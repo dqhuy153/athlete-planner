@@ -11,16 +11,18 @@ import {
   LogOut,
   ChevronDown,
   ChevronRight,
+  Dumbbell,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
 
 const NAV_ITEMS = [
-  { href: '/users', label: 'Users', icon: Users },
-  { href: '/blog', label: 'Blog', icon: FileText },
-  { href: '/assets', label: 'Assets', icon: FolderOpen },
-  { href: '/config', label: 'Config', icon: Settings },
+  { href: '/users',     label: 'Users',     icon: Users     },
+  { href: '/exercises', label: 'Exercises', icon: Dumbbell  },
+  { href: '/blog',      label: 'Blog',      icon: FileText  },
+  { href: '/assets',    label: 'Assets',    icon: FolderOpen },
+  { href: '/config',    label: 'Config',    icon: Settings  },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

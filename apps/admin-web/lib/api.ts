@@ -1,4 +1,4 @@
-import type { User, BlogPost, BlogCategory, Asset } from '@athlete-planner/contracts';
+import type { User, BlogPost, BlogCategory, Asset, GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -152,5 +152,128 @@ export function updateAppConfig(
   return apiFetch('/admin/config', accessToken, {
     method: 'PUT',
     body: JSON.stringify(config),
+  });
+}
+
+// ── Exercises (Admin) ────────────────────────────────────────────────────────
+
+export function getGymExercises(
+  accessToken: string,
+  params?: { muscleGroup?: string; page?: number; limit?: number },
+): Promise<GymExerciseMaster[]> {
+  const q = new URLSearchParams();
+  if (params?.muscleGroup) q.set('muscleGroup', params.muscleGroup);
+  if (params?.page)   q.set('page',  String(params.page));
+  if (params?.limit)  q.set('limit', String(params.limit));
+  return apiFetch(`/exercises/gym?${q}`, accessToken);
+}
+
+export function getRunningExercises(
+  accessToken: string,
+  params?: { runningType?: string; page?: number; limit?: number },
+): Promise<RunningExerciseMaster[]> {
+  const q = new URLSearchParams();
+  if (params?.runningType) q.set('runningType', params.runningType);
+  if (params?.page)  q.set('page',  String(params.page));
+  if (params?.limit) q.set('limit', String(params.limit));
+  return apiFetch(`/exercises/running?${q}`, accessToken);
+}
+
+export function createGymExercise(
+  accessToken: string,
+  data: {
+    name: string;
+    vietnameseName: string;
+    targetMuscleGroup: string;
+    secondaryMuscleGroups?: string[];
+    youtubeEmbedUrl?: string;
+    gifUrl?: string;
+    garminExerciseEnum?: string;
+    instructions?: any[];
+  },
+): Promise<GymExerciseMaster> {
+  return apiFetch('/exercises/gym', accessToken, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export function createRunningExercise(
+  accessToken: string,
+  data: {
+    name: string;
+    vietnameseName: string;
+    runningType: string;
+    youtubeEmbedUrl?: string;
+    gifUrl?: string;
+    instructions?: { vi: string[]; en: string[] };
+    workoutStructure?: any[];
+  },
+): Promise<RunningExerciseMaster> {
+  return apiFetch('/exercises/running', accessToken, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateGymExercise(
+  accessToken: string,
+  id: string,
+  data: Partial<{
+    name: string;
+    vietnameseName: string;
+    targetMuscleGroup: string;
+    secondaryMuscleGroups: string[];
+    youtubeEmbedUrl: string;
+    gifUrl: string;
+    garminExerciseEnum: string;
+    instructions: any[];
+  }>,
+): Promise<GymExerciseMaster> {
+  return apiFetch(`/exercises/${id}?type=gym`, accessToken, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateRunningExercise(
+  accessToken: string,
+  id: string,
+  data: Partial<{
+    name: string;
+    vietnameseName: string;
+    runningType: string;
+    youtubeEmbedUrl: string;
+    gifUrl: string;
+    instructions: { vi: string[]; en: string[] };
+    workoutStructure: any[];
+  }>,
+): Promise<RunningExerciseMaster> {
+  return apiFetch(`/exercises/${id}?type=running`, accessToken, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export function toggleExercise(
+  accessToken: string,
+  id: string,
+  type: 'gym' | 'running',
+): Promise<{ isActive: boolean }> {
+  return apiFetch(`/exercises/${id}/toggle?type=${type}`, accessToken, { method: 'PATCH' });
+}
+
+export function generateExerciseContent(
+  accessToken: string,
+  data: {
+    name: string;
+    sportType: 'GYM' | 'RUNNING';
+    muscleGroup?: string;
+    runningType?: string;
+  },
+): Promise<{ content: any }> {
+  return apiFetch('/admin/exercises/generate-content', accessToken, {
+    method: 'POST',
+    body: JSON.stringify(data),
   });
 }

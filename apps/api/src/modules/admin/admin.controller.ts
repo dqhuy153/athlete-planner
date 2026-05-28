@@ -14,9 +14,27 @@ import {
 import { PrismaService } from '@athlete-planner/database';
 import { S3Service } from '../shared/s3.service';
 import { CloudinarySignService } from '../shared/cloudinary-sign.service';
+import { AIService } from '../shared/ai.service';
 import { AdminGuard } from './admin.guard';
 import { ConfigService } from '@nestjs/config';
+import { IsString, IsEnum, IsOptional } from 'class-validator';
 import crypto from 'crypto';
+
+export class GenerateExerciseContentDto {
+  @IsString()
+  name!: string;
+
+  @IsEnum(['GYM', 'RUNNING'])
+  sportType!: 'GYM' | 'RUNNING';
+
+  @IsString()
+  @IsOptional()
+  muscleGroup?: string;
+
+  @IsString()
+  @IsOptional()
+  runningType?: string;
+}
 
 @Controller('admin')
 @UseGuards(AdminGuard)
@@ -26,10 +44,41 @@ export class AdminController {
     private readonly s3Service: S3Service,
     private readonly cloudinarySign: CloudinarySignService,
     private readonly config: ConfigService,
+    private readonly aiService: AIService,
   ) {}
 
   // ── User Management ─────────────────────────────────────────────────────────
 
+  // ── Exercise Content Generation ─────────────────────────────────────────────
+
+  @Post('exercises/generate-content')
+  async generateExerciseContent(@Body() body: GenerateExerciseContentDto) {
+    const contextDetails = body.sportType === 'GYM'
+      ? `Target muscle group: ${body.muscleGroup || 'not specified'}`
+      : `Running type: ${body.runningType || 'not specified'}`;
+
+    const prompt = `Generate Vietnamese name and a brief description for this ${body.sportType.toLowerCase()} exercise.
+Exercise name: ${body.name}
+${contextDetails}
+
+Respond with JSON only:
+{
+  "vietnameseName": "Vietnamese translation or transliteration of the exercise name",
+  "description": "1-2 sentence description in English"
+}`;
+
+    const result = await this.aiService.generateText({ prompt });
+
+    let content: Record<string, any> = {};
+    try {
+      const jsonMatch = result.text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) content = JSON.parse(jsonMatch[0]);
+    } catch {
+      content = { raw: result.text };
+    }
+
+    return { content };
+  }
   @Get('users')
   async getUsers(
     @Query('search') search?: string,

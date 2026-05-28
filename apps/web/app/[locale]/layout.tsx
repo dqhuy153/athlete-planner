@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { BottomNav } from '@/components/BottomNav';
 import '../globals.css';
 
 const inter = Inter({
@@ -55,8 +56,11 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+            <main className="min-h-screen pb-[88px]">
+              {children}
+            </main>
+            <BottomNav locale={locale} />
+          </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 class ApiClient {
@@ -70,11 +72,67 @@ class ApiClient {
     return this.request<any[]>('/blog/categories');
   }
 
-  // ── Exercises (will be expanded in Phase 1) ──────────────────────────────
-  // Placeholder - will add exercise CRUD methods
+  // ── Exercises ────────────────────────────────────────────────────────────
 
-  // ── Schedules (will be expanded in Phase 1) ──────────────────────────────
-  // Placeholder - will add schedule CRUD methods
+  getGymExercises(params?: { muscleGroup?: string }) {
+    const qs = params?.muscleGroup ? `?muscleGroup=${encodeURIComponent(params.muscleGroup)}` : '';
+    return this.request<GymExerciseMaster[]>(`/exercises/gym${qs}`);
+  }
+
+  getRunningExercises(params?: { runningType?: string }) {
+    const qs = params?.runningType ? `?runningType=${encodeURIComponent(params.runningType)}` : '';
+    return this.request<RunningExerciseMaster[]>(`/exercises/running${qs}`);
+  }
+
+  getExerciseDetail(id: string) {
+    return this.request<GymExerciseMaster | RunningExerciseMaster | PrivateExercise>(`/exercises/${id}`);
+  }
+
+  getPrivateExercises(token: string) {
+    return this.request<PrivateExercise[]>('/exercises/private', {
+      headers: this.authHeaders(token),
+    });
+  }
+
+  createPrivateExercise(
+    token: string,
+    data: {
+      sportType: string;
+      name: string;
+      targetMuscleGroup?: string;
+      runningType?: string;
+      customNotes?: string;
+      gifUrl?: string;
+    },
+  ) {
+    return this.request<PrivateExercise>('/exercises/private', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify(data),
+    });
+  }
+
+  updatePrivateExercise(
+    token: string,
+    id: string,
+    data: Partial<{ name: string; customNotes: string; gifUrl: string }>,
+  ) {
+    return this.request<PrivateExercise>(`/exercises/private/${id}`, {
+      method: 'PUT',
+      headers: this.authHeaders(token),
+      body: JSON.stringify(data),
+    });
+  }
+
+  togglePrivateExercise(token: string, id: string) {
+    return this.request<PrivateExercise>(`/exercises/private/${id}/toggle`, {
+      method: 'PATCH',
+      headers: this.authHeaders(token),
+    });
+  }
+
+  // ── Schedules ────────────────────────────────────────────────────────────
+  // Placeholder - will add schedule CRUD methods in Phase 3
 }
 
 export const api = new ApiClient(API_URL);

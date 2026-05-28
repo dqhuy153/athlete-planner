@@ -6,11 +6,12 @@ import { AdminGuard } from './admin.guard';
 import { RootAdminBootstrap } from './root-admin.bootstrap';
 import { S3Service } from '../shared/s3.service';
 import { CloudinarySignService } from '../shared/cloudinary-sign.service';
+import { AIService } from '../shared/ai.service';
 
 @Module({
   imports: [CqrsModule],
   controllers: [AdminController, ConfigController],
-  providers: [AdminGuard, RootAdminBootstrap, S3Service, CloudinarySignService],
+  providers: [AdminGuard, RootAdminBootstrap, S3Service, CloudinarySignService, AIService],
   exports: [AdminGuard, S3Service],
 })
 export class AdminModule {}
