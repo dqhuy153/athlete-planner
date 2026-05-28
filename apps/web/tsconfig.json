@@ -1,0 +1,14 @@
+{
+  "extends": "../../packages/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@athlete-planner/contracts": ["../../packages/contracts/src/index.ts"],
+      "@athlete-planner/ui": ["../../packages/ui/src/index.ts"],
+      "@athlete-planner/ui/utils": ["../../packages/ui/src/utils.ts"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

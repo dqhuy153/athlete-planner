@@ -1,0 +1,241 @@
+// The Sport Notebook Planner - Prisma Schema
+// Run `pnpm --filter @athlete-planner/database prisma generate` to generate the client.
+// Run `pnpm --filter @athlete-planner/database prisma migrate dev` to create/apply migrations.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User & Auth ─────────────────────────────────────────────────────────────
+
+enum UserTier {
+  FREE
+  PRO
+}
+
+enum UserRole {
+  user
+  admin
+  root
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  googleId  String?  @unique
+  avatarUrl String?
+  tier      UserTier @default(FREE)
+  role      UserRole @default(user)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  privateExercises PrivateExercise[]
+  dailySchedules   DailySchedule[]
+
+  @@map("users")
+}
+
+// ─── Exercise Library (Admin-managed) ────────────────────────────────────────
+
+enum MuscleGroup {
+  Chest
+  Back
+  Shoulders
+  Arms
+  Legs
+  Abs
+}
+
+enum RunningType {
+  Interval
+  Easy
+  Tempo
+  Long_Run
+}
+
+model GymExerciseMaster {
+  id                    String      @id @default(uuid())
+  isActive              Boolean     @default(true)
+  name                  String
+  vietnameseName        String
+  targetMuscleGroup     MuscleGroup
+  secondaryMuscleGroups String[]
+  youtubeEmbedUrl       String?
+  gifUrl                String?
+  garminExerciseEnum    String?
+  instructions          Json        // Array of { level, steps, form_cues }
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  scheduleItems ScheduleItem[]
+
+  @@map("gym_exercise_masters")
+}
+
+model RunningExerciseMaster {
+  id               String      @id @default(uuid())
+  isActive         Boolean     @default(true)
+  name             String
+  vietnameseName   String
+  runningType      RunningType
+  youtubeEmbedUrl  String?
+  gifUrl           String?
+  instructions     Json        // LocalizedStringArray { vi: string[], en: string[] }
+  workoutStructure Json        // Array of { phase, duration_minutes?, distance_meters? }
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  scheduleItems ScheduleItem[]
+
+  @@map("running_exercise_masters")
+}
+
+// ─── Private Exercises (User-owned) ──────────────────────────────────────────
+
+model PrivateExercise {
+  id                String       @id @default(uuid())
+  userId            String
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isActive          Boolean      @default(true)
+  sportType         String       // GYM | RUNNING
+  name              String
+  targetMuscleGroup MuscleGroup?
+  runningType       RunningType?
+  customNotes       String?
+  gifUrl            String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  scheduleItems ScheduleItem[]
+
+  @@map("private_exercises")
+}
+
+// ─── Schedule System ─────────────────────────────────────────────────────────
+
+enum DayStatus {
+  PENDING
+  COMPLETED
+  SKIPPED
+  REST
+}
+
+model DailySchedule {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateString String    // YYYY-MM-DD format
+  weekNumber Int       // ISO 8601 week number
+  year       Int       // ISO 8601 week year
+  dayStatus  DayStatus @default(PENDING)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  items ScheduleItem[]
+
+  @@unique([userId, dateString])
+  @@index([userId, year, weekNumber])
+  @@map("daily_schedules")
+}
+
+model ScheduleItem {
+  id             String @id @default(uuid())
+  scheduleId     String
+  schedule       DailySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  sequenceOrder  Int
+  sportType      String // GYM | RUNNING
+  isPrivateExercise Boolean @default(false)
+
+  // Polymorphic FK: only ONE should be set
+  gymMasterId       String?
+  gymMaster         GymExerciseMaster?    @relation(fields: [gymMasterId], references: [id], onDelete: SetNull)
+  runningMasterId   String?
+  runningMaster     RunningExerciseMaster? @relation(fields: [runningMasterId], references: [id], onDelete: SetNull)
+  privateExerciseId String?
+  privateExercise   PrivateExercise?      @relation(fields: [privateExerciseId], references: [id], onDelete: SetNull)
+
+  // Payloads (nullable for FREE tier rolling cleanup)
+  gymPayload     Json? // { rest_time_seconds, sets: [{ set_number, weight_kg, reps, rpe, is_completed }] }
+  runningPayload Json? // { target_distance_km?, duration_minutes?, intensity_type, pace_target_range?, hr_target_range? }
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([scheduleId, sequenceOrder])
+  @@map("schedule_items")
+}
+
+// ─── Blog / CMS ───────────────────────────────────────────────────────────────
+
+model BlogPost {
+  id          String        @id @default(uuid())
+  title       String
+  slug        String        @unique
+  excerpt     String        @default("")
+  content     String        @default("")
+  coverImage  String?
+  tags        String[]
+  categoryKey String?
+  status      String        @default("draft") // draft | published | archived
+  readingTime Int           @default(5)
+  publishedAt DateTime?
+  authorId    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  category BlogCategory? @relation(fields: [categoryKey], references: [key])
+
+  @@map("blog_posts")
+}
+
+model BlogCategory {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  label       String
+  description String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts BlogPost[]
+
+  @@map("blog_categories")
+}
+
+// ─── Storage / Assets ─────────────────────────────────────────────────────────
+
+model Asset {
+  id              String   @id @default(uuid())
+  fileName        String
+  url             String
+  key             String?
+  storageProvider String   @default("r2") // r2 | cloudinary
+  mimeType        String?
+  size            Int?
+  category        String?
+  uploadedBy      String?
+  createdAt       DateTime @default(now())
+
+  @@map("assets")
+}
+
+// ─── App Config ───────────────────────────────────────────────────────────────
+
+model AppConfig {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     Json
+  label     String?
+  updatedAt DateTime @updatedAt
+
+  @@map("app_configs")
+}

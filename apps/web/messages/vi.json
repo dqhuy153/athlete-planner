@@ -1,0 +1,87 @@
+{
+  "common": {
+    "appName": "Sport Notebook",
+    "loading": "Đang tải...",
+    "error": "Có lỗi xảy ra",
+    "retry": "Thử lại",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo mới",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "back": "Quay lại",
+    "next": "Tiếp",
+    "confirm": "Xác nhận",
+    "close": "Đóng"
+  },
+  "auth": {
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất",
+    "signInWithGoogle": "Đăng nhập với Google",
+    "welcomeBack": "Chào mừng quay lại"
+  },
+  "nav": {
+    "schedule": "Lịch tập",
+    "library": "Thư viện",
+    "profile": "Hồ sơ",
+    "blog": "Bài viết"
+  },
+  "schedule": {
+    "title": "Lịch tập tuần",
+    "today": "Hôm nay",
+    "week": "Tuần",
+    "addExercise": "Thêm bài tập",
+    "noExercises": "Chưa có bài tập nào",
+    "completed": "Hoàn thành",
+    "skipped": "Bỏ qua",
+    "rest": "Nghỉ ngơi",
+    "pending": "Chờ tập",
+    "disciplineRate": "Tỷ lệ kỷ luật",
+    "copyDay": "Sao chép ngày",
+    "copyWeek": "Sao chép tuần",
+    "sets": "Set",
+    "reps": "Reps",
+    "weight": "Tạ (kg)",
+    "rpe": "RPE",
+    "restTime": "Nghỉ giữa set",
+    "pace": "Pace",
+    "distance": "Khoảng cách",
+    "duration": "Thời lượng",
+    "heartRate": "Nhịp tim"
+  },
+  "library": {
+    "title": "Thư viện bài tập",
+    "gym": "Gym",
+    "running": "Chạy bộ",
+    "myExercises": "Bài tập của tôi",
+    "muscleGroups": "Nhóm cơ",
+    "chest": "Ngực",
+    "back": "Lưng",
+    "shoulders": "Vai",
+    "arms": "Tay",
+    "legs": "Chân",
+    "abs": "Bụng",
+    "beginner": "Cơ bản",
+    "advanced": "Nâng cao",
+    "privateExerciseCount": "{count}/10 bài tập cá nhân"
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "tier": "Gói cước",
+    "free": "Miễn phí",
+    "pro": "Pro",
+    "upgrade": "Nâng cấp",
+    "settings": "Cài đặt",
+    "language": "Ngôn ngữ"
+  },
+  "tier": {
+    "upgradeTitle": "Nâng cấp Pro",
+    "limitReached": "Đã đạt giới hạn gói miễn phí",
+    "exerciseLimit": "Tối đa 10 bài tập cá nhân",
+    "calendarLimit": "Lập lịch tối đa 14 ngày",
+    "historyExpired": "Nâng cấp để xem lại chi tiết",
+    "exportLocked": "Xuất Garmin chỉ dành cho Pro"
+  }
+}

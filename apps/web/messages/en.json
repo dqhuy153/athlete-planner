@@ -1,0 +1,87 @@
+{
+  "common": {
+    "appName": "Sport Notebook",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm",
+    "close": "Close"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signInWithGoogle": "Sign in with Google",
+    "welcomeBack": "Welcome back"
+  },
+  "nav": {
+    "schedule": "Schedule",
+    "library": "Library",
+    "profile": "Profile",
+    "blog": "Articles"
+  },
+  "schedule": {
+    "title": "Weekly Schedule",
+    "today": "Today",
+    "week": "Week",
+    "addExercise": "Add exercise",
+    "noExercises": "No exercises yet",
+    "completed": "Completed",
+    "skipped": "Skipped",
+    "rest": "Rest",
+    "pending": "Pending",
+    "disciplineRate": "Discipline Rate",
+    "copyDay": "Copy day",
+    "copyWeek": "Copy week",
+    "sets": "Sets",
+    "reps": "Reps",
+    "weight": "Weight (kg)",
+    "rpe": "RPE",
+    "restTime": "Rest between sets",
+    "pace": "Pace",
+    "distance": "Distance",
+    "duration": "Duration",
+    "heartRate": "Heart rate"
+  },
+  "library": {
+    "title": "Exercise Library",
+    "gym": "Gym",
+    "running": "Running",
+    "myExercises": "My Exercises",
+    "muscleGroups": "Muscle Groups",
+    "chest": "Chest",
+    "back": "Back",
+    "shoulders": "Shoulders",
+    "arms": "Arms",
+    "legs": "Legs",
+    "abs": "Abs",
+    "beginner": "Beginner",
+    "advanced": "Advanced",
+    "privateExerciseCount": "{count}/10 private exercises"
+  },
+  "profile": {
+    "title": "Profile",
+    "tier": "Plan",
+    "free": "Free",
+    "pro": "Pro",
+    "upgrade": "Upgrade",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "tier": {
+    "upgradeTitle": "Upgrade to Pro",
+    "limitReached": "Free plan limit reached",
+    "exerciseLimit": "Maximum 10 private exercises",
+    "calendarLimit": "Plan up to 14 days ahead",
+    "historyExpired": "Upgrade to view workout details",
+    "exportLocked": "Garmin export is Pro-only"
+  }
+}

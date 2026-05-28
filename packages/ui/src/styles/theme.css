@@ -1,0 +1,398 @@
+/* ─── Premium Report Theme System ─────────────────────────────────────────────
+   CSS custom properties for dark/light premium report rendering.
+   Scoped with --report-* prefix to avoid collisions with app-level tokens.
+
+   Usage:
+     Default (dark): no class needed, or add .theme-dark to wrapper
+     Light mode:     add .theme-light to the report wrapper element
+
+   The DynamicReportRenderer applies these classes automatically via the
+   optional `theme` prop (default: "dark").
+
+   Inspired by horos-report-clone.html styling patterns.
+  ──────────────────────────────────────────────────────────────────────────── */
+
+/* ── Default: Dark Theme ─────────────────────────────────────────────────── */
+:root,
+.theme-dark {
+  /* Surface & card backgrounds — horos-inspired deep charcoal */
+  --report-surface: #0a0a0c;
+  --report-surface-container: #111317;
+  --report-surface-container-high: #1a1c20;
+  --report-surface-container-highest: #24262a;
+
+  /* Tailwind-compatible surface tokens (for bg-surface, bg-surface-container, etc.) */
+  --surface: #111317;
+  --surface-dim: #111317;
+  --surface-bright: #37393d;
+  --surface-container-lowest: #0c0e12;
+  --surface-container-low: #1a1c1f;
+  --surface-container: #1e2023;
+  --surface-container-high: #282a2e;
+  --surface-container-highest: #333539;
+  /* RGB tokens for Tailwind alpha utilities */
+  --surface-container-lowest-rgb: 12 14 18;
+  --surface-container-low-rgb: 26 28 31;
+  --surface-container-highest-rgb: 51 53 57;
+  --on-surface: #e2e2e7;
+  --on-surface-variant: #d0c5af;
+  /* RGB tokens for Tailwind alpha utilities */
+  --surface-rgb: 17 19 23;
+  --surface-container-rgb: 30 32 35;
+  --surface-container-high-rgb: 40 42 46;
+  --on-surface-rgb: 226 226 231;
+  --on-surface-variant-rgb: 208 197 175;
+  --surface-primary-rgb: 242 202 80;
+  --on-background: #e2e2e7;
+  --outline: #99907c;
+  --outline-variant: #4d4635;
+  /* RGB tokens used by Tailwind opacity utilities */
+  --outline-rgb: 77 70 53;
+  --border: #4d4635;
+  --input: #333539;
+  --ring: #d4af37;
+  --surface-primary: #f2ca50;
+  --surface-primary-container: #d4af37;
+  --surface-on-primary: #3c2f00;
+  --surface-on-primary-container: #554300;
+  --surface-secondary: #d0bcff;
+  --surface-secondary-container: #5417be;
+  --surface-on-secondary: #3b0091;
+  --surface-on-secondary-container: #c0a7ff;
+  --surface-tertiary: #d8c9e4;
+  --surface-tertiary-container: #bcaec8;
+  --surface-tint: #e9c349;
+  --surface-primary-fixed: #ffe088;
+  --surface-primary-fixed-dim: #e9c349;
+  --surface-error: #ffb4ab;
+  --surface-error-container: #93000a;
+  --surface-on-error: #690005;
+  --surface-on-error-container: #ffdad6;
+  --surface-accent: #d4af37;
+  --surface-on-accent: #3c2f00;
+  --surface-gold: #d4af37;
+
+  /* Text colors — horos-inspired */
+  --report-text-primary: #e8e6e1;
+  --report-text-secondary: #c4b89a;
+  --report-text-muted: #8a8276;
+  --report-text-on-primary: #1a1a1a;
+
+  /* Pastel accent for dividers — horos pattern */
+  --report-pastel: rgba(212, 175, 55, 0.15);
+
+  /* Badge variants — background + text */
+  --report-badge-positive-bg: rgba(16, 185, 129, 0.15);
+  --report-badge-positive-text: #34d399;
+  --report-badge-negative-bg: rgba(244, 63, 94, 0.15);
+  --report-badge-negative-text: #fb7185;
+  --report-badge-neutral-bg: rgba(251, 191, 36, 0.15);
+  --report-badge-neutral-text: #fbbf24;
+  --report-badge-info-bg: rgba(56, 189, 248, 0.15);
+  --report-badge-info-text: #38bdf8;
+  --report-badge-special-bg: rgba(167, 139, 250, 0.15);
+  --report-badge-special-text: #a78bfa;
+  --report-badge-challenge-bg: rgba(244, 63, 94, 0.15);
+  --report-badge-challenge-text: #fb7185;
+
+  /* Callout box variants — background + border */
+  --report-callout-info-bg: rgba(56, 189, 248, 0.1);
+  --report-callout-info-border: rgba(56, 189, 248, 0.2);
+  --report-callout-success-bg: rgba(16, 185, 129, 0.1);
+  --report-callout-success-border: rgba(16, 185, 129, 0.2);
+  --report-callout-warning-bg: rgba(251, 191, 36, 0.1);
+  --report-callout-warning-border: rgba(251, 191, 36, 0.2);
+  --report-callout-danger-bg: rgba(244, 63, 94, 0.1);
+  --report-callout-danger-border: rgba(244, 63, 94, 0.2);
+  --report-callout-spiritual-bg: rgba(167, 139, 250, 0.1);
+  --report-callout-spiritual-border: rgba(167, 139, 250, 0.2);
+  --report-callout-dark-bg: #1a1c20;
+  --report-callout-dark-border: rgba(212, 175, 55, 0.3);
+  --report-callout-accent-bg: rgba(212, 175, 55, 0.1);
+  --report-callout-accent-border: rgba(212, 175, 55, 0.2);
+
+  /* Chart accent colors (6 slots) */
+  --report-chart-accent-1: #e9c349;
+  --report-chart-accent-2: #d97706;
+  --report-chart-accent-3: #dc2626;
+  --report-chart-accent-4: #9333ea;
+  --report-chart-accent-5: #db2777;
+  --report-chart-accent-6: #0891b2;
+
+  /* Gradient text stops (golden quote) */
+  --report-gradient-from: #fbbf24;
+  --report-gradient-via: #fde68a;
+  --report-gradient-to: #f59e0b;
+
+  /* Heatmap variants */
+  --report-heatmap-dark-bg: #1a1c20;
+  --report-heatmap-dark-text: #e8e6e1;
+  --report-heatmap-accent-bg: #e9c349;
+  --report-heatmap-accent-text: #1a1a1a;
+  --report-heatmap-light-bg: #111317;
+  --report-heatmap-light-text: #e8e6e1;
+  --report-heatmap-pastel-bg: rgba(212, 175, 55, 0.2);
+  --report-heatmap-pastel-text: #e9c349;
+  --report-heatmap-muted-bg: rgba(77, 70, 53, 0.2);
+  --report-heatmap-muted-text: #c4b89a;
+
+  /* Accent & highlight */
+  --report-accent: #e9c349;
+  --report-accent-soft: rgba(212, 175, 55, 0.15);
+  --report-border-subtle: rgba(77, 70, 53, 0.3);
+  --report-primary-soft: rgba(233, 195, 73, 0.1);
+  --report-primary-border: rgba(233, 195, 73, 0.25);
+
+  /* MetaCard (card-1 / card-2) */
+  --report-metacard-bg: #111317;
+  --report-metacard-bg-dark: #1e2023;
+  --report-metacard-accent-bar: rgba(233, 195, 73, 0.6);
+  --report-metacard-divider: rgba(233, 195, 73, 0.2);
+
+  /* Chapter cover sigil / icon styling — tuned for contrast per theme */
+  --report-chapter-sigil-bg: color-mix(in srgb, var(--report-accent) 6%, var(--report-metacard-bg));
+  --report-chapter-sigil-fg: var(--report-accent);
+
+  /* Card styling — horos-inspired shadow + accent bar */
+  --report-card-bg: #111317;
+  --report-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --report-card-accent: rgba(212, 175, 55, 0.4);
+  --report-card-border: rgba(77, 70, 53, 0.2);
+
+  /* Astro chart colors — dark mode defaults */
+  --report-astro-planet-sun: #fbbf24;
+  --report-astro-planet-moon: #e2e8f0;
+  --report-astro-planet-mercury: #c4b5fd;
+  --report-astro-planet-venus: #f9a8d4;
+  --report-astro-planet-mars: #fca5a5;
+  --report-astro-planet-jupiter: #fcd34d;
+  --report-astro-planet-saturn: #94a3b8;
+  --report-astro-planet-uranus: #67e8f9;
+  --report-astro-planet-neptune: #818cf8;
+  --report-astro-planet-pluto: #d8b4fe;
+  --report-astro-aspect-conjunction: #fbbf24;
+  --report-astro-aspect-sextile: #4ade80;
+  --report-astro-aspect-square: #f87171;
+  --report-astro-aspect-trine: #22c55e;
+  --report-astro-aspect-opposition: #ef4444;
+  --report-astro-aspect-quincunx: #a78bfa;
+  --report-astro-sign-fire-bg: #7f1d1d;
+  --report-astro-sign-fire-fg: #fca5a5;
+  --report-astro-sign-earth-bg: #14532d;
+  --report-astro-sign-earth-fg: #86efac;
+  --report-astro-sign-air-bg: #713f12;
+  --report-astro-sign-air-fg: #fde68a;
+  --report-astro-sign-water-bg: #1e3a5f;
+  --report-astro-sign-water-fg: #93c5fd;
+  --report-astro-chart-bg-start: #1e1b4b;
+  --report-astro-chart-bg-end: #0a0a1a;
+  --report-astro-chart-stroke: #1e1b4b;
+  --report-astro-chart-inner-bg: #0a0a1a;
+  --report-astro-chart-badge-bg: #0f0f2e;
+  --report-astro-chart-legend-a-bg: #0f0f2e;
+  --report-astro-chart-legend-a-stroke: #60a5fa;
+  --report-astro-chart-legend-a-text: #93c5fd;
+  --report-astro-chart-legend-b-bg: #1a0a1e;
+  --report-astro-chart-legend-b-stroke: #f9a8d4;
+  --report-astro-chart-legend-b-text: #f9a8d4;
+  --report-astro-chart-tooltip-bg: #0f0f2e;
+  --report-astro-chart-tooltip-text: #e2e8f0;
+  --report-astro-chart-tooltip-label: #ffffff;
+  --report-astro-chart-tooltip-sign: #93c5fd;
+  --report-astro-chart-tooltip-house: #fbbf24;
+  --report-astro-chart-tooltip-b-label: #f9a8d4;
+  --report-astro-chart-tooltip-muted: #94a3b8;
+  --report-astro-table-header-bg: rgba(39, 39, 42, 0.2);
+}
+
+/* ── Light Theme ─────────────────────────────────────────────────────────── */
+.theme-light {
+  /* Surface & card backgrounds — horos-inspired light */
+  --report-surface: #faf9f7;
+  --report-surface-container: #f5f4f0;
+  --report-surface-container-high: #ffffff;
+  --report-surface-container-highest: #ebe9e4;
+
+  /* Tailwind-compatible surface tokens (for bg-surface, bg-surface-container, etc.) */
+  --surface: #faf9f7;
+  --surface-dim: #f5f4f0;
+  --surface-bright: #ffffff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #faf9f7;
+  --surface-container: #f5f4f0;
+  --surface-container-high: #ffffff;
+  --surface-container-highest: #ebe9e4;
+  /* RGB tokens for Tailwind alpha utilities (light theme) */
+  --surface-container-lowest-rgb: 255 255 255;
+  --surface-container-low-rgb: 250 249 247;
+  --surface-container-highest-rgb: 235 233 228;
+  --on-surface: #1a1a1a;
+  --on-surface-variant: #6b6b6b;
+  /* RGB tokens for Tailwind alpha utilities (light theme) */
+  --surface-rgb: 250 249 247;
+  --surface-container-rgb: 245 244 240;
+  --surface-container-high-rgb: 255 255 255;
+  --on-surface-rgb: 26 26 26;
+  --on-surface-variant-rgb: 107 107 107;
+  --surface-primary-rgb: 212 175 55;
+  --on-background: #1a1a1a;
+  --outline: #d0c5af;
+  --outline-variant: #e0d9c8;
+  /* RGB tokens used by Tailwind opacity utilities */
+  --outline-rgb: 224 217 200;
+  --border: #e0d9c8;
+  --input: #f5f4f0;
+  --ring: #d4af37;
+  --surface-primary: #d4af37;
+  --surface-primary-container: #b8942e;
+  --surface-on-primary: #ffffff;
+  --surface-on-primary-container: #3c2f00;
+  --surface-secondary: #7c3aed;
+  --surface-secondary-container: #ede9fe;
+  --surface-on-secondary: #ffffff;
+  --surface-on-secondary-container: #5b21b6;
+  --surface-tertiary: #d8c9e4;
+  --surface-tertiary-container: #bcaec8;
+  --surface-tint: #d4af37;
+  --surface-primary-fixed: #ffe088;
+  --surface-primary-fixed-dim: #d4af37;
+  --surface-error: #dc2626;
+  --surface-error-container: #fee2e2;
+  --surface-on-error: #ffffff;
+  --surface-on-error-container: #991b1b;
+  --surface-accent: #d4af37;
+  --surface-on-accent: #ffffff;
+  --surface-gold: #d4af37;
+
+  /* Text colors — horos-inspired */
+  --report-text-primary: #1a1a1a;
+  --report-text-secondary: #4a4a4a;
+  --report-text-muted: #7a7a7a;
+  --report-text-on-primary: #ffffff;
+
+  /* Pastel accent for dividers */
+  --report-pastel: rgba(212, 175, 55, 0.2);
+
+  /* Badge variants — lower saturation for light backgrounds */
+  --report-badge-positive-bg: rgba(16, 185, 129, 0.1);
+  --report-badge-positive-text: #059669;
+  --report-badge-negative-bg: rgba(244, 63, 94, 0.1);
+  --report-badge-negative-text: #e11d48;
+  --report-badge-neutral-bg: rgba(251, 191, 36, 0.1);
+  --report-badge-neutral-text: #d97706;
+  --report-badge-info-bg: rgba(56, 189, 248, 0.1);
+  --report-badge-info-text: #0284c7;
+  --report-badge-special-bg: rgba(167, 139, 250, 0.1);
+  --report-badge-special-text: #7c3aed;
+  --report-badge-challenge-bg: rgba(244, 63, 94, 0.1);
+  --report-badge-challenge-text: #e11d48;
+
+  /* Callout box variants */
+  --report-callout-info-bg: rgba(56, 189, 248, 0.08);
+  --report-callout-info-border: rgba(56, 189, 248, 0.25);
+  --report-callout-success-bg: rgba(16, 185, 129, 0.08);
+  --report-callout-success-border: rgba(16, 185, 129, 0.25);
+  --report-callout-warning-bg: rgba(251, 191, 36, 0.08);
+  --report-callout-warning-border: rgba(251, 191, 36, 0.25);
+  --report-callout-danger-bg: rgba(244, 63, 94, 0.08);
+  --report-callout-danger-border: rgba(244, 63, 94, 0.25);
+  --report-callout-spiritual-bg: rgba(167, 139, 250, 0.08);
+  --report-callout-spiritual-border: rgba(167, 139, 250, 0.25);
+  --report-callout-dark-bg: #f5f4f0;
+  --report-callout-dark-border: rgba(0, 0, 0, 0.12);
+  --report-callout-accent-bg: rgba(212, 175, 55, 0.12);
+  --report-callout-accent-border: rgba(212, 175, 55, 0.3);
+
+  /* Chart accent colors — softer for light surfaces */
+  --report-chart-accent-1: #d4af37;
+  --report-chart-accent-2: #b45309;
+  --report-chart-accent-3: #b91c1c;
+  --report-chart-accent-4: #7c3aed;
+  --report-chart-accent-5: #be185d;
+  --report-chart-accent-6: #0e7490;
+
+  /* Gradient text stops — richer for light backgrounds */
+  --report-gradient-from: #d97706;
+  --report-gradient-via: #d4af37;
+  --report-gradient-to: #b45309;
+
+  /* Heatmap variants */
+  --report-heatmap-dark-bg: #f5f4f0;
+  --report-heatmap-dark-text: #1a1a1a;
+  --report-heatmap-accent-bg: #d4af37;
+  --report-heatmap-accent-text: #ffffff;
+  --report-heatmap-light-bg: #ffffff;
+  --report-heatmap-light-text: #1a1a1a;
+  --report-heatmap-pastel-bg: rgba(212, 175, 55, 0.15);
+  --report-heatmap-pastel-text: #b45309;
+  --report-heatmap-muted-bg: rgba(0, 0, 0, 0.08);
+  --report-heatmap-muted-text: #4a4a4a;
+
+  /* Accent & highlight */
+  --report-accent: #d4af37;
+  --report-accent-soft: rgba(212, 175, 55, 0.12);
+  --report-border-subtle: rgba(0, 0, 0, 0.1);
+  --report-primary-soft: rgba(212, 175, 55, 0.1);
+  --report-primary-border: rgba(212, 175, 55, 0.3);
+
+  /* MetaCard (card-1 / card-2) */
+  --report-metacard-bg: #ffffff;
+  --report-metacard-bg-dark: #f0ebe3;
+  --report-metacard-accent-bar: rgba(212, 175, 55, 0.8);
+  --report-metacard-divider: rgba(212, 175, 55, 0.25);
+
+  /* Chapter cover sigil / icon styling — tuned for contrast per theme */
+  --report-chapter-sigil-bg: color-mix(in srgb, var(--report-accent) 12%, var(--report-metacard-bg));
+  --report-chapter-sigil-fg: var(--report-accent);
+
+  /* Card styling — horos-inspired shadow + accent bar */
+  --report-card-bg: #ffffff;
+  --report-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --report-card-accent: rgba(212, 175, 55, 0.6);
+  --report-card-border: rgba(0, 0, 0, 0.08);
+
+  /* Astro chart colors — light mode (darker for contrast on white) */
+  --report-astro-planet-sun: #b8860b;
+  --report-astro-planet-moon: #64748b;
+  --report-astro-planet-mercury: #8b5cf6;
+  --report-astro-planet-venus: #c026d3;
+  --report-astro-planet-mars: #dc2626;
+  --report-astro-planet-jupiter: #b45309;
+  --report-astro-planet-saturn: #64748b;
+  --report-astro-planet-uranus: #0891b2;
+  --report-astro-planet-neptune: #6366f1;
+  --report-astro-planet-pluto: #9333ea;
+  --report-astro-aspect-conjunction: #b45309;
+  --report-astro-aspect-sextile: #15803d;
+  --report-astro-aspect-square: #dc2626;
+  --report-astro-aspect-trine: #15803d;
+  --report-astro-aspect-opposition: #dc2626;
+  --report-astro-aspect-quincunx: #7c3aed;
+  --report-astro-sign-fire-bg: #991b1b;
+  --report-astro-sign-fire-fg: #f87171;
+  --report-astro-sign-earth-bg: #166534;
+  --report-astro-sign-earth-fg: #4ade80;
+  --report-astro-sign-air-bg: #854d0e;
+  --report-astro-sign-air-fg: #facc15;
+  --report-astro-sign-water-bg: #1e3a5f;
+  --report-astro-sign-water-fg: #60a5fa;
+  --report-astro-chart-bg-start: #24262a;
+  --report-astro-chart-bg-end: #1a1c20;
+  --report-astro-chart-stroke: #4d4635;
+  --report-astro-chart-inner-bg: #f5f4f0;
+  --report-astro-chart-badge-bg: #1e2023;
+  --report-astro-chart-legend-a-bg: #1e2023;
+  --report-astro-chart-legend-a-stroke: #0891b2;
+  --report-astro-chart-legend-a-text: #0891b2;
+  --report-astro-chart-legend-b-bg: #1e2023;
+  --report-astro-chart-legend-b-stroke: #c026d3;
+  --report-astro-chart-legend-b-text: #c026d3;
+  --report-astro-chart-tooltip-bg: #1e2023;
+  --report-astro-chart-tooltip-text: #d0c5af;
+  --report-astro-chart-tooltip-label: #1a1a1a;
+  --report-astro-chart-tooltip-sign: #0891b2;
+  --report-astro-chart-tooltip-house: #b8860b;
+  --report-astro-chart-tooltip-b-label: #c026d3;
+  --report-astro-chart-tooltip-muted: #64748b;
+  --report-astro-table-header-bg: rgba(39, 39, 42, 0.1);
+}

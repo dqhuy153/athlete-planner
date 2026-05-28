@@ -1,0 +1,25 @@
+{
+  "name": "athlete-planner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Sport Notebook Planner — Training planner for hybrid athletes with Garmin export",
+  "scripts": {
+    "infra:up": "docker compose up -d",
+    "dev": "turbo dev",
+    "dev:all": "pnpm infra:up && pnpm dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "dev:api": "turbo dev --filter=api",
+    "dev:web": "turbo dev --filter=web",
+    "dev:admin": "turbo dev --filter=admin-web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "prettier": "^3.4.0",
+    "turbo": "^2.9.14"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
