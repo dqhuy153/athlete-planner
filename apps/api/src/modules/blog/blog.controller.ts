@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AdminGuard } from '../admin/admin.guard';
@@ -11,6 +22,12 @@ import { DeleteBlogCategoryCommand } from './commands/delete-blog-category.comma
 import { GetBlogPostsQuery } from './queries/get-blog-posts.query';
 import { GetBlogPostBySlugQuery } from './queries/get-blog-post-by-slug.query';
 import { GetBlogCategoriesQuery } from './queries/get-blog-categories.query';
+import {
+  CreateBlogPostDto,
+  UpdateBlogPostDto,
+  CreateBlogCategoryDto,
+  UpdateBlogCategoryDto,
+} from './dto/blog.dto';
 
 @Controller('blog')
 export class BlogController {
@@ -20,7 +37,9 @@ export class BlogController {
   ) {}
 
   @Get()
-  async findAll(@Query() query: { page?: string; limit?: string; category?: string; status?: string }) {
+  async findAll(
+    @Query() query: { page?: string; limit?: string; category?: string; status?: string },
+  ) {
     return this.queryBus.execute(new GetBlogPostsQuery(query));
   }
 
@@ -36,7 +55,7 @@ export class BlogController {
 
   @UseGuards(AdminGuard)
   @Post()
-  async create(@Body() body: any, @Req() req: Request) {
+  async create(@Body() body: CreateBlogPostDto, @Req() req: Request) {
     const auth = req.headers['authorization'] || '';
     const authorId = auth.startsWith('Bearer ') ? auth.slice(7) : undefined;
     return this.commandBus.execute(new CreateBlogPostCommand(body, authorId));
@@ -44,7 +63,7 @@ export class BlogController {
 
   @UseGuards(AdminGuard)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body: any) {
+  async update(@Param('id') id: string, @Body() body: UpdateBlogPostDto) {
     return this.commandBus.execute(new UpdateBlogPostCommand(id, body));
   }
 
@@ -56,13 +75,13 @@ export class BlogController {
 
   @UseGuards(AdminGuard)
   @Post('categories')
-  async createCategory(@Body() body: any) {
+  async createCategory(@Body() body: CreateBlogCategoryDto) {
     return this.commandBus.execute(new CreateBlogCategoryCommand(body));
   }
 
   @UseGuards(AdminGuard)
   @Put('categories/:id')
-  async updateCategory(@Param('id') id: string, @Body() body: any) {
+  async updateCategory(@Param('id') id: string, @Body() body: UpdateBlogCategoryDto) {
     return this.commandBus.execute(new UpdateBlogCategoryCommand(id, body));
   }
 

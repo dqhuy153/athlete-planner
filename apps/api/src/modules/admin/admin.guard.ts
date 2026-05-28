@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, UserRole } from '@athlete-planner/database';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -26,7 +26,7 @@ export class AdminGuard implements CanActivate {
         where: { id: token },
         select: { id: true, role: true },
       });
-      if (user?.role === 'admin' || user?.role === 'root') return true;
+      if (user?.role === UserRole.admin || user?.role === UserRole.root) return true;
     } catch {
       // invalid UUID or DB error
     }

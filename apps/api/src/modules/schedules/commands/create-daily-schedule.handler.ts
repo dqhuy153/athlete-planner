@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, DayStatus } from '@athlete-planner/database';
 import { getISOWeek, getISOWeekYear, parseISO } from 'date-fns';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { CreateDailyScheduleCommand } from './create-daily-schedule.command';
@@ -21,7 +21,7 @@ export class CreateDailyScheduleHandler implements ICommandHandler<CreateDailySc
 
     return this.prisma.dailySchedule.upsert({
       where: { userId_dateString: { userId, dateString } },
-      create: { userId, dateString, weekNumber, year, dayStatus: 'PENDING' },
+      create: { userId, dateString, weekNumber, year, dayStatus: DayStatus.PENDING },
       update: {},
     });
   }

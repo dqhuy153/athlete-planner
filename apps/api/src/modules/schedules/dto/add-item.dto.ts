@@ -1,15 +1,14 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { ExerciseSourceType, SportType } from '@athlete-planner/contracts';
 
 export class AddItemDto {
-  @IsString()
-  @IsNotEmpty()
-  exerciseType: string;
+  @IsEnum(ExerciseSourceType)
+  exerciseType: ExerciseSourceType;
 
   @IsString()
   @IsNotEmpty()
   exerciseId: string;
 
-  @IsString()
-  @IsNotEmpty()
-  sportType: string;
+  @IsEnum(SportType)
+  sportType: SportType;
 }

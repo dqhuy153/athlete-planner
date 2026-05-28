@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AuthenticatedRequest } from '../../common/interfaces/authenticated-request.interface';
 import { CreateDailyScheduleCommand } from './commands/create-daily-schedule.command';
 import { UpdateDayStatusCommand } from './commands/update-day-status.command';
 import { AddScheduleItemCommand } from './commands/add-schedule-item.command';
@@ -41,7 +42,7 @@ export class SchedulesController {
   async getWeekSchedule(
     @Param('year') year: string,
     @Param('weekNumber') weekNumber: string,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.queryBus.execute(
       new GetWeekScheduleQuery(req.user.sub, parseInt(year), parseInt(weekNumber)),
@@ -49,7 +50,10 @@ export class SchedulesController {
   }
 
   @Get('day/:dateString')
-  async getDailySchedule(@Param('dateString') dateString: string, @Req() req: any) {
+  async getDailySchedule(
+    @Param('dateString') dateString: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
     return this.queryBus.execute(new GetDailyScheduleQuery(req.user.sub, dateString));
   }
 
@@ -57,7 +61,7 @@ export class SchedulesController {
   async getDisciplineRate(
     @Param('year') year: string,
     @Param('weekNumber') weekNumber: string,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.queryBus.execute(
       new GetDisciplineRateQuery(req.user.sub, parseInt(year), parseInt(weekNumber)),
@@ -65,7 +69,7 @@ export class SchedulesController {
   }
 
   @Post('day')
-  async createDay(@Body() dto: CreateScheduleDto, @Req() req: any) {
+  async createDay(@Body() dto: CreateScheduleDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(new CreateDailyScheduleCommand(req.user.sub, dto.dateString));
   }
 
@@ -73,18 +77,22 @@ export class SchedulesController {
   async updateDayStatus(
     @Param('id') id: string,
     @Body() dto: UpdateDayStatusDto,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(new UpdateDayStatusCommand(id, dto.status, req.user.sub));
   }
 
   @Post('day/:id/items')
-  async addItem(@Param('id') id: string, @Body() dto: AddItemDto, @Req() req: any) {
+  async addItem(
+    @Param('id') id: string,
+    @Body() dto: AddItemDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
     return this.commandBus.execute(new AddScheduleItemCommand(id, dto, req.user.sub));
   }
 
   @Delete('items/:itemId')
-  async removeItem(@Param('itemId') itemId: string, @Req() req: any) {
+  async removeItem(@Param('itemId') itemId: string, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(new RemoveScheduleItemCommand(itemId, req.user.sub));
   }
 
@@ -92,7 +100,7 @@ export class SchedulesController {
   async reorderItems(
     @Param('id') id: string,
     @Body() dto: { itemIds: string[] },
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(new ReorderItemsCommand(id, dto.itemIds, req.user.sub));
   }
@@ -101,7 +109,7 @@ export class SchedulesController {
   async updateGymPayload(
     @Param('itemId') itemId: string,
     @Body() dto: UpdatePayloadDto,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(new UpdateGymPayloadCommand(itemId, dto.payload, req.user.sub));
   }
@@ -110,7 +118,7 @@ export class SchedulesController {
   async updateRunningPayload(
     @Param('itemId') itemId: string,
     @Body() dto: UpdatePayloadDto,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(
       new UpdateRunningPayloadCommand(itemId, dto.payload, req.user.sub),
@@ -118,16 +126,22 @@ export class SchedulesController {
   }
 
   @Post('copy-day')
-  async copyDay(@Body() dto: CopyDayDto, @Req() req: any) {
+  async copyDay(@Body() dto: CopyDayDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(
       new CopyDayCommand(req.user.sub, dto.sourceDateString, dto.targetDateString),
     );
   }
 
   @Post('copy-week')
-  async copyWeek(@Body() dto: CopyWeekDto, @Req() req: any) {
+  async copyWeek(@Body() dto: CopyWeekDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(
-      new CopyWeekCommand(req.user.sub, dto.sourceYear, dto.sourceWeek, dto.targetYear, dto.targetWeek),
+      new CopyWeekCommand(
+        req.user.sub,
+        dto.sourceYear,
+        dto.sourceWeek,
+        dto.targetYear,
+        dto.targetWeek,
+      ),
     );
   }
 }

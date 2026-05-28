@@ -1,7 +1,17 @@
-// ─── User Types ─────────────────────────────────────────────────────────────
+// ─── User Enums ──────────────────────────────────────────────────────────────
 
-export type UserTier = 'FREE' | 'PRO';
-export type UserRole = 'user' | 'admin' | 'root';
+export enum UserTier {
+  FREE = 'FREE',
+  PRO = 'PRO',
+}
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+  ROOT = 'root',
+}
+
+// ─── User Types ─────────────────────────────────────────────────────────────
 
 export interface User {
   id: string;
@@ -15,11 +25,38 @@ export interface User {
   updatedAt: string;
 }
 
-// ─── Exercise Types ─────────────────────────────────────────────────────────
+// ─── Exercise Enums ──────────────────────────────────────────────────────────
 
-export type MuscleGroup = 'Chest' | 'Back' | 'Shoulders' | 'Arms' | 'Legs' | 'Abs';
-export type RunningType = 'Interval' | 'Easy' | 'Tempo' | 'Long_Run';
-export type SportType = 'GYM' | 'RUNNING';
+export enum MuscleGroup {
+  CHEST = 'Chest',
+  BACK = 'Back',
+  SHOULDERS = 'Shoulders',
+  ARMS = 'Arms',
+  LEGS = 'Legs',
+  ABS = 'Abs',
+}
+
+export enum RunningType {
+  INTERVAL = 'Interval',
+  EASY = 'Easy',
+  TEMPO = 'Tempo',
+  LONG_RUN = 'Long_Run',
+}
+
+/** Sport category — stored as String in DB (not a Prisma enum) */
+export enum SportType {
+  GYM = 'GYM',
+  RUNNING = 'RUNNING',
+}
+
+/** Exercise source type for schedule items */
+export enum ExerciseSourceType {
+  GYM_MASTER = 'GYM_MASTER',
+  RUNNING_MASTER = 'RUNNING_MASTER',
+  PRIVATE = 'PRIVATE',
+}
+
+// ─── Exercise Types ─────────────────────────────────────────────────────────
 
 export interface LocalizedStringArray {
   vi: string[];
@@ -81,9 +118,22 @@ export interface PrivateExercise {
   updatedAt: string;
 }
 
-// ─── Schedule Types ─────────────────────────────────────────────────────────
+// ─── Schedule Enums ──────────────────────────────────────────────────────────
 
-export type DayStatus = 'PENDING' | 'COMPLETED' | 'SKIPPED' | 'REST';
+export enum DayStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  SKIPPED = 'SKIPPED',
+  REST = 'REST',
+}
+
+export enum RunningIntensityType {
+  PACE = 'PACE',
+  HEART_RATE = 'HEART_RATE',
+  NONE = 'NONE',
+}
+
+// ─── Schedule Types ─────────────────────────────────────────────────────────
 
 export interface GymSet {
   set_number: number;
@@ -112,7 +162,7 @@ export interface HrTargetRange {
 export interface RunningPayload {
   target_distance_km?: number;
   duration_minutes?: number;
-  intensity_type: 'PACE' | 'HEART_RATE' | 'NONE';
+  intensity_type: RunningIntensityType;
   pace_target_range?: PaceTargetRange;
   hr_target_range?: HrTargetRange;
 }
@@ -144,6 +194,14 @@ export interface DailySchedule {
   updatedAt: string;
 }
 
+// ─── Blog Enums ──────────────────────────────────────────────────────────────
+
+export enum BlogStatus {
+  DRAFT = 'draft',
+  PUBLISHED = 'published',
+  ARCHIVED = 'archived',
+}
+
 // ─── Blog Types ─────────────────────────────────────────────────────────────
 
 export interface BlogPost {
@@ -155,7 +213,7 @@ export interface BlogPost {
   coverImage: string | null;
   tags: string[];
   categoryKey: string | null;
-  status: 'draft' | 'published' | 'archived';
+  status: BlogStatus;
   readingTime: number;
   publishedAt: string | null;
   authorId: string | null;
@@ -173,6 +231,13 @@ export interface BlogCategory {
   order: number;
 }
 
+// ─── Storage Enums ───────────────────────────────────────────────────────────
+
+export enum StorageProvider {
+  R2 = 'r2',
+  CLOUDINARY = 'cloudinary',
+}
+
 // ─── API Response Types ─────────────────────────────────────────────────────
 
 export interface Asset {
@@ -180,7 +245,7 @@ export interface Asset {
   fileName: string;
   url: string;
   key: string | null;
-  storageProvider: 'r2' | 'cloudinary';
+  storageProvider: StorageProvider;
   mimeType: string | null;
   size: number | null;
   category: string | null;

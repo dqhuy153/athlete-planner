@@ -1,10 +1,10 @@
 import { IsString, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
 import { MuscleGroup, RunningType } from '@athlete-planner/database';
+import { SportType } from '@athlete-planner/contracts';
 
 export class CreatePrivateExerciseDto {
-  @IsString()
-  @IsNotEmpty()
-  sportType: string;
+  @IsEnum(SportType)
+  sportType: SportType;
 
   @IsString()
   @IsNotEmpty()

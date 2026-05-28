@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, DayStatus } from '@athlete-planner/database';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { getISOWeek, getISOWeekYear, parseISO, format } from 'date-fns';
 
@@ -26,9 +26,9 @@ export class ScheduleReplicationService {
         dateString: targetDateString,
         weekNumber: getISOWeek(parseISO(targetDateString)),
         year: getISOWeekYear(parseISO(targetDateString)),
-        dayStatus: 'PENDING',
+        dayStatus: DayStatus.PENDING,
       },
-      update: { dayStatus: 'PENDING' },
+      update: { dayStatus: DayStatus.PENDING },
     });
 
     await this.prisma.scheduleItem.deleteMany({ where: { scheduleId: target.id } });

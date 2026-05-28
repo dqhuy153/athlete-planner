@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ExerciseSourceType } from '@athlete-planner/contracts';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { AddScheduleItemCommand } from './add-schedule-item.command';
 
@@ -32,10 +33,10 @@ export class AddScheduleItemHandler implements ICommandHandler<AddScheduleItemCo
         scheduleId,
         sequenceOrder: maxOrder + 1,
         sportType,
-        isPrivateExercise: exerciseType === 'PRIVATE',
-        gymMasterId: exerciseType === 'GYM_MASTER' ? exerciseId : null,
-        runningMasterId: exerciseType === 'RUNNING_MASTER' ? exerciseId : null,
-        privateExerciseId: exerciseType === 'PRIVATE' ? exerciseId : null,
+        isPrivateExercise: exerciseType === ExerciseSourceType.PRIVATE,
+        gymMasterId: exerciseType === ExerciseSourceType.GYM_MASTER ? exerciseId : null,
+        runningMasterId: exerciseType === ExerciseSourceType.RUNNING_MASTER ? exerciseId : null,
+        privateExerciseId: exerciseType === ExerciseSourceType.PRIVATE ? exerciseId : null,
       },
     });
   }

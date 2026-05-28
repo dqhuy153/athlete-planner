@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, INestApplication } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 declare const globalThis: { _nestApp?: INestApplication };
 
@@ -24,8 +25,10 @@ export async function createNestApp(): Promise<INestApplication> {
     credentials: true,
   });
 
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: false, transform: true }),
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }),
   );
 
   app.setGlobalPrefix('api');

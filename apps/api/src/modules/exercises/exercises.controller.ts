@@ -13,6 +13,7 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../admin/admin.guard';
+import { AuthenticatedRequest } from '../../common/interfaces/authenticated-request.interface';
 import { CreateGymMasterCommand } from './commands/create-gym-master.command';
 import { CreateRunningMasterCommand } from './commands/create-running-master.command';
 import { CreatePrivateExerciseCommand } from './commands/create-private-exercise.command';
@@ -44,9 +45,8 @@ export class ExercisesController {
 
   @UseGuards(JwtAuthGuard)
   @Get('private')
-  async getPrivateExercises(@Req() req: any) {
-    const userId = req.user.sub;
-    return this.queryBus.execute(new GetPrivateExercisesQuery(userId));
+  async getPrivateExercises(@Req() req: AuthenticatedRequest) {
+    return this.queryBus.execute(new GetPrivateExercisesQuery(req.user.sub));
   }
 
   @Get(':id')
@@ -68,7 +68,11 @@ export class ExercisesController {
 
   @UseGuards(AdminGuard)
   @Put(':id')
-  async updateExercise(@Param('id') id: string, @Body() body: any, @Query('type') type: 'gym' | 'running' = 'gym') {
+  async updateExercise(
+    @Param('id') id: string,
+    @Body() body: CreateGymExerciseDto | CreateRunningExerciseDto,
+    @Query('type') type: 'gym' | 'running' = 'gym',
+  ) {
     return this.commandBus.execute(new UpdateExerciseCommand(id, body, type));
   }
 
@@ -80,26 +84,26 @@ export class ExercisesController {
 
   @UseGuards(JwtAuthGuard)
   @Post('private')
-  async createPrivateExercise(@Body() body: CreatePrivateExerciseDto, @Req() req: any) {
-    const userId = req.user.sub;
-    return this.commandBus.execute(new CreatePrivateExerciseCommand(body, userId));
+  async createPrivateExercise(
+    @Body() body: CreatePrivateExerciseDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.commandBus.execute(new CreatePrivateExerciseCommand(body, req.user.sub));
   }
 
   @UseGuards(JwtAuthGuard)
   @Put('private/:id')
   async updatePrivateExercise(
     @Param('id') id: string,
-    @Body() body: any,
-    @Req() req: any,
+    @Body() body: CreatePrivateExerciseDto,
+    @Req() req: AuthenticatedRequest,
   ) {
-    const userId = req.user.sub;
-    return this.commandBus.execute(new UpdateExerciseCommand(id, body, 'private', userId));
+    return this.commandBus.execute(new UpdateExerciseCommand(id, body, 'private', req.user.sub));
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('private/:id/toggle')
-  async togglePrivateExercise(@Param('id') id: string, @Req() req: any) {
-    const userId = req.user.sub;
-    return this.commandBus.execute(new ToggleExerciseActiveCommand(id, 'private', userId));
+  async togglePrivateExercise(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+    return this.commandBus.execute(new ToggleExerciseActiveCommand(id, 'private', req.user.sub));
   }
 }
