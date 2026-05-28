@@ -19,6 +19,9 @@ import { AdminModule } from './modules/admin/admin.module';
 import { CronModule } from './modules/cron/cron.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { HealthModule } from './modules/health/health.module';
+import { ExercisesModule } from './modules/exercises/exercises.module';
+import { SchedulesModule } from './modules/schedules/schedules.module';
+import { TierGuardModule } from './modules/tier-guard/tier-guard.module';
 
 @Module({
   imports: [
@@ -54,6 +57,9 @@ import { HealthModule } from './modules/health/health.module';
     CronModule,
     BlogModule,
     HealthModule,
+    TierGuardModule,
+    ExercisesModule,
+    SchedulesModule,
   ],
 })
 export class AppModule {}

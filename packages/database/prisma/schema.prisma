@@ -3,13 +3,13 @@
 // Run `pnpm --filter @athlete-planner/database prisma migrate dev` to create/apply migrations.
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/client"
+  provider     = "prisma-client"
+  output       = "../src/generated/client"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ─── User & Auth ─────────────────────────────────────────────────────────────
