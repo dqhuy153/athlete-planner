@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm, FormProvider, useFieldArray, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Check, Sparkles, Plus, Trash2 } from 'lucide-react';
+import { FormLabel, FormError } from '@athlete-planner/ui';
 import { useAuth } from '@/lib/auth-context';
 import { generateExerciseContent } from '@/lib/api';
 import { WizardStepper } from './WizardStepper';
@@ -226,13 +227,14 @@ export function RunningExerciseWizard({
         {step === 0 && (
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Exercise name <span className="text-error">*</span>
-              </label>
+              <FormLabel htmlFor="name" required>Exercise name</FormLabel>
               <div className="flex gap-2">
                 <input
+                  id="name"
                   {...register('name')}
                   placeholder="e.g. 5K Easy Run"
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
                   className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <button
@@ -245,29 +247,29 @@ export function RunningExerciseWizard({
                   {generating ? 'Generating…' : 'Generate'}
                 </button>
               </div>
-              {errors.name && <p className="mt-1 text-xs text-error">{errors.name.message}</p>}
+              <FormError id="name-error" message={errors.name?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Vietnamese name <span className="text-error">*</span>
-              </label>
+              <FormLabel htmlFor="vietnameseName" required>Vietnamese name</FormLabel>
               <input
+                id="vietnameseName"
                 {...register('vietnameseName')}
                 placeholder="e.g. Chạy nhẹ 5km"
+                aria-invalid={!!errors.vietnameseName}
+                aria-describedby={errors.vietnameseName ? 'vietnameseName-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
-              {errors.vietnameseName && (
-                <p className="mt-1 text-xs text-error">{errors.vietnameseName.message}</p>
-              )}
+              <FormError id="vietnameseName-error" message={errors.vietnameseName?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Running type <span className="text-error">*</span>
-              </label>
+              <FormLabel htmlFor="runningType" required>Running type</FormLabel>
               <select
+                id="runningType"
                 {...register('runningType')}
+                aria-invalid={!!errors.runningType}
+                aria-describedby={errors.runningType ? 'runningType-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {RUNNING_TYPES.map((t) => (
@@ -276,30 +278,35 @@ export function RunningExerciseWizard({
                   </option>
                 ))}
               </select>
+              <FormError id="runningType-error" message={errors.runningType?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                YouTube embed URL
-              </label>
+              <FormLabel htmlFor="youtubeEmbedUrl">YouTube embed URL</FormLabel>
               <input
+                id="youtubeEmbedUrl"
                 {...register('youtubeEmbedUrl')}
                 type="url"
                 placeholder="https://www.youtube.com/embed/..."
+                aria-invalid={!!errors.youtubeEmbedUrl}
+                aria-describedby={errors.youtubeEmbedUrl ? 'youtubeEmbedUrl-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormError id="youtubeEmbedUrl-error" message={errors.youtubeEmbedUrl?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                GIF / Image URL
-              </label>
+              <FormLabel htmlFor="gifUrl">GIF / Image URL</FormLabel>
               <input
+                id="gifUrl"
                 {...register('gifUrl')}
                 type="url"
                 placeholder="https://..."
+                aria-invalid={!!errors.gifUrl}
+                aria-describedby={errors.gifUrl ? 'gifUrl-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormError id="gifUrl-error" message={errors.gifUrl?.message} />
               {watchedValues.gifUrl && (
                 <img
                   src={watchedValues.gifUrl}
