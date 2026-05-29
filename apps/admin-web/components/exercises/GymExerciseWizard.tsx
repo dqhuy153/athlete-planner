@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Check, Sparkles } from 'lucide-react';
+import { FormLabel, FormError } from '@athlete-planner/ui';
 import { useAuth } from '@/lib/auth-context';
 import { generateExerciseContent } from '@/lib/api';
 import { WizardStepper } from './WizardStepper';
@@ -143,13 +144,14 @@ export function GymExerciseWizard({
         {step === 0 && (
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Exercise name <span className="text-error">*</span>
-              </label>
+              <FormLabel htmlFor="name" required>Exercise name</FormLabel>
               <div className="flex gap-2">
                 <input
+                  id="name"
                   {...register('name')}
                   placeholder="e.g. Barbell Back Squat"
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
                   className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <button
@@ -162,29 +164,29 @@ export function GymExerciseWizard({
                   {generating ? 'Generating…' : 'Generate'}
                 </button>
               </div>
-              {errors.name && <p className="mt-1 text-xs text-error">{errors.name.message}</p>}
+              <FormError id="name-error" message={errors.name?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Vietnamese name <span className="text-error">*</span>
-              </label>
+              <FormLabel htmlFor="vietnameseName" required>Vietnamese name</FormLabel>
               <input
+                id="vietnameseName"
                 {...register('vietnameseName')}
                 placeholder="e.g. Squat tạ đòn"
+                aria-invalid={!!errors.vietnameseName}
+                aria-describedby={errors.vietnameseName ? 'vietnameseName-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
-              {errors.vietnameseName && (
-                <p className="mt-1 text-xs text-error">{errors.vietnameseName.message}</p>
-              )}
+              <FormError id="vietnameseName-error" message={errors.vietnameseName?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Target muscle group <span className="text-error">*</span>
-              </label>
+              <FormLabel htmlFor="targetMuscleGroup" required>Target muscle group</FormLabel>
               <select
+                id="targetMuscleGroup"
                 {...register('targetMuscleGroup')}
+                aria-invalid={!!errors.targetMuscleGroup}
+                aria-describedby={errors.targetMuscleGroup ? 'targetMuscleGroup-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {MUSCLE_GROUPS.map((mg) => (
@@ -193,29 +195,36 @@ export function GymExerciseWizard({
                   </option>
                 ))}
               </select>
+              <FormError id="targetMuscleGroup-error" message={errors.targetMuscleGroup?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
+              <FormLabel htmlFor="secondaryMuscleGroups">
                 Secondary muscles{' '}
                 <span className="text-xs text-on-surface-variant/60">(comma-separated)</span>
-              </label>
+              </FormLabel>
               <input
+                id="secondaryMuscleGroups"
                 {...register('secondaryMuscleGroups')}
                 placeholder="e.g. Glutes, Hamstrings"
+                aria-invalid={!!errors.secondaryMuscleGroups}
+                aria-describedby={errors.secondaryMuscleGroups ? 'secondaryMuscleGroups-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormError id="secondaryMuscleGroups-error" message={errors.secondaryMuscleGroups?.message} />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                Garmin exercise enum
-              </label>
+              <FormLabel htmlFor="garminExerciseEnum">Garmin exercise enum</FormLabel>
               <input
+                id="garminExerciseEnum"
                 {...register('garminExerciseEnum')}
                 placeholder="e.g. SQUAT"
+                aria-invalid={!!errors.garminExerciseEnum}
+                aria-describedby={errors.garminExerciseEnum ? 'garminExerciseEnum-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <FormError id="garminExerciseEnum-error" message={errors.garminExerciseEnum?.message} />
             </div>
           </div>
         )}
@@ -229,32 +238,31 @@ export function GymExerciseWizard({
         {step === 2 && (
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                YouTube embed URL
-              </label>
+              <FormLabel htmlFor="youtubeEmbedUrl">YouTube embed URL</FormLabel>
               <input
+                id="youtubeEmbedUrl"
+                type="url"
                 {...register('youtubeEmbedUrl')}
-                type="url"
                 placeholder="https://www.youtube.com/embed/..."
+                aria-invalid={!!errors.youtubeEmbedUrl}
+                aria-describedby={errors.youtubeEmbedUrl ? 'youtubeEmbedUrl-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
-              {errors.youtubeEmbedUrl && (
-                <p className="mt-1 text-xs text-error">{errors.youtubeEmbedUrl.message}</p>
-              )}
+              <FormError id="youtubeEmbedUrl-error" message={errors.youtubeEmbedUrl?.message} />
             </div>
+
             <div>
-              <label className="mb-1 block text-sm font-medium text-on-surface-variant">
-                GIF / Image URL
-              </label>
+              <FormLabel htmlFor="gifUrl">GIF / Image URL</FormLabel>
               <input
-                {...register('gifUrl')}
+                id="gifUrl"
                 type="url"
+                {...register('gifUrl')}
                 placeholder="https://..."
+                aria-invalid={!!errors.gifUrl}
+                aria-describedby={errors.gifUrl ? 'gifUrl-error' : undefined}
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
-              {errors.gifUrl && (
-                <p className="mt-1 text-xs text-error">{errors.gifUrl.message}</p>
-              )}
+              <FormError id="gifUrl-error" message={errors.gifUrl?.message} />
               {watchedValues.gifUrl && (
                 <img
                   src={watchedValues.gifUrl}
