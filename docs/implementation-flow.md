@@ -12,7 +12,7 @@
 | Phase 3 | COMPLETED | Daily Planner (Core UX) |
 | Phase 4 | COMPLETED | Schedule Replication Engine |
 | Phase 5 | COMPLETED | Monetization & Garmin Export |
-| Phase 6 | PENDING | Content, Polish & Deploy |
+| Phase 6 | COMPLETED | Content, Polish & Deploy |
 
 ---
 
@@ -333,10 +333,46 @@ Add to `apps/web/app/[locale]/library/`:
 
 ## Phase 6: Content, Polish & Deploy
 
-**Goal:** Blog, i18n, performance, deployment.
+**Goal:** Blog pages, profile page, PWA, deployment configs, documentation.
 
-### 6.1 - Blog Adaptation (fitness content)
-### 6.2 - i18n Completion (all keys translated)
-### 6.3 - Performance (images, code split, PWA manifest)
-### 6.4 - Deployment (Vercel + Railway configs)
+### 6.1 - Blog Adaptation
+
+Added to `apps/web/app/[locale]/blog/`:
+- `page.tsx` — Server component listing with parallel fetch (posts + categories). Category filter tabs with URL-state.
+- `BlogCategoryTabs.tsx` — Client component for tab interaction.
+- `[slug]/page.tsx` — Server component article detail with cover image, reading time, tags, HTML content.
+
+### 6.2 - Profile Page + i18n Completion
+
+Added `apps/web/app/[locale]/profile/page.tsx`:
+- Tier badge (FREE / PRO with Zap icon)
+- Language switcher (vi ↔ en via router.push)
+- Sign out button (next-auth signOut)
+- Unauthenticated state with sign-in link
+
+Added `blog.*` and updated `profile.*` keys to `en.json` + `vi.json`.
+
+### 6.3 - PWA + Performance
+
+- `apps/web/public/manifest.json` — PWA manifest with icons, theme color `#0A0A0A`
+- Root layout + locale layout updated with `manifest`, `appleWebApp`, `formatDetection` metadata
+- Fonts: Inter + JetBrains Mono via `next/font/google` (already present in locale layout)
+- Server components used for blog pages (no client waterfalls)
+
+### 6.4 - Deployment Configs
+
+- `apps/web/vercel.json` — Vercel config pointing to monorepo root
+- `apps/admin-web/vercel.json` — same pattern for admin
+- `apps/api/Dockerfile` — multi-stage Docker build for Railway
+- `railway.toml` — Railway service config (Dockerfile builder)
+
 ### 6.5 - Documentation Finalization
+
+- `docs/deployment.md` — Complete step-by-step: Google OAuth, Railway (API + DB + Redis), Cloudflare R2, PayOS, Vercel (web + admin), migration commands, env var reference, security checklist
+- `docs/MEMORY.md` — Updated with Phase 5 deliverables, all stack versions, critical technical details, phase completion summary
+- `.env.example` — Root env example with all variables documented
+- `apps/web/.env.example` — Web app env example
+- `apps/admin-web/.env.example` — Admin env example
+- Fixed `apps/web/.env.local` — empty GOOGLE_CLIENT_ID/SECRET now set to `dev-placeholder` so Zod validation passes on dev start
+
+**Verification:** `pnpm build` — Tasks: 5 successful, 5 total.

@@ -140,14 +140,30 @@
     "saving": "Saving...",
     "limitBanner": "You've reached the 10 private exercise limit"
   },
+  "blog": {
+    "title": "Articles",
+    "allCategories": "All",
+    "readMore": "Read article",
+    "minRead": "{n} min read",
+    "noPosts": "No articles yet",
+    "noPostsHint": "Check back soon.",
+    "back": "Back to articles",
+    "publishedOn": "Published {date}",
+    "tags": "Topics"
+  },
   "profile": {
     "title": "Profile",
     "tier": "Plan",
     "free": "Free",
     "pro": "Pro",
-    "upgrade": "Upgrade",
+    "upgrade": "Upgrade to PRO",
+    "signOut": "Sign out",
     "settings": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "langVi": "Tiếng Việt",
+    "langEn": "English",
+    "notSignedIn": "Not signed in",
+    "signIn": "Sign in"
   },
   "tier": {
     "upgradeTitle": "Upgrade to Pro",

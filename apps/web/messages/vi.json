@@ -141,14 +141,30 @@
     "saving": "Đang lưu...",
     "limitBanner": "Bạn đã đạt giới hạn 10 bài tập cá nhân"
   },
+  "blog": {
+    "title": "Bài viết",
+    "allCategories": "Tất cả",
+    "readMore": "Đọc bài",
+    "minRead": "{n} phút đọc",
+    "noPosts": "Chưa có bài viết",
+    "noPostsHint": "Quay lại sau nhé.",
+    "back": "Quay lại bài viết",
+    "publishedOn": "Đăng ngày {date}",
+    "tags": "Chủ đề"
+  },
   "profile": {
     "title": "Hồ sơ",
     "tier": "Gói cước",
     "free": "Miễn phí",
     "pro": "Pro",
-    "upgrade": "Nâng cấp",
+    "upgrade": "Nâng cấp PRO",
+    "signOut": "Đăng xuất",
     "settings": "Cài đặt",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "langVi": "Tiếng Việt",
+    "langEn": "English",
+    "notSignedIn": "Chưa đăng nhập",
+    "signIn": "Đăng nhập"
   },
   "tier": {
     "upgradeTitle": "Nâng cấp Pro",

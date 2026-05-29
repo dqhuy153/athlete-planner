@@ -22,6 +22,13 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: { default: 'Sport Notebook', template: '%s | Sport Notebook' },
   description: 'Training planner for hybrid athletes',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Sport Notebook',
+  },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {

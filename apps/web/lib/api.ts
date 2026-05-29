@@ -1,4 +1,15 @@
-import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise, DailySchedule, ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
+import type {
+  GymExerciseMaster,
+  RunningExerciseMaster,
+  PrivateExercise,
+  DailySchedule,
+  ScheduleItem,
+  GymPayload,
+  RunningPayload,
+  BlogPost,
+  BlogCategory,
+  User,
+} from '@athlete-planner/contracts';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -40,13 +51,13 @@ class ApiClient {
 
   // ── Users ────────────────────────────────────────────────────────────────
   getProfile(accessToken: string) {
-    return this.request<any>('/users/profile', {
+    return this.request<User>('/users/profile', {
       headers: this.authHeaders(accessToken),
     });
   }
 
   updateProfile(accessToken: string, data: { name?: string; avatarUrl?: string }) {
-    return this.request<any>('/users/profile', {
+    return this.request<User>('/users/profile', {
       method: 'PATCH',
       headers: this.authHeaders(accessToken),
       body: JSON.stringify(data),
@@ -59,17 +70,17 @@ class ApiClient {
     if (params?.page) query.set('page', String(params.page));
     if (params?.limit) query.set('limit', String(params.limit));
     if (params?.categoryKey) query.set('categoryKey', params.categoryKey);
-    return this.request<{ posts: any[]; total: number; page: number; limit: number }>(
+    return this.request<{ posts: BlogPost[]; total: number; page: number; limit: number }>(
       `/blog?${query}`,
     );
   }
 
   getBlogPostBySlug(slug: string) {
-    return this.request<any>(`/blog/${slug}`);
+    return this.request<BlogPost>(`/blog/${slug}`);
   }
 
   getBlogCategories() {
-    return this.request<any[]>('/blog/categories');
+    return this.request<BlogCategory[]>('/blog/categories');
   }
 
   // ── Exercises ────────────────────────────────────────────────────────────

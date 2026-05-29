@@ -3,6 +3,13 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: { default: 'Sport Notebook', template: '%s | Sport Notebook' },
   description: 'Training planner for hybrid athletes',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Sport Notebook',
+  },
+  formatDetection: { telephone: false },
 };
 
 // Root layout — minimal wrapper. The actual app layout is in app/[locale]/layout.tsx
