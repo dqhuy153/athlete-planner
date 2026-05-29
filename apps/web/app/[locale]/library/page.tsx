@@ -45,7 +45,7 @@ export default async function GymLibraryPage({
 
   return (
     <div className='flex flex-col h-full'>
-      <div className='sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur-sm px-4 py-3'>
+      <div className='sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur-sm py-3'>
         <Suspense fallback={null}>
           <MuscleGroupFilter />
         </Suspense>
