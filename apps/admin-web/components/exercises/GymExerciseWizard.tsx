@@ -115,8 +115,12 @@ export function GymExerciseWizard({
       1: [],
       2: [],
     };
-    const valid = await trigger(stepFields[step] ?? []);
-    if (valid) setStep((s) => s + 1);
+    try {
+      const valid = await trigger(stepFields[step] ?? []);
+      if (valid) setStep((s) => s + 1);
+    } catch {
+      // Zod validation errors are shown inline — don't crash the boundary
+    }
   }
 
   async function handleFinalSubmit(data: GymExerciseFormValues) {
