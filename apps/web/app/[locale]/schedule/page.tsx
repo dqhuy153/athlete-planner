@@ -15,9 +15,12 @@ import { DailyScheduleView }     from '@/components/DailyScheduleView';
 import { ExercisePicker, type PickedExercise } from '@/components/ExercisePicker';
 import { CopyDayModal }  from '@/components/CopyDayModal';
 import { CopyWeekModal } from '@/components/CopyWeekModal';
+import { UpgradePrompt } from '@/components/UpgradePrompt';
+import { Download, Archive, Lock } from 'lucide-react';
 
 export default function SchedulePage() {
   const t                       = useTranslations('schedule');
+  const tExport                 = useTranslations('export');
   const { data: session, status } = useSession();
 
   const token   = (session?.accessToken as string) ?? '';
@@ -110,6 +113,9 @@ export default function SchedulePage() {
   const [pickerOpen,   setPickerOpen]   = useState(false);
   const [copyDayOpen,  setCopyDayOpen]  = useState(false);
   const [copyWeekOpen, setCopyWeekOpen] = useState(false);
+  const [upgradePromptOpen, setUpgradePromptOpen] = useState(false);
+  const [exportingDay,  setExportingDay]  = useState(false);
+  const [exportingWeek, setExportingWeek] = useState(false);
 
   const handlePick = useCallback(async (picked: PickedExercise) => {
     setPickerOpen(false);
@@ -166,6 +172,57 @@ export default function SchedulePage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSchedule, gymExercises, runningExercises, privateExercises]);
 
+  // ISO week for copy-week source and export
+  const sourceWeekBase  = addWeeks(startOfISOWeek(new Date()), weekOffset);
+  const sourceWeekNum   = getISOWeek(sourceWeekBase);
+  const sourceWeekYear  = getISOWeekYear(sourceWeekBase);
+
+  // ── Export helpers ───────────────────────────────────────────────────────
+  function triggerDownload(blob: Blob, filename: string) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleExportDay() {
+    if (userTier !== UserTier.PRO) {
+      setUpgradePromptOpen(true);
+      return;
+    }
+    if (!token) return;
+    setExportingDay(true);
+    try {
+      const { blob, filename } = await api.exportDayFit(selectedDate, token);
+      triggerDownload(blob, filename);
+    } catch {
+      // silently fail
+    } finally {
+      setExportingDay(false);
+    }
+  }
+
+  async function handleExportWeek() {
+    if (userTier !== UserTier.PRO) {
+      setUpgradePromptOpen(true);
+      return;
+    }
+    if (!token) return;
+    setExportingWeek(true);
+    try {
+      const { blob, filename } = await api.exportWeekZip(sourceWeekYear, sourceWeekNum, token);
+      triggerDownload(blob, filename);
+    } catch {
+      // silently fail
+    } finally {
+      setExportingWeek(false);
+    }
+  }
+
   // ── Loading / auth states ────────────────────────────────────────────────
   if (status === 'loading') {
     return (
@@ -185,11 +242,6 @@ export default function SchedulePage() {
 
   const currentStatus = activeSchedule?.dayStatus ?? DayStatus.PENDING;
   const currentItems  = activeSchedule?.items ?? [];
-
-  // ISO week for copy-week source
-  const sourceWeekBase  = addWeeks(startOfISOWeek(new Date()), weekOffset);
-  const sourceWeekNum   = getISOWeek(sourceWeekBase);
-  const sourceWeekYear  = getISOWeekYear(sourceWeekBase);
 
   return (
     <div className="flex flex-col gap-4 pb-8">
@@ -213,6 +265,32 @@ export default function SchedulePage() {
             className="rounded-lg bg-surface-2 px-3 py-1.5 text-caption text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             {t('copyWeek')}
+          </button>
+          <button
+            type="button"
+            onClick={handleExportDay}
+            disabled={exportingDay}
+            aria-label={tExport('fitDay')}
+            className="flex min-h-[48px] items-center gap-2 rounded-xl border border-border px-4 text-sm font-medium hover:bg-surface-1 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <Download size={16} />
+            {exportingDay ? tExport('downloading') : tExport('fitDay')}
+            {userTier !== UserTier.PRO && (
+              <Lock size={12} className="text-muted-foreground" />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={handleExportWeek}
+            disabled={exportingWeek}
+            aria-label={tExport('fitWeek')}
+            className="flex min-h-[48px] items-center gap-2 rounded-xl border border-border px-4 text-sm font-medium hover:bg-surface-1 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <Archive size={16} />
+            {exportingWeek ? tExport('downloading') : tExport('fitWeek')}
+            {userTier !== UserTier.PRO && (
+              <Lock size={12} className="text-muted-foreground" />
+            )}
           </button>
         </div>
       </div>
@@ -296,6 +374,12 @@ export default function SchedulePage() {
         onConfirm={async (srcWeek, srcYear, tgtWeek, tgtYear, overwrite) => {
           await api.copyWeek(token, srcWeek, srcYear, tgtWeek, tgtYear, overwrite);
         }}
+      />
+
+      <UpgradePrompt
+        isOpen={upgradePromptOpen}
+        onClose={() => setUpgradePromptOpen(false)}
+        featureHint="export.upgradeToExport"
       />
     </div>
   );
