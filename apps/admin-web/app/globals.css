@@ -7,7 +7,28 @@
     box-sizing: border-box;
   }
 
+  /* ── Light theme (default) ────────────────────────────────────────────────── */
   :root {
+    --background: #FAFAFA;
+    --foreground: #0A0A0A;
+    --surface-1: #F4F4F4;
+    --surface-2: #EBEBEB;
+    --surface-3: #E0E0E0;
+    --accent: #00B894;
+    --accent-muted: rgba(0, 184, 148, 0.12);
+    --accent-foreground: #FFFFFF;
+    --text-primary: #0A0A0A;
+    --text-secondary: #525252;
+    --text-tertiary: #A3A3A3;
+    --success: #16A34A;
+    --warning: #D97706;
+    --error: #DC2626;
+    --border: #E5E5E5;
+    --border-muted: #F0F0F0;
+  }
+
+  /* ── Dark theme ───────────────────────────────────────────────────────────── */
+  .dark {
     --background: #0A0A0A;
     --foreground: #FAFAFA;
     --surface-1: #141414;

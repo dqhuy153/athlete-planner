@@ -22,6 +22,7 @@ import { IsString, IsEnum, IsOptional, IsInt, Min, Max } from 'class-validator';
 import crypto from 'crypto';
 import { SeedGymExercisesCommand } from './commands/seed-gym-exercises.command';
 import { SeedRunningExercisesCommand } from './commands/seed-running-exercises.command';
+import { SeedFreeExerciseDbCommand } from './commands/seed-free-exercise-db.command';
 import { AIGenerateGymExercisesCommand } from './commands/ai-generate-gym-exercises.command';
 import { AIGenerateRunningExercisesCommand } from './commands/ai-generate-running-exercises.command';
 
@@ -114,6 +115,11 @@ Respond with JSON only:
   @Post('exercises/seed/running')
   async seedRunningExercises() {
     return this.commandBus.execute(new SeedRunningExercisesCommand());
+  }
+
+  @Post('exercises/seed/free-exercise-db')
+  async seedFreeExerciseDb() {
+    return this.commandBus.execute(new SeedFreeExerciseDbCommand());
   }
 
   // ── AI Bulk Generate ─────────────────────────────────────────────────────────

@@ -11,12 +11,14 @@ import { CloudinarySignService } from '../shared/cloudinary-sign.service';
 import { AIService } from '../shared/ai.service';
 import { SeedGymExercisesHandler } from './commands/seed-gym-exercises.handler';
 import { SeedRunningExercisesHandler } from './commands/seed-running-exercises.handler';
+import { SeedFreeExerciseDbHandler } from './commands/seed-free-exercise-db.handler';
 import { AIGenerateGymExercisesHandler } from './commands/ai-generate-gym-exercises.handler';
 import { AIGenerateRunningExercisesHandler } from './commands/ai-generate-running-exercises.handler';
 
 const CommandHandlers = [
   SeedGymExercisesHandler,
   SeedRunningExercisesHandler,
+  SeedFreeExerciseDbHandler,
   AIGenerateGymExercisesHandler,
   AIGenerateRunningExercisesHandler,
 ];

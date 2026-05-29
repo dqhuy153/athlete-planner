@@ -12,10 +12,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      {/* suppressHydrationWarning: tolerate minor DOM mutations (eg. browser extensions
-          injecting attributes) that occur only on the client and would otherwise
-          cause React hydration mismatch warnings. */}
+    <html lang="en" suppressHydrationWarning>
+      {/* suppressHydrationWarning on html: next-themes injects the .dark class
+          client-side; this prevents React hydration mismatch warnings. */}
       <body className="min-h-screen bg-background" suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>

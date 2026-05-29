@@ -34,7 +34,7 @@ export default async function GymLibraryPage({ params, searchParams }: PageProps
   ]);
 
   return (
-    <section>
+    <section className="overflow-x-hidden">
       <Suspense fallback={null}>
         <div className="mb-4">
           <MuscleGroupFilter />

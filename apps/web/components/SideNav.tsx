@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
-import { CalendarDays, BookOpen, User, Activity, FileText } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { CalendarDays, BookOpen, User, Activity, FileText, Sun, Moon } from 'lucide-react';
 import { UserTier } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
 
@@ -38,6 +39,7 @@ export function SideNav({ locale }: SideNavProps) {
   const user = session?.user;
   const tier = (session as any)?.user?.tier as UserTier | undefined;
   const isPro = tier === UserTier.PRO;
+  const { resolvedTheme, setTheme } = useTheme();
 
   function NavLink({ item }: { item: NavItem }) {
     const { key, href, icon: Icon, labelKey } = item;
@@ -104,6 +106,31 @@ export function SideNav({ locale }: SideNavProps) {
             <NavLink key={item.key} item={item} />
           ))}
         </div>
+      </div>
+
+      {/* Theme toggle */}
+      <div className="px-2 pb-2">
+        <button
+          type="button"
+          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+          title={resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          className={cn(
+            'flex items-center gap-3 rounded-lg transition-colors duration-150 w-full',
+            'min-h-[44px] px-3',
+            'md:justify-center lg:justify-start',
+            'text-text-secondary hover:text-text-primary hover:bg-surface-2',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
+          )}
+        >
+          {resolvedTheme === 'dark' ? (
+            <Sun size={20} className="shrink-0" aria-hidden />
+          ) : (
+            <Moon size={20} className="shrink-0" aria-hidden />
+          )}
+          <span className="hidden lg:block text-sm font-medium leading-none">
+            {resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </span>
+        </button>
       </div>
 
       {/* User section */}

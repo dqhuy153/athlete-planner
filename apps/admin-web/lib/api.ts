@@ -234,6 +234,20 @@ export function createRunningExercise(
   });
 }
 
+export function getGymExercise(
+  accessToken: string,
+  id: string,
+): Promise<GymExerciseMaster> {
+  return apiFetch(`/exercises/${id}?type=gym`, accessToken);
+}
+
+export function getRunningExercise(
+  accessToken: string,
+  id: string,
+): Promise<RunningExerciseMaster> {
+  return apiFetch(`/exercises/${id}?type=running`, accessToken);
+}
+
 export function updateGymExercise(
   accessToken: string,
   id: string,
@@ -308,6 +322,12 @@ export function seedRunningExercises(
   accessToken: string,
 ): Promise<{ created: number; skipped: number; total: number }> {
   return apiFetch('/admin/exercises/seed/running', accessToken, { method: 'POST' });
+}
+
+export function seedFreeExerciseDb(
+  accessToken: string,
+): Promise<{ created: number; skipped: number; total: number }> {
+  return apiFetch('/admin/exercises/seed/free-exercise-db', accessToken, { method: 'POST' });
 }
 
 // ── AI Bulk Generate ──────────────────────────────────────────────────────────

@@ -26,7 +26,7 @@ export function MuscleGroupFilter() {
 
   return (
     <div
-      className="no-scrollbar flex gap-2 overflow-x-auto py-1"
+      className="no-scrollbar flex w-full gap-2 overflow-x-auto py-1"
       role="group"
       aria-label={t('filterByMuscle')}
     >

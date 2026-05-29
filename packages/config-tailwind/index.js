@@ -13,6 +13,8 @@ module.exports = {
           1: 'var(--surface-1)',
           2: 'var(--surface-2)',
           3: 'var(--surface-3)',
+          // 'surface' alone (for bg-surface, text-surface) → surface-1
+          DEFAULT: 'var(--surface-1)',
         },
 
         // Accent (Cyan/Teal)
@@ -35,6 +37,27 @@ module.exports = {
         // Border
         border: 'var(--border)',
         'border-muted': 'var(--border-muted)',
+
+        // ── Material Design 3 aliases ────────────────────────────────────────
+        // These map admin-web page token names to our CSS variables.
+        // 'primary' maps to accent — allows bg-primary, text-primary (color),
+        //   border-primary, bg-primary/10 opacity modifiers, etc.
+        primary: 'var(--accent)',
+        'on-primary': 'var(--accent-foreground)',
+
+        // Surface aliases (bg-surface = bg-surface-1)
+        // bg-surface-container-high → surface-3
+        'surface-container-high': 'var(--surface-3)',
+
+        // Text token aliases
+        'on-surface': 'var(--text-primary)',
+        'on-surface-variant': 'var(--text-secondary)',
+
+        // Border alias
+        'outline-variant': 'var(--border)',
+
+        // Ring alias (focus-visible:ring-ring)
+        ring: 'var(--accent)',
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],

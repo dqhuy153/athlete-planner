@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import {
   Users,
   FileText,
@@ -12,23 +13,29 @@ import {
   ChevronDown,
   ChevronRight,
   Dumbbell,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
+import { useLang } from '@/lib/lang-context';
+import { useState } from 'react';
 
 const NAV_ITEMS = [
-  { href: '/users',     label: 'Users',     icon: Users     },
-  { href: '/exercises', label: 'Exercises', icon: Dumbbell  },
-  { href: '/blog',      label: 'Blog',      icon: FileText  },
-  { href: '/assets',    label: 'Assets',    icon: FolderOpen },
-  { href: '/config',    label: 'Config',    icon: Settings  },
+  { href: '/users',     labelKey: 'nav.users',     icon: Users      },
+  { href: '/exercises', labelKey: 'nav.exercises', icon: Dumbbell   },
+  { href: '/blog',      labelKey: 'nav.blog',      icon: FileText   },
+  { href: '/assets',    labelKey: 'nav.assets',    icon: FolderOpen },
+  { href: '/config',    labelKey: 'nav.config',    icon: Settings   },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { session, isLoading, signOut } = useAuth();
+  const { t, locale, setLocale } = useLang();
+  const { resolvedTheme, setTheme } = useTheme();
   const [expanded, setExpanded] = useState(true);
 
   // Protect admin routes - redirect to login if not authenticated
@@ -46,7 +53,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (isLoading || !session) {
     return (
       <div className="flex items-center justify-center h-screen bg-background">
-        <div className="text-on-surface-variant">Loading...</div>
+        <div className="text-on-surface-variant">{t('common.loading')}</div>
       </div>
     );
   }
@@ -59,6 +66,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           expanded ? 'w-56' : 'w-16',
         )}
       >
+        {/* Header */}
         <div className="flex items-center gap-2 px-3 h-14 border-b border-border">
           <Button
             variant="ghost"
@@ -69,10 +77,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
           </Button>
           {expanded && (
-            <span className="text-sm font-semibold text-on-surface whitespace-nowrap">Admin</span>
+            <span className="text-sm font-semibold text-on-surface whitespace-nowrap">
+              {t('common.admin')}
+            </span>
           )}
         </div>
 
+        {/* Nav */}
         <nav className="flex-1 py-3 px-2 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -87,30 +98,63 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface',
                   !expanded && 'justify-center px-2',
                 )}
-                title={!expanded ? item.label : undefined}
+                title={!expanded ? t(item.labelKey) : undefined}
               >
                 <item.icon className="w-4 h-4 shrink-0" />
-                {expanded && <span>{item.label}</span>}
+                {expanded && <span>{t(item.labelKey)}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div className="border-t border-border p-3 space-y-2">
+        {/* Footer: email + controls */}
+        <div className="border-t border-border p-3 space-y-1">
           {expanded && (
-            <div className="px-2 py-1.5">
+            <div className="px-1 pb-1">
               <p className="text-xs text-on-surface-variant/60 truncate">{session.email}</p>
             </div>
           )}
+
+          {/* Theme + lang toggles */}
+          <div className={cn('flex gap-1', !expanded && 'flex-col items-center')}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              title={resolvedTheme === 'dark' ? t('theme.light') : t('theme.dark')}
+              className="h-8 w-8 text-on-surface-variant"
+            >
+              {resolvedTheme === 'dark' ? (
+                <Sun className="w-4 h-4" aria-hidden />
+              ) : (
+                <Moon className="w-4 h-4" aria-hidden />
+              )}
+              <span className="sr-only">
+                {resolvedTheme === 'dark' ? t('theme.light') : t('theme.dark')}
+              </span>
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setLocale(locale === 'vi' ? 'en' : 'vi')}
+              title="Switch language"
+              className="h-8 w-8 text-xs font-mono font-semibold text-on-surface-variant"
+            >
+              {locale.toUpperCase()}
+            </Button>
+          </div>
+
+          {/* Logout */}
           <Button
             onClick={handleLogout}
             variant="ghost"
             size={expanded ? 'default' : 'icon'}
             className={cn('w-full text-error hover:bg-error/10', !expanded && 'justify-center')}
-            title={!expanded ? 'Logout' : undefined}
+            title={!expanded ? t('common.logout') : undefined}
           >
-            <LogOut className="w-4 h-4" />
-            {expanded && <span className="ml-2">Logout</span>}
+            <LogOut className="w-4 h-4" aria-hidden />
+            {expanded && <span className="ml-1">{t('common.logout')}</span>}
           </Button>
         </div>
       </aside>
