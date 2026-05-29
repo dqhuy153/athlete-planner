@@ -156,5 +156,33 @@
     "calendarLimit": "Plan up to 14 days ahead",
     "historyExpired": "Upgrade to view workout details",
     "exportLocked": "Garmin export is Pro-only"
+  },
+  "upgrade": {
+    "title": "Upgrade to PRO",
+    "subtitle": "One-time payment, lifetime access",
+    "price": "199,000 VND",
+    "oneTime": "One-time \u2022 No subscription",
+    "featureUnlimited": "Unlimited private exercises",
+    "featureHistory": "Full training history \u2014 no expiry",
+    "featureGarmin": "Garmin FIT export for every workout",
+    "featureCloud": "Lifetime cloud backup",
+    "cta": "Upgrade Now",
+    "alreadyPro": "You already have PRO",
+    "loading": "Preparing payment...",
+    "successTitle": "Welcome to PRO",
+    "successSubtitle": "Your training data is now fully unlocked.",
+    "successCta": "Start Training",
+    "cancelTitle": "Payment Cancelled",
+    "cancelSubtitle": "Your account remains on the free plan.",
+    "cancelCta": "Back to Upgrade",
+    "promoHint": "Upgrade once, use forever."
+  },
+  "export": {
+    "fitDay": "Export FIT",
+    "fitWeek": "Export Week ZIP",
+    "proOnly": "PRO feature",
+    "downloading": "Downloading...",
+    "error": "Export failed. Try again.",
+    "upgradeToExport": "Upgrade to PRO to export Garmin FIT files"
   }
 }
