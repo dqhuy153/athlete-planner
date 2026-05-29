@@ -2,6 +2,7 @@
 
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
+import { FormLabel, FormError } from '@athlete-planner/ui';
 
 type Level = 'BEGINNER' | 'ADVANCED';
 
@@ -11,7 +12,7 @@ interface InstructionsEditorProps {
 }
 
 export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsEditorProps) {
-  const { control, register } = useFormContext();
+  const { control, register, formState: { errors } } = useFormContext();
 
   const levelIndex = activeLevel === 'BEGINNER' ? 0 : 1;
 
@@ -59,9 +60,7 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
       {/* Steps EN */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-on-surface-variant uppercase tracking-wider">
-            Steps (EN)
-          </label>
+          <FormLabel>Steps (EN)</FormLabel>
           <button
             type="button"
             onClick={() => appendStepEn({ value: '' } as any)}
@@ -75,11 +74,19 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
           {stepEnFields.map((field, idx) => (
             <div key={field.id} className="flex gap-2 items-start">
               <span className="mt-2.5 text-xs text-on-surface-variant/60 w-5 shrink-0">{idx + 1}</span>
-              <input
-                {...register(`instructions.${levelIndex}.steps_en.${idx}.value` as any)}
-                placeholder="Describe this step..."
-                className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="flex-1">
+                <input
+                  {...register(`instructions.${levelIndex}.steps_en.${idx}.value` as any)}
+                  placeholder="Describe this step..."
+                  aria-invalid={!!errors.instructions?.[levelIndex]?.steps_en?.[idx]?.value}
+                  aria-describedby={errors.instructions?.[levelIndex]?.steps_en?.[idx]?.value ? `steps-en-${idx}-error` : undefined}
+                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <FormError
+                  id={`steps-en-${idx}-error`}
+                  message={errors.instructions?.[levelIndex]?.steps_en?.[idx]?.value?.message}
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => removeStepEn(idx)}
@@ -96,9 +103,7 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
       {/* Steps VI */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-on-surface-variant uppercase tracking-wider">
-            Steps (VI) — tùy chọn
-          </label>
+          <FormLabel>Steps (VI) — tùy chọn</FormLabel>
           <button
             type="button"
             onClick={() => appendStepVi({ value: '' } as any)}
@@ -112,11 +117,19 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
           {stepViFields.map((field, idx) => (
             <div key={field.id} className="flex gap-2 items-start">
               <span className="mt-2.5 text-xs text-on-surface-variant/60 w-5 shrink-0">{idx + 1}</span>
-              <input
-                {...register(`instructions.${levelIndex}.steps_vi.${idx}.value` as any)}
-                placeholder="Mô tả bước này..."
-                className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="flex-1">
+                <input
+                  {...register(`instructions.${levelIndex}.steps_vi.${idx}.value` as any)}
+                  placeholder="Mô tả bước này..."
+                  aria-invalid={!!errors.instructions?.[levelIndex]?.steps_vi?.[idx]?.value}
+                  aria-describedby={errors.instructions?.[levelIndex]?.steps_vi?.[idx]?.value ? `steps-vi-${idx}-error` : undefined}
+                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <FormError
+                  id={`steps-vi-${idx}-error`}
+                  message={errors.instructions?.[levelIndex]?.steps_vi?.[idx]?.value?.message}
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => removeStepVi(idx)}
@@ -133,9 +146,7 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
       {/* Form Cues EN */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-on-surface-variant uppercase tracking-wider">
-            Form Cues (EN)
-          </label>
+          <FormLabel>Form Cues (EN)</FormLabel>
           <button
             type="button"
             onClick={() => appendCueEn({ value: '' } as any)}
@@ -149,11 +160,19 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
           {cueEnFields.map((field, idx) => (
             <div key={field.id} className="flex gap-2 items-start">
               <span className="mt-2.5 text-xs text-on-surface-variant/60 w-5 shrink-0">—</span>
-              <input
-                {...register(`instructions.${levelIndex}.form_cues_en.${idx}.value` as any)}
-                placeholder="e.g. Keep shoulder blades retracted"
-                className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="flex-1">
+                <input
+                  {...register(`instructions.${levelIndex}.form_cues_en.${idx}.value` as any)}
+                  placeholder="e.g. Keep shoulder blades retracted"
+                  aria-invalid={!!errors.instructions?.[levelIndex]?.form_cues_en?.[idx]?.value}
+                  aria-describedby={errors.instructions?.[levelIndex]?.form_cues_en?.[idx]?.value ? `cues-en-${idx}-error` : undefined}
+                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <FormError
+                  id={`cues-en-${idx}-error`}
+                  message={errors.instructions?.[levelIndex]?.form_cues_en?.[idx]?.value?.message}
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => removeCueEn(idx)}
@@ -170,9 +189,7 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
       {/* Form Cues VI */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-on-surface-variant uppercase tracking-wider">
-            Form Cues (VI) — tùy chọn
-          </label>
+          <FormLabel>Form Cues (VI) — tùy chọn</FormLabel>
           <button
             type="button"
             onClick={() => appendCueVi({ value: '' } as any)}
@@ -186,11 +203,19 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
           {cueViFields.map((field, idx) => (
             <div key={field.id} className="flex gap-2 items-start">
               <span className="mt-2.5 text-xs text-on-surface-variant/60 w-5 shrink-0">—</span>
-              <input
-                {...register(`instructions.${levelIndex}.form_cues_vi.${idx}.value` as any)}
-                placeholder="e.g. Giữ bả vai co lại"
-                className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="flex-1">
+                <input
+                  {...register(`instructions.${levelIndex}.form_cues_vi.${idx}.value` as any)}
+                  placeholder="e.g. Giữ bả vai co lại"
+                  aria-invalid={!!errors.instructions?.[levelIndex]?.form_cues_vi?.[idx]?.value}
+                  aria-describedby={errors.instructions?.[levelIndex]?.form_cues_vi?.[idx]?.value ? `cues-vi-${idx}-error` : undefined}
+                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <FormError
+                  id={`cues-vi-${idx}-error`}
+                  message={errors.instructions?.[levelIndex]?.form_cues_vi?.[idx]?.value?.message}
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => removeCueVi(idx)}
