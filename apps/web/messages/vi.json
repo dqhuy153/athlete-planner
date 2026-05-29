@@ -95,7 +95,8 @@
     "lockedDay": "Không thể lập lịch",
     "lockedDayHint": "Gói miễn phí: tối đa 14 ngày",
     "historyLocked": "Chi tiết bị ẩn",
-    "historyLockedHint": "Gói miễn phí: lịch sử 30 ngày"
+    "historyLockedHint": "Gói miễn phí: lịch sử 30 ngày",
+    "workouts": "bài tập"
   },
   "library": {
     "title": "Thư viện bài tập",
@@ -175,31 +176,34 @@
     "exportLocked": "Xuất Garmin chỉ dành cho Pro"
   },
   "upgrade": {
-    "title": "N\u00e2ng c\u1ea5p l\u00ean PRO",
-    "subtitle": "Thanh to\u00e1n m\u1ed9t l\u1ea7n, d\u00f9ng m\u00e3i m\u00e3i",
+    "title": "Nâng cấp lên PRO",
+    "subtitle": "Thanh toán một lần, dùng mãi mãi",
     "price": "199.000 VND",
-    "oneTime": "M\u1ed9t l\u1ea7n \u2022 Kh\u00f4ng thu\u00ea bao",
-    "featureUnlimited": "B\u00e0i t\u1eadp c\u00e1 nh\u00e2n kh\u00f4ng gi\u1edbi h\u1ea1n",
-    "featureHistory": "L\u1ecbch s\u1eed t\u1eadp luy\u1ec7n \u0111\u1ea7y \u0111\u1ee7 \u2014 kh\u00f4ng h\u1ebft h\u1ea1n",
-    "featureGarmin": "Xu\u1ea5t file Garmin FIT cho m\u1ecdi bu\u1ed5i t\u1eadp",
-    "featureCloud": "L\u01b0u tr\u1eef \u0111\u00e1m m\u00e2y tr\u1ecdn \u0111\u1eddi",
-    "cta": "N\u00e2ng c\u1ea5p ngay",
-    "alreadyPro": "B\u1ea1n \u0111\u00e3 c\u00f3 PRO",
-    "loading": "\u0110ang chu\u1ea9n b\u1ecb thanh to\u00e1n...",
-    "successTitle": "Ch\u00e0o m\u1eebng \u0111\u1ebfn PRO",
-    "successSubtitle": "D\u1eef li\u1ec7u t\u1eadp luy\u1ec7n c\u1ee7a b\u1ea1n \u0111\u00e3 \u0111\u01b0\u1ee3c m\u1edf kh\u00f3a ho\u00e0n to\u00e0n.",
-    "successCta": "B\u1eaft \u0111\u1ea7u t\u1eadp",
-    "cancelTitle": "Thanh to\u00e1n \u0111\u00e3 h\u1ee7y",
-    "cancelSubtitle": "T\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n v\u1eabn \u1edf g\u00f3i mi\u1ec5n ph\u00ed.",
-    "cancelCta": "Quay l\u1ea1i n\u00e2ng c\u1ea5p",
-    "promoHint": "N\u00e2ng c\u1ea5p m\u1ed9t l\u1ea7n, s\u1eed d\u1ee5ng m\u00e3i m\u00e3i."
+    "oneTime": "Một lần • Không thuê bao",
+    "featureUnlimited": "Bài tập cá nhân không giới hạn",
+    "featureHistory": "Lịch sử tập luyện đầy đủ — không hết hạn",
+    "featureGarmin": "Xuất file Garmin FIT cho mọi buổi tập",
+    "featureCloud": "Lưu trữ đám mây trọn đời",
+    "cta": "Nâng cấp ngay",
+    "alreadyPro": "Bạn đã có PRO",
+    "loading": "Đang chuẩn bị thanh toán...",
+    "successTitle": "Chào mừng đến PRO",
+    "successSubtitle": "Dữ liệu tập luyện của bạn đã được mở khóa hoàn toàn.",
+    "successCta": "Bắt đầu tập",
+    "cancelTitle": "Thanh toán đã hủy",
+    "cancelSubtitle": "Tài khoản của bạn vẫn ở gói miễn phí.",
+    "cancelCta": "Quay lại nâng cấp",
+    "promoHint": "Nâng cấp một lần, sử dụng mãi mãi."
   },
   "export": {
-    "fitDay": "Xu\u1ea5t FIT",
-    "fitWeek": "Xu\u1ea5t ZIP tu\u1ea7n",
-    "proOnly": "T\u00ednh n\u0103ng PRO",
-    "downloading": "\u0110ang t\u1ea3i...",
-    "error": "Xu\u1ea5t th\u1ea5t b\u1ea1i. Th\u1eed l\u1ea1i.",
-    "upgradeToExport": "N\u00e2ng c\u1ea5p l\u00ean PRO \u0111\u1ec3 xu\u1ea5t file Garmin FIT"
+    "fitDay": "Xuất FIT",
+    "fitWeek": "Xuất ZIP tuần",
+    "proOnly": "Tính năng PRO",
+    "downloading": "Đang tải...",
+    "error": "Xuất thất bại. Thử lại.",
+    "upgradeToExport": "Nâng cấp lên PRO để xuất file Garmin FIT",
+    "exportDay": "Xuất ngày",
+    "exportWeek": "Xuất tuần",
+    "exporting": "Đang xuất..."
   }
 }

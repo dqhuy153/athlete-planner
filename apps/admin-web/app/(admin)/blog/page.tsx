@@ -42,8 +42,8 @@ export default function BlogPage() {
         getBlogPosts(session!.accessToken, { page: 1, limit: 50 }),
         getBlogCategories(session!.accessToken),
       ]);
-      setPosts(postsRes.posts);
-      setCategories(catsRes);
+      setPosts(postsRes?.posts ?? []);
+      setCategories(catsRes ?? []);
     } catch (e: any) {
       alert(e.message);
     } finally {
