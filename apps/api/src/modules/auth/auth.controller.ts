@@ -1,8 +1,9 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Req, ForbiddenException } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { GoogleAuthDto, DevLoginDto } from './dto/auth.dto';
+import { GoogleAuthDto, DevLoginDto, AdminLoginDto } from './dto/auth.dto';
 import { GoogleAuthCommand } from './commands/google-auth.command';
+import { AdminLoginCommand } from './commands/admin-login.command';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
@@ -37,6 +38,16 @@ export class AuthController {
         null,
       ),
     );
+  }
+
+  /**
+   * Admin login — validates email + password against ROOT_ADMIN_EMAIL / ROOT_ADMIN_PASSWORD env vars.
+   * Upserts the user with role=root and returns a JWT. Available in all environments.
+   */
+  @Post('admin-login')
+  @HttpCode(HttpStatus.OK)
+  async adminLogin(@Body() dto: AdminLoginDto) {
+    return this.commandBus.execute(new AdminLoginCommand(dto.email, dto.password));
   }
 
   @Get('me')

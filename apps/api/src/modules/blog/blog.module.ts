@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BlogController } from './blog.controller';
 import { CreateBlogPostHandler } from './handlers/create-blog-post.handler';
 import { UpdateBlogPostHandler } from './handlers/update-blog-post.handler';
@@ -19,7 +21,17 @@ const CommandHandlers = [
 const QueryHandlers = [GetBlogPostsHandler, GetBlogPostBySlugHandler, GetBlogCategoriesHandler];
 
 @Module({
-  imports: [CqrsModule],
+  imports: [
+    CqrsModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET') || 'change-me-jwt-secret',
+        signOptions: { expiresIn: '7d' },
+      }),
+    }),
+  ],
   controllers: [BlogController],
   providers: [...CommandHandlers, ...QueryHandlers, AdminGuard],
 })

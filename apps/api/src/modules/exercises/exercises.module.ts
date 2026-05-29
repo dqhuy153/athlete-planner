@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ExercisesController } from './exercises.controller';
 import { TierGuardModule } from '../tier-guard/tier-guard.module';
 import { AdminGuard } from '../admin/admin.guard';
@@ -31,7 +33,18 @@ const QueryHandlers = [
 ];
 
 @Module({
-  imports: [CqrsModule, TierGuardModule],
+  imports: [
+    CqrsModule,
+    TierGuardModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET') || 'change-me-jwt-secret',
+        signOptions: { expiresIn: '7d' },
+      }),
+    }),
+  ],
   controllers: [ExercisesController],
   providers: [...CommandHandlers, ...QueryHandlers, AdminGuard],
 })

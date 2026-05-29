@@ -8,8 +8,9 @@ import { AuthTokenService } from './services/auth-token.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RolesGuard } from './guards/roles.guard';
 import { GoogleAuthHandler } from './commands/google-auth.handler';
+import { AdminLoginHandler } from './commands/admin-login.handler';
 
-const CommandHandlers = [GoogleAuthHandler];
+const CommandHandlers = [GoogleAuthHandler, AdminLoginHandler];
 
 @Module({
   imports: [

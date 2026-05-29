@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -21,11 +21,12 @@ export default function HomePage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect authenticated users to the schedule
-  if (status === 'authenticated' && session) {
-    router.replace(`/${locale}/schedule`);
-    return null;
-  }
+  // Redirect authenticated users — must be in useEffect, never in render body
+  useEffect(() => {
+    if (status === 'authenticated' && session) {
+      router.replace(`/${locale}/schedule`);
+    }
+  }, [status, session, locale, router]);
 
   async function handleGoogleSignIn() {
     setError(null);
@@ -51,7 +52,7 @@ export default function HomePage() {
     }
   }
 
-  if (status === 'loading') {
+  if (status === 'loading' || (status === 'authenticated' && session)) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="h-8 w-8 animate-pulse-subtle rounded-full bg-accent/30" />

@@ -16,6 +16,13 @@ async function apiFetch<T>(
     ...init,
   });
   if (!res.ok) {
+    // 401 from any admin route means the session is invalid — redirect to login
+    if (res.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('admin_web_session');
+      window.location.href = '/';
+      // Throw to stop execution — the redirect will happen asynchronously
+      throw new Error('Unauthorized — redirecting to login');
+    }
     const text = await res.text();
     try {
       const err = JSON.parse(text);
@@ -34,14 +41,14 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
-export async function loginUser(email: string, _password: string): Promise<LoginResponse> {
-  // Admin portal uses dev-login (Google OAuth not available in admin portal).
-  // The backend creates/finds the user by email and returns a JWT.
-  // Ensure the user has role=admin|root via ADMIN_EMAIL env var or manually in DB.
-  const res = await fetch(`${API_URL}/api/auth/dev-login`, {
+export async function loginUser(email: string, password: string): Promise<LoginResponse> {
+  // Calls POST /auth/admin-login — validates email + password against
+  // ROOT_ADMIN_EMAIL / ROOT_ADMIN_PASSWORD env vars on the API.
+  // Returns a JWT with role=root if credentials match.
+  const res = await fetch(`${API_URL}/api/auth/admin-login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, name: 'Admin' }),
+    body: JSON.stringify({ email, password }),
   });
   if (!res.ok) {
     const text = await res.text();
