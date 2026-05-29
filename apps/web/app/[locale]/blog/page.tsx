@@ -51,10 +51,11 @@ export default async function BlogPage({
   const t = await getTranslations({ locale, namespace: 'blog' });
 
   // Parallel fetch — vercel-react-best-practices: async-parallel
-  const [{ posts }, categories] = await Promise.all([
+  const [postsResult, categories] = await Promise.all([
     fetchPosts(category),
     fetchCategories(),
   ]);
+  const posts = postsResult?.posts ?? [];
 
   return (
     <div className="mx-auto max-w-2xl px-4 md:px-6 py-8 md:py-10">
@@ -105,7 +106,7 @@ export default async function BlogPage({
                       <Clock size={12} aria-hidden />
                       {t('minRead', { n: post.readingTime })}
                     </span>
-                    {post.tags.length > 0 && (
+                    {post.tags?.length > 0 && (
                       <span className="flex items-center gap-1">
                         <Tag size={12} aria-hidden />
                         {post.tags[0]}

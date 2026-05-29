@@ -51,7 +51,7 @@ export default async function GymLibraryPage({
         </Suspense>
       </div>
 
-      <div className='px-4 py-4 overflow-x-hidden'>
+      <div className='py-4 overflow-x-hidden'>
         {exercises.length === 0 ? (
           <div className='flex flex-col items-center gap-2 py-16 text-center'>
             <p className='text-sm text-text-tertiary'>{t('noExercises')}</p>
