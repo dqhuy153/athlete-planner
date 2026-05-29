@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
 // Validates all required env vars at server startup — throws if any are missing
 import '@/lib/env';
 import { routing } from '@/i18n/routing';
@@ -61,12 +62,22 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  // Read theme from cookie so SSR matches client
+  const cookieStore = await cookies();
+  const theme = cookieStore.get('theme')?.value ?? 'dark';
+
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning className={theme}>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
         suppressHydrationWarning
       >
+        {/* Sync localStorage → cookie BEFORE React hydration so SSR and client match */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t){document.cookie='theme='+t+';path=/;max-age=31536000;SameSite=Lax'}}catch(e){}`,
+          }}
+        />
         <ThemeProvider>
           <SessionProvider>
             <NextIntlClientProvider messages={messages}>
