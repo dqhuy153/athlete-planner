@@ -14,6 +14,7 @@ import { UpdateGymPayloadHandler } from './commands/update-gym-payload.handler';
 import { UpdateRunningPayloadHandler } from './commands/update-running-payload.handler';
 import { CopyDayHandler } from './commands/copy-day.handler';
 import { CopyWeekHandler } from './commands/copy-week.handler';
+import { BridgeGuestScheduleHandler } from './commands/bridge-guest-schedule.handler';
 
 // Queries
 import { GetWeekScheduleHandler } from './queries/get-week-schedule.handler';
@@ -30,6 +31,7 @@ const CommandHandlers = [
   UpdateRunningPayloadHandler,
   CopyDayHandler,
   CopyWeekHandler,
+  BridgeGuestScheduleHandler,
 ];
 
 const QueryHandlers = [

@@ -5,6 +5,7 @@ import { VideoPlayer } from '@/components/VideoPlayer';
 import { InstructionsPanel } from '@/components/InstructionsPanel';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { CustomizeSaveButton } from './CustomizeSaveButton';
 
 export const revalidate = 300;
 
@@ -69,6 +70,19 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
         </h1>
         <p className="mt-0.5 text-caption text-text-tertiary">{exercise.name}</p>
       </div>
+
+      {/* Customize & Save Copy — only for master exercises (gym or running) */}
+      {(isGym(exercise) || isRunning(exercise)) && (
+        <div className="mt-5">
+          <CustomizeSaveButton
+            exerciseId={exercise.id}
+            exerciseName={exercise.vietnameseName ?? exercise.name}
+            sportType={isGym(exercise) ? 'GYM' : 'RUNNING'}
+            targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
+            runningType={isRunning(exercise) ? exercise.runningType : undefined}
+          />
+        </div>
+      )}
 
       {/* Gym metadata */}
       {isGym(exercise) && (

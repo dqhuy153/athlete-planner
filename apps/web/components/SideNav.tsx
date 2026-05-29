@@ -129,8 +129,8 @@ export function SideNav({ locale }: SideNavProps) {
         </div>
       </div>
 
-      {/* Upgrade banner for FREE users */}
-      {!isPro && (
+      {/* Upgrade banner for FREE users (authenticated only) */}
+      {session && !isPro && (
         <div className="px-2 pb-2">
           <Link
             href={`/${locale}/upgrade`}

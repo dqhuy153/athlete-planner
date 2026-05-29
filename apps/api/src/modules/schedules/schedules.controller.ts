@@ -21,6 +21,7 @@ import { UpdateGymPayloadCommand } from './commands/update-gym-payload.command';
 import { UpdateRunningPayloadCommand } from './commands/update-running-payload.command';
 import { CopyDayCommand } from './commands/copy-day.command';
 import { CopyWeekCommand } from './commands/copy-week.command';
+import { BridgeGuestScheduleCommand } from './commands/bridge-guest-schedule.command';
 import { GetWeekScheduleQuery } from './queries/get-week-schedule.query';
 import { GetDailyScheduleQuery } from './queries/get-daily-schedule.query';
 import { GetDisciplineRateQuery } from './queries/get-discipline-rate.query';
@@ -29,6 +30,7 @@ import { UpdateDayStatusDto } from './dto/update-day-status.dto';
 import { AddItemDto } from './dto/add-item.dto';
 import { UpdatePayloadDto } from './dto/update-payload.dto';
 import { CopyDayDto, CopyWeekDto } from './dto/copy.dto';
+import { BridgeGuestScheduleDto } from './dto/bridge-guest.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('schedules')
@@ -142,6 +144,16 @@ export class SchedulesController {
         dto.targetYear,
         dto.targetWeek,
       ),
+    );
+  }
+
+  @Post('bridge-guest')
+  async bridgeGuestSchedule(
+    @Body() dto: BridgeGuestScheduleDto,
+    @Req() req: AuthenticatedRequest,
+  ): Promise<{ bridged: boolean }> {
+    return this.commandBus.execute(
+      new BridgeGuestScheduleCommand(req.user.sub, dto.scheduleData ?? {}),
     );
   }
 }

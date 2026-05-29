@@ -16,6 +16,7 @@ import { DisciplineRateWidget } from '@/components/DisciplineRateWidget';
 import { DailyScheduleView }    from '@/components/DailyScheduleView';
 import { UpgradePrompt }        from '@/components/UpgradePrompt';
 import { Download, Archive, Copy, CalendarRange, Plus } from 'lucide-react';
+import { AuthGate } from '@/components/AuthGate';
 
 const ExercisePicker = dynamic(
   () => import('@/components/ExercisePicker').then(m => ({ default: m.ExercisePicker })),
@@ -192,6 +193,7 @@ export default function SchedulePage() {
   const dayLabel = format(selectedDateObj, 'EEE, d MMM');
 
   return (
+    <AuthGate message="Sign in to view and plan your training schedule">
     <>
       <div className="flex min-h-[calc(100vh-0px)]">
         {/* Left panel: week overview (lg+) */}
@@ -401,5 +403,6 @@ export default function SchedulePage() {
         featureHint="export.upgradeToExport"
       />
     </>
+    </AuthGate>
   );
 }

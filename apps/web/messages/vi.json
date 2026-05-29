@@ -140,7 +140,11 @@
     "gymOption": "Gym",
     "runningOption": "Chạy bộ",
     "saving": "Đang lưu...",
-    "limitBanner": "Bạn đã đạt giới hạn 10 bài tập cá nhân"
+    "limitBanner": "Bạn đã đạt giới hạn 10 bài tập cá nhân",
+    "customizeSave": "Tùy chỉnh & Lưu bản sao",
+    "customizeSaveHint": "Tạo bản sao cá nhân — tính vào giới hạn {count}/10",
+    "customizeSaveFull": "Đã đạt giới hạn 10 bài tập",
+    "customizeSaving": "Đang lưu..."
   },
   "blog": {
     "title": "Bài viết",
@@ -205,5 +209,44 @@
     "exportDay": "Xuất ngày",
     "exportWeek": "Xuất tuần",
     "exporting": "Đang xuất..."
+  },
+  "landing": {
+    "heroTitle": "Tập luyện có kế hoạch.",
+    "heroTitleAccent": "Ghi chép tất cả.",
+    "heroSubtitle": "Sổ tập luyện cho vận động viên hybrid — Gym + Chạy bộ với xuất file Garmin.",
+    "ctaStart": "Bắt đầu miễn phí",
+    "ctaSignIn": "Đã có tài khoản",
+    "stat1": "bài tập gym",
+    "stat2": "giáo án chạy bộ",
+    "stat3": "Xuất Garmin FIT",
+    "feat1Title": "Lịch tập tuần",
+    "feat1Desc": "Lên kế hoạch gym và chạy bộ, sao chép ngày & tuần.",
+    "feat2Title": "Thư viện bài tập",
+    "feat2Desc": "800+ bài tập có hướng dẫn và video kỹ thuật.",
+    "feat3Title": "Xuất Garmin (PRO)",
+    "feat3Desc": "File FIT cho mọi buổi tập — đồng bộ trực tiếp với đồng hồ.",
+    "pricingTitle": "Đơn giản, minh bạch",
+    "freePlan": "Miễn phí",
+    "proPlan": "PRO",
+    "freeFeature1": "10 bài tập cá nhân",
+    "freeFeature2": "Lịch 14 ngày",
+    "freeFeature3": "Lịch sử 30 ngày",
+    "proFeature1": "Bài tập không giới hạn",
+    "proFeature2": "Lịch & lịch sử trọn đời",
+    "proFeature3": "Xuất file Garmin FIT",
+    "proFeature4": "Lưu trữ đám mây trọn đời",
+    "proCtaLanding": "Nâng cấp lên PRO",
+    "footerTerms": "Điều khoản",
+    "footerPrivacy": "Chính sách"
+  },
+  "authGate": {
+    "scheduleMessage": "Đăng nhập để xem và lập lịch tập luyện",
+    "profileMessage": "Đăng nhập để quản lý hồ sơ của bạn",
+    "signInButton": "Đăng nhập với Google"
+  },
+  "legal": {
+    "termsTitle": "Điều Khoản Dịch Vụ",
+    "privacyTitle": "Chính Sách Bảo Mật",
+    "lastUpdated": "Cập nhật lần cuối: {date}"
   }
 }

@@ -139,7 +139,11 @@
     "gymOption": "Gym",
     "runningOption": "Running",
     "saving": "Saving...",
-    "limitBanner": "You've reached the 10 private exercise limit"
+    "limitBanner": "You've reached the 10 private exercise limit",
+    "customizeSave": "Customize & Save Copy",
+    "customizeSaveHint": "Creates a personal copy — counts toward {count}/10 limit",
+    "customizeSaveFull": "10 exercise limit reached",
+    "customizeSaving": "Saving..."
   },
   "blog": {
     "title": "Articles",
@@ -204,5 +208,44 @@
     "exportDay": "Export Day",
     "exportWeek": "Export Week",
     "exporting": "Exporting..."
+  },
+  "landing": {
+    "heroTitle": "Train with a plan.",
+    "heroTitleAccent": "Log everything.",
+    "heroSubtitle": "Training notebook for hybrid athletes — Gym + Running with Garmin export.",
+    "ctaStart": "Get started free",
+    "ctaSignIn": "Already have an account",
+    "stat1": "gym exercises",
+    "stat2": "running workouts",
+    "stat3": "Garmin FIT export",
+    "feat1Title": "Weekly Schedule",
+    "feat1Desc": "Plan gym and running sessions, copy days & weeks.",
+    "feat2Title": "Exercise Library",
+    "feat2Desc": "800+ guided movements with technique videos.",
+    "feat3Title": "Garmin Export (PRO)",
+    "feat3Desc": "FIT files for every session — sync directly to your watch.",
+    "pricingTitle": "Simple, transparent",
+    "freePlan": "Free",
+    "proPlan": "PRO",
+    "freeFeature1": "10 private exercises",
+    "freeFeature2": "14-day planning horizon",
+    "freeFeature3": "30-day history",
+    "proFeature1": "Unlimited exercises",
+    "proFeature2": "Lifetime schedule & history",
+    "proFeature3": "Garmin FIT export",
+    "proFeature4": "Lifetime cloud backup",
+    "proCtaLanding": "Upgrade to PRO",
+    "footerTerms": "Terms",
+    "footerPrivacy": "Privacy"
+  },
+  "authGate": {
+    "scheduleMessage": "Sign in to view and plan your training schedule",
+    "profileMessage": "Sign in to manage your profile",
+    "signInButton": "Sign in with Google"
+  },
+  "legal": {
+    "termsTitle": "Terms of Service",
+    "privacyTitle": "Privacy Policy",
+    "lastUpdated": "Last updated: {date}"
   }
 }

@@ -10,6 +10,7 @@ import { Zap, LogOut, Languages, User as UserIcon, ChevronRight, CheckCircle2 } 
 import { UserTier } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
+import { AuthGate } from '@/components/AuthGate';
 
 type PreferredLevel = 'BEGINNER' | 'ADVANCED';
 
@@ -72,23 +73,9 @@ export default function ProfilePage() {
     );
   }
 
-  if (!session) {
-    return (
-      <div className="mx-auto flex max-w-lg flex-col items-center gap-4 px-4 py-16">
-        <UserIcon size={40} className="text-text-tertiary" />
-        <p className="text-text-secondary">{t('notSignedIn')}</p>
-        <Link
-          href={`/api/auth/signin?callbackUrl=/${locale}/profile`}
-          className="min-h-[48px] rounded-xl bg-accent px-6 py-3 font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent flex items-center"
-        >
-          {t('signIn')}
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className="mx-auto max-w-lg px-4 py-6 md:py-10">
+    <AuthGate message="Sign in to manage your profile">
+      <div className="mx-auto max-w-lg px-4 py-6 md:py-10">
       <div className="mb-6 flex items-center gap-4">
         {user?.image ? (
           <Image
@@ -192,5 +179,6 @@ export default function ProfilePage() {
         </button>
       </div>
     </div>
+    </AuthGate>
   );
 }

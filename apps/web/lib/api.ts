@@ -277,6 +277,19 @@ class ApiClient {
     });
   }
 
+  // ─── Guest Bridge ─────────────────────────────────────────────────────────────
+
+  bridgeGuestSchedule(
+    token: string,
+    scheduleData: Record<string, any[]> = {},
+  ): Promise<{ bridged: boolean }> {
+    return this.request<{ bridged: boolean }>('/schedules/bridge-guest', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ scheduleData }),
+    });
+  }
+
   // ─── Export ─────────────────────────────────────────────────────────────────
 
   /**

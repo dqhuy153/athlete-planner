@@ -2,23 +2,23 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useSession } from 'next-auth/react';
-import { useRouter, useParams } from 'next/navigation';
-import { Zap, Check, Activity, History, Download, LayoutGrid } from 'lucide-react';
+import { useSession, signIn } from 'next-auth/react';
+import { useParams, usePathname } from 'next/navigation';
+import { Zap, Check, Activity, History, Download, LayoutGrid, Globe } from 'lucide-react';
 import { api } from '@/lib/api';
 import { UserTier } from '@athlete-planner/contracts';
-import { cn } from '@athlete-planner/ui';
 
 export default function UpgradePage() {
   const t = useTranslations('upgrade');
   const { data: session } = useSession();
-  const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const locale = params.locale as string;
   const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const isAlreadyPro = (session?.user as any)?.tier === UserTier.PRO;
+  const isVi = locale === 'vi';
+  const isAlreadyPro = (session as any)?.user?.tier === UserTier.PRO;
 
   const features = [
     { icon: LayoutGrid, key: 'featureUnlimited' },
@@ -28,8 +28,14 @@ export default function UpgradePage() {
   ] as const;
 
   async function handleUpgrade() {
+    // Guest: redirect to Google OAuth then come back here
+    if (!session) {
+      await signIn('google', { callbackUrl: pathname });
+      return;
+    }
     const token = (session as any)?.accessToken as string | undefined;
-    if (!token) { router.push(`/${locale}`); return; }
+    if (!token) return;
+
     setLoading(true);
     setError(null);
     try {
@@ -69,16 +75,33 @@ export default function UpgradePage() {
         ))}
       </ul>
 
+      {/* Price block */}
       <div className="mb-6 overflow-hidden rounded-2xl border border-accent/30 bg-accent/5">
         <div className="p-6">
-          <div className="flex items-baseline gap-2">
-            <span className="font-mono text-4xl font-black text-accent">{t('price')}</span>
-          </div>
-          <p className="mt-1 text-sm font-medium text-text-secondary">{t('oneTime')}</p>
-          <p className="mt-1 text-xs text-text-tertiary">{t('promoHint')}</p>
+          {isVi ? (
+            <>
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono text-4xl font-black text-accent">199.000₫</span>
+              </div>
+              <p className="mt-1 text-sm font-medium text-text-secondary">{t('oneTime')}</p>
+              <p className="mt-1 text-xs text-text-tertiary">{t('promoHint')}</p>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-4xl font-black text-text-tertiary line-through opacity-60">$9.99</span>
+                <span className="rounded-full border border-border bg-surface-2 px-2.5 py-0.5 text-xs text-text-tertiary">
+                  Vietnam only
+                </span>
+              </div>
+              <p className="mt-2 text-sm text-text-secondary">
+                International payments are coming soon. Currently available for Vietnam bank accounts only.
+              </p>
+            </>
+          )}
         </div>
         <div className="border-t border-accent/20 bg-accent/5 px-6 py-3">
-          <p className="text-xs text-text-secondary">One-time payment — no subscriptions</p>
+          <p className="text-xs text-text-secondary">One-time payment — no subscriptions, no recurring fees</p>
         </div>
       </div>
 
@@ -89,15 +112,20 @@ export default function UpgradePage() {
           <Check size={16} aria-hidden />
           {t('alreadyPro')}
         </div>
-      ) : (
+      ) : isVi ? (
         <button
           onClick={handleUpgrade}
-          disabled={loading || !session}
+          disabled={loading}
           className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           <Zap size={16} aria-hidden />
           {loading ? t('loading') : t('cta')}
         </button>
+      ) : (
+        <div className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-1 text-sm text-text-tertiary cursor-not-allowed select-none">
+          <Globe size={16} aria-hidden />
+          International gateway coming soon
+        </div>
       )}
     </main>
   );
