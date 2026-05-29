@@ -57,7 +57,7 @@ export default async function BlogPage({
   ]);
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className="mx-auto max-w-2xl px-4 md:px-6 py-8 md:py-10">
       <h1 className="mb-6 text-2xl font-bold tracking-tight">{t('title')}</h1>
 
       {categories.length > 0 && (

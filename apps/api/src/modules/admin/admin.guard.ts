@@ -1,12 +1,13 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService, UserRole } from '@athlete-planner/database';
+import { JwtService } from '@nestjs/jwt';
+import { UserRole } from '@athlete-planner/database';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
   constructor(
     private readonly config: ConfigService,
-    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -20,15 +21,16 @@ export class AdminGuard implements CanActivate {
     const staticToken = this.config.get<string>('ADMIN_API_TOKEN');
     if (staticToken && token === staticToken) return true;
 
-    // 2. UserId-based role check
+    // 2. JWT token with admin/root role
     try {
-      const user = await this.prisma.user.findUnique({
-        where: { id: token },
-        select: { id: true, role: true },
-      });
-      if (user?.role === UserRole.admin || user?.role === UserRole.root) return true;
+      const secret = this.config.get<string>('JWT_SECRET') || 'change-me-jwt-secret';
+      const payload = this.jwtService.verify(token, { secret });
+      if (payload?.role === UserRole.admin || payload?.role === UserRole.root) {
+        req.user = { sub: payload.sub, email: payload.email, role: payload.role };
+        return true;
+      }
     } catch {
-      // invalid UUID or DB error
+      // invalid or expired JWT
     }
 
     throw new UnauthorizedException('Admin access required');

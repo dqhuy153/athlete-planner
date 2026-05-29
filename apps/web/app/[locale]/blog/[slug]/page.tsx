@@ -56,7 +56,7 @@ export default async function BlogPostPage({
     : null;
 
   return (
-    <article className="mx-auto max-w-2xl px-4 py-8">
+    <article className="mx-auto max-w-2xl px-4 md:px-6 py-8 md:py-10">
       <Link
         href={`/${locale}/blog`}
         className="mb-6 flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"

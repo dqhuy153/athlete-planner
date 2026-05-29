@@ -34,13 +34,24 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
-export async function loginUser(email: string, password: string): Promise<LoginResponse> {
-  const res = await fetch(`${API_URL}/api/auth/login`, {
+export async function loginUser(email: string, _password: string): Promise<LoginResponse> {
+  // Admin portal uses dev-login (Google OAuth not available in admin portal).
+  // The backend creates/finds the user by email and returns a JWT.
+  // Ensure the user has role=admin|root via ADMIN_EMAIL env var or manually in DB.
+  const res = await fetch(`${API_URL}/api/auth/dev-login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, name: 'Admin' }),
   });
-  if (!res.ok) throw new Error(await res.text());
+  if (!res.ok) {
+    const text = await res.text();
+    try {
+      const err = JSON.parse(text);
+      throw new Error(err.message || text);
+    } catch {
+      throw new Error(text || `HTTP ${res.status}`);
+    }
+  }
   return res.json();
 }
 
@@ -275,5 +286,58 @@ export function generateExerciseContent(
   return apiFetch('/admin/exercises/generate-content', accessToken, {
     method: 'POST',
     body: JSON.stringify(data),
+  });
+}
+
+// ── Exercise Seed ─────────────────────────────────────────────────────────────
+
+export function seedGymExercises(
+  accessToken: string,
+): Promise<{ created: number; skipped: number; total: number }> {
+  return apiFetch('/admin/exercises/seed/gym', accessToken, { method: 'POST' });
+}
+
+export function seedRunningExercises(
+  accessToken: string,
+): Promise<{ created: number; skipped: number; total: number }> {
+  return apiFetch('/admin/exercises/seed/running', accessToken, { method: 'POST' });
+}
+
+// ── AI Bulk Generate ──────────────────────────────────────────────────────────
+
+export interface AIGeneratedGymExercise {
+  name: string;
+  vietnameseName: string;
+  targetMuscleGroup: string;
+  secondaryMuscleGroups: string[];
+  garminExerciseEnum?: string;
+  instructions: Array<{ level: string; steps: string[]; form_cues: string[] }>;
+}
+
+export interface AIGeneratedRunningExercise {
+  name: string;
+  vietnameseName: string;
+  runningType: string;
+  instructions: { vi: string[]; en: string[] };
+  workoutStructure: Array<{ phase: string; duration_minutes?: number; distance_meters?: number }>;
+}
+
+export function aiGenerateGymExercises(
+  accessToken: string,
+  data: { prompt: string; count?: number; muscleGroup?: string },
+): Promise<{ exercises: AIGeneratedGymExercise[] }> {
+  return apiFetch('/admin/exercises/ai-generate/gym', accessToken, {
+    method: 'POST',
+    body: JSON.stringify({ count: 5, ...data }),
+  });
+}
+
+export function aiGenerateRunningExercises(
+  accessToken: string,
+  data: { prompt: string; count?: number; runningType?: string },
+): Promise<{ exercises: AIGeneratedRunningExercise[] }> {
+  return apiFetch('/admin/exercises/ai-generate/running', accessToken, {
+    method: 'POST',
+    body: JSON.stringify({ count: 5, ...data }),
   });
 }

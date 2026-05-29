@@ -7,6 +7,8 @@ import { notFound } from 'next/navigation';
 import '@/lib/env';
 import { routing } from '@/i18n/routing';
 import { BottomNav } from '@/components/BottomNav';
+import { SessionProvider } from '@/components/SessionProvider';
+import { SideNav } from '@/components/SideNav';
 import '../globals.css';
 
 const inter = Inter({
@@ -64,12 +66,19 @@ export default async function LocaleLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
         suppressHydrationWarning
       >
-        <NextIntlClientProvider messages={messages}>
-            <main className="min-h-screen pb-[88px]">
-              {children}
-            </main>
+        <SessionProvider>
+          <NextIntlClientProvider messages={messages}>
+            {/* Responsive shell: BottomNav on mobile, SideNav on tablet/desktop */}
+            <div className="flex min-h-screen">
+              <SideNav locale={locale} />
+              <main className="min-w-0 flex-1 pb-[88px] md:pb-0">
+                {children}
+              </main>
+            </div>
+            {/* Mobile-only bottom navigation — hidden on md+ via md:hidden in BottomNav */}
             <BottomNav locale={locale} />
           </NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );

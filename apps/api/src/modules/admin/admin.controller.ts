@@ -11,14 +11,19 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
 import { S3Service } from '../shared/s3.service';
 import { CloudinarySignService } from '../shared/cloudinary-sign.service';
 import { AIService } from '../shared/ai.service';
 import { AdminGuard } from './admin.guard';
 import { ConfigService } from '@nestjs/config';
-import { IsString, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsInt, Min, Max } from 'class-validator';
 import crypto from 'crypto';
+import { SeedGymExercisesCommand } from './commands/seed-gym-exercises.command';
+import { SeedRunningExercisesCommand } from './commands/seed-running-exercises.command';
+import { AIGenerateGymExercisesCommand } from './commands/ai-generate-gym-exercises.command';
+import { AIGenerateRunningExercisesCommand } from './commands/ai-generate-running-exercises.command';
 
 export class GenerateExerciseContentDto {
   @IsString()
@@ -26,6 +31,24 @@ export class GenerateExerciseContentDto {
 
   @IsEnum(['GYM', 'RUNNING'])
   sportType!: 'GYM' | 'RUNNING';
+
+  @IsString()
+  @IsOptional()
+  muscleGroup?: string;
+
+  @IsString()
+  @IsOptional()
+  runningType?: string;
+}
+
+export class AIGenerateExercisesDto {
+  @IsString()
+  prompt!: string;
+
+  @IsInt()
+  @Min(1)
+  @Max(10)
+  count: number = 5;
 
   @IsString()
   @IsOptional()
@@ -45,6 +68,7 @@ export class AdminController {
     private readonly cloudinarySign: CloudinarySignService,
     private readonly config: ConfigService,
     private readonly aiService: AIService,
+    private readonly commandBus: CommandBus,
   ) {}
 
   // ── User Management ─────────────────────────────────────────────────────────
@@ -78,6 +102,36 @@ Respond with JSON only:
     }
 
     return { content };
+  }
+
+  // ── Exercise Seed ────────────────────────────────────────────────────────────
+
+  @Post('exercises/seed/gym')
+  async seedGymExercises() {
+    return this.commandBus.execute(new SeedGymExercisesCommand());
+  }
+
+  @Post('exercises/seed/running')
+  async seedRunningExercises() {
+    return this.commandBus.execute(new SeedRunningExercisesCommand());
+  }
+
+  // ── AI Bulk Generate ─────────────────────────────────────────────────────────
+
+  @Post('exercises/ai-generate/gym')
+  async aiGenerateGymExercises(@Body() body: AIGenerateExercisesDto) {
+    const exercises = await this.commandBus.execute(
+      new AIGenerateGymExercisesCommand(body.prompt, body.count ?? 5, body.muscleGroup),
+    );
+    return { exercises };
+  }
+
+  @Post('exercises/ai-generate/running')
+  async aiGenerateRunningExercises(@Body() body: AIGenerateExercisesDto) {
+    const exercises = await this.commandBus.execute(
+      new AIGenerateRunningExercisesCommand(body.prompt, body.count ?? 5, body.runningType),
+    );
+    return { exercises };
   }
   @Get('users')
   async getUsers(

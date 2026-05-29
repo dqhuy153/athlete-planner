@@ -27,7 +27,7 @@ export default function ProfilePage() {
 
   if (status === 'loading') {
     return (
-      <div className="mx-auto max-w-md px-4 py-8">
+      <div className="mx-auto max-w-lg px-4 py-8 md:py-12">
         <div className="h-16 w-16 animate-pulse rounded-full bg-surface-2" />
       </div>
     );
@@ -35,7 +35,7 @@ export default function ProfilePage() {
 
   if (!session) {
     return (
-      <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-16">
+      <div className="mx-auto flex max-w-lg flex-col items-center gap-4 px-4 py-16 md:py-24">
         <UserIcon size={40} className="text-text-tertiary" />
         <p className="text-text-secondary">{t('notSignedIn')}</p>
         <a
@@ -49,7 +49,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-md px-4 py-8">
+    <div className="mx-auto max-w-lg px-4 py-8 md:py-12">
       {/* Avatar + name */}
       <div className="mb-8 flex items-center gap-4">
         {user?.image ? (

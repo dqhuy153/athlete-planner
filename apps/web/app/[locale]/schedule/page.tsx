@@ -16,7 +16,7 @@ import { ExercisePicker, type PickedExercise } from '@/components/ExercisePicker
 import { CopyDayModal }  from '@/components/CopyDayModal';
 import { CopyWeekModal } from '@/components/CopyWeekModal';
 import { UpgradePrompt } from '@/components/UpgradePrompt';
-import { Download, Archive, Lock } from 'lucide-react';
+import { Download, Archive, Lock, Copy, CalendarRange } from 'lucide-react';
 
 export default function SchedulePage() {
   const t                       = useTranslations('schedule');
@@ -244,52 +244,70 @@ export default function SchedulePage() {
   const currentItems  = activeSchedule?.items ?? [];
 
   return (
-    <div className="flex flex-col gap-4 pb-8">
-      {/* Page title + copy actions */}
-      <div className="flex items-start justify-between px-4 pt-6">
+    <div className="mx-auto max-w-4xl flex flex-col gap-4 pb-8">
+      {/* Page title + action bar */}
+      <div className="flex items-center justify-between px-4 pt-6">
         <h1 className="text-balance text-title font-bold text-text-primary">{t('title')}</h1>
-        <div className="flex gap-2 shrink-0 mt-1">
+
+        {/* Action buttons — icon-only on mobile, icon + label on md+ */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {/* Copy day */}
           <button
             type="button"
             onClick={() => setCopyDayOpen(true)}
             disabled={!activeSchedule}
             aria-label={t('copyDay')}
-            className="rounded-lg bg-surface-2 px-3 py-1.5 text-caption text-text-secondary hover:bg-surface-3 disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            title={t('copyDay')}
+            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg bg-surface-2 px-2 md:px-3 text-caption text-text-secondary hover:bg-surface-3 disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            {t('copyDay')}
+            <Copy size={16} aria-hidden />
+            <span className="hidden md:inline">{t('copyDay')}</span>
           </button>
+
+          {/* Copy week */}
           <button
             type="button"
             onClick={() => setCopyWeekOpen(true)}
             aria-label={t('copyWeek')}
-            className="rounded-lg bg-surface-2 px-3 py-1.5 text-caption text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            title={t('copyWeek')}
+            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg bg-surface-2 px-2 md:px-3 text-caption text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            {t('copyWeek')}
+            <CalendarRange size={16} aria-hidden />
+            <span className="hidden md:inline">{t('copyWeek')}</span>
           </button>
+
+          {/* Divider */}
+          <div className="mx-0.5 h-5 w-px bg-border" aria-hidden />
+
+          {/* Export day FIT */}
           <button
             type="button"
             onClick={handleExportDay}
             disabled={exportingDay}
             aria-label={tExport('fitDay')}
-            className="flex min-h-[48px] items-center gap-2 rounded-xl border border-border px-4 text-sm font-medium hover:bg-surface-1 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            title={tExport('fitDay')}
+            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-2 md:px-3 text-sm font-medium text-text-secondary hover:bg-surface-1 disabled:opacity-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <Download size={16} />
-            {exportingDay ? tExport('downloading') : tExport('fitDay')}
+            <Download size={16} aria-hidden />
+            <span className="hidden md:inline">{exportingDay ? tExport('downloading') : tExport('fitDay')}</span>
             {userTier !== UserTier.PRO && (
-              <Lock size={12} className="text-muted-foreground" />
+              <Lock size={12} className="text-text-tertiary" aria-hidden />
             )}
           </button>
+
+          {/* Export week ZIP */}
           <button
             type="button"
             onClick={handleExportWeek}
             disabled={exportingWeek}
             aria-label={tExport('fitWeek')}
-            className="flex min-h-[48px] items-center gap-2 rounded-xl border border-border px-4 text-sm font-medium hover:bg-surface-1 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            title={tExport('fitWeek')}
+            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-2 md:px-3 text-sm font-medium text-text-secondary hover:bg-surface-1 disabled:opacity-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <Archive size={16} />
-            {exportingWeek ? tExport('downloading') : tExport('fitWeek')}
+            <Archive size={16} aria-hidden />
+            <span className="hidden md:inline">{exportingWeek ? tExport('downloading') : tExport('fitWeek')}</span>
             {userTier !== UserTier.PRO && (
-              <Lock size={12} className="text-muted-foreground" />
+              <Lock size={12} className="text-text-tertiary" aria-hidden />
             )}
           </button>
         </div>
