@@ -9,8 +9,8 @@
 | Phase 0 | COMPLETED | Foundation & Rebranding |
 | Phase 1 | COMPLETED | Data Layer & API Core |
 | Phase 2 | COMPLETED | Exercise Library UI |
-| Phase 3 | NEXT | Daily Planner (Core UX) |
-| Phase 4 | PENDING | Schedule Replication Engine |
+| Phase 3 | COMPLETED | Daily Planner (Core UX) |
+| Phase 4 | COMPLETED | Schedule Replication Engine |
 | Phase 5 | PENDING | Monetization & Garmin Export |
 | Phase 6 | PENDING | Content, Polish & Deploy |
 

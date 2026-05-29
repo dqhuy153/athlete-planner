@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { format, addWeeks, startOfISOWeek } from 'date-fns';
+import { format, addWeeks, startOfISOWeek, getISOWeek, getISOWeekYear } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
@@ -13,6 +13,8 @@ import { DayStatusBar }          from '@/components/DayStatusBar';
 import { DisciplineRateWidget }  from '@/components/DisciplineRateWidget';
 import { DailyScheduleView }     from '@/components/DailyScheduleView';
 import { ExercisePicker, type PickedExercise } from '@/components/ExercisePicker';
+import { CopyDayModal }  from '@/components/CopyDayModal';
+import { CopyWeekModal } from '@/components/CopyWeekModal';
 
 export default function SchedulePage() {
   const t                       = useTranslations('schedule');
@@ -105,7 +107,9 @@ export default function SchedulePage() {
   }, [activeSchedule, selectedDate, updateStatus]);
 
   // ── Exercise picker ──────────────────────────────────────────────────────
-  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerOpen,   setPickerOpen]   = useState(false);
+  const [copyDayOpen,  setCopyDayOpen]  = useState(false);
+  const [copyWeekOpen, setCopyWeekOpen] = useState(false);
 
   const handlePick = useCallback(async (picked: PickedExercise) => {
     setPickerOpen(false);
@@ -182,11 +186,35 @@ export default function SchedulePage() {
   const currentStatus = activeSchedule?.dayStatus ?? DayStatus.PENDING;
   const currentItems  = activeSchedule?.items ?? [];
 
+  // ISO week for copy-week source
+  const sourceWeekBase  = addWeeks(startOfISOWeek(new Date()), weekOffset);
+  const sourceWeekNum   = getISOWeek(sourceWeekBase);
+  const sourceWeekYear  = getISOWeekYear(sourceWeekBase);
+
   return (
     <div className="flex flex-col gap-4 pb-8">
-      {/* Page title */}
-      <div className="px-4 pt-6">
+      {/* Page title + copy actions */}
+      <div className="flex items-start justify-between px-4 pt-6">
         <h1 className="text-balance text-title font-bold text-text-primary">{t('title')}</h1>
+        <div className="flex gap-2 shrink-0 mt-1">
+          <button
+            type="button"
+            onClick={() => setCopyDayOpen(true)}
+            disabled={!activeSchedule}
+            aria-label={t('copyDay')}
+            className="rounded-lg bg-surface-2 px-3 py-1.5 text-caption text-text-secondary hover:bg-surface-3 disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            {t('copyDay')}
+          </button>
+          <button
+            type="button"
+            onClick={() => setCopyWeekOpen(true)}
+            aria-label={t('copyWeek')}
+            className="rounded-lg bg-surface-2 px-3 py-1.5 text-caption text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            {t('copyWeek')}
+          </button>
+        </div>
       </div>
 
       {/* Discipline rate */}
@@ -245,6 +273,30 @@ export default function SchedulePage() {
           onClose={() => setPickerOpen(false)}
         />
       )}
+
+      {/* Copy day modal */}
+      <CopyDayModal
+        open={copyDayOpen}
+        onClose={() => setCopyDayOpen(false)}
+        sourceDateString={selectedDate}
+        userTier={userTier}
+        onConfirm={async (targetDate, overwrite) => {
+          await api.copyDay(token, selectedDate, targetDate, overwrite);
+          // Reload week so the target day shows updated state
+          loadWeek(weekOffset);
+        }}
+      />
+
+      {/* Copy week modal */}
+      <CopyWeekModal
+        open={copyWeekOpen}
+        onClose={() => setCopyWeekOpen(false)}
+        sourceWeekOffset={weekOffset}
+        userTier={userTier}
+        onConfirm={async (srcWeek, srcYear, tgtWeek, tgtYear, overwrite) => {
+          await api.copyWeek(token, srcWeek, srcYear, tgtWeek, tgtYear, overwrite);
+        }}
+      />
     </div>
   );
 }

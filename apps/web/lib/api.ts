@@ -219,6 +219,35 @@ class ApiClient {
       { headers: this.authHeaders(token) },
     );
   }
+
+  copyDay(token: string, sourceDateString: string, targetDateString: string, overwrite: boolean) {
+    return this.request<DailySchedule>('/schedules/copy-day', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ source_date_string: sourceDateString, target_date_string: targetDateString, overwrite }),
+    });
+  }
+
+  copyWeek(
+    token: string,
+    sourceWeekNumber: number,
+    sourceYear: number,
+    targetWeekNumber: number,
+    targetYear: number,
+    overwrite: boolean,
+  ) {
+    return this.request<{ copied: number }>('/schedules/copy-week', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({
+        source_week_number: sourceWeekNumber,
+        source_year: sourceYear,
+        target_week_number: targetWeekNumber,
+        target_year: targetYear,
+        overwrite,
+      }),
+    });
+  }
 }
 
 export const api = new ApiClient(API_URL);

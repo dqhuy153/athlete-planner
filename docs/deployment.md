@@ -1,265 +1,136 @@
-# Deployment Guide - The Sport Notebook Planner
+# Deployment Guide — The Sport Notebook Planner
 
-## Infrastructure Overview
+## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        PRODUCTION                            │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  Vercel (Frontend)              Railway (Backend)           │
-│  ┌──────────────┐              ┌──────────────────────┐    │
-│  │  web app     │─── HTTPS ───►│  NestJS API          │    │
-│  │  (Next.js)   │              │  (Docker container)  │    │
-│  └──────────────┘              │                      │    │
-│  ┌──────────────┐              │  ┌────────────────┐  │    │
-│  │  admin-web   │─── HTTPS ───►│  │  PostgreSQL 16 │  │    │
-│  │  (Next.js)   │              │  └────────────────┘  │    │
-│  └──────────────┘              │  ┌────────────────┐  │    │
-│                                │  │  Redis 7       │  │    │
-│                                │  └────────────────┘  │    │
-│                                └──────────────────────┘    │
-│                                                             │
-│  Cloudflare R2 (File Storage)                               │
-│  ┌──────────────────────────────────────────┐              │
-│  │  Exercise GIFs, Videos, User uploads     │              │
-│  └──────────────────────────────────────────┘              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
+| App | Platform | Port |
+|-----|----------|------|
+| `apps/api` | Railway (Docker/Node) | 3001 |
+| `apps/web` | Vercel | 3000 |
+| `apps/admin-web` | Vercel | 3002 |
+| PostgreSQL | Railway | 5432 |
+| Redis | Railway | 6379 |
+| Storage | Cloudflare R2 (prod) / MinIO (dev) | — |
+
+---
+
+## Environment Variables Reference
+
+### Root `.env` (used by `apps/api` and seeded into CI)
+
+Variables marked **REQUIRED** will cause the API to refuse startup if absent (Joi validation in `ConfigModule`).
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `NODE_ENV` | optional | `development` | `development` \| `production` \| `test` |
+| `API_PORT` | optional | `3001` | Port the NestJS API listens on |
+| **Database** | | | |
+| `DATABASE_URL` | **REQUIRED** | — | PostgreSQL connection string. Format: `postgresql://user:pass@host:5432/db` |
+| **Redis** | | | |
+| `REDIS_HOST` | optional | `localhost` | Redis hostname (ignored if `REDIS_URL` set) |
+| `REDIS_PORT` | optional | `6379` | Redis port (ignored if `REDIS_URL` set) |
+| `REDIS_PASSWORD` | optional | — | Redis AUTH password |
+| `REDIS_URL` | optional | — | Full Redis URL — overrides HOST/PORT if set |
+| **Auth** | | | |
+| `JWT_SECRET` | **REQUIRED** | — | Secret for signing JWT tokens. Min 16 chars. Generate: `openssl rand -base64 32` |
+| `GOOGLE_CLIENT_ID` | **REQUIRED** | — | Google OAuth 2.0 Client ID (from Google Cloud Console) |
+| `GOOGLE_CLIENT_SECRET` | **REQUIRED** | — | Google OAuth 2.0 Client Secret |
+| **Admin** | | | |
+| `ADMIN_API_TOKEN` | **REQUIRED** | — | Static bearer token for admin-web → API requests. Min 16 chars. |
+| `ROOT_ADMIN_EMAIL` | **REQUIRED** | — | Email of the root admin user (seeded on first run) |
+| `ROOT_ADMIN_PASSWORD` | optional | — | Used for seeding only — not required in production |
+| **CORS / URLs** | | | |
+| `CORS_ORIGINS` | **REQUIRED** | — | Comma-separated allowed origins. E.g. `https://app.domain.com,https://admin.domain.com` |
+| `FRONTEND_URL` | **REQUIRED** | `http://localhost:3000` | Primary web app URL (used in emails/redirects) |
+| **Storage: Cloudflare R2 / MinIO** | | | |
+| `R2_ACCESS_KEY_ID` | **REQUIRED** | — | R2 or MinIO access key ID |
+| `R2_SECRET_ACCESS_KEY` | **REQUIRED** | — | R2 or MinIO secret access key |
+| `R2_BUCKET_NAME` | **REQUIRED** | — | Storage bucket name |
+| `R2_PUBLIC_URL` | **REQUIRED** | — | Public base URL for serving assets. E.g. `https://pub-xxx.r2.dev` |
+| `R2_ENDPOINT` | optional | — | Custom endpoint URL for MinIO dev or non-default R2 region |
+| `R2_ACCOUNT_ID` | optional | — | Cloudflare account ID (not needed for MinIO) |
+| **Storage: Cloudinary (alternative)** | | | |
+| `CLOUDINARY_CLOUD_NAME` | optional | — | Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | optional | — | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | optional | — | Cloudinary API secret |
+| `CLOUDINARY_UPLOAD_PRESET` | optional | — | Cloudinary upload preset |
+| `CLOUDINARY_FOLDER` | optional | `app/assets` | Base folder for Cloudinary uploads |
+| **AI (admin content generation)** | | | |
+| `ANTHROPIC_API_KEY` | optional | — | Anthropic Claude API key — required for AI content generation feature |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | optional | — | Google Gemini API key |
+| **Payments: PayOS** | | | |
+| `PAYOS_CLIENT_ID` | optional | — | PayOS client ID — required for PRO purchase flow |
+| `PAYOS_API_KEY` | optional | — | PayOS API key |
+| `PAYOS_CHECKSUM_KEY` | optional | — | PayOS checksum key |
+| `BANK_BIN` | optional | — | Bank BIN code for PayOS |
+| `BANK_ACCOUNT_NO` | optional | — | Bank account number |
+| `BANK_ACCOUNT_NAME` | optional | — | Bank account holder name |
+| **Email: Resend** | | | |
+| `RESEND_API_KEY` | optional | — | Resend API key for transactional emails |
+| `RESEND_FROM_EMAIL` | optional | — | Sender address. E.g. `App <noreply@domain.com>` |
+
+---
+
+### `apps/web/.env.local`
+
+Validation: Zod schema in `apps/web/lib/env.ts`. Next.js throws at startup if any REQUIRED var is missing.
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_API_URL` | **REQUIRED** | URL of the NestJS API (exposed to browser) |
+| `NEXT_PUBLIC_SITE_URL` | **REQUIRED** | URL of this web app (exposed to browser) |
+| `NEXTAUTH_URL` | **REQUIRED** | Must equal `NEXT_PUBLIC_SITE_URL` |
+| `NEXTAUTH_SECRET` | **REQUIRED** | NextAuth.js secret — min 16 chars. Generate: `openssl rand -base64 32` |
+| `GOOGLE_CLIENT_ID` | **REQUIRED** | Google OAuth Client ID (same as API's) |
+| `GOOGLE_CLIENT_SECRET` | **REQUIRED** | Google OAuth Client Secret (same as API's) |
+
+---
+
+### `apps/admin-web/.env.local`
+
+Validation: Zod schema in `apps/admin-web/lib/env.ts`.
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_API_URL` | **REQUIRED** | URL of the NestJS API |
+
+---
+
+## Local Development Setup
+
+```bash
+# 1. Copy root env
+cp .env.example .env
+# Fill in DATABASE_URL, JWT_SECRET, GOOGLE_CLIENT_ID/SECRET, R2 vars
+
+# 2. Copy web env
+cp apps/web/.env.local.example apps/web/.env.local
+# Fill in GOOGLE_CLIENT_ID/SECRET, generate NEXTAUTH_SECRET
+
+# 3. Copy admin env
+cp apps/admin-web/.env.local.example apps/admin-web/.env.local
+
+# 4. Start Docker services (PostgreSQL, Redis, MinIO)
+docker-compose up -d
+
+# 5. Generate Prisma client + push schema
+pnpm --filter @athlete-planner/database db:generate
+pnpm --filter @athlete-planner/database db:push
+
+# 6. Start all apps
+source ~/.nvm/nvm.sh && nvm use v22.14.0 && pnpm dev
 ```
 
 ---
 
-## Environment Variables
+## Production Checklist
 
-### API (apps/api/.env)
-
-```bash
-# Server
-NODE_ENV=production
-API_PORT=3001
-CORS_ORIGINS=https://yourapp.com,https://admin.yourapp.com
-
-# Database
-DATABASE_URL=postgresql://user:pass@host:5432/athlete_planner
-
-# Redis
-REDIS_URL=redis://default:pass@host:6379
-
-# Auth
-JWT_SECRET=your-secure-jwt-secret-min-32-chars
-GOOGLE_CLIENT_ID=your-google-oauth-client-id
-GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
-
-# Storage (Cloudflare R2)
-R2_ACCOUNT_ID=your-account-id
-R2_ACCESS_KEY_ID=your-access-key
-R2_SECRET_ACCESS_KEY=your-secret-key
-R2_BUCKET_NAME=athlete-planner
-R2_PUBLIC_URL=https://cdn.yourapp.com
-
-# Payment (PayOS)
-PAYOS_CLIENT_ID=your-client-id
-PAYOS_API_KEY=your-api-key
-PAYOS_CHECKSUM_KEY=your-checksum-key
-
-# AI (Admin content generation)
-ANTHROPIC_API_KEY=your-anthropic-key
-GOOGLE_AI_API_KEY=your-google-ai-key
-
-# Admin
-ADMIN_API_TOKEN=your-admin-bootstrap-token
-```
-
-### Web (apps/web/.env.local)
-
-```bash
-NEXT_PUBLIC_API_URL=https://api.yourapp.com
-NEXT_PUBLIC_SITE_URL=https://yourapp.com
-NEXTAUTH_URL=https://yourapp.com
-NEXTAUTH_SECRET=your-nextauth-secret-min-32-chars
-GOOGLE_CLIENT_ID=your-google-oauth-client-id
-GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
-```
-
-### Admin Web (apps/admin-web/.env.local)
-
-```bash
-NEXT_PUBLIC_API_URL=https://api.yourapp.com
-NEXT_PUBLIC_ADMIN_TOKEN=your-admin-api-token
-```
-
----
-
-## Local Development
-
-### Prerequisites
-
-- Node.js >= 20
-- pnpm 9.15+
-- Docker & Docker Compose
-
-### Setup
-
-```bash
-# 1. Clone and install
-git clone <repo-url>
-cd athlete-planner
-pnpm install
-
-# 2. Start infrastructure (PostgreSQL, Redis, MinIO)
-pnpm infra:up
-
-# 3. Setup database
-pnpm --filter @athlete-planner/database prisma generate
-pnpm --filter @athlete-planner/database prisma migrate dev
-
-# 4. Copy environment files
-cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env.local
-cp apps/admin-web/.env.example apps/admin-web/.env.local
-
-# 5. Start all apps
-pnpm dev
-```
-
-### Local ports
-
-| Service | Port | URL |
-|---------|------|-----|
-| Web | 3000 | http://localhost:3000 |
-| API | 3001 | http://localhost:3001 |
-| Admin | 3002 | http://localhost:3002 |
-| PostgreSQL | 5442 | localhost:5442 |
-| Redis | 6379 | localhost:6379 |
-| MinIO Console | 9001 | http://localhost:9001 |
-
----
-
-## Vercel Deployment (Frontend)
-
-### Web App
-
-```bash
-# Install Vercel CLI
-pnpm add -g vercel
-
-# Deploy from root (select apps/web as root directory)
-vercel --cwd apps/web
-
-# Set environment variables
-vercel env add NEXT_PUBLIC_API_URL
-vercel env add NEXTAUTH_URL
-vercel env add NEXTAUTH_SECRET
-vercel env add GOOGLE_CLIENT_ID
-vercel env add GOOGLE_CLIENT_SECRET
-```
-
-**vercel.json** (apps/web/vercel.json):
-```json
-{
-  "framework": "nextjs",
-  "installCommand": "cd ../.. && pnpm install",
-  "buildCommand": "cd ../.. && pnpm turbo build --filter=web"
-}
-```
-
-### Admin Web
-
-Same process, deploy `apps/admin-web` as separate Vercel project with restricted access.
-
----
-
-## Railway Deployment (Backend)
-
-### Dockerfile (apps/api/Dockerfile)
-
-```dockerfile
-FROM node:20-alpine AS base
-RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
-
-FROM base AS deps
-WORKDIR /app
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY apps/api/package.json apps/api/
-COPY packages/database/package.json packages/database/
-COPY packages/contracts/package.json packages/contracts/
-RUN pnpm install --frozen-lockfile --filter=api...
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
-COPY --from=deps /app/packages ./packages
-COPY apps/api apps/api
-COPY packages packages
-RUN pnpm --filter @athlete-planner/database prisma generate
-RUN pnpm --filter api build
-
-FROM base AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/packages/database/src/generated ./node_modules/@athlete-planner/database/src/generated
-COPY --from=builder /app/packages/database/prisma ./prisma
-
-EXPOSE 3001
-CMD ["node", "dist/main.js"]
-```
-
-### Railway Setup
-
-1. Create new project on Railway
-2. Add PostgreSQL service (plugin)
-3. Add Redis service (plugin)
-4. Connect GitHub repo → select `apps/api` as root
-5. Set all environment variables from the API section above
-6. Railway auto-detects Dockerfile
-
----
-
-## Database Migrations (Production)
-
-```bash
-# Generate migration locally
-pnpm --filter @athlete-planner/database prisma migrate dev --name description
-
-# Apply to production (Railway)
-# Option 1: Via Railway CLI
-railway run pnpm --filter @athlete-planner/database prisma migrate deploy
-
-# Option 2: Add to Dockerfile CMD
-CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma && node dist/main.js"]
-```
-
----
-
-## CI/CD (GitHub Actions)
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  lint-and-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm build
-```
-
-Vercel and Railway auto-deploy on push to `main` when connected to GitHub.
+- [ ] `DATABASE_URL` points to Railway PostgreSQL (SSL enabled)
+- [ ] `REDIS_URL` points to Railway Redis
+- [ ] `JWT_SECRET` is a secure random string (≥ 32 chars)
+- [ ] `ADMIN_API_TOKEN` is a secure random string (≥ 32 chars)
+- [ ] `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` are for the production OAuth app
+- [ ] `NEXTAUTH_SECRET` is a secure random string (≥ 32 chars)
+- [ ] `CORS_ORIGINS` lists only production domains
+- [ ] `R2_*` vars point to Cloudflare R2 (not MinIO)
+- [ ] `PAYOS_*` vars set for payment processing
+- [ ] Node.js version: **22.14.0** (`.nvmrc` present in repo root)

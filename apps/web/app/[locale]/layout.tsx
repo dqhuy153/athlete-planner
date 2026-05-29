@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+// Validates all required env vars at server startup — throws if any are missing
+import '@/lib/env';
 import { routing } from '@/i18n/routing';
 import { BottomNav } from '@/components/BottomNav';
 import '../globals.css';

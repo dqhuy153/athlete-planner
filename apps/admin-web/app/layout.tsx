@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Providers } from '@/components/Providers';
+// Validates required env vars at server startup — throws if any are missing
+import '@/lib/env';
 //@ts-ignore
 import './globals.css';
 

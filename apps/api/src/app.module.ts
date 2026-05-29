@@ -12,6 +12,7 @@ import databaseConfig from './config/database.config';
 import redisConfig from './config/redis.config';
 import r2Config from './config/r2.config';
 import cloudinaryConfig from './config/cloudinary.config';
+import { envValidationSchema } from './config/env.validation';
 
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -29,6 +30,11 @@ import { TierGuardModule } from './modules/tier-guard/tier-guard.module';
       isGlobal: true,
       load: [databaseConfig, redisConfig, r2Config, cloudinaryConfig],
       envFilePath: ['../../.env', '.env'],
+      validationSchema: envValidationSchema,
+      validationOptions: {
+        allowUnknown: true,  // allow CI/platform env vars not in schema
+        abortEarly: false,   // report ALL invalid vars at once
+      },
     }),
     PrismaModule,
     ScheduleModule.forRoot(),
