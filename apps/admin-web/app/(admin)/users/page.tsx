@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { getUsers, updateUserRole } from '@/lib/api';
 import type { User } from '@athlete-planner/contracts';
+import { Input } from '@/components/ui/input';
 
 export default function UsersPage() {
   const { session } = useAuth();
@@ -59,12 +60,12 @@ export default function UsersPage() {
       </div>
 
       <div className="mb-4">
-        <input
+        <Input
           type="text"
           placeholder="Search by name or email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-sm px-3 py-2 text-sm bg-surface border border-outline rounded-lg text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary"
+          className="max-w-sm"
         />
       </div>
 
@@ -81,6 +82,7 @@ export default function UsersPage() {
                   <th className="text-left px-4 py-3 text-on-surface-variant font-medium">Name</th>
                   <th className="text-left px-4 py-3 text-on-surface-variant font-medium">Email</th>
                   <th className="text-left px-4 py-3 text-on-surface-variant font-medium">Role</th>
+                  <th className="text-left px-4 py-3 text-on-surface-variant font-medium">Tier</th>
                   <th className="text-left px-4 py-3 text-on-surface-variant font-medium">Created</th>
                   <th className="text-left px-4 py-3 text-on-surface-variant font-medium">Actions</th>
                 </tr>
@@ -99,6 +101,15 @@ export default function UsersPage() {
                         }`}
                       >
                         {user.role}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                        (user as any).tier === 'PRO'
+                          ? 'bg-primary/10 text-primary'
+                          : 'bg-surface-variant text-on-surface-variant'
+                      }`}>
+                        {(user as any).tier ?? 'FREE'}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-on-surface-variant">

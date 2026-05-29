@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class GoogleAuthDto {
   @IsEmail()
@@ -29,6 +29,11 @@ export class DevLoginDto {
   @IsString()
   @IsOptional()
   name?: string;
+
+  @IsString()
+  @IsOptional()
+  @IsIn(['FREE', 'PRO'])
+  tier?: 'FREE' | 'PRO';
 }
 
 /**

@@ -1,26 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import {
-  Users,
-  FileText,
-  FolderOpen,
-  Settings,
-  LogOut,
-  ChevronDown,
-  ChevronRight,
-  Dumbbell,
-  Sun,
-  Moon,
+  Users, FileText, FolderOpen, Settings, LogOut,
+  Dumbbell, Sun, Moon, Activity, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
 import { useLang } from '@/lib/lang-context';
-import { useState } from 'react';
 
 const NAV_ITEMS = [
   { href: '/users',     labelKey: 'nav.users',     icon: Users      },
@@ -32,129 +23,130 @@ const NAV_ITEMS = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
+  const router   = useRouter();
   const { session, isLoading, signOut } = useAuth();
-  const { t, locale, setLocale } = useLang();
-  const { resolvedTheme, setTheme } = useTheme();
-  const [expanded, setExpanded] = useState(true);
+  const { t, locale, setLocale }        = useLang();
+  const { resolvedTheme, setTheme }     = useTheme();
+  const [expanded, setExpanded]         = useState(true);
 
-  // Protect admin routes - redirect to login if not authenticated
   useEffect(() => {
-    if (!isLoading && !session) {
-      router.replace('/');
-    }
+    if (!isLoading && !session) router.replace('/');
   }, [session, isLoading, router]);
 
-  const handleLogout = () => {
-    signOut();
-  };
-
-  // Show nothing while checking authentication
   if (isLoading || !session) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background">
-        <div className="text-on-surface-variant">{t('common.loading')}</div>
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="text-on-surface-variant text-sm">{t('common.loading')}</div>
       </div>
     );
   }
 
+  const sidebarWidth = expanded ? 'w-56' : 'w-14';
+
   return (
     <div className="flex h-screen overflow-hidden">
-      <aside
-        className={cn(
-          'flex flex-col border-r border-border bg-surface transition-all duration-200 ease-in-out',
-          expanded ? 'w-56' : 'w-16',
-        )}
-      >
+      <aside className={cn(
+        'flex flex-col border-r border-border bg-surface-1 transition-[width] duration-200 ease-in-out shrink-0',
+        sidebarWidth,
+      )}>
         {/* Header */}
-        <div className="flex items-center gap-2 px-3 h-14 border-b border-border">
+        <div className="flex h-14 shrink-0 items-center justify-between border-b border-border px-3">
+          {expanded && (
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Activity size={14} className="text-primary" aria-hidden />
+              </div>
+              <span className="truncate text-sm font-bold text-on-surface">
+                {t('common.admin')}
+              </span>
+            </div>
+          )}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setExpanded(!expanded)}
-            className="p-1.5 rounded-lg hover:bg-surface-container-high transition-colors text-on-surface-variant"
+            className={cn('h-8 w-8 shrink-0 text-on-surface-variant hover:text-on-surface', !expanded && 'mx-auto')}
           >
-            {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            {expanded
+              ? <ChevronLeft className="h-4 w-4" aria-hidden />
+              : <ChevronRight className="h-4 w-4" aria-hidden />
+            }
           </Button>
-          {expanded && (
-            <span className="text-sm font-semibold text-on-surface whitespace-nowrap">
-              {t('common.admin')}
-            </span>
-          )}
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-3 px-2 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
-                  isActive
-                    ? 'bg-primary/10 text-primary font-medium'
-                    : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface',
-                  !expanded && 'justify-center px-2',
-                )}
-                title={!expanded ? t(item.labelKey) : undefined}
-              >
-                <item.icon className="w-4 h-4 shrink-0" />
-                {expanded && <span>{t(item.labelKey)}</span>}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 overflow-y-auto py-2 px-2">
+          <ul className="space-y-0.5">
+            {NAV_ITEMS.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? 'page' : undefined}
+                    title={!expanded ? t(item.labelKey) : undefined}
+                    className={cn(
+                      'group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition-all duration-150',
+                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                      isActive
+                        ? 'bg-primary/10 text-primary font-medium'
+                        : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface',
+                      !expanded && 'justify-center px-2',
+                    )}
+                  >
+                    <div className={cn(
+                      'absolute left-0 top-1 bottom-1 w-0.5 rounded-full transition-all',
+                      isActive ? 'bg-primary' : 'bg-transparent',
+                    )} aria-hidden />
+                    <item.icon className="h-4 w-4 shrink-0" aria-hidden />
+                    {expanded && <span>{t(item.labelKey)}</span>}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </nav>
 
-        {/* Footer: email + controls */}
-        <div className="border-t border-border p-3 space-y-1">
-          {expanded && (
-            <div className="px-1 pb-1">
-              <p className="text-xs text-on-surface-variant/60 truncate">{session.email}</p>
-            </div>
+        {/* Footer */}
+        <div className="shrink-0 border-t border-border p-2 space-y-1">
+          {expanded && session.email && (
+            <p className="truncate px-2 py-1 text-xs text-on-surface-variant/60">{session.email}</p>
           )}
 
-          {/* Theme + lang toggles */}
           <div className={cn('flex gap-1', !expanded && 'flex-col items-center')}>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
               title={resolvedTheme === 'dark' ? t('theme.light') : t('theme.dark')}
-              className="h-8 w-8 text-on-surface-variant"
+              className="h-8 w-8 text-on-surface-variant hover:text-on-surface"
             >
-              {resolvedTheme === 'dark' ? (
-                <Sun className="w-4 h-4" aria-hidden />
-              ) : (
-                <Moon className="w-4 h-4" aria-hidden />
-              )}
-              <span className="sr-only">
-                {resolvedTheme === 'dark' ? t('theme.light') : t('theme.dark')}
-              </span>
+              {resolvedTheme === 'dark'
+                ? <Sun className="h-3.5 w-3.5" aria-hidden />
+                : <Moon className="h-3.5 w-3.5" aria-hidden />
+              }
             </Button>
-
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setLocale(locale === 'vi' ? 'en' : 'vi')}
               title="Switch language"
-              className="h-8 w-8 text-xs font-mono font-semibold text-on-surface-variant"
+              className="h-8 w-8 text-xs font-mono font-bold text-on-surface-variant hover:text-on-surface"
             >
               {locale.toUpperCase()}
             </Button>
           </div>
 
-          {/* Logout */}
           <Button
-            onClick={handleLogout}
+            onClick={signOut}
             variant="ghost"
-            size={expanded ? 'default' : 'icon'}
-            className={cn('w-full text-error hover:bg-error/10', !expanded && 'justify-center')}
-            title={!expanded ? t('common.logout') : undefined}
+            className={cn(
+              'w-full text-error hover:bg-error/10 hover:text-error',
+              expanded ? 'justify-start gap-2 px-2.5' : 'justify-center',
+            )}
           >
-            <LogOut className="w-4 h-4" aria-hidden />
-            {expanded && <span className="ml-1">{t('common.logout')}</span>}
+            <LogOut className="h-3.5 w-3.5 shrink-0" aria-hidden />
+            {expanded && <span className="text-sm">{t('common.logout')}</span>}
           </Button>
         </div>
       </aside>

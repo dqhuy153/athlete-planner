@@ -1,0 +1,88 @@
+<h2>Gym Exercise Form — Multi-Step Wizard</h2>
+<p class="subtitle">Click through the steps to see the proposed layout</p>
+
+<!-- Step indicator -->
+<div style="display:flex;gap:4px;margin-bottom:32px">
+  <div style="flex:1;height:3px;background:var(--accent);border-radius:2px"></div>
+  <div style="flex:1;height:3px;background:var(--accent);border-radius:2px"></div>
+  <div style="flex:1;height:3px;background:var(--surface-3);border-radius:2px"></div>
+  <div style="flex:1;height:3px;background:var(--surface-3);border-radius:2px"></div>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:32px">
+  <span style="font-size:12px;color:var(--accent);font-weight:600">1. Basic Info</span>
+  <span style="font-size:12px;color:var(--accent);font-weight:600">2. Instructions</span>
+  <span style="font-size:12px;color:var(--text-tertiary)">3. Media</span>
+  <span style="font-size:12px;color:var(--text-tertiary)">4. Garmin</span>
+</div>
+
+<!-- Simulated form area -->
+<div class="mockup">
+  <div class="mockup-header">Step 2: Instructions</div>
+  <div class="mockup-body" style="padding:16px">
+
+    <!-- Level selector -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em">Level</div>
+      <div style="display:flex;gap:8px">
+        <div style="padding:6px 14px;border-radius:6px;background:var(--accent);color:#000;font-size:13px;font-weight:500;cursor:pointer">BEGINNER</div>
+        <div style="padding:6px 14px;border-radius:6px;background:var(--surface-3);color:var(--text-primary);font-size:13px;cursor:pointer">ADVANCED</div>
+      </div>
+    </div>
+
+    <!-- Steps section -->
+    <div style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em">Steps</div>
+        <button style="font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer">+ Add step</button>
+      </div>
+
+      <div style="padding:8px 12px;background:var(--surface-2);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--text-tertiary);font-size:13px;min-width:16px">1</span>
+        <span style="color:var(--text-primary);font-size:13px;flex:1">Lie flat on the bench with eyes under the barbell</span>
+        <button style="color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-size:12px">✕</button>
+      </div>
+
+      <div style="padding:8px 12px;background:var(--surface-2);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--text-tertiary);font-size:13px;min-width:16px">2</span>
+        <span style="color:var(--text-primary);font-size:13px;flex:1">Grip the bar slightly wider than shoulder width</span>
+        <button style="color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-size:12px">✕</button>
+      </div>
+
+      <div style="padding:8px 12px;background:var(--surface-2);border-radius:6px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--text-tertiary);font-size:13px;min-width:16px">3</span>
+        <span style="color:var(--text-primary);font-size:13px;flex:1">Unrack the bar and lower to mid-chest</span>
+        <button style="color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-size:12px">✕</button>
+      </div>
+    </div>
+
+    <!-- Form cues section -->
+    <div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em">Form Cues</div>
+        <button style="font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer">+ Add cue</button>
+      </div>
+
+      <div style="padding:8px 12px;background:var(--surface-2);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--text-tertiary);font-size:13px;min-width:16px">1</span>
+        <span style="color:var(--text-primary);font-size:13px;flex:1">Keep shoulder blades retracted throughout</span>
+        <button style="color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-size:12px">✕</button>
+      </div>
+
+      <div style="padding:8px 12px;background:var(--surface-2);border-radius:6px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--text-tertiary);font-size:13px;min-width:16px">2</span>
+        <span style="color:var(--text-primary);font-size:13px;flex:1">Feet flat on floor, slight arch in lower back</span>
+        <button style="color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-size:12px">✕</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;margin-top:16px;justify-content:space-between">
+  <button style="padding:10px 20px;border-radius:8px;background:var(--surface-3);color:var(--text-primary);border:none;font-size:13px;cursor:pointer">← Back</button>
+  <button style="padding:10px 20px;border-radius:8px;background:var(--accent);color:#000;border:none;font-size:13px;font-weight:600;cursor:pointer">Next: Media →</button>
+</div>
+
+<p style="font-size:11px;color:var(--text-tertiary);margin-top:20px;text-align:center">
+  Each level gets its own set of instructions. Admin switches tabs between BEGINNER and ADVANCED.
+</p>

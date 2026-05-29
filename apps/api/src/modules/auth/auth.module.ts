@@ -9,8 +9,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { RolesGuard } from './guards/roles.guard';
 import { GoogleAuthHandler } from './commands/google-auth.handler';
 import { AdminLoginHandler } from './commands/admin-login.handler';
+import { DevLoginHandler } from './commands/dev-login.handler';
 
-const CommandHandlers = [GoogleAuthHandler, AdminLoginHandler];
+const CommandHandlers = [GoogleAuthHandler, AdminLoginHandler, DevLoginHandler];
 
 @Module({
   imports: [

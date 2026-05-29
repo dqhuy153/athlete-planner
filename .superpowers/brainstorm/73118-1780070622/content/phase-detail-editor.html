@@ -1,0 +1,121 @@
+<h2>Workout Phase — Detail Editor</h2>
+<p class="subtitle">Expanded phase with all intensity fields (EN/VI)</p>
+
+<!-- Mockup: expanded phase -->
+<div class="mockup">
+  <div class="mockup-header">Phase Detail Editor</div>
+  <div class="mockup-body" style="padding:16px">
+
+    <!-- Phase header row -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <div style="width:3px;height:28px;background:#EF4444;border-radius:2px"></div>
+      <div style="flex:1">
+        <div style="font-size:13px;color:var(--text-primary);font-weight:500">Interval Run / Chạy interval</div>
+        <div style="font-size:11px;color:var(--text-tertiary)">Phase 2 of 4</div>
+      </div>
+      <button style="color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-size:12px">✕</button>
+    </div>
+
+    <!-- Duration / Distance -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Duration (phút) / min</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px" value="1" />
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Distance (mét) / m</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px" value="400" />
+      </div>
+    </div>
+
+    <!-- HR Zone -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">HR Zone / Vùng nhịp tim</div>
+      <div style="display:flex;gap:6px">
+        <div style="flex:1;padding:7px 10px;background:var(--surface-3);border-radius:6px;text-align:center;font-size:12px;color:var(--text-tertiary);cursor:pointer">Z1</div>
+        <div style="flex:1;padding:7px 10px;background:var(--surface-3);border-radius:6px;text-align:center;font-size:12px;color:var(--text-tertiary);cursor:pointer">Z2</div>
+        <div style="flex:1;padding:7px 10px;background:rgba(239,68,68,0.3);border:1px solid #EF4444;border-radius:6px;text-align:center;font-size:12px;color:#EF4444;cursor:pointer;font-weight:500">Z4</div>
+        <div style="flex:1;padding:7px 10px;background:var(--surface-3);border-radius:6px;text-align:center;font-size:12px;color:var(--text-tertiary);cursor:pointer">Z5</div>
+      </div>
+    </div>
+
+    <!-- HR Range (bpm) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">HR Min (nhịp/phút)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px" value="160" />
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">HR Max (nhịp/phút)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px" value="175" />
+      </div>
+    </div>
+
+    <!-- Pace Range -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Pace Min (phút/km)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px" value="4:30" />
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Pace Max (phút/km)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px" value="5:00" />
+      </div>
+    </div>
+
+    <!-- RPE + Cadence + Power -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">RPE (1-10)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px;text-align:center" value="7" />
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Cadence (steps/min)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px;text-align:center" value="170" />
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Power Zone (Stryd)</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px;text-align:center" placeholder="—" />
+      </div>
+    </div>
+
+    <!-- Repeat block -->
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:14px;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:6px;border:1px solid rgba(239,68,68,0.2)">
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Lặp lại / Repeat</div>
+        <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;width:100%;padding:7px 10px;border-radius:6px;text-align:center" value="6" />
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Nghỉ giữa hiệp / Rest between reps</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:13px;flex:1;padding:7px 10px;border-radius:6px" value="90" />
+          <span style="font-size:11px;color:var(--text-tertiary)">sec</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intensity type (Garmin-style label) -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Loại cường độ / Intensity Type</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <div style="padding:6px 12px;background:rgba(239,68,68,0.3);border:1px solid #EF4444;border-radius:6px;font-size:12px;color:#EF4444;cursor:pointer">Interval</div>
+        <div style="padding:6px 12px;background:var(--surface-3);border-radius:6px;font-size:12px;color:var(--text-tertiary);cursor:pointer">Recovery</div>
+        <div style="padding:6px 12px;background:var(--surface-3);border-radius:6px;font-size:12px;color:var(--text-tertiary);cursor:pointer">Steady State</div>
+        <div style="padding:6px 12px;background:var(--surface-3);border-radius:6px;font-size:12px;color:var(--text-tertiary);cursor:pointer">Warm-up</div>
+        <div style="padding:6px 12px;background:var(--surface-3);border-radius:6px;font-size:12px;color:var(--text-tertiary);cursor:pointer">Cool-down</div>
+        <div style="padding:6px 12px;background:var(--surface-3);border-radius:6px;font-size:12px;color:var(--text-tertiary);cursor:pointer">Custom...</div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px">Ghi chú / Notes</div>
+      <textarea style="background:var(--surface-3);border:none;color:var(--text-primary);font-size:12px;width:100%;padding:8px 10px;border-radius:6px;resize:vertical;min-height:40px" placeholder="Mô tả thêm về giai đoạn này... / Additional description..."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<p style="font-size:11px;color:var(--text-tertiary);margin-top:16px;text-align:center">
+  Each phase carries full Garmin-compatible intensity data. Repeat block wraps a set of phases.
+</p>

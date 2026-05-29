@@ -1,39 +1,59 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { format, addWeeks, startOfISOWeek, getISOWeek, getISOWeekYear } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
 import { UserTier, DayStatus } from '@athlete-planner/contracts';
+import { cn } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
 import { useSchedule } from '@/lib/hooks/useSchedule';
-import { WeekCalendar }          from '@/components/WeekCalendar';
-import { DayStatusBar }          from '@/components/DayStatusBar';
-import { DisciplineRateWidget }  from '@/components/DisciplineRateWidget';
-import { DailyScheduleView }     from '@/components/DailyScheduleView';
-import { ExercisePicker, type PickedExercise } from '@/components/ExercisePicker';
-import { CopyDayModal }  from '@/components/CopyDayModal';
-import { CopyWeekModal } from '@/components/CopyWeekModal';
-import { UpgradePrompt } from '@/components/UpgradePrompt';
-import { Download, Archive, Lock, Copy, CalendarRange } from 'lucide-react';
+import { WeekCalendar }         from '@/components/WeekCalendar';
+import { DayStatusBar }         from '@/components/DayStatusBar';
+import { DisciplineRateWidget } from '@/components/DisciplineRateWidget';
+import { DailyScheduleView }    from '@/components/DailyScheduleView';
+import { UpgradePrompt }        from '@/components/UpgradePrompt';
+import { Download, Archive, Copy, CalendarRange, Plus } from 'lucide-react';
+
+const ExercisePicker = dynamic(
+  () => import('@/components/ExercisePicker').then(m => ({ default: m.ExercisePicker })),
+  { ssr: false },
+);
+const CopyDayModal = dynamic(
+  () => import('@/components/CopyDayModal').then(m => ({ default: m.CopyDayModal })),
+  { ssr: false },
+);
+const CopyWeekModal = dynamic(
+  () => import('@/components/CopyWeekModal').then(m => ({ default: m.CopyWeekModal })),
+  { ssr: false },
+);
+
+import type { PickedExercise } from '@/components/ExercisePicker';
 
 export default function SchedulePage() {
-  const t                       = useTranslations('schedule');
-  const tExport                 = useTranslations('export');
+  const t       = useTranslations('schedule');
+  const tExport = useTranslations('export');
   const { data: session, status } = useSession();
 
-  const token   = (session?.accessToken as string) ?? '';
+  const token    = (session?.accessToken as string) ?? '';
   const userTier = (session?.user as { tier?: UserTier })?.tier ?? UserTier.FREE;
 
-  // ── Exercise lists for picker ────────────────────────────────────────────
   const [gymExercises,     setGymExercises]     = useState<GymExerciseMaster[]>([]);
   const [runningExercises, setRunningExercises] = useState<RunningExerciseMaster[]>([]);
   const [privateExercises, setPrivateExercises] = useState<PrivateExercise[]>([]);
+  const [labelMap,         setLabelMap]         = useState<Map<string, string>>(new Map());
 
+  // Parallel fetch
   useEffect(() => {
-    api.getGymExercises().then(setGymExercises).catch(() => {});
-    api.getRunningExercises().then(setRunningExercises).catch(() => {});
+    Promise.all([
+      api.getGymExercises().catch(() => [] as GymExerciseMaster[]),
+      api.getRunningExercises().catch(() => [] as RunningExerciseMaster[]),
+    ]).then(([gym, running]) => {
+      setGymExercises(gym);
+      setRunningExercises(running);
+    });
   }, []);
 
   useEffect(() => {
@@ -41,17 +61,10 @@ export default function SchedulePage() {
     api.getPrivateExercises(token).then(setPrivateExercises).catch(() => {});
   }, [token]);
 
-  // ── Build a label map: itemId → exercise name ────────────────────────────
-  // We track labels in state so we can display them after picking
-  const [labelMap, setLabelMap] = useState<Map<string, string>>(new Map());
-
-  // ── Selected date state ──────────────────────────────────────────────────
   const todayStr = format(new Date(), 'yyyy-MM-dd');
   const [selectedDate, setSelectedDate] = useState(todayStr);
 
-  // ── Schedule hook ────────────────────────────────────────────────────────
   const {
-    schedules,
     activeSchedule,
     loading,
     disciplineRate,
@@ -65,30 +78,22 @@ export default function SchedulePage() {
     reorderItems,
     saveGymPayload,
     saveRunningPayload,
+    schedules,
   } = useSchedule({ token });
 
-  // Load initial week
   useEffect(() => {
     if (status !== 'authenticated') return;
     loadWeek(0);
+    selectDate(todayStr);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  // Reload when week changes
   useEffect(() => {
     if (status !== 'authenticated') return;
     loadWeek(weekOffset);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weekOffset]);
 
-  // Select today on first load
-  useEffect(() => {
-    if (status !== 'authenticated') return;
-    selectDate(todayStr);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
-
-  // ── Week offset sync: when offset changes update selectedDate to Mon ─────
   const handleWeekChange = useCallback((delta: number) => {
     const next = weekOffset + delta;
     setWeekOffset(next);
@@ -103,263 +108,255 @@ export default function SchedulePage() {
     selectDate(dateStr);
   }, [selectDate]);
 
-  // ── Status change ────────────────────────────────────────────────────────
   const handleStatusChange = useCallback(async (newStatus: DayStatus) => {
     if (!activeSchedule) return;
     await updateStatus(activeSchedule.id, newStatus, selectedDate);
   }, [activeSchedule, selectedDate, updateStatus]);
 
-  // ── Exercise picker ──────────────────────────────────────────────────────
-  const [pickerOpen,   setPickerOpen]   = useState(false);
-  const [copyDayOpen,  setCopyDayOpen]  = useState(false);
-  const [copyWeekOpen, setCopyWeekOpen] = useState(false);
+  const [pickerOpen,        setPickerOpen]       = useState(false);
+  const [copyDayOpen,       setCopyDayOpen]      = useState(false);
+  const [copyWeekOpen,      setCopyWeekOpen]     = useState(false);
   const [upgradePromptOpen, setUpgradePromptOpen] = useState(false);
-  const [exportingDay,  setExportingDay]  = useState(false);
-  const [exportingWeek, setExportingWeek] = useState(false);
+  const [exportingDay,      setExportingDay]     = useState(false);
+  const [exportingWeek,     setExportingWeek]    = useState(false);
+
+  const _pendingLabel = { current: '' };
 
   const handlePick = useCallback(async (picked: PickedExercise) => {
     setPickerOpen(false);
     if (!activeSchedule) return;
-
-    // Ensure schedule exists (may have been created lazily)
-    const schedId = activeSchedule.id;
-    await addItem(schedId, selectedDate, picked);
-
-    // Register label for this pick
-    setLabelMap(prev => {
-      // We'll update the label after addItem populates a new item — we need itemId
-      // Workaround: store by a temp key and reconcile below
-      return prev;
-    });
-    // We store picked label in a temp map keyed by source id
     _pendingLabel.current = picked.label;
+    await addItem(activeSchedule.id, selectedDate, picked);
   }, [activeSchedule, selectedDate, addItem]);
 
-  // Keep a ref for the pending label to apply after item added
-  const _pendingLabel = { current: '' };
-
-  // When activeSchedule.items grows, apply pending label to newest item
   useEffect(() => {
-    if (!activeSchedule) return;
-    if (!_pendingLabel.current) return;
+    if (!activeSchedule || !_pendingLabel.current) return;
     const items = activeSchedule.items;
     if (items.length === 0) return;
     const newest = items[items.length - 1];
     if (labelMap.has(newest.id)) return;
     setLabelMap(prev => new Map(prev).set(newest.id, _pendingLabel.current));
     _pendingLabel.current = '';
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSchedule?.items?.length]);
 
-  // Also build label map from exercise lists when they load
   useEffect(() => {
     if (!activeSchedule) return;
     const next = new Map(labelMap);
     for (const item of activeSchedule.items) {
       if (next.has(item.id)) continue;
-      if (item.gymMasterId) {
-        const ex = gymExercises.find(e => e.id === item.gymMasterId);
-        if (ex) next.set(item.id, ex.vietnameseName || ex.name);
-      } else if (item.runningMasterId) {
-        const ex = runningExercises.find(e => e.id === item.runningMasterId);
-        if (ex) next.set(item.id, ex.vietnameseName || ex.name);
-      } else if (item.privateExerciseId) {
-        const ex = privateExercises.find(e => e.id === item.privateExerciseId);
-        if (ex) next.set(item.id, ex.name);
-      }
+      const gym  = gymExercises.find(e => e.id === item.gymMasterId);
+      const run  = runningExercises.find(e => e.id === item.runningMasterId);
+      const priv = privateExercises.find(e => e.id === item.privateExerciseId);
+      const label = gym?.vietnameseName || gym?.name || run?.vietnameseName || run?.name || priv?.name;
+      if (label) next.set(item.id, label);
     }
     setLabelMap(next);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSchedule, gymExercises, runningExercises, privateExercises]);
 
-  // ISO week for copy-week source and export
-  const sourceWeekBase  = addWeeks(startOfISOWeek(new Date()), weekOffset);
-  const sourceWeekNum   = getISOWeek(sourceWeekBase);
-  const sourceWeekYear  = getISOWeekYear(sourceWeekBase);
+  const sourceWeekBase = addWeeks(startOfISOWeek(new Date()), weekOffset);
+  const sourceWeekNum  = getISOWeek(sourceWeekBase);
+  const sourceWeekYear = getISOWeekYear(sourceWeekBase);
 
-  // ── Export helpers ───────────────────────────────────────────────────────
   function triggerDownload(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    const a   = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
 
   async function handleExportDay() {
-    if (userTier !== UserTier.PRO) {
-      setUpgradePromptOpen(true);
-      return;
-    }
+    if (userTier !== UserTier.PRO) { setUpgradePromptOpen(true); return; }
     if (!token) return;
     setExportingDay(true);
     try {
       const { blob, filename } = await api.exportDayFit(selectedDate, token);
       triggerDownload(blob, filename);
-    } catch {
-      // silently fail
-    } finally {
-      setExportingDay(false);
-    }
+    } catch { /* ignore */ } finally { setExportingDay(false); }
   }
 
   async function handleExportWeek() {
-    if (userTier !== UserTier.PRO) {
-      setUpgradePromptOpen(true);
-      return;
-    }
+    if (userTier !== UserTier.PRO) { setUpgradePromptOpen(true); return; }
     if (!token) return;
     setExportingWeek(true);
     try {
       const { blob, filename } = await api.exportWeekZip(sourceWeekYear, sourceWeekNum, token);
       triggerDownload(blob, filename);
-    } catch {
-      // silently fail
-    } finally {
-      setExportingWeek(false);
-    }
+    } catch { /* ignore */ } finally { setExportingWeek(false); }
   }
 
-  // ── Loading / auth states ────────────────────────────────────────────────
-  if (status === 'loading') {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" aria-label="Loading" />
-      </div>
-    );
-  }
-
-  if (status === 'unauthenticated') {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-4">
-        <p className="text-body text-text-secondary">{t('title')}</p>
-      </div>
-    );
-  }
-
-  const currentStatus = activeSchedule?.dayStatus ?? DayStatus.PENDING;
-  const currentItems  = activeSchedule?.items ?? [];
+  const scheduleMap = schedules;
+  const selectedDateObj = new Date(selectedDate + 'T00:00:00');
+  const dayLabel = format(selectedDateObj, 'EEE, d MMM');
 
   return (
-    <div className="mx-auto max-w-4xl flex flex-col gap-4 pb-8">
-      {/* Page title + action bar */}
-      <div className="flex items-center justify-between px-4 pt-6">
-        <h1 className="text-balance text-title font-bold text-text-primary">{t('title')}</h1>
+    <>
+      <div className="flex min-h-[calc(100vh-0px)]">
+        {/* Left panel: week overview (lg+) */}
+        <aside className="hidden lg:flex lg:w-[340px] xl:w-[360px] flex-col shrink-0 border-r border-border bg-surface-1">
+          <div className="border-b border-border py-4">
+            <WeekCalendar
+              weekOffset={weekOffset}
+              selectedDate={selectedDate}
+              scheduleMap={scheduleMap}
+              userTier={userTier}
+              onSelectDate={handleSelectDate}
+              onChangeWeek={handleWeekChange}
+            />
+          </div>
 
-        {/* Action buttons — icon-only on mobile, icon + label on md+ */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* Copy day */}
-          <button
-            type="button"
-            onClick={() => setCopyDayOpen(true)}
-            disabled={!activeSchedule}
-            aria-label={t('copyDay')}
-            title={t('copyDay')}
-            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg bg-surface-2 px-2 md:px-3 text-caption text-text-secondary hover:bg-surface-3 disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <Copy size={16} aria-hidden />
-            <span className="hidden md:inline">{t('copyDay')}</span>
-          </button>
+          <div className="border-b border-border py-4">
+            <DisciplineRateWidget
+              rate={disciplineRate?.rate ?? 0}
+              completedDays={disciplineRate?.completedDays ?? 0}
+              totalDays={disciplineRate?.totalDays ?? 0}
+              loading={loading}
+            />
+          </div>
 
-          {/* Copy week */}
-          <button
-            type="button"
-            onClick={() => setCopyWeekOpen(true)}
-            aria-label={t('copyWeek')}
-            title={t('copyWeek')}
-            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg bg-surface-2 px-2 md:px-3 text-caption text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <CalendarRange size={16} aria-hidden />
-            <span className="hidden md:inline">{t('copyWeek')}</span>
-          </button>
+          <div className="p-4">
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Plus size={16} aria-hidden />
+              {t('addWorkout')}
+            </button>
+          </div>
 
-          {/* Divider */}
-          <div className="mx-0.5 h-5 w-px bg-border" aria-hidden />
+          <div className="flex flex-col gap-2 px-4 pb-4">
+            <button
+              type="button"
+              onClick={() => setCopyDayOpen(true)}
+              className="flex min-h-[40px] items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Copy size={14} aria-hidden />
+              {t('copyDay')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setCopyWeekOpen(true)}
+              className="flex min-h-[40px] items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <CalendarRange size={14} aria-hidden />
+              {t('copyWeek')}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportDay}
+              disabled={exportingDay}
+              className={cn(
+                'flex min-h-[40px] items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50',
+                userTier === UserTier.PRO
+                  ? 'border-border bg-surface-2 text-text-secondary hover:text-text-primary hover:bg-surface-3'
+                  : 'border-border bg-surface-2 text-text-tertiary',
+              )}
+            >
+              <Download size={14} aria-hidden />
+              {exportingDay ? tExport('exporting') : tExport('exportDay')}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportWeek}
+              disabled={exportingWeek}
+              className={cn(
+                'flex min-h-[40px] items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50',
+                userTier === UserTier.PRO
+                  ? 'border-border bg-surface-2 text-text-secondary hover:text-text-primary hover:bg-surface-3'
+                  : 'border-border bg-surface-2 text-text-tertiary',
+              )}
+            >
+              <Archive size={14} aria-hidden />
+              {exportingWeek ? tExport('exporting') : tExport('exportWeek')}
+            </button>
+          </div>
+        </aside>
 
-          {/* Export day FIT */}
-          <button
-            type="button"
-            onClick={handleExportDay}
-            disabled={exportingDay}
-            aria-label={tExport('fitDay')}
-            title={tExport('fitDay')}
-            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-2 md:px-3 text-sm font-medium text-text-secondary hover:bg-surface-1 disabled:opacity-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <Download size={16} aria-hidden />
-            <span className="hidden md:inline">{exportingDay ? tExport('downloading') : tExport('fitDay')}</span>
-            {userTier !== UserTier.PRO && (
-              <Lock size={12} className="text-text-tertiary" aria-hidden />
-            )}
-          </button>
+        {/* Right panel: day detail */}
+        <div className="flex-1 min-w-0 flex flex-col">
+          {/* Mobile: week strip at top */}
+          <div className="lg:hidden border-b border-border bg-surface-1 py-3">
+            <WeekCalendar
+              weekOffset={weekOffset}
+              selectedDate={selectedDate}
+              scheduleMap={scheduleMap}
+              userTier={userTier}
+              onSelectDate={handleSelectDate}
+              onChangeWeek={handleWeekChange}
+            />
+          </div>
 
-          {/* Export week ZIP */}
-          <button
-            type="button"
-            onClick={handleExportWeek}
-            disabled={exportingWeek}
-            aria-label={tExport('fitWeek')}
-            title={tExport('fitWeek')}
-            className="flex min-h-[40px] min-w-[40px] items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-2 md:px-3 text-sm font-medium text-text-secondary hover:bg-surface-1 disabled:opacity-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <Archive size={16} aria-hidden />
-            <span className="hidden md:inline">{exportingWeek ? tExport('downloading') : tExport('fitWeek')}</span>
-            {userTier !== UserTier.PRO && (
-              <Lock size={12} className="text-text-tertiary" aria-hidden />
-            )}
-          </button>
+          {/* Day header */}
+          <div className="flex items-center justify-between border-b border-border bg-surface-1 px-4 py-3">
+            <div>
+              <p className="font-mono text-lg font-bold text-text-primary leading-tight">{dayLabel}</p>
+              <p className="text-xs text-text-tertiary">
+                {activeSchedule?.items?.length ?? 0} {t('workouts')}
+              </p>
+            </div>
+            <div className="lg:hidden flex items-center gap-2">
+              <span className="font-mono text-sm font-bold text-accent">
+                {disciplineRate?.rate ?? 0}%
+              </span>
+              <span className="text-xs text-text-tertiary">{t('disciplineRate')}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              className="lg:hidden flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label={t('addWorkout')}
+            >
+              <Plus size={16} aria-hidden />
+            </button>
+          </div>
+
+          {/* Day status bar */}
+          {activeSchedule && (
+            <DayStatusBar
+              currentStatus={activeSchedule.dayStatus}
+              onStatusChange={handleStatusChange}
+            />
+          )}
+
+          {/* Workout list */}
+          <div className="flex-1 overflow-y-auto">
+            <DailyScheduleView
+              items={activeSchedule?.items ?? []}
+              labelMap={labelMap}
+              onAdd={() => setPickerOpen(true)}
+              onRemove={(id) => activeSchedule && removeItem(id, activeSchedule.id, activeSchedule.dateString)}
+              onReorder={(ids) => activeSchedule && reorderItems(activeSchedule.id, activeSchedule.dateString, ids)}
+              onSaveGym={(itemId, payload) => saveGymPayload(itemId, payload, activeSchedule!.dateString)}
+              onSaveRunning={(itemId, payload) => saveRunningPayload(itemId, payload, activeSchedule!.dateString)}
+            />
+          </div>
+
+          {/* Mobile: bottom action bar */}
+          <div className="lg:hidden flex gap-2 border-t border-border p-3">
+            <button
+              type="button"
+              onClick={() => setCopyDayOpen(true)}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px]"
+            >
+              <Copy size={13} aria-hidden />
+              {t('copyDay')}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportDay}
+              disabled={exportingDay}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px] disabled:opacity-50"
+            >
+              <Download size={13} aria-hidden />
+              {tExport('exportDay')}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Discipline rate */}
-      <DisciplineRateWidget
-        rate={disciplineRate.rate}
-        completedDays={disciplineRate.completedDays}
-        totalDays={disciplineRate.totalDays}
-        loading={loading}
-      />
-
-      {/* Week calendar strip */}
-      <WeekCalendar
-        weekOffset={weekOffset}
-        selectedDate={selectedDate}
-        scheduleMap={schedules}
-        userTier={userTier}
-        onSelectDate={handleSelectDate}
-        onChangeWeek={handleWeekChange}
-      />
-
-      {/* Day status bar */}
-      <DayStatusBar
-        currentStatus={currentStatus}
-        onStatusChange={handleStatusChange}
-        disabled={!activeSchedule}
-      />
-
-      {/* Workout list */}
-      <DailyScheduleView
-        items={currentItems}
-        labelMap={labelMap}
-        onAdd={() => setPickerOpen(true)}
-        onRemove={(itemId) => {
-          if (!activeSchedule) return;
-          removeItem(itemId, activeSchedule.id, selectedDate);
-        }}
-        onReorder={(orderedIds) => {
-          if (!activeSchedule) return;
-          reorderItems(activeSchedule.id, selectedDate, orderedIds);
-        }}
-        onSaveGym={async (itemId, payload) => {
-          await saveGymPayload(itemId, payload, selectedDate);
-        }}
-        onSaveRunning={async (itemId, payload) => {
-          await saveRunningPayload(itemId, payload, selectedDate);
-        }}
-      />
-
-      {/* Exercise picker modal */}
       {pickerOpen && (
         <ExercisePicker
           gymExercises={gymExercises}
@@ -370,35 +367,39 @@ export default function SchedulePage() {
         />
       )}
 
-      {/* Copy day modal */}
-      <CopyDayModal
-        open={copyDayOpen}
-        onClose={() => setCopyDayOpen(false)}
-        sourceDateString={selectedDate}
-        userTier={userTier}
-        onConfirm={async (targetDate, overwrite) => {
-          await api.copyDay(token, selectedDate, targetDate, overwrite);
-          // Reload week so the target day shows updated state
-          loadWeek(weekOffset);
-        }}
-      />
+      {copyDayOpen && (
+        <CopyDayModal
+          open={copyDayOpen}
+          sourceDateString={selectedDate}
+          userTier={userTier}
+          onClose={() => setCopyDayOpen(false)}
+          onConfirm={async (targetDateString, overwrite) => {
+            await api.copyDay(token, selectedDate, targetDateString, overwrite);
+            setCopyDayOpen(false);
+            loadWeek(weekOffset);
+          }}
+        />
+      )}
 
-      {/* Copy week modal */}
-      <CopyWeekModal
-        open={copyWeekOpen}
-        onClose={() => setCopyWeekOpen(false)}
-        sourceWeekOffset={weekOffset}
-        userTier={userTier}
-        onConfirm={async (srcWeek, srcYear, tgtWeek, tgtYear, overwrite) => {
-          await api.copyWeek(token, srcWeek, srcYear, tgtWeek, tgtYear, overwrite);
-        }}
-      />
+      {copyWeekOpen && (
+        <CopyWeekModal
+          open={copyWeekOpen}
+          sourceWeekOffset={weekOffset}
+          userTier={userTier}
+          onClose={() => setCopyWeekOpen(false)}
+          onConfirm={async (sourceWeek, sourceYear, targetWeek, targetYear, overwrite) => {
+            await api.copyWeek(token, sourceWeek, sourceYear, targetWeek, targetYear, overwrite);
+            setCopyWeekOpen(false);
+            loadWeek(weekOffset);
+          }}
+        />
+      )}
 
       <UpgradePrompt
         isOpen={upgradePromptOpen}
         onClose={() => setUpgradePromptOpen(false)}
         featureHint="export.upgradeToExport"
       />
-    </div>
+    </>
   );
 }

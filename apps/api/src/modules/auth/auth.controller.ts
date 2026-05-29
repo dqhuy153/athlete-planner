@@ -4,6 +4,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { GoogleAuthDto, DevLoginDto, AdminLoginDto } from './dto/auth.dto';
 import { GoogleAuthCommand } from './commands/google-auth.command';
 import { AdminLoginCommand } from './commands/admin-login.command';
+import { DevLoginCommand } from './commands/dev-login.command';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
@@ -31,12 +32,7 @@ export class AuthController {
       throw new ForbiddenException('Dev login is only available in development mode');
     }
     return this.commandBus.execute(
-      new GoogleAuthCommand(
-        dto.email,
-        dto.name ?? 'Dev User',
-        `dev-${dto.email}`,  // synthetic googleId — unique per email
-        null,
-      ),
+      new DevLoginCommand(dto.email, dto.name, dto.tier ?? 'FREE'),
     );
   }
 

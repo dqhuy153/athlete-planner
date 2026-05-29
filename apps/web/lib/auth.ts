@@ -27,8 +27,8 @@ if (isDev) {
       id: 'dev-credentials',
       name: 'Dev Login',
       credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'test@local.dev' },
-        password: { label: 'Password (ignored in dev)', type: 'password', placeholder: 'anything' },
+        email: { label: 'Email', type: 'email' },
+        tier:  { label: 'Tier',  type: 'text'  },
       },
       async authorize(credentials) {
         if (!credentials?.email) return null;
@@ -36,7 +36,10 @@ if (isDev) {
           const res = await fetch(`${API_URL}/api/auth/dev-login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: credentials.email }),
+            body: JSON.stringify({
+              email: credentials.email,
+              tier: credentials.tier ?? 'FREE',
+            }),
           });
           if (!res.ok) return null;
           const data = await res.json();
@@ -45,7 +48,6 @@ if (isDev) {
             email: data.user.email,
             name: data.user.name,
             image: data.user.avatarUrl ?? null,
-            // Attach API-specific data for the JWT callback
             accessToken: data.accessToken,
             nestUser: data.user,
           };

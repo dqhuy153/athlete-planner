@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Dumbbell } from 'lucide-react';
+import { cn } from '@athlete-planner/ui';
 
 interface ExerciseCardProps {
   id: string;
@@ -26,23 +27,22 @@ export function ExerciseCard({
   return (
     <Link
       href={`/${locale}/library/${id}`}
-      className={[
-        'card-surface group relative flex flex-col overflow-hidden',
-        'transition-colors duration-150 hover:border-border',
+      className={cn(
+        'group relative flex flex-col overflow-hidden rounded-xl',
+        'border border-border bg-surface-1 transition-all duration-150',
+        'hover:border-accent/40 hover:bg-surface-2',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
-        'touch-action-manipulation',
         isInactive ? 'opacity-50' : '',
-      ].join(' ')}
+      )}
     >
-      {/* Thumbnail */}
-      <div className="relative aspect-video w-full overflow-hidden bg-surface-2">
+      <div className="relative aspect-square w-full overflow-hidden bg-surface-2">
         {gifUrl ? (
           <Image
             src={gifUrl}
             alt={`${vietnameseName} demonstration`}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-200 group-hover:scale-105"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
             unoptimized={gifUrl.endsWith('.gif')}
           />
         ) : (
@@ -50,15 +50,19 @@ export function ExerciseCard({
             <Dumbbell className="h-8 w-8 text-text-tertiary" aria-hidden />
           </div>
         )}
+        {isPrivate && (
+          <div className="absolute right-2 top-2 rounded-md bg-warning/20 px-1.5 py-0.5 text-xs font-medium text-warning">
+            My
+          </div>
+        )}
       </div>
 
-      {/* Info */}
-      <div className="flex flex-1 flex-col gap-1 p-3">
-        <p className="line-clamp-1 text-caption font-medium leading-tight text-text-primary">
+      <div className="flex flex-1 flex-col gap-1 p-2.5">
+        <p className="line-clamp-2 text-xs font-semibold leading-tight text-text-primary">
           {vietnameseName}
         </p>
-        <p className="line-clamp-1 text-micro text-text-tertiary">{name}</p>
-        <span className="mt-1 inline-flex w-fit items-center rounded-sm bg-accent-muted px-1.5 py-0.5 text-micro font-medium text-accent">
+        <p className="line-clamp-1 text-xs text-text-tertiary">{name}</p>
+        <span className="mt-auto inline-flex w-fit items-center rounded-md bg-accent/10 px-1.5 py-0.5 text-xs font-medium text-accent">
           {badge}
         </span>
       </div>

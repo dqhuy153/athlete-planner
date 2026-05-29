@@ -1,73 +1,59 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { MuscleGroup } from '@athlete-planner/contracts';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { cn } from '@athlete-planner/ui';
 
-const MUSCLE_GROUPS = Object.values(MuscleGroup);
+const MUSCLE_GROUPS = [
+  { value: '',           label: 'All'       },
+  { value: 'Chest',      label: 'Chest'     },
+  { value: 'Back',       label: 'Back'      },
+  { value: 'Shoulders',  label: 'Shoulders' },
+  { value: 'Arms',       label: 'Arms'      },
+  { value: 'Legs',       label: 'Legs'      },
+  { value: 'Abs',        label: 'Abs'       },
+];
 
 export function MuscleGroupFilter() {
-  const router = useRouter();
-  const pathname = usePathname();
+  const router       = useRouter();
   const searchParams = useSearchParams();
-  const t = useTranslations('library');
-  const active = searchParams.get('muscleGroup') ?? '';
+  const active       = searchParams.get('muscleGroup') ?? '';
 
   function handleSelect(value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === '' || value === active) {
-      params.delete('muscleGroup');
-    } else {
+    if (value) {
       params.set('muscleGroup', value);
+    } else {
+      params.delete('muscleGroup');
     }
-    const qs = params.toString();
-    router.push(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false });
+    router.push(`?${params.toString()}`);
   }
 
   return (
     <div
-      className="no-scrollbar flex w-full gap-2 overflow-x-auto py-1"
+      className="no-scrollbar flex overflow-x-auto gap-1.5 pb-1"
       role="group"
-      aria-label={t('filterByMuscle')}
+      aria-label="Filter by muscle group"
     >
-      <FilterChip label={t('all')} active={active === ''} onSelect={() => handleSelect('')} />
-      {MUSCLE_GROUPS.map((mg) => (
-        <FilterChip
-          key={mg}
-          label={mg}
-          active={active === mg}
-          onSelect={() => handleSelect(mg)}
-        />
-      ))}
+      {MUSCLE_GROUPS.map(({ value, label }) => {
+        const isActive = active === value;
+        return (
+          <button
+            key={value}
+            type="button"
+            onClick={() => handleSelect(value)}
+            aria-pressed={isActive}
+            className={cn(
+              'shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-150',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+              isActive
+                ? 'bg-accent text-accent-foreground'
+                : 'border border-border bg-surface-1 text-text-secondary hover:border-accent/40 hover:text-text-primary',
+            )}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
-  );
-}
-
-function FilterChip({
-  label,
-  active,
-  onSelect,
-}: {
-  label: string;
-  active: boolean;
-  onSelect(): void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={active}
-      className={[
-        'shrink-0 rounded-full px-3 py-1.5 text-caption font-medium',
-        'min-h-[36px] touch-action-manipulation',
-        'transition-colors duration-150',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
-        active
-          ? 'bg-accent text-accent-foreground'
-          : 'border border-border bg-surface-2 text-text-secondary hover:border-accent/50 hover:text-text-primary',
-      ].join(' ')}
-    >
-      {label}
-    </button>
   );
 }
