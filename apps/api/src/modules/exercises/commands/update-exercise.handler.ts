@@ -11,22 +11,55 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
     const { id, dto, type, userId } = command;
 
     if (type === 'private') {
-      const existing = await this.prisma.privateExercise.findUnique({ where: { id } });
+      const existing = await this.prisma.privateExercise.findUnique({
+        where: { id },
+        select: { id: true, userId: true },
+      });
       if (!existing) throw new NotFoundException('Exercise not found');
       if (existing.userId !== userId) throw new ForbiddenException('Access denied');
-      return this.prisma.privateExercise.update({ where: { id }, data: dto });
+      const { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl } = dto as any;
+      return this.prisma.privateExercise.update({
+        where: { id },
+        data: { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl },
+      });
     }
 
     if (type === 'gym') {
-      const existing = await this.prisma.gymExerciseMaster.findUnique({ where: { id } });
+      const existing = await this.prisma.gymExerciseMaster.findUnique({
+        where: { id },
+        select: { id: true },
+      });
       if (!existing) throw new NotFoundException('Exercise not found');
-      return this.prisma.gymExerciseMaster.update({ where: { id }, data: dto });
+      const {
+        name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
+        youtubeEmbedUrl, gifUrl, garminExerciseEnum, instructions,
+      } = dto as any;
+      return this.prisma.gymExerciseMaster.update({
+        where: { id },
+        data: {
+          name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
+          youtubeEmbedUrl, gifUrl, garminExerciseEnum, instructions,
+        },
+      });
     }
 
     if (type === 'running') {
-      const existing = await this.prisma.runningExerciseMaster.findUnique({ where: { id } });
+      const existing = await this.prisma.runningExerciseMaster.findUnique({
+        where: { id },
+        select: { id: true },
+      });
       if (!existing) throw new NotFoundException('Exercise not found');
-      return this.prisma.runningExerciseMaster.update({ where: { id }, data: dto });
+      const {
+        name, vietnameseName, runningType, youtubeEmbedUrl,
+        gifUrl, instructions, workoutStructure,
+      } = dto as any;
+      return this.prisma.runningExerciseMaster.update({
+        where: { id },
+        data: {
+          name, vietnameseName, runningType, youtubeEmbedUrl,
+          gifUrl, instructions, workoutStructure,
+        },
+      });
     }
   }
 }

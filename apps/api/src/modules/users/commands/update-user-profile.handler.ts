@@ -14,7 +14,15 @@ export class UpdateUserProfileHandler implements ICommandHandler<UpdateUserProfi
     return this.prisma.user.update({
       where: { id: command.userId },
       data: command.data,
-      select: { id: true, email: true, name: true, avatarUrl: true, tier: true, role: true },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        tier: true,
+        role: true,
+        preferredLevel: true,
+      },
     });
   }
 }

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { VideoPlayer } from '@/components/VideoPlayer';
+import { InstructionsPanel } from '@/components/InstructionsPanel';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -92,42 +93,35 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
         </div>
       )}
 
+      {/* Running instructions */}
+      {isRunning(exercise) && exercise.instructions &&
+        ((exercise.instructions as any).vi?.length > 0 || (exercise.instructions as any).en?.length > 0) && (
+        <section className="mt-6" aria-labelledby="run-instructions-heading">
+          <h2 id="run-instructions-heading" className="mb-3 text-caption font-semibold uppercase tracking-wider text-text-tertiary">
+            {t('instructions')}
+          </h2>
+          <div className="card-surface p-4">
+            <ol className="space-y-1.5" role="list">
+              {((exercise.instructions as any)[locale] ?? (exercise.instructions as any).en ?? []).map((step: string, i: number) => (
+                <li key={i} className="flex gap-2 text-caption text-text-primary">
+                  <span className="font-data shrink-0 text-accent">{i + 1}.</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
       {/* Gym instructions */}
       {isGym(exercise) && exercise.instructions.length > 0 && (
         <section className="mt-6" aria-labelledby="instructions-heading">
           <h2 id="instructions-heading" className="mb-3 text-caption font-semibold uppercase tracking-wider text-text-tertiary">
             {t('instructions')}
           </h2>
-          {exercise.instructions.map((inst: any) => (
-            <div key={inst.level} className="mb-4 card-surface p-4">
-              <p className="mb-2 text-micro font-semibold uppercase tracking-wider text-text-secondary">
-                {inst.level === 'BEGINNER' ? t('beginner_steps') : t('advanced_steps')}
-              </p>
-              <ol className="space-y-1.5" role="list">
-                {(inst.steps?.vi ?? inst.steps?.en ?? []).map((step: string, i: number) => (
-                  <li key={i} className="flex gap-2 text-caption text-text-primary">
-                    <span className="font-data shrink-0 text-accent">{i + 1}.</span>
-                    <span>{step}</span>
-                  </li>
-                ))}
-              </ol>
-              {inst.form_cues && (
-                <div className="mt-3 border-t border-border pt-3">
-                  <p className="mb-1.5 text-micro font-semibold uppercase tracking-wider text-text-secondary">
-                    {t('form_cues')}
-                  </p>
-                  <ul className="space-y-1" role="list">
-                    {(inst.form_cues?.vi ?? inst.form_cues?.en ?? []).map((cue: string, i: number) => (
-                      <li key={i} className="flex gap-2 text-caption text-text-secondary">
-                        <span aria-hidden className="text-accent">—</span>
-                        <span>{cue}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          ))}
+          <div className="card-surface p-4">
+            <InstructionsPanel instructions={exercise.instructions} locale={locale} />
+          </div>
         </section>
       )}
 

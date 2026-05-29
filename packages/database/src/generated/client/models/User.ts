@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   avatarUrl: string | null
   tier: $Enums.UserTier | null
   role: $Enums.UserRole | null
+  preferredLevel: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +45,7 @@ export type UserMaxAggregateOutputType = {
   avatarUrl: string | null
   tier: $Enums.UserTier | null
   role: $Enums.UserRole | null
+  preferredLevel: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +58,7 @@ export type UserCountAggregateOutputType = {
   avatarUrl: number
   tier: number
   role: number
+  preferredLevel: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,6 +73,7 @@ export type UserMinAggregateInputType = {
   avatarUrl?: true
   tier?: true
   role?: true
+  preferredLevel?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +86,7 @@ export type UserMaxAggregateInputType = {
   avatarUrl?: true
   tier?: true
   role?: true
+  preferredLevel?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +99,7 @@ export type UserCountAggregateInputType = {
   avatarUrl?: true
   tier?: true
   role?: true
+  preferredLevel?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -179,6 +185,7 @@ export type UserGroupByOutputType = {
   avatarUrl: string | null
   tier: $Enums.UserTier
   role: $Enums.UserRole
+  preferredLevel: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -212,6 +219,7 @@ export type UserWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   tier?: Prisma.EnumUserTierFilter<"User"> | $Enums.UserTier
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  preferredLevel?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   privateExercises?: Prisma.PrivateExerciseListRelationFilter
@@ -227,6 +235,7 @@ export type UserOrderByWithRelationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preferredLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   privateExercises?: Prisma.PrivateExerciseOrderByRelationAggregateInput
@@ -245,6 +254,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   tier?: Prisma.EnumUserTierFilter<"User"> | $Enums.UserTier
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  preferredLevel?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   privateExercises?: Prisma.PrivateExerciseListRelationFilter
@@ -260,6 +270,7 @@ export type UserOrderByWithAggregationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preferredLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -278,6 +289,7 @@ export type UserScalarWhereWithAggregatesInput = {
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   tier?: Prisma.EnumUserTierWithAggregatesFilter<"User"> | $Enums.UserTier
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+  preferredLevel?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -290,6 +302,7 @@ export type UserCreateInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -305,6 +318,7 @@ export type UserUncheckedCreateInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -320,6 +334,7 @@ export type UserUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -335,6 +350,7 @@ export type UserUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -350,6 +366,7 @@ export type UserCreateManyInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -362,6 +379,7 @@ export type UserUpdateManyMutationInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -374,6 +392,7 @@ export type UserUncheckedUpdateManyInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -386,6 +405,7 @@ export type UserCountOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preferredLevel?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -398,6 +418,7 @@ export type UserMaxOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preferredLevel?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -410,6 +431,7 @@ export type UserMinOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  preferredLevel?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -489,6 +511,7 @@ export type UserCreateWithoutPrivateExercisesInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   dailySchedules?: Prisma.DailyScheduleCreateNestedManyWithoutUserInput
@@ -503,6 +526,7 @@ export type UserUncheckedCreateWithoutPrivateExercisesInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   dailySchedules?: Prisma.DailyScheduleUncheckedCreateNestedManyWithoutUserInput
@@ -533,6 +557,7 @@ export type UserUpdateWithoutPrivateExercisesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dailySchedules?: Prisma.DailyScheduleUpdateManyWithoutUserNestedInput
@@ -547,6 +572,7 @@ export type UserUncheckedUpdateWithoutPrivateExercisesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dailySchedules?: Prisma.DailyScheduleUncheckedUpdateManyWithoutUserNestedInput
@@ -561,6 +587,7 @@ export type UserCreateWithoutDailySchedulesInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -575,6 +602,7 @@ export type UserUncheckedCreateWithoutDailySchedulesInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -605,6 +633,7 @@ export type UserUpdateWithoutDailySchedulesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -619,6 +648,7 @@ export type UserUncheckedUpdateWithoutDailySchedulesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -633,6 +663,7 @@ export type UserCreateWithoutPaymentsInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -647,6 +678,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   avatarUrl?: string | null
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
+  preferredLevel?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -677,6 +709,7 @@ export type UserUpdateWithoutPaymentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -691,6 +724,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -754,6 +788,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarUrl?: boolean
   tier?: boolean
   role?: boolean
+  preferredLevel?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   privateExercises?: boolean | Prisma.User$privateExercisesArgs<ExtArgs>
@@ -770,6 +805,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarUrl?: boolean
   tier?: boolean
   role?: boolean
+  preferredLevel?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -782,6 +818,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarUrl?: boolean
   tier?: boolean
   role?: boolean
+  preferredLevel?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -794,11 +831,12 @@ export type UserSelectScalar = {
   avatarUrl?: boolean
   tier?: boolean
   role?: boolean
+  preferredLevel?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "googleId" | "avatarUrl" | "tier" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "googleId" | "avatarUrl" | "tier" | "role" | "preferredLevel" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   privateExercises?: boolean | Prisma.User$privateExercisesArgs<ExtArgs>
   dailySchedules?: boolean | Prisma.User$dailySchedulesArgs<ExtArgs>
@@ -823,6 +861,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     avatarUrl: string | null
     tier: $Enums.UserTier
     role: $Enums.UserRole
+    preferredLevel: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1258,6 +1297,7 @@ export interface UserFieldRefs {
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
   readonly tier: Prisma.FieldRef<"User", 'UserTier'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
+  readonly preferredLevel: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

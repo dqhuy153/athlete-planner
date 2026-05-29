@@ -1,13 +1,17 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession, signOut } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Zap, LogOut, Languages, User as UserIcon, ChevronRight } from 'lucide-react';
+import { Zap, LogOut, Languages, User as UserIcon, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { UserTier } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
+import { api } from '@/lib/api';
+
+type PreferredLevel = 'BEGINNER' | 'ADVANCED';
 
 export default function ProfilePage() {
   const t = useTranslations('profile');
@@ -18,8 +22,34 @@ export default function ProfilePage() {
   const otherLocale = locale === 'vi' ? 'en' : 'vi';
 
   const user = session?.user;
-  const tier = (session as any)?.user?.tier as UserTier | undefined;
+  const tier = session?.user?.tier as UserTier | undefined;
   const isPro = tier === UserTier.PRO;
+
+  const [currentLevel, setCurrentLevel] = useState<PreferredLevel | null>(null);
+  const [levelSaving, setLevelSaving] = useState(false);
+  const [levelSaved, setLevelSaved] = useState(false);
+
+  useEffect(() => {
+    if (session?.user?.preferredLevel) {
+      setCurrentLevel(session.user.preferredLevel as PreferredLevel);
+    }
+  }, [session?.user?.preferredLevel]);
+
+  async function handleLevelChange(level: PreferredLevel) {
+    if (!session?.accessToken || !user?.id || levelSaving) return;
+    setLevelSaving(true);
+    setLevelSaved(false);
+    try {
+      await api.updatePreferredLevel(session.accessToken, user.id, level);
+      setCurrentLevel(level);
+      setLevelSaved(true);
+      setTimeout(() => setLevelSaved(false), 2000);
+    } catch {
+      // silently fail — non-critical preference
+    } finally {
+      setLevelSaving(false);
+    }
+  }
 
   function handleLocaleSwitch() {
     const path = window.location.pathname.replace(`/${locale}`, `/${otherLocale}`);
@@ -109,6 +139,38 @@ export default function ProfilePage() {
       )}
 
       <div className="rounded-xl border border-border bg-surface-1 overflow-hidden">
+        {/* Preferred instruction level */}
+        <div className="border-b border-border px-4 py-3">
+          <p className="text-sm font-medium text-text-primary mb-2">
+            Instruction level
+            {levelSaved && (
+              <CheckCircle2 size={14} className="inline ml-2 text-accent" aria-hidden />
+            )}
+          </p>
+          <div className="flex gap-2">
+            {(['BEGINNER', 'ADVANCED'] as PreferredLevel[]).map((level) => (
+              <button
+                key={level}
+                type="button"
+                disabled={levelSaving}
+                onClick={() => handleLevelChange(level)}
+                className={cn(
+                  'flex-1 min-h-[44px] rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
+                  currentLevel === level
+                    ? 'border-accent bg-accent/10 text-accent'
+                    : 'border-border text-text-secondary hover:bg-surface-2',
+                  levelSaving && 'opacity-60 cursor-not-allowed',
+                )}
+              >
+                {level === 'BEGINNER' ? 'Cơ bản' : 'Nâng cao'}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1.5 text-xs text-text-tertiary">
+            Hiển thị hướng dẫn phù hợp trong thư viện bài tập
+          </p>
+        </div>
+
         <button
           onClick={handleLocaleSwitch}
           className="flex min-h-[52px] w-full items-center gap-3 border-b border-border px-4 text-sm text-text-primary transition-colors hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"

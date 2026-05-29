@@ -10,6 +10,7 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../admin/admin.guard';
@@ -34,13 +35,27 @@ export class ExercisesController {
   ) {}
 
   @Get('gym')
-  async getGymLibrary(@Query('muscleGroup') muscleGroup?: string) {
-    return this.queryBus.execute(new GetExerciseLibraryQuery('gym', { muscleGroup }));
+  async getGymLibrary(
+    @Query('muscleGroup') muscleGroup?: string,
+    @Query('includeInactive') includeInactive?: string,
+    @Req() req?: Request,
+  ) {
+    const isAdmin = !!(req?.headers?.authorization) && includeInactive === 'true';
+    return this.queryBus.execute(
+      new GetExerciseLibraryQuery('gym', { muscleGroup, includeInactive: isAdmin }),
+    );
   }
 
   @Get('running')
-  async getRunningLibrary(@Query('runningType') runningType?: string) {
-    return this.queryBus.execute(new GetExerciseLibraryQuery('running', { runningType }));
+  async getRunningLibrary(
+    @Query('runningType') runningType?: string,
+    @Query('includeInactive') includeInactive?: string,
+    @Req() req?: Request,
+  ) {
+    const isAdmin = !!(req?.headers?.authorization) && includeInactive === 'true';
+    return this.queryBus.execute(
+      new GetExerciseLibraryQuery('running', { runningType, includeInactive: isAdmin }),
+    );
   }
 
   @UseGuards(JwtAuthGuard)

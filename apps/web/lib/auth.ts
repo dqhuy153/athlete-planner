@@ -100,6 +100,7 @@ const authConfig = NextAuth({
           token.name = nestUser.name;
           token.picture = nestUser.avatarUrl;
           token.tier = nestUser.tier;
+          token.preferredLevel = nestUser.preferredLevel ?? null;
         }
       }
       return token;
@@ -112,6 +113,7 @@ const authConfig = NextAuth({
           id: token.userId as string,
           role: token.role as string,
           tier: token.tier as string,
+          preferredLevel: (token.preferredLevel as 'BEGINNER' | 'ADVANCED' | null) ?? null,
         },
         accessToken: token.accessToken as string,
       };

@@ -1275,6 +1275,7 @@ export const UserScalarFieldEnum = {
   avatarUrl: 'avatarUrl',
   tier: 'tier',
   role: 'role',
+  preferredLevel: 'preferredLevel',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

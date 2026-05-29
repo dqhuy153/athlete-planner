@@ -32,12 +32,13 @@ export class UsersController {
   @Put(':id/profile')
   async updateProfile(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: { name?: string; dob?: string },
+    @Body() body: { name?: string; dob?: string; preferredLevel?: string },
   ) {
     return this.commandBus.execute(
       new UpdateUserProfileCommand(id, {
         name: body.name,
         dob: body.dob ? new Date(body.dob) : undefined,
+        preferredLevel: body.preferredLevel,
       }),
     );
   }

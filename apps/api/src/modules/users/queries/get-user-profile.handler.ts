@@ -17,6 +17,7 @@ export class GetUserProfileHandler implements IQueryHandler<GetUserProfileQuery>
         avatarUrl: true,
         tier: true,
         role: true,
+        preferredLevel: true,
         createdAt: true,
       },
     });

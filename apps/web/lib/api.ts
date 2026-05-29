@@ -64,6 +64,14 @@ class ApiClient {
     });
   }
 
+  updatePreferredLevel(accessToken: string, userId: string, preferredLevel: string | null) {
+    return this.request<User>(`/users/${userId}/profile`, {
+      method: 'PUT',
+      headers: this.authHeaders(accessToken),
+      body: JSON.stringify({ preferredLevel }),
+    });
+  }
+
   // ── Blog ─────────────────────────────────────────────────────────────────
   getBlogPosts(params?: { page?: number; limit?: number; categoryKey?: string }) {
     const query = new URLSearchParams();

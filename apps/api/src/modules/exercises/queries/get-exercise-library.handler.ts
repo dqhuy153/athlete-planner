@@ -8,23 +8,26 @@ export class GetExerciseLibraryHandler implements IQueryHandler<GetExerciseLibra
 
   async execute(query: GetExerciseLibraryQuery) {
     const { type, filter } = query;
+    const showAll = filter?.includeInactive === true;
 
     if (type === 'gym') {
       return this.prisma.gymExerciseMaster.findMany({
         where: {
-          isActive: true,
+          ...(showAll ? {} : { isActive: true }),
           ...(filter?.muscleGroup
             ? { targetMuscleGroup: filter.muscleGroup as MuscleGroup }
             : {}),
         },
+        orderBy: { createdAt: 'desc' },
       });
     }
 
     return this.prisma.runningExerciseMaster.findMany({
       where: {
-        isActive: true,
+        ...(showAll ? {} : { isActive: true }),
         ...(filter?.runningType ? { runningType: filter.runningType as RunningType } : {}),
       },
+      orderBy: { createdAt: 'desc' },
     });
   }
 }

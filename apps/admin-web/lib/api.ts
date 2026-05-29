@@ -180,6 +180,7 @@ export function getGymExercises(
   params?: { muscleGroup?: string; page?: number; limit?: number },
 ): Promise<GymExerciseMaster[]> {
   const q = new URLSearchParams();
+  q.set('includeInactive', 'true');
   if (params?.muscleGroup) q.set('muscleGroup', params.muscleGroup);
   if (params?.page)   q.set('page',  String(params.page));
   if (params?.limit)  q.set('limit', String(params.limit));
@@ -191,6 +192,7 @@ export function getRunningExercises(
   params?: { runningType?: string; page?: number; limit?: number },
 ): Promise<RunningExerciseMaster[]> {
   const q = new URLSearchParams();
+  q.set('includeInactive', 'true');
   if (params?.runningType) q.set('runningType', params.runningType);
   if (params?.page)  q.set('page',  String(params.page));
   if (params?.limit) q.set('limit', String(params.limit));

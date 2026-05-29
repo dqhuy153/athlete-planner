@@ -21,6 +21,7 @@ export interface User {
   avatarUrl: string | null;
   tier: UserTier;
   role: UserRole;
+  preferredLevel: 'BEGINNER' | 'ADVANCED' | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -70,9 +71,21 @@ export interface ExerciseInstruction {
 }
 
 export interface WorkoutPhase {
-  phase: 'Warm-up' | 'Interval_Work' | 'Cool-down';
+  phase: string;
+  type: 'interval' | 'recovery' | 'steady_state' | 'warm_up' | 'cool_down' | 'custom';
   duration_minutes?: number;
   distance_meters?: number;
+  hr_zone?: number;
+  hr_min?: number;
+  hr_max?: number;
+  pace_min_per_km?: string;
+  pace_max_per_km?: string;
+  rpe?: number;
+  cadence?: number;
+  power_zone?: number;
+  repeat_count?: number;
+  repeat_rest_seconds?: number;
+  notes?: { vi: string; en: string };
 }
 
 export interface GymExerciseMaster {

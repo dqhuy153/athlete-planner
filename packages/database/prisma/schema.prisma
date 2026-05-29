@@ -26,15 +26,16 @@ enum UserRole {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  googleId  String?  @unique
-  avatarUrl String?
-  tier      UserTier @default(FREE)
-  role      UserRole @default(user)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String?
+  googleId       String?  @unique
+  avatarUrl      String?
+  tier           UserTier @default(FREE)
+  role           UserRole @default(user)
+  preferredLevel String?  // 'BEGINNER' | 'ADVANCED'
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   privateExercises PrivateExercise[]
   dailySchedules   DailySchedule[]

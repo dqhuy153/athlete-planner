@@ -7,6 +7,7 @@ declare module 'next-auth' {
       id: string;
       role: string;
       tier: string;
+      preferredLevel?: 'BEGINNER' | 'ADVANCED' | null;
     } & DefaultSession['user'];
   }
 }
