@@ -1,56 +1,68 @@
-import { Suspense } from 'react';
-import { getTranslations } from 'next-intl/server';
-import type { GymExerciseMaster } from '@athlete-planner/contracts';
-import { ExerciseCard }      from '@/components/ExerciseCard';
-import { MuscleGroupFilter } from '@/components/MuscleGroupFilter';
+import { Suspense } from 'react'
+import { getTranslations } from 'next-intl/server'
+import type { GymExerciseMaster } from '@athlete-planner/contracts'
+import { ExerciseCard } from '@/components/ExerciseCard'
+import { MuscleGroupFilter } from '@/components/MuscleGroupFilter'
 
-export const revalidate = 300;
+export const revalidate = 300
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
 
-async function fetchGymExercises(muscleGroup?: string): Promise<GymExerciseMaster[]> {
-  const qs = muscleGroup ? `?muscleGroup=${encodeURIComponent(muscleGroup)}` : '';
+async function fetchGymExercises(
+  muscleGroup?: string,
+): Promise<GymExerciseMaster[]> {
+  const qs = muscleGroup
+    ? `?muscleGroup=${encodeURIComponent(muscleGroup)}`
+    : ''
   try {
-    const res = await fetch(`${API_URL}/api/exercises/gym${qs}`, { next: { revalidate: 300 } });
-    if (!res.ok) return [];
-    return res.json();
+    const res = await fetch(`${API_URL}/api/exercises/gym${qs}`, {
+      next: { revalidate: 300 },
+    })
+    if (!res.ok) return []
+    return res.json()
   } catch {
-    return [];
+    return []
   }
 }
 
 interface PageProps {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ muscleGroup?: string }>;
+  params: Promise<{ locale: string }>
+  searchParams: Promise<{ muscleGroup?: string }>
 }
 
-export default async function GymLibraryPage({ params, searchParams }: PageProps) {
-  const [{ locale }, { muscleGroup }] = await Promise.all([params, searchParams]);
+export default async function GymLibraryPage({
+  params,
+  searchParams,
+}: PageProps) {
+  const [{ locale }, { muscleGroup }] = await Promise.all([
+    params,
+    searchParams,
+  ])
   const [exercises, t] = await Promise.all([
     fetchGymExercises(muscleGroup),
     getTranslations('library'),
-  ]);
+  ])
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur-sm px-4 py-3">
+    <div className='flex flex-col h-full'>
+      <div className='sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur-sm px-4 py-3'>
         <Suspense fallback={null}>
           <MuscleGroupFilter />
         </Suspense>
       </div>
 
-      <div className="px-4 py-4 overflow-x-hidden">
+      <div className='px-4 py-4 overflow-x-hidden'>
         {exercises.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 py-16 text-center">
-            <p className="text-sm text-text-tertiary">{t('noExercises')}</p>
+          <div className='flex flex-col items-center gap-2 py-16 text-center'>
+            <p className='text-sm text-text-tertiary'>{t('noExercises')}</p>
           </div>
         ) : (
           <ul
-            className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-            role="list"
+            className='grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+            role='list'
             aria-label={t('gym')}
           >
-            {exercises.map((ex) => (
+            {exercises.map(ex => (
               <li key={ex.id}>
                 <ExerciseCard
                   id={ex.id}
@@ -66,5 +78,5 @@ export default async function GymLibraryPage({ params, searchParams }: PageProps
         )}
       </div>
     </div>
-  );
+  )
 }

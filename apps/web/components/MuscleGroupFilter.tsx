@@ -30,7 +30,7 @@ export function MuscleGroupFilter() {
 
   return (
     <div
-      className="no-scrollbar flex overflow-x-auto gap-1.5 pb-1"
+      className="no-scrollbar flex overflow-x-auto gap-1.5 px-4 pb-1"
       role="group"
       aria-label="Filter by muscle group"
     >
