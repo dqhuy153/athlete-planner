@@ -9,8 +9,8 @@
 ```
 apps/
   api/          # NestJS API (port 3001) — CQRS, Prisma, JWT auth (Google OAuth only)
-  web/          # Next.js 15 user-facing app (port 3000) — NextAuth (Google), Zustand, React Query, next-intl
-  admin-web/    # Next.js 15 admin dashboard (port 3002) — localStorage auth, role=root only
+  web/          # Next.js 16 user-facing app (port 3000) — NextAuth (Google), Zustand, React Query, next-intl
+  admin-web/    # Next.js 16 admin dashboard (port 3002) — localStorage auth, role=root only
 packages/
   contracts/    # Shared TypeScript types (domain models)
   database/     # Prisma client + PrismaService + PrismaModule (NestJS)
@@ -32,7 +32,7 @@ packages/
 
 ## Frontend (apps/web)
 
-- Framework: Next.js 15 App Router, React 19
+- Framework: Next.js 16 App Router, React 19
 - Auth: next-auth@5 beta with GoogleProvider only
 - i18n: next-intl, path-based `/[locale]/...` (vi, en)
 - State: Zustand (`lib/store/index.ts`) + React Query for server state
@@ -43,7 +43,7 @@ packages/
 
 ## Admin (apps/admin-web)
 
-- Framework: Next.js 15 App Router, React 19
+- Framework: Next.js 16 App Router, React 19
 - Auth: localStorage session (`admin_web_session`), `role === 'root'` required
 - API calls: `lib/api.ts` — standalone functions
 - Routes: `/users`, `/exercises`, `/blog`, `/assets`, `/config`

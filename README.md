@@ -4,7 +4,7 @@ Training planner for hybrid athletes (Gym + Running) with Garmin .FIT export.
 
 ## Stack
 
-- **Frontend:** Next.js 15 (App Router) + React 19
+- **Frontend:** Next.js 16 (App Router) + React 19
 - **Backend:** NestJS 11 (CQRS) + Prisma + PostgreSQL
 - **Packages:** Turborepo monorepo with shared contracts, UI, and config
 - **Auth:** Google OAuth only (via NextAuth + JWT)
