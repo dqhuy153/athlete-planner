@@ -1,0 +1,169 @@
+'use client';
+
+import { useState, useCallback, useRef } from 'react';
+import { getISOWeek, getISOWeekYear } from 'date-fns';
+import type { DailySchedule, GymPayload, RunningPayload } from '@athlete-planner/contracts';
+import type { PickedExercise } from '../../components/ExercisePicker';
+import { api } from '../api';
+
+interface UseScheduleOptions {
+  token: string;
+}
+
+export function useSchedule({ token }: UseScheduleOptions) {
+  const [schedules, setSchedules]       = useState<Map<string, DailySchedule>>(new Map());
+  const [activeSchedule, setActive]     = useState<DailySchedule | null>(null);
+  const [loading, setLoading]           = useState(false);
+  const [disciplineRate, setDisciplineRate] = useState({ rate: 0, completedDays: 0, totalDays: 0 });
+  const [weekOffset, setWeekOffset]     = useState(0);
+
+  const loadingRef = useRef(false);
+
+  const loadWeek = useCallback(async (offset: number) => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    setLoading(true);
+
+    const now  = new Date();
+    const base = new Date(now);
+    base.setDate(now.getDate() + offset * 7);
+    const year = getISOWeekYear(base);
+    const week = getISOWeek(base);
+
+    try {
+      const [days, rate] = await Promise.all([
+        api.getWeekSchedule(token, year, week),
+        api.getDisciplineRate(token, year, week),
+      ]);
+
+      const map = new Map<string, DailySchedule>();
+      for (const d of days) map.set(d.dateString, d);
+      setSchedules(map);
+      setDisciplineRate(rate);
+    } catch {
+      // fail silently — schedules may not exist yet
+    } finally {
+      setLoading(false);
+      loadingRef.current = false;
+    }
+  }, [token]);
+
+  const selectDate = useCallback(async (dateString: string) => {
+    // Check cache first
+    const cached = schedules.get(dateString);
+    if (cached) {
+      setActive(cached);
+      return;
+    }
+    // Fetch or create
+    try {
+      let schedule = await api.getDailySchedule(token, dateString);
+      if (!schedule) {
+        schedule = await api.createDailySchedule(token, dateString);
+      }
+      setSchedules(prev => new Map(prev).set(dateString, schedule!));
+      setActive(schedule);
+    } catch {
+      setActive(null);
+    }
+  }, [token, schedules]);
+
+  const updateStatus = useCallback(async (scheduleId: string, status: string, dateString: string) => {
+    try {
+      const updated = await api.updateDayStatus(token, scheduleId, status);
+      setSchedules(prev => new Map(prev).set(dateString, updated));
+      setActive(updated);
+    } catch { /* ignore */ }
+  }, [token]);
+
+  const addItem = useCallback(async (scheduleId: string, dateString: string, picked: PickedExercise) => {
+    try {
+      const item = await api.addScheduleItem(token, scheduleId, {
+        sportType:         picked.sportType,
+        sourceType:        picked.sourceType,
+        gymMasterId:       picked.gymMasterId,
+        runningMasterId:   picked.runningMasterId,
+        privateExerciseId: picked.privateExerciseId,
+      });
+      setSchedules(prev => {
+        const map = new Map(prev);
+        const sched = map.get(dateString);
+        if (sched) map.set(dateString, { ...sched, items: [...sched.items, item] });
+        return map;
+      });
+      setActive(prev => prev ? { ...prev, items: [...prev.items, item] } : prev);
+    } catch { /* ignore */ }
+  }, [token]);
+
+  const removeItem = useCallback(async (itemId: string, scheduleId: string, dateString: string) => {
+    try {
+      await api.removeScheduleItem(token, itemId);
+      setSchedules(prev => {
+        const map = new Map(prev);
+        const sched = map.get(dateString);
+        if (sched) map.set(dateString, { ...sched, items: sched.items.filter(i => i.id !== itemId) });
+        return map;
+      });
+      setActive(prev => prev ? { ...prev, items: prev.items.filter(i => i.id !== itemId) } : prev);
+    } catch { /* ignore */ }
+  }, [token]);
+
+  const reorderItems = useCallback(async (scheduleId: string, dateString: string, orderedIds: string[]) => {
+    // Optimistic
+    setSchedules(prev => {
+      const map = new Map(prev);
+      const sched = map.get(dateString);
+      if (!sched) return prev;
+      const sorted = orderedIds.map(id => sched.items.find(i => i.id === id)!).filter(Boolean);
+      map.set(dateString, { ...sched, items: sorted });
+      return map;
+    });
+    setActive(prev => {
+      if (!prev) return prev;
+      const sorted = orderedIds.map(id => prev.items.find(i => i.id === id)!).filter(Boolean);
+      return { ...prev, items: sorted };
+    });
+    try {
+      await api.reorderScheduleItems(token, scheduleId, orderedIds);
+    } catch { /* ignore — optimistic already applied */ }
+  }, [token]);
+
+  const saveGymPayload = useCallback(async (itemId: string, payload: GymPayload, dateString: string) => {
+    const updated = await api.updateGymPayload(token, itemId, payload);
+    setSchedules(prev => {
+      const map = new Map(prev);
+      const sched = map.get(dateString);
+      if (sched) map.set(dateString, { ...sched, items: sched.items.map(i => i.id === itemId ? updated : i) });
+      return map;
+    });
+    setActive(prev => prev ? { ...prev, items: prev.items.map(i => i.id === itemId ? updated : i) } : prev);
+  }, [token]);
+
+  const saveRunningPayload = useCallback(async (itemId: string, payload: RunningPayload, dateString: string) => {
+    const updated = await api.updateRunningPayload(token, itemId, payload);
+    setSchedules(prev => {
+      const map = new Map(prev);
+      const sched = map.get(dateString);
+      if (sched) map.set(dateString, { ...sched, items: sched.items.map(i => i.id === itemId ? updated : i) });
+      return map;
+    });
+    setActive(prev => prev ? { ...prev, items: prev.items.map(i => i.id === itemId ? updated : i) } : prev);
+  }, [token]);
+
+  return {
+    schedules,
+    activeSchedule,
+    loading,
+    disciplineRate,
+    weekOffset,
+    setWeekOffset,
+    loadWeek,
+    selectDate,
+    updateStatus,
+    addItem,
+    removeItem,
+    reorderItems,
+    saveGymPayload,
+    saveRunningPayload,
+  };
+}

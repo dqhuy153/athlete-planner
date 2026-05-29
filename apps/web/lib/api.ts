@@ -1,4 +1,4 @@
-import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise, DailySchedule, ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -132,7 +132,93 @@ class ApiClient {
   }
 
   // ── Schedules ────────────────────────────────────────────────────────────
-  // Placeholder - will add schedule CRUD methods in Phase 3
+
+  getWeekSchedule(token: string, year: number, weekNumber: number) {
+    return this.request<DailySchedule[]>(
+      `/schedules/week/${year}/${weekNumber}`,
+      { headers: this.authHeaders(token) },
+    );
+  }
+
+  getDailySchedule(token: string, dateString: string) {
+    return this.request<DailySchedule | null>(`/schedules/day/${dateString}`, {
+      headers: this.authHeaders(token),
+    });
+  }
+
+  createDailySchedule(token: string, dateString: string) {
+    return this.request<DailySchedule>('/schedules/day', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ dateString }),
+    });
+  }
+
+  updateDayStatus(token: string, scheduleId: string, status: string) {
+    return this.request<DailySchedule>(`/schedules/day/${scheduleId}/status`, {
+      method: 'PATCH',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  addScheduleItem(
+    token: string,
+    scheduleId: string,
+    data: {
+      sportType: string;
+      sourceType: string;
+      gymMasterId?: string;
+      runningMasterId?: string;
+      privateExerciseId?: string;
+      gymPayload?: Partial<GymPayload>;
+      runningPayload?: Partial<RunningPayload>;
+    },
+  ) {
+    return this.request<ScheduleItem>(`/schedules/day/${scheduleId}/items`, {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify(data),
+    });
+  }
+
+  removeScheduleItem(token: string, itemId: string) {
+    return this.request<{ deleted: boolean }>(`/schedules/items/${itemId}`, {
+      method: 'DELETE',
+      headers: this.authHeaders(token),
+    });
+  }
+
+  reorderScheduleItems(token: string, scheduleId: string, itemIds: string[]) {
+    return this.request<DailySchedule>(`/schedules/day/${scheduleId}/reorder`, {
+      method: 'PATCH',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ itemIds }),
+    });
+  }
+
+  updateGymPayload(token: string, itemId: string, payload: GymPayload) {
+    return this.request<ScheduleItem>(`/schedules/items/${itemId}/gym-payload`, {
+      method: 'PATCH',
+      headers: this.authHeaders(token),
+      body: JSON.stringify(payload),
+    });
+  }
+
+  updateRunningPayload(token: string, itemId: string, payload: RunningPayload) {
+    return this.request<ScheduleItem>(`/schedules/items/${itemId}/running-payload`, {
+      method: 'PATCH',
+      headers: this.authHeaders(token),
+      body: JSON.stringify(payload),
+    });
+  }
+
+  getDisciplineRate(token: string, year: number, weekNumber: number) {
+    return this.request<{ rate: number; completedDays: number; totalDays: number }>(
+      `/schedules/discipline-rate/${year}/${weekNumber}`,
+      { headers: this.authHeaders(token) },
+    );
+  }
 }
 
 export const api = new ApiClient(API_URL);
