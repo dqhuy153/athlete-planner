@@ -281,3 +281,9 @@ export interface CopyWeekDto {
   target_year: number;
   overwrite: boolean;
 }
+
+// ─── Payment Types ────────────────────────────────────────────────────────────
+
+export interface CreatePaymentLinkResponse {
+  checkoutUrl: string;
+}
