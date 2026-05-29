@@ -89,3 +89,8 @@ export type Asset = Prisma.AssetModel
  * 
  */
 export type AppConfig = Prisma.AppConfigModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel

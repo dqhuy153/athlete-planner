@@ -60,7 +60,8 @@ export const ModelName = {
   BlogPost: 'BlogPost',
   BlogCategory: 'BlogCategory',
   Asset: 'Asset',
-  AppConfig: 'AppConfig'
+  AppConfig: 'AppConfig',
+  Payment: 'Payment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -238,6 +239,20 @@ export const AppConfigScalarFieldEnum = {
 } as const
 
 export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  orderCode: 'orderCode',
+  amount: 'amount',
+  status: 'status',
+  checkoutUrl: 'checkoutUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
 export const SortOrder = {

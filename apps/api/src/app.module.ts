@@ -23,6 +23,7 @@ import { HealthModule } from './modules/health/health.module';
 import { ExercisesModule } from './modules/exercises/exercises.module';
 import { SchedulesModule } from './modules/schedules/schedules.module';
 import { TierGuardModule } from './modules/tier-guard/tier-guard.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { TierGuardModule } from './modules/tier-guard/tier-guard.module';
     TierGuardModule,
     ExercisesModule,
     SchedulesModule,
+    PaymentsModule,
   ],
 })
 export class AppModule {}
