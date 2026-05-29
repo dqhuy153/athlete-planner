@@ -248,6 +248,48 @@ class ApiClient {
       }),
     });
   }
+  // ─── Payments ───────────────────────────────────────────────────────────────
+
+  async createPaymentLink(token: string, returnUrl: string, cancelUrl: string): Promise<{ checkoutUrl: string }> {
+    return this.request<{ checkoutUrl: string }>('/payments/create-link', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ returnUrl, cancelUrl }),
+    });
+  }
+
+  // ─── Export ─────────────────────────────────────────────────────────────────
+
+  /**
+   * Download day FIT (or ZIP if multiple items).
+   * Returns a Blob for browser download.
+   */
+  async exportDayFit(dateString: string, token: string): Promise<{ blob: Blob; filename: string }> {
+    const res = await fetch(`${this.baseUrl}/api/export/day/${dateString}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error('Export failed');
+    const disposition = res.headers.get('content-disposition') ?? '';
+    const match = disposition.match(/filename="([^"]+)"/);
+    const filename = match?.[1] ?? `${dateString}.fit`;
+    const blob = await res.blob();
+    return { blob, filename };
+  }
+
+  /**
+   * Download week ZIP of FIT files.
+   */
+  async exportWeekZip(year: number, weekNumber: number, token: string): Promise<{ blob: Blob; filename: string }> {
+    const res = await fetch(`${this.baseUrl}/api/export/week/${year}/${weekNumber}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error('Export failed');
+    const disposition = res.headers.get('content-disposition') ?? '';
+    const match = disposition.match(/filename="([^"]+)"/);
+    const filename = match?.[1] ?? `week_${year}_W${weekNumber}.zip`;
+    const blob = await res.blob();
+    return { blob, filename };
+  }
 }
 
 export const api = new ApiClient(API_URL);
