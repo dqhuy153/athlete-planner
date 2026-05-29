@@ -71,9 +71,9 @@ export const envValidationSchema = Joi.object({
   GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().allow('').optional(),
 
   // ─── Payments: PayOS ─────────────────────────────────────────────────────
-  PAYOS_CLIENT_ID: Joi.string().allow('').optional(),
-  PAYOS_API_KEY: Joi.string().allow('').optional(),
-  PAYOS_CHECKSUM_KEY: Joi.string().allow('').optional(),
+  PAYOS_CLIENT_ID: Joi.string().required(),
+  PAYOS_API_KEY: Joi.string().required(),
+  PAYOS_CHECKSUM_KEY: Joi.string().required(),
   BANK_BIN: Joi.string().allow('').optional(),
   BANK_ACCOUNT_NO: Joi.string().allow('').optional(),
   BANK_ACCOUNT_NAME: Joi.string().allow('').optional(),
