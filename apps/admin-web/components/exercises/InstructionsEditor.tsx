@@ -15,6 +15,7 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
   const { control, register, formState: { errors } } = useFormContext();
 
   const levelIndex = activeLevel === 'BEGINNER' ? 0 : 1;
+  const instructionErrors = (errors.instructions as any)?.[levelIndex];
 
   const { fields: stepEnFields, append: appendStepEn, remove: removeStepEn } = useFieldArray({
     control,
@@ -78,13 +79,13 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
                 <input
                   {...register(`instructions.${levelIndex}.steps_en.${idx}.value` as any)}
                   placeholder="Describe this step..."
-                  aria-invalid={!!errors.instructions?.[levelIndex]?.steps_en?.[idx]?.value}
-                  aria-describedby={errors.instructions?.[levelIndex]?.steps_en?.[idx]?.value ? `steps-en-${idx}-error` : undefined}
+                  aria-invalid={!!instructionErrors?.steps_en?.[idx]?.value}
+                  aria-describedby={instructionErrors?.steps_en?.[idx]?.value ? `steps-en-${idx}-error` : undefined}
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <FormError
                   id={`steps-en-${idx}-error`}
-                  message={errors.instructions?.[levelIndex]?.steps_en?.[idx]?.value?.message}
+                  message={instructionErrors?.steps_en?.[idx]?.value?.message}
                 />
               </div>
               <button
@@ -121,13 +122,13 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
                 <input
                   {...register(`instructions.${levelIndex}.steps_vi.${idx}.value` as any)}
                   placeholder="Mô tả bước này..."
-                  aria-invalid={!!errors.instructions?.[levelIndex]?.steps_vi?.[idx]?.value}
-                  aria-describedby={errors.instructions?.[levelIndex]?.steps_vi?.[idx]?.value ? `steps-vi-${idx}-error` : undefined}
+                  aria-invalid={!!instructionErrors?.steps_vi?.[idx]?.value}
+                  aria-describedby={instructionErrors?.steps_vi?.[idx]?.value ? `steps-vi-${idx}-error` : undefined}
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <FormError
                   id={`steps-vi-${idx}-error`}
-                  message={errors.instructions?.[levelIndex]?.steps_vi?.[idx]?.value?.message}
+                  message={instructionErrors?.steps_vi?.[idx]?.value?.message}
                 />
               </div>
               <button
@@ -164,13 +165,13 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
                 <input
                   {...register(`instructions.${levelIndex}.form_cues_en.${idx}.value` as any)}
                   placeholder="e.g. Keep shoulder blades retracted"
-                  aria-invalid={!!errors.instructions?.[levelIndex]?.form_cues_en?.[idx]?.value}
-                  aria-describedby={errors.instructions?.[levelIndex]?.form_cues_en?.[idx]?.value ? `cues-en-${idx}-error` : undefined}
+                  aria-invalid={!!instructionErrors?.form_cues_en?.[idx]?.value}
+                  aria-describedby={instructionErrors?.form_cues_en?.[idx]?.value ? `cues-en-${idx}-error` : undefined}
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <FormError
                   id={`cues-en-${idx}-error`}
-                  message={errors.instructions?.[levelIndex]?.form_cues_en?.[idx]?.value?.message}
+                  message={instructionErrors?.form_cues_en?.[idx]?.value?.message}
                 />
               </div>
               <button
@@ -207,13 +208,13 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
                 <input
                   {...register(`instructions.${levelIndex}.form_cues_vi.${idx}.value` as any)}
                   placeholder="e.g. Giữ bả vai co lại"
-                  aria-invalid={!!errors.instructions?.[levelIndex]?.form_cues_vi?.[idx]?.value}
-                  aria-describedby={errors.instructions?.[levelIndex]?.form_cues_vi?.[idx]?.value ? `cues-vi-${idx}-error` : undefined}
+                  aria-invalid={!!instructionErrors?.form_cues_vi?.[idx]?.value}
+                  aria-describedby={instructionErrors?.form_cues_vi?.[idx]?.value ? `cues-vi-${idx}-error` : undefined}
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <FormError
                   id={`cues-vi-${idx}-error`}
-                  message={errors.instructions?.[levelIndex]?.form_cues_vi?.[idx]?.value?.message}
+                  message={instructionErrors?.form_cues_vi?.[idx]?.value?.message}
                 />
               </div>
               <button
