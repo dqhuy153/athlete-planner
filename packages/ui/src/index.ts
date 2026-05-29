@@ -25,6 +25,7 @@ export type { TextAreaProps } from './components/textarea';
 // Form components
 export { FormError } from './components/form-error';
 export { FormLabel } from './components/form-label';
+export { FormField } from './components/form-field';
 
 // Custom UI components
 export { ToastProvider, useToast } from './components/toast';
