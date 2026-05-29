@@ -14,7 +14,10 @@ Training planner for hybrid athletes (Gym + Running) with Garmin .FIT export.
 ## Quick Start
 
 ```bash
-# Prerequisites: Node >= 20, pnpm 9.15+, Docker
+# Prerequisites: Node 22.14.0 (use nvm), pnpm 9+, Docker
+
+# 0. Use correct Node version
+nvm use 22.14.0
 
 # 1. Install dependencies
 pnpm install
