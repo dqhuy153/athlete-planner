@@ -22,8 +22,8 @@ class ApiClient {
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
     const res = await fetch(`${this.baseUrl}/api${path}`, {
-      headers: { 'Content-Type': 'application/json', ...options?.headers },
       ...options,
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
     });
     if (!res.ok) {
       const text = await res.text();
@@ -93,14 +93,20 @@ class ApiClient {
 
   // ── Exercises ────────────────────────────────────────────────────────────
 
-  getGymExercises(params?: { muscleGroup?: string }) {
-    const qs = params?.muscleGroup ? `?muscleGroup=${encodeURIComponent(params.muscleGroup)}` : '';
-    return this.request<GymExerciseMaster[]>(`/exercises/gym${qs}`);
+  getGymExercises(params?: { muscleGroup?: string; search?: string }) {
+    const qs = new URLSearchParams();
+    if (params?.muscleGroup) qs.set('muscleGroup', params.muscleGroup);
+    if (params?.search) qs.set('search', params.search);
+    const q = qs.toString();
+    return this.request<GymExerciseMaster[]>(`/exercises/gym${q ? `?${q}` : ''}`);
   }
 
-  getRunningExercises(params?: { runningType?: string }) {
-    const qs = params?.runningType ? `?runningType=${encodeURIComponent(params.runningType)}` : '';
-    return this.request<RunningExerciseMaster[]>(`/exercises/running${qs}`);
+  getRunningExercises(params?: { runningType?: string; search?: string }) {
+    const qs = new URLSearchParams();
+    if (params?.runningType) qs.set('runningType', params.runningType);
+    if (params?.search) qs.set('search', params.search);
+    const q = qs.toString();
+    return this.request<RunningExerciseMaster[]>(`/exercises/running${q ? `?${q}` : ''}`);
   }
 
   getExerciseDetail(id: string) {
@@ -173,6 +179,16 @@ class ApiClient {
     });
   }
 
+  async getOrCreateDailySchedule(token: string, dateString: string): Promise<DailySchedule> {
+    try {
+      const existing = await this.getDailySchedule(token, dateString);
+      if (existing) return existing;
+    } catch {
+      // not found — create below
+    }
+    return this.createDailySchedule(token, dateString);
+  }
+
   updateDayStatus(token: string, scheduleId: string, status: string) {
     return this.request<DailySchedule>(`/schedules/day/${scheduleId}/status`, {
       method: 'PATCH',
@@ -185,13 +201,9 @@ class ApiClient {
     token: string,
     scheduleId: string,
     data: {
-      sportType: string;
-      sourceType: string;
-      gymMasterId?: string;
-      runningMasterId?: string;
-      privateExerciseId?: string;
-      gymPayload?: Partial<GymPayload>;
-      runningPayload?: Partial<RunningPayload>;
+      exerciseType: 'GYM_MASTER' | 'RUNNING_MASTER' | 'PRIVATE';
+      exerciseId: string;
+      sportType: 'GYM' | 'RUNNING';
     },
   ) {
     return this.request<ScheduleItem>(`/schedules/day/${scheduleId}/items`, {
