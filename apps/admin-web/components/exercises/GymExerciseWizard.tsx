@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Check, Sparkles } from 'lucide-react';
 import { FormLabel, FormError } from '@athlete-planner/ui';
@@ -20,7 +20,6 @@ interface GymExerciseWizardProps {
   submitLabel?: string;
 }
 
-/** Transform RHF form data → API payload shape */
 export function gymFormToPayload(data: GymExerciseFormValues) {
   return {
     name: data.name.trim(),
@@ -88,8 +87,7 @@ export function GymExerciseWizard({
     },
   });
 
-  const { register, handleSubmit, watch, trigger, formState } = methods;
-  const { errors } = formState;
+  const { register, handleSubmit, watch, trigger } = methods;
   const watchedValues = watch();
 
   async function handleGenerate() {
@@ -120,8 +118,20 @@ export function GymExerciseWizard({
     try {
       const valid = await trigger(stepFields[step] ?? []);
       if (valid) setStep((s) => s + 1);
-    } catch {
-      // Zod validation errors are shown inline — don't crash the boundary
+    } catch (err: any) {
+      // zodResolver throws ZodError instead of setting formState.errors.
+      // Manually parse and set errors so FormFieldError components can display them.
+      if (err?.issues && Array.isArray(err.issues)) {
+        err.issues.forEach((issue: any) => {
+          const fieldName = issue.path?.[0];
+          if (fieldName) {
+            methods.setError(fieldName, {
+              type: 'validation',
+              message: issue.message,
+            });
+          }
+        });
+      }
     }
   }
 
@@ -141,175 +151,22 @@ export function GymExerciseWizard({
       <WizardStepper steps={STEPS} currentStep={step} />
 
       <form onSubmit={handleSubmit(handleFinalSubmit)} className="space-y-4">
-        {/* Step 0: Basic Info */}
         {step === 0 && (
-          <div className="space-y-4">
-            <div>
-              <FormLabel htmlFor="name" required>Exercise name</FormLabel>
-              <div className="flex gap-2">
-                <input
-                  id="name"
-                  {...register('name')}
-                  placeholder="e.g. Barbell Back Squat"
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? 'name-error' : undefined}
-                  className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <button
-                  type="button"
-                  onClick={handleGenerate}
-                  disabled={generating || !watchedValues.name}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface-variant hover:bg-surface-container-high disabled:opacity-50 transition-colors"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  {generating ? 'Generating…' : 'Generate'}
-                </button>
-              </div>
-              <FormError id="name-error" message={errors.name?.message} />
-            </div>
-
-            <div>
-              <FormLabel htmlFor="vietnameseName" required>Vietnamese name</FormLabel>
-              <input
-                id="vietnameseName"
-                {...register('vietnameseName')}
-                placeholder="e.g. Squat tạ đòn"
-                aria-invalid={!!errors.vietnameseName}
-                aria-describedby={errors.vietnameseName ? 'vietnameseName-error' : undefined}
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormError id="vietnameseName-error" message={errors.vietnameseName?.message} />
-            </div>
-
-            <div>
-              <FormLabel htmlFor="targetMuscleGroup" required>Target muscle group</FormLabel>
-              <select
-                id="targetMuscleGroup"
-                {...register('targetMuscleGroup')}
-                aria-invalid={!!errors.targetMuscleGroup}
-                aria-describedby={errors.targetMuscleGroup ? 'targetMuscleGroup-error' : undefined}
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {MUSCLE_GROUPS.map((mg) => (
-                  <option key={mg} value={mg}>
-                    {mg}
-                  </option>
-                ))}
-              </select>
-              <FormError id="targetMuscleGroup-error" message={errors.targetMuscleGroup?.message} />
-            </div>
-
-            <div>
-              <FormLabel htmlFor="secondaryMuscleGroups">
-                Secondary muscles{' '}
-                <span className="text-xs text-on-surface-variant/60">(comma-separated)</span>
-              </FormLabel>
-              <input
-                id="secondaryMuscleGroups"
-                {...register('secondaryMuscleGroups')}
-                placeholder="e.g. Glutes, Hamstrings"
-                aria-invalid={!!errors.secondaryMuscleGroups}
-                aria-describedby={errors.secondaryMuscleGroups ? 'secondaryMuscleGroups-error' : undefined}
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormError id="secondaryMuscleGroups-error" message={errors.secondaryMuscleGroups?.message} />
-            </div>
-
-            <div>
-              <FormLabel htmlFor="garminExerciseEnum">Garmin exercise enum</FormLabel>
-              <input
-                id="garminExerciseEnum"
-                {...register('garminExerciseEnum')}
-                placeholder="e.g. SQUAT"
-                aria-invalid={!!errors.garminExerciseEnum}
-                aria-describedby={errors.garminExerciseEnum ? 'garminExerciseEnum-error' : undefined}
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormError id="garminExerciseEnum-error" message={errors.garminExerciseEnum?.message} />
-            </div>
-          </div>
+          <Step0BasicInfo
+            register={register}
+            watchedValues={watchedValues}
+            generating={generating}
+            onGenerate={handleGenerate}
+          />
         )}
 
-        {/* Step 1: Instructions */}
         {step === 1 && (
           <InstructionsEditor activeLevel={activeLevel} onLevelChange={setActiveLevel} />
         )}
 
-        {/* Step 2: Media */}
-        {step === 2 && (
-          <div className="space-y-4">
-            <div>
-              <FormLabel htmlFor="youtubeEmbedUrl">YouTube embed URL</FormLabel>
-              <input
-                id="youtubeEmbedUrl"
-                type="url"
-                {...register('youtubeEmbedUrl')}
-                placeholder="https://www.youtube.com/embed/..."
-                aria-invalid={!!errors.youtubeEmbedUrl}
-                aria-describedby={errors.youtubeEmbedUrl ? 'youtubeEmbedUrl-error' : undefined}
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormError id="youtubeEmbedUrl-error" message={errors.youtubeEmbedUrl?.message} />
-            </div>
+        {step === 2 && <Step2Media register={register} watchedValues={watchedValues} />}
 
-            <div>
-              <FormLabel htmlFor="gifUrl">GIF / Image URL</FormLabel>
-              <input
-                id="gifUrl"
-                type="url"
-                {...register('gifUrl')}
-                placeholder="https://..."
-                aria-invalid={!!errors.gifUrl}
-                aria-describedby={errors.gifUrl ? 'gifUrl-error' : undefined}
-                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FormError id="gifUrl-error" message={errors.gifUrl?.message} />
-              {watchedValues.gifUrl && (
-                <img
-                  src={watchedValues.gifUrl}
-                  alt="Preview"
-                  className="mt-2 h-32 w-auto rounded-lg object-cover"
-                />
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Review */}
-        {step === 3 && (
-          <div className="space-y-3 rounded-xl border border-border bg-surface p-4">
-            <h2 className="text-sm font-semibold text-on-surface">Review</h2>
-            <dl className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <dt className="text-on-surface-variant">Name</dt>
-                <dd className="font-medium text-on-surface">{watchedValues.name}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-on-surface-variant">Vietnamese</dt>
-                <dd className="text-on-surface">{watchedValues.vietnameseName}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-on-surface-variant">Muscle</dt>
-                <dd className="text-on-surface">{watchedValues.targetMuscleGroup}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-on-surface-variant">Instruction sets</dt>
-                <dd className="text-on-surface">
-                  {watchedValues.instructions?.filter((i) =>
-                    i.steps_en?.some((s) => s.value),
-                  ).length ?? 0}{' '}
-                  levels
-                </dd>
-              </div>
-              {watchedValues.youtubeEmbedUrl && (
-                <div className="flex justify-between">
-                  <dt className="text-on-surface-variant">Video</dt>
-                  <dd className="max-w-[200px] truncate text-xs text-on-surface">Set</dd>
-                </div>
-              )}
-            </dl>
-          </div>
-        )}
+        {step === 3 && <Step3Review watchedValues={watchedValues} />}
 
         {error && (
           <p role="alert" className="text-sm text-error">
@@ -317,7 +174,6 @@ export function GymExerciseWizard({
           </p>
         )}
 
-        {/* Navigation */}
         <div className="flex gap-3 pt-2">
           {step > 0 ? (
             <button
@@ -359,5 +215,197 @@ export function GymExerciseWizard({
         </div>
       </form>
     </FormProvider>
+  );
+}
+
+function Step0BasicInfo({
+  register,
+  watchedValues,
+  generating,
+  onGenerate,
+}: {
+  register: any;
+  watchedValues: any;
+  generating: boolean;
+  onGenerate: () => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <FormLabel htmlFor="name" required>
+          Exercise name
+        </FormLabel>
+        <div className="flex gap-2">
+          <input
+            id="name"
+            {...register('name')}
+            placeholder="e.g. Barbell Back Squat"
+            className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <button
+            type="button"
+            onClick={onGenerate}
+            disabled={generating || !watchedValues.name}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface-variant hover:bg-surface-container-high disabled:opacity-50 transition-colors"
+          >
+            <Sparkles className="h-4 w-4" />
+            {generating ? 'Generating…' : 'Generate'}
+          </button>
+        </div>
+        <FormFieldError name="name" />
+      </div>
+
+      <div>
+        <FormLabel htmlFor="vietnameseName" required>
+          Vietnamese name
+        </FormLabel>
+        <input
+          id="vietnameseName"
+          {...register('vietnameseName')}
+          placeholder="e.g. Squat tạ đòn"
+          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FormFieldError name="vietnameseName" />
+      </div>
+
+      <div>
+        <FormLabel htmlFor="targetMuscleGroup" required>
+          Target muscle group
+        </FormLabel>
+        <select
+          id="targetMuscleGroup"
+          {...register('targetMuscleGroup')}
+          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          {MUSCLE_GROUPS.map((mg) => (
+            <option key={mg} value={mg}>
+              {mg}
+            </option>
+          ))}
+        </select>
+        <FormFieldError name="targetMuscleGroup" />
+      </div>
+
+      <div>
+        <FormLabel htmlFor="secondaryMuscleGroups">
+          Secondary muscles{' '}
+          <span className="text-xs text-on-surface-variant/60">(comma-separated)</span>
+        </FormLabel>
+        <input
+          id="secondaryMuscleGroups"
+          {...register('secondaryMuscleGroups')}
+          placeholder="e.g. Glutes, Hamstrings"
+          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FormFieldError name="secondaryMuscleGroups" />
+      </div>
+
+      <div>
+        <FormLabel htmlFor="garminExerciseEnum">Garmin exercise enum</FormLabel>
+        <input
+          id="garminExerciseEnum"
+          {...register('garminExerciseEnum')}
+          placeholder="e.g. SQUAT"
+          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FormFieldError name="garminExerciseEnum" />
+      </div>
+    </div>
+  );
+}
+
+function Step2Media({
+  register,
+  watchedValues,
+}: {
+  register: any;
+  watchedValues: any;
+}) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <FormLabel htmlFor="youtubeEmbedUrl">YouTube embed URL</FormLabel>
+        <input
+          id="youtubeEmbedUrl"
+          type="url"
+          {...register('youtubeEmbedUrl')}
+          placeholder="https://www.youtube.com/embed/..."
+          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FormFieldError name="youtubeEmbedUrl" />
+      </div>
+
+      <div>
+        <FormLabel htmlFor="gifUrl">GIF / Image URL</FormLabel>
+        <input
+          id="gifUrl"
+          type="url"
+          {...register('gifUrl')}
+          placeholder="https://..."
+          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FormFieldError name="gifUrl" />
+        {watchedValues.gifUrl && (
+          <img
+            src={watchedValues.gifUrl}
+            alt="Preview"
+            className="mt-2 h-32 w-auto rounded-lg object-cover"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Step3Review({ watchedValues }: { watchedValues: any }) {
+  return (
+    <div className="space-y-3 rounded-xl border border-border bg-surface p-4">
+      <h2 className="text-sm font-semibold text-on-surface">Review</h2>
+      <dl className="space-y-2 text-sm">
+        <div className="flex justify-between">
+          <dt className="text-on-surface-variant">Name</dt>
+          <dd className="font-medium text-on-surface">{watchedValues.name}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-on-surface-variant">Vietnamese</dt>
+          <dd className="text-on-surface">{watchedValues.vietnameseName}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-on-surface-variant">Muscle</dt>
+          <dd className="text-on-surface">{watchedValues.targetMuscleGroup}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-on-surface-variant">Instruction sets</dt>
+          <dd className="text-on-surface">
+            {watchedValues.instructions?.filter((i: any) =>
+              i.steps_en?.some((s: any) => s.value),
+            ).length ?? 0}{' '}
+            levels
+          </dd>
+        </div>
+        {watchedValues.youtubeEmbedUrl && (
+          <div className="flex justify-between">
+            <dt className="text-on-surface-variant">Video</dt>
+            <dd className="max-w-[200px] truncate text-xs text-on-surface">Set</dd>
+          </div>
+        )}
+      </dl>
+    </div>
+  );
+}
+
+/** Reads error directly from useFormContext — no stale proxy reference */
+function FormFieldError({ name }: { name: string }) {
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  const error = errors[name];
+  if (!error) return null;
+
+  return (
+    <p className="mt-1 flex items-center gap-1 text-xs text-error" role="alert">
+      <span>{String(error.message)}</span>
+    </p>
   );
 }

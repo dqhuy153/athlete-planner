@@ -16,7 +16,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react'
-import { FormLabel, FormError } from '@athlete-planner/ui'
+import { FormLabel } from '@athlete-planner/ui'
 import { useAuth } from '@/lib/auth-context'
 import { generateExerciseContent } from '@/lib/api'
 import { WizardStepper } from './WizardStepper'
@@ -198,8 +198,7 @@ export function RunningExerciseWizard({
     },
   })
 
-  const { register, handleSubmit, watch, trigger, formState } = methods
-  const { errors } = formState
+  const { register, handleSubmit, watch, trigger } = methods
   const watchedValues = watch()
 
   async function handleGenerate() {
@@ -230,8 +229,18 @@ export function RunningExerciseWizard({
     try {
       const valid = await trigger(stepFields[step] ?? [])
       if (valid) setStep(s => s + 1)
-    } catch {
-      // Zod validation errors are shown inline — don't crash the boundary
+    } catch (err: any) {
+      if (err?.issues && Array.isArray(err.issues)) {
+        err.issues.forEach((issue: any) => {
+          const fieldName = issue.path?.[0]
+          if (fieldName) {
+            methods.setError(fieldName, {
+              type: 'validation',
+              message: issue.message,
+            })
+          }
+        })
+      }
     }
   }
 
@@ -263,8 +272,6 @@ export function RunningExerciseWizard({
                   id='name'
                   {...register('name')}
                   placeholder='e.g. 5K Easy Run'
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? 'name-error' : undefined}
                   className='flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
                 />
                 <button
@@ -277,7 +284,7 @@ export function RunningExerciseWizard({
                   {generating ? 'Generating…' : 'Generate'}
                 </button>
               </div>
-              <FormError id='name-error' message={errors.name?.message} />
+              <FormFieldError name='name' />
             </div>
 
             <div>
@@ -288,16 +295,9 @@ export function RunningExerciseWizard({
                 id='vietnameseName'
                 {...register('vietnameseName')}
                 placeholder='e.g. Chạy nhẹ 5km'
-                aria-invalid={!!errors.vietnameseName}
-                aria-describedby={
-                  errors.vietnameseName ? 'vietnameseName-error' : undefined
-                }
                 className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
               />
-              <FormError
-                id='vietnameseName-error'
-                message={errors.vietnameseName?.message}
-              />
+              <FormFieldError name='vietnameseName' />
             </div>
 
             <div>
@@ -307,10 +307,6 @@ export function RunningExerciseWizard({
               <select
                 id='runningType'
                 {...register('runningType')}
-                aria-invalid={!!errors.runningType}
-                aria-describedby={
-                  errors.runningType ? 'runningType-error' : undefined
-                }
                 className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
               >
                 {RUNNING_TYPES.map(t => (
@@ -319,10 +315,7 @@ export function RunningExerciseWizard({
                   </option>
                 ))}
               </select>
-              <FormError
-                id='runningType-error'
-                message={errors.runningType?.message}
-              />
+              <FormFieldError name='runningType' />
             </div>
 
             <div>
@@ -332,16 +325,9 @@ export function RunningExerciseWizard({
                 {...register('youtubeEmbedUrl')}
                 type='url'
                 placeholder='https://www.youtube.com/embed/...'
-                aria-invalid={!!errors.youtubeEmbedUrl}
-                aria-describedby={
-                  errors.youtubeEmbedUrl ? 'youtubeEmbedUrl-error' : undefined
-                }
                 className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
               />
-              <FormError
-                id='youtubeEmbedUrl-error'
-                message={errors.youtubeEmbedUrl?.message}
-              />
+              <FormFieldError name='youtubeEmbedUrl' />
             </div>
 
             <div>
@@ -351,11 +337,9 @@ export function RunningExerciseWizard({
                 {...register('gifUrl')}
                 type='url'
                 placeholder='https://...'
-                aria-invalid={!!errors.gifUrl}
-                aria-describedby={errors.gifUrl ? 'gifUrl-error' : undefined}
                 className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
               />
-              <FormError id='gifUrl-error' message={errors.gifUrl?.message} />
+              <FormFieldError name='gifUrl' />
               {watchedValues.gifUrl && (
                 <img
                   src={watchedValues.gifUrl}
@@ -467,5 +451,21 @@ export function RunningExerciseWizard({
         </div>
       </form>
     </FormProvider>
+  )
+}
+
+/** Reads error directly from useFormContext — no stale proxy reference */
+function FormFieldError({ name }: { name: string }) {
+  const {
+    formState: { errors },
+  } = useFormContext()
+
+  const error = errors[name]
+  if (!error) return null
+
+  return (
+    <p className='mt-1 flex items-center gap-1 text-xs text-error' role='alert'>
+      <span>{String(error.message)}</span>
+    </p>
   )
 }
