@@ -1,7 +1,14 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, RunningType } from '@athlete-planner/database';
 import { SeedRunningExercisesCommand } from './seed-running-exercises.command';
 import { RUNNING_EXERCISES_SEED } from '../seed-data/running-exercises.seed';
+
+const TYPE_MAP: Record<string, RunningType> = {
+  easy: RunningType.Easy,
+  interval: RunningType.Interval,
+  tempo: RunningType.Tempo,
+  long_run: RunningType.Long_Run,
+};
 
 @CommandHandler(SeedRunningExercisesCommand)
 export class SeedRunningExercisesHandler implements ICommandHandler<SeedRunningExercisesCommand> {
@@ -22,9 +29,12 @@ export class SeedRunningExercisesHandler implements ICommandHandler<SeedRunningE
         data: toCreate.map((seed) => ({
           name: seed.name,
           vietnameseName: seed.vietnameseName,
-          runningType: seed.runningType as any,
-          instructions: seed.instructions,
-          workoutStructure: seed.workoutStructure,
+          runningType: TYPE_MAP[seed.type],
+          instructions: {
+            vi: [seed.description.vi],
+            en: [seed.description.en],
+          },
+          workoutStructure: seed.phases,
           isActive: true,
         })),
       });
