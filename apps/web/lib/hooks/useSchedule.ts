@@ -79,11 +79,9 @@ export function useSchedule({ token }: UseScheduleOptions) {
   const addItem = useCallback(async (scheduleId: string, dateString: string, picked: PickedExercise) => {
     try {
       const item = await api.addScheduleItem(token, scheduleId, {
-        sportType:         picked.sportType,
-        sourceType:        picked.sourceType,
-        gymMasterId:       picked.gymMasterId,
-        runningMasterId:   picked.runningMasterId,
-        privateExerciseId: picked.privateExerciseId,
+        exerciseType: picked.sourceType as 'GYM_MASTER' | 'RUNNING_MASTER' | 'PRIVATE',
+        exerciseId: picked.gymMasterId ?? picked.runningMasterId ?? picked.privateExerciseId ?? '',
+        sportType: picked.sportType as 'GYM' | 'RUNNING',
       });
       setSchedules(prev => {
         const map = new Map(prev);
