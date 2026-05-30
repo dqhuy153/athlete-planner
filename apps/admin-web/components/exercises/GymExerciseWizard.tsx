@@ -60,6 +60,7 @@ export function GymExerciseWizard({
 
   const methods = useForm<GymExerciseFormValues>({
     resolver: zodResolver(GymExerciseSchema),
+    mode: 'onChange',
     defaultValues: {
       name: '',
       vietnameseName: '',
