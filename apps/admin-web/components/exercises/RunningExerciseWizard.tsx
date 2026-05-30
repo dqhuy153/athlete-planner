@@ -1,32 +1,25 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  useForm,
-  FormProvider,
-  useFieldArray,
-  useFormContext,
-} from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, FormProvider, useWatch } from 'react-hook-form'
 import {
   ArrowLeft,
   ArrowRight,
   Check,
-  Sparkles,
-  Plus,
-  Trash2,
 } from 'lucide-react'
-import { FormLabel } from '@athlete-planner/ui'
 import { useAuth } from '@/lib/auth-context'
 import { generateExerciseContent } from '@/lib/api'
 import { WizardStepper } from './WizardStepper'
 import { WorkoutStructureEditor } from './WorkoutStructureEditor'
+import { RunningStep0BasicInfo } from './RunningStep0BasicInfo'
+import { InstructionsStep } from './RunningStep1Instructions'
+import { RunningStep3Review } from './RunningStep3Review'
 import {
   RunningExerciseSchema,
   type RunningExerciseFormValues,
 } from './schemas'
+import { safeZodResolver } from './safe-zod-resolver'
 
-const RUNNING_TYPES = ['Interval', 'Easy', 'Tempo', 'Long_Run'] as const
 const STEPS = ['Basic Info', 'Instructions', 'Structure', 'Review']
 
 interface RunningExerciseWizardProps {
@@ -70,108 +63,6 @@ export function runningFormToPayload(data: RunningExerciseFormValues) {
   }
 }
 
-function InstructionsStep() {
-  const methods = useFormContext<RunningExerciseFormValues>()
-
-  const {
-    fields: enFields,
-    append: appendEn,
-    remove: removeEn,
-  } = useFieldArray({
-    control: methods.control,
-    name: 'instructions_en',
-  })
-
-  const {
-    fields: viFields,
-    append: appendVi,
-    remove: removeVi,
-  } = useFieldArray({
-    control: methods.control,
-    name: 'instructions_vi',
-  })
-
-  return (
-    <div className='space-y-6'>
-      {/* EN steps */}
-      <div>
-        <div className='mb-3 flex items-center justify-between'>
-          <label className='text-sm font-medium uppercase tracking-wider text-on-surface-variant'>
-            Instructions (EN)
-          </label>
-          <button
-            type='button'
-            onClick={() => appendEn({ value: '' })}
-            className='flex items-center gap-1 text-xs text-primary hover:text-primary/80'
-          >
-            <Plus className='h-3 w-3' /> Add step
-          </button>
-        </div>
-        <div className='space-y-2'>
-          {enFields.map((field, idx) => (
-            <div key={field.id} className='flex items-start gap-2'>
-              <span className='mt-2.5 w-5 shrink-0 text-xs text-on-surface-variant/60'>
-                {idx + 1}
-              </span>
-              <input
-                {...methods.register(`instructions_en.${idx}.value`)}
-                placeholder='Describe this step...'
-                className='flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-              />
-              <button
-                type='button'
-                onClick={() => removeEn(idx)}
-                disabled={enFields.length === 1}
-                className='mt-2 text-on-surface-variant/40 hover:text-error disabled:opacity-30'
-              >
-                <Trash2 className='h-4 w-4' />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* VI steps */}
-      <div>
-        <div className='mb-3 flex items-center justify-between'>
-          <label className='text-sm font-medium uppercase tracking-wider text-on-surface-variant'>
-            Instructions (VI) — tùy chọn
-          </label>
-          <button
-            type='button'
-            onClick={() => appendVi({ value: '' })}
-            className='flex items-center gap-1 text-xs text-primary hover:text-primary/80'
-          >
-            <Plus className='h-3 w-3' /> Add
-          </button>
-        </div>
-        <div className='space-y-2'>
-          {viFields.map((field, idx) => (
-            <div key={field.id} className='flex items-start gap-2'>
-              <span className='mt-2.5 w-5 shrink-0 text-xs text-on-surface-variant/60'>
-                {idx + 1}
-              </span>
-              <input
-                {...methods.register(`instructions_vi.${idx}.value`)}
-                placeholder='Mô tả bước này...'
-                className='flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-              />
-              <button
-                type='button'
-                onClick={() => removeVi(idx)}
-                disabled={viFields.length === 1}
-                className='mt-2 text-on-surface-variant/40 hover:text-error disabled:opacity-30'
-              >
-                <Trash2 className='h-4 w-4' />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export function RunningExerciseWizard({
   initialValues,
   onSubmit,
@@ -184,7 +75,8 @@ export function RunningExerciseWizard({
   const { session } = useAuth()
 
   const methods = useForm<RunningExerciseFormValues>({
-    resolver: zodResolver(RunningExerciseSchema),
+    resolver: safeZodResolver(RunningExerciseSchema),
+    mode: 'onChange',
     defaultValues: {
       name: '',
       vietnameseName: '',
@@ -198,8 +90,8 @@ export function RunningExerciseWizard({
     },
   })
 
-  const { register, handleSubmit, watch, trigger } = methods
-  const watchedValues = watch()
+  const { register, handleSubmit, trigger } = methods
+  const watchedValues = useWatch()
 
   async function handleGenerate() {
     if (!session?.accessToken || !watchedValues.name) return
@@ -226,22 +118,8 @@ export function RunningExerciseWizard({
       1: [],
       2: [],
     }
-    try {
-      const valid = await trigger(stepFields[step] ?? [])
-      if (valid) setStep(s => s + 1)
-    } catch (err: any) {
-      if (err?.issues && Array.isArray(err.issues)) {
-        err.issues.forEach((issue: any) => {
-          const fieldName = issue.path?.[0]
-          if (fieldName) {
-            methods.setError(fieldName, {
-              type: 'validation',
-              message: issue.message,
-            })
-          }
-        })
-      }
-    }
+    const valid = await trigger(stepFields[step] ?? [])
+    if (valid) setStep(s => s + 1)
   }
 
   async function handleFinalSubmit(data: RunningExerciseFormValues) {
@@ -260,101 +138,15 @@ export function RunningExerciseWizard({
       <WizardStepper steps={STEPS} currentStep={step} />
 
       <form onSubmit={handleSubmit(handleFinalSubmit)} className='space-y-4'>
-        {/* Step 0: Basic Info */}
         {step === 0 && (
-          <div className='space-y-4'>
-            <div>
-              <FormLabel htmlFor='name' required>
-                Exercise name
-              </FormLabel>
-              <div className='flex gap-2'>
-                <input
-                  id='name'
-                  {...register('name')}
-                  placeholder='e.g. 5K Easy Run'
-                  className='flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-                />
-                <button
-                  type='button'
-                  onClick={handleGenerate}
-                  disabled={generating || !watchedValues.name}
-                  className='inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface-variant hover:bg-surface-container-high disabled:opacity-50 transition-colors'
-                >
-                  <Sparkles className='h-4 w-4' />
-                  {generating ? 'Generating…' : 'Generate'}
-                </button>
-              </div>
-              <FormFieldError name='name' />
-            </div>
-
-            <div>
-              <FormLabel htmlFor='vietnameseName' required>
-                Vietnamese name
-              </FormLabel>
-              <input
-                id='vietnameseName'
-                {...register('vietnameseName')}
-                placeholder='e.g. Chạy nhẹ 5km'
-                className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-              />
-              <FormFieldError name='vietnameseName' />
-            </div>
-
-            <div>
-              <FormLabel htmlFor='runningType' required>
-                Running type
-              </FormLabel>
-              <select
-                id='runningType'
-                {...register('runningType')}
-                className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-              >
-                {RUNNING_TYPES.map(t => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-              <FormFieldError name='runningType' />
-            </div>
-
-            <div>
-              <FormLabel htmlFor='youtubeEmbedUrl'>YouTube embed URL</FormLabel>
-              <input
-                id='youtubeEmbedUrl'
-                {...register('youtubeEmbedUrl')}
-                type='url'
-                placeholder='https://www.youtube.com/embed/...'
-                className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-              />
-              <FormFieldError name='youtubeEmbedUrl' />
-            </div>
-
-            <div>
-              <FormLabel htmlFor='gifUrl'>GIF / Image URL</FormLabel>
-              <input
-                id='gifUrl'
-                {...register('gifUrl')}
-                type='url'
-                placeholder='https://...'
-                className='w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary'
-              />
-              <FormFieldError name='gifUrl' />
-              {watchedValues.gifUrl && (
-                <img
-                  src={watchedValues.gifUrl}
-                  alt='Preview'
-                  className='mt-2 h-32 w-auto rounded-lg object-cover'
-                />
-              )}
-            </div>
-          </div>
+          <RunningStep0BasicInfo
+            generating={generating}
+            onGenerate={handleGenerate}
+          />
         )}
 
-        {/* Step 1: Instructions */}
         {step === 1 && <InstructionsStep />}
 
-        {/* Step 2: Structure */}
         {step === 2 && (
           <div>
             <p className='mb-4 text-sm text-on-surface-variant'>
@@ -364,44 +156,7 @@ export function RunningExerciseWizard({
           </div>
         )}
 
-        {/* Step 3: Review */}
-        {step === 3 && (
-          <div className='space-y-3 rounded-xl border border-border bg-surface p-4'>
-            <h2 className='text-sm font-semibold text-on-surface'>Review</h2>
-            <dl className='space-y-2 text-sm'>
-              <div className='flex justify-between'>
-                <dt className='text-on-surface-variant'>Name</dt>
-                <dd className='font-medium text-on-surface'>
-                  {watchedValues.name}
-                </dd>
-              </div>
-              <div className='flex justify-between'>
-                <dt className='text-on-surface-variant'>Vietnamese</dt>
-                <dd className='text-on-surface'>
-                  {watchedValues.vietnameseName}
-                </dd>
-              </div>
-              <div className='flex justify-between'>
-                <dt className='text-on-surface-variant'>Type</dt>
-                <dd className='text-on-surface'>{watchedValues.runningType}</dd>
-              </div>
-              <div className='flex justify-between'>
-                <dt className='text-on-surface-variant'>Phases</dt>
-                <dd className='text-on-surface'>
-                  {watchedValues.workoutStructure?.length ?? 0}
-                </dd>
-              </div>
-              <div className='flex justify-between'>
-                <dt className='text-on-surface-variant'>Instructions</dt>
-                <dd className='text-on-surface'>
-                  {watchedValues.instructions_en?.filter(s => s.value).length ??
-                    0}{' '}
-                  steps (EN)
-                </dd>
-              </div>
-            </dl>
-          </div>
-        )}
+        {step === 3 && <RunningStep3Review />}
 
         {error && (
           <p role='alert' className='text-sm text-error'>
@@ -409,7 +164,6 @@ export function RunningExerciseWizard({
           </p>
         )}
 
-        {/* Navigation */}
         <div className='flex gap-3 pt-2'>
           {step > 0 ? (
             <button
@@ -451,21 +205,5 @@ export function RunningExerciseWizard({
         </div>
       </form>
     </FormProvider>
-  )
-}
-
-/** Reads error directly from useFormContext — no stale proxy reference */
-function FormFieldError({ name }: { name: string }) {
-  const {
-    formState: { errors },
-  } = useFormContext()
-
-  const error = errors[name]
-  if (!error) return null
-
-  return (
-    <p className='mt-1 flex items-center gap-1 text-xs text-error' role='alert'>
-      <span>{String(error.message)}</span>
-    </p>
   )
 }
