@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -73,7 +74,9 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         {/* Sync localStorage → cookie BEFORE React hydration so SSR and client match */}
-        <script
+        <Script
+          id="theme-sync"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `try{var t=localStorage.getItem('theme');if(t){document.cookie='theme='+t+';path=/;max-age=31536000;SameSite=Lax'}}catch(e){}`,
           }}
