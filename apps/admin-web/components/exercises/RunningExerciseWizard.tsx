@@ -185,7 +185,6 @@ export function RunningExerciseWizard({
 
   const methods = useForm<RunningExerciseFormValues>({
     resolver: zodResolver(RunningExerciseSchema),
-    mode: 'onChange',
     defaultValues: {
       name: '',
       vietnameseName: '',
