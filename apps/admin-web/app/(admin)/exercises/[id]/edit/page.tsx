@@ -103,6 +103,19 @@ export default function EditExercisePage({ params }: PageProps) {
           const viArr: string[] = instructionsAny?.vi ?? [];
           const structure: any[] = Array.isArray(ex.workoutStructure) ? ex.workoutStructure : [];
 
+          // Helper function to generate a default phase name from phase type
+          const getPhaseName = (type: string): string => {
+            const nameMap: Record<string, string> = {
+              warm_up: 'Warm-up',
+              cool_down: 'Cool-down',
+              steady_state: 'Steady Effort',
+              interval: 'Intervals',
+              recovery: 'Recovery',
+              custom: 'Custom',
+            };
+            return nameMap[type] || type;
+          };
+
           setRunningInitial({
             name: ex.name,
             vietnameseName: ex.vietnameseName,
@@ -113,7 +126,7 @@ export default function EditExercisePage({ params }: PageProps) {
             instructions_vi: viArr.length ? viArr.map((v) => ({ value: v })) : [{ value: '' }],
             workoutStructure: structure.map((phase) => ({
               id: crypto.randomUUID(),
-              phase: phase.phase ?? '',
+              phase: phase.phase || getPhaseName(phase.type || 'custom'),
               type: phase.type ?? 'custom',
               duration_minutes: phase.duration_minutes,
               distance_meters: phase.distance_meters,

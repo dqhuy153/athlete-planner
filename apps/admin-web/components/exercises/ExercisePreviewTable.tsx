@@ -145,7 +145,7 @@ function GymRow({
   const update = (patch: Partial<AIGeneratedGymExercise>) => onEdit({ ...ex, ...patch });
 
   return (
-    <div className={`border-l-2 ${borderColor} bg-surface-container rounded-lg mb-2`}>
+    <div className={`border-l-2 ${borderColor} bg-surface-2 rounded-lg mb-2`}>
       <div className="flex items-center gap-3 px-4 py-3">
         <button
           onClick={onToggle}
@@ -274,7 +274,7 @@ function RunningRow({
   const update = (patch: Partial<AIGeneratedRunningExercise>) => onEdit({ ...ex, ...patch });
 
   return (
-    <div className={`border-l-2 ${borderColor} bg-surface-container rounded-lg mb-2`}>
+    <div className={`border-l-2 ${borderColor} bg-surface-2 rounded-lg mb-2`}>
       <div className="flex items-center gap-3 px-4 py-3">
         <button
           onClick={onToggle}

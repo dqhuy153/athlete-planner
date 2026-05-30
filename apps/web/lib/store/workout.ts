@@ -1,0 +1,152 @@
+'use client';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { WorkoutSession, WorkoutItem } from '../types/workout';
+import { WorkoutMode } from '../types/workout';
+
+const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+interface WorkoutStore {
+  session: WorkoutSession | null;
+  settingsOpen: boolean;
+  restTimerActive: boolean;
+  restTimerDefaultSeconds: number;
+  // actions
+  startSession: (
+    items: WorkoutItem[],
+    mode: WorkoutMode,
+    scheduleId?: string,
+    dateString?: string,
+  ) => void;
+  discardSession: () => void;
+  setCurrentItem: (index: number) => void;
+  completeSet: (
+    itemIndex: number,
+    setIndex: number,
+    updates: { weight_kg: number; reps: number },
+  ) => void;
+  advancePhase: (itemIndex: number) => void;
+  completeItem: (itemIndex: number) => void;
+  startRestTimer: (seconds: number) => void;
+  stopRestTimer: () => void;
+  setSoundEnabled: (v: boolean) => void;
+  setVibrationEnabled: (v: boolean) => void;
+  setAutoAdvance: (v: boolean) => void;
+  setSettingsOpen: (v: boolean) => void;
+  checkAndDiscardExpired: () => void;
+}
+
+export const useWorkoutStore = create<WorkoutStore>()(
+  persist(
+    (set, get) => ({
+      session: null,
+      settingsOpen: false,
+      restTimerActive: false,
+      restTimerDefaultSeconds: 90,
+
+      startSession: (items, mode, scheduleId, dateString) =>
+        set({
+          session: {
+            id: crypto.randomUUID(),
+            mode,
+            scheduleId,
+            dateString,
+            startedAt: Date.now(),
+            items,
+            currentItemIndex: 0,
+            soundEnabled: false,
+            vibrationEnabled: true,
+            autoAdvance: true,
+          },
+          restTimerActive: false,
+        }),
+
+      discardSession: () =>
+        set({ session: null, restTimerActive: false }),
+
+      setCurrentItem: (index) =>
+        set((state) => ({
+          session: state.session
+            ? { ...state.session, currentItemIndex: index }
+            : null,
+          restTimerActive: false,
+        })),
+
+      completeSet: (itemIndex, setIndex, updates) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) => {
+            if (i !== itemIndex) return item;
+            const sets = item.sets.map((s, j) =>
+              j === setIndex ? { ...s, ...updates, completed: true } : s,
+            );
+            return { ...item, sets };
+          });
+          return { session: { ...state.session, items } };
+        }),
+
+      advancePhase: (itemIndex) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) => {
+            if (i !== itemIndex) return item;
+            const nextPhase = item.currentPhaseIndex + 1;
+            const phaseCount = item.workoutStructure?.length ?? 0;
+            if (nextPhase >= phaseCount) {
+              return { ...item, done: true };
+            }
+            return { ...item, currentPhaseIndex: nextPhase };
+          });
+          return { session: { ...state.session, items } };
+        }),
+
+      completeItem: (itemIndex) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) =>
+            i === itemIndex ? { ...item, done: true } : item,
+          );
+          // Auto-advance to next undone item
+          const nextIndex = items.findIndex((item, i) => i > itemIndex && !item.done);
+          const currentItemIndex =
+            nextIndex !== -1 ? nextIndex : state.session.currentItemIndex;
+          return { session: { ...state.session, items, currentItemIndex } };
+        }),
+
+      startRestTimer: (seconds) =>
+        set({ restTimerActive: true, restTimerDefaultSeconds: seconds }),
+
+      stopRestTimer: () => set({ restTimerActive: false }),
+
+      setSoundEnabled: (v) =>
+        set((state) => ({
+          session: state.session ? { ...state.session, soundEnabled: v } : null,
+        })),
+
+      setVibrationEnabled: (v) =>
+        set((state) => ({
+          session: state.session
+            ? { ...state.session, vibrationEnabled: v }
+            : null,
+        })),
+
+      setAutoAdvance: (v) =>
+        set((state) => ({
+          session: state.session ? { ...state.session, autoAdvance: v } : null,
+        })),
+
+      setSettingsOpen: (v) => set({ settingsOpen: v }),
+
+      checkAndDiscardExpired: () => {
+        const { session } = get();
+        if (session && Date.now() - session.startedAt > SESSION_TTL_MS) {
+          set({ session: null });
+        }
+      },
+    }),
+    {
+      name: 'workout-session',
+      partialize: (state) => ({ session: state.session }),
+    },
+  ),
+);

@@ -83,14 +83,38 @@ export class AdminController {
       ? `Target muscle group: ${body.muscleGroup || 'not specified'}`
       : `Running type: ${body.runningType || 'not specified'}`;
 
-    const prompt = `Generate Vietnamese name and a brief description for this ${body.sportType.toLowerCase()} exercise.
+    const isGym = body.sportType === 'GYM';
+
+    const prompt = isGym
+      ? `Generate content for this gym exercise.
 Exercise name: ${body.name}
 ${contextDetails}
 
-Respond with JSON only:
+Respond with JSON only (no markdown):
 {
   "vietnameseName": "Vietnamese translation or transliteration of the exercise name",
-  "description": "1-2 sentence description in English"
+  "beginner": {
+    "steps_en": ["Step 1 in English", "Step 2 in English"],
+    "steps_vi": ["Bước 1 tiếng Việt", "Bước 2 tiếng Việt"],
+    "form_cues_en": ["Form cue 1", "Form cue 2"],
+    "form_cues_vi": ["Gợi ý kỹ thuật 1", "Gợi ý kỹ thuật 2"]
+  },
+  "advanced": {
+    "steps_en": ["Advanced step 1", "Advanced step 2"],
+    "steps_vi": ["Bước nâng cao 1", "Bước nâng cao 2"],
+    "form_cues_en": ["Advanced cue 1"],
+    "form_cues_vi": ["Gợi ý nâng cao 1"]
+  }
+}`
+      : `Generate content for this running workout.
+Workout name: ${body.name}
+${contextDetails}
+
+Respond with JSON only (no markdown):
+{
+  "vietnameseName": "Vietnamese translation or transliteration",
+  "instructions_en": ["Instruction step 1 in English", "Instruction step 2"],
+  "instructions_vi": ["Hướng dẫn bước 1 tiếng Việt", "Hướng dẫn bước 2"]
 }`;
 
     const result = await this.aiService.generateText({ prompt });

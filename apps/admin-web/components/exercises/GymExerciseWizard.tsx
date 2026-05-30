@@ -105,8 +105,49 @@ export function GymExerciseWizard({
         sportType: SportType.GYM,
         muscleGroup: watchedValues.targetMuscleGroup || undefined,
       });
-      if (result?.content?.vietnameseName) {
-        methods.setValue('vietnameseName', result.content.vietnameseName);
+      const c = result?.content;
+      if (!c) return;
+
+      if (c.vietnameseName) {
+        methods.setValue('vietnameseName', c.vietnameseName);
+      }
+
+      // Populate instruction steps for BEGINNER (index 0) if currently empty
+      const instructions = methods.getValues('instructions');
+      const beginnerIdx = instructions.findIndex(i => i.level === ExperienceLevel.BEGINNER);
+      const advancedIdx = instructions.findIndex(i => i.level === ExperienceLevel.ADVANCED);
+
+      function toFields(arr: string[] | undefined) {
+        return (arr ?? []).filter(Boolean).map(v => ({ value: v }));
+      }
+      function isEmpty(fields: { value: string }[]) {
+        return fields.every(f => !f.value.trim());
+      }
+
+      if (c.beginner && beginnerIdx !== -1) {
+        const b = c.beginner;
+        const base = `instructions.${beginnerIdx}` as const;
+        if (b.steps_en?.length && isEmpty(instructions[beginnerIdx].steps_en))
+          methods.setValue(`${base}.steps_en` as any, toFields(b.steps_en));
+        if (b.steps_vi?.length && isEmpty(instructions[beginnerIdx].steps_vi))
+          methods.setValue(`${base}.steps_vi` as any, toFields(b.steps_vi));
+        if (b.form_cues_en?.length && isEmpty(instructions[beginnerIdx].form_cues_en))
+          methods.setValue(`${base}.form_cues_en` as any, toFields(b.form_cues_en));
+        if (b.form_cues_vi?.length && isEmpty(instructions[beginnerIdx].form_cues_vi))
+          methods.setValue(`${base}.form_cues_vi` as any, toFields(b.form_cues_vi));
+      }
+
+      if (c.advanced && advancedIdx !== -1) {
+        const a = c.advanced;
+        const base = `instructions.${advancedIdx}` as const;
+        if (a.steps_en?.length && isEmpty(instructions[advancedIdx].steps_en))
+          methods.setValue(`${base}.steps_en` as any, toFields(a.steps_en));
+        if (a.steps_vi?.length && isEmpty(instructions[advancedIdx].steps_vi))
+          methods.setValue(`${base}.steps_vi` as any, toFields(a.steps_vi));
+        if (a.form_cues_en?.length && isEmpty(instructions[advancedIdx].form_cues_en))
+          methods.setValue(`${base}.form_cues_en` as any, toFields(a.form_cues_en));
+        if (a.form_cues_vi?.length && isEmpty(instructions[advancedIdx].form_cues_vi))
+          methods.setValue(`${base}.form_cues_vi` as any, toFields(a.form_cues_vi));
       }
     } catch (err: any) {
       setError(err.message);
@@ -118,8 +159,8 @@ export function GymExerciseWizard({
   async function nextStep() {
     const stepFields: Record<number, (keyof GymExerciseFormValues)[]> = {
       0: ['name', 'vietnameseName', 'targetMuscleGroup'],
-      1: [],
-      2: [],
+      1: ['instructions'],
+      2: ['youtubeEmbedUrl', 'gifUrl'],
     };
     const valid = await trigger(stepFields[step] ?? []);
     if (valid) setStep((s) => s + 1);
@@ -133,6 +174,7 @@ export function GymExerciseWizard({
       setSaved(true);
     } catch (err: any) {
       setError(err.message || 'Failed to save exercise');
+    } finally {
       setSubmitting(false);
     }
   }

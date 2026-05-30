@@ -13,6 +13,7 @@ export interface RunningExerciseSeed {
   description: { vi: string; en: string };
   phases: Array<{
     id?: string;
+    phase: string; // User-facing name: "Warm-up", "Steady Effort", etc.
     type: 'warm_up' | 'interval' | 'recovery' | 'steady_state' | 'cool_down' | 'custom';
     duration_minutes?: number;
     distance_km?: number;
@@ -39,6 +40,7 @@ export const LONG_RUNS: RunningExerciseSeed[] = [
     },
     phases: [
       {
+        phase: 'Warm-up',
         type: 'warm_up',
         duration_minutes: 5,
         distance_km: 0.8,
@@ -54,6 +56,7 @@ export const LONG_RUNS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Steady Effort',
         type: 'steady_state',
         duration_minutes: 60,
         distance_km: 6.5,
@@ -69,6 +72,7 @@ export const LONG_RUNS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Cool-down',
         type: 'cool_down',
         duration_minutes: 5,
         distance_km: 0.7,
@@ -95,6 +99,7 @@ export const LONG_RUNS: RunningExerciseSeed[] = [
     },
     phases: [
       {
+        phase: 'Warm-up',
         type: 'warm_up',
         duration_minutes: 5,
         distance_km: 0.8,
@@ -110,6 +115,7 @@ export const LONG_RUNS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Steady Effort',
         type: 'steady_state',
         duration_minutes: 85,
         distance_km: 9.3,
@@ -125,6 +131,7 @@ export const LONG_RUNS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Final Surge',
         type: 'custom',
         duration_minutes: 5,
         distance_km: 0.9,

@@ -358,9 +358,9 @@ modules/
 - aria-labels on `DailyScheduleView`, `DayStatusBar`, `ExercisePicker`, `VideoPlayer`, `UpgradePrompt` — accessibility-only
 - PRO/FREE badge text in SideNav — intentionally kept as-is (tier labels)
 
-**Admin delete condition — STILL NEEDS CLARIFICATION:**
+**Admin delete condition — CLARIFIED:**
 - Current impl: regular admin blocked if `total > 0`; root can force-delete
-- User asked to re-clarify this condition — awaiting response
+- Past usage counts toward block (history is reference data, not garbage to clean up)
 
 ---
 

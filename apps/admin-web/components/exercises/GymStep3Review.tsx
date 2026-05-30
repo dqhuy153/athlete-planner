@@ -41,7 +41,7 @@ export function Step3Review() {
           {values.garminExerciseEnum && (
             <div className="flex justify-between gap-4">
               <dt className="text-on-surface-variant shrink-0">Garmin enum</dt>
-              <dd className="font-mono text-xs text-on-surface bg-surface-container px-1.5 py-0.5 rounded">{values.garminExerciseEnum}</dd>
+              <dd className="font-mono text-xs text-on-surface bg-surface-2 px-1.5 py-0.5 rounded">{values.garminExerciseEnum}</dd>
             </div>
           )}
           <div className="flex justify-between gap-4">

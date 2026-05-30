@@ -75,13 +75,13 @@ export function TagInput({ value, onChange, placeholder, suggestions = [] }: Tag
         />
       </div>
       {showSuggestions && input && filtered.length > 0 && (
-        <ul className="absolute z-20 mt-1 w-full rounded-lg border border-border bg-surface-container shadow-lg">
+        <ul className="absolute z-20 mt-1 w-full rounded-lg border border-border bg-surface-2 shadow-lg max-h-48 overflow-auto">
           {filtered.map((s) => (
             <li key={s}>
               <button
                 type="button"
                 onMouseDown={() => addTag(s)}
-                className="w-full px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-container-high"
+                className="w-full px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-3 transition-colors"
               >
                 {s}
               </button>

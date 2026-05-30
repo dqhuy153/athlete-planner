@@ -23,7 +23,7 @@ export function Step0BasicInfo({ generating, onGenerate }: Step0BasicInfoProps) 
 
   const filteredGarmin = GARMIN_EXERCISE_ENUMS
     .filter((e) => e.toLowerCase().includes(garminQuery.toLowerCase()))
-    .slice(0, 8);
+    .slice(0, 12);
 
   return (
     <div className="space-y-4">
@@ -121,7 +121,7 @@ export function Step0BasicInfo({ generating, onGenerate }: Step0BasicInfoProps) 
                 className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
               />
               {showGarmin && filteredGarmin.length > 0 && (
-                <ul className="absolute z-20 mt-1 w-full rounded-lg border border-border bg-surface-container shadow-lg max-h-48 overflow-auto">
+                <ul className="absolute z-20 mt-1 w-full rounded-lg border border-border bg-surface-2 shadow-lg max-h-56 overflow-auto">
                   {filteredGarmin.map((e) => (
                     <li key={e}>
                       <button
@@ -131,7 +131,7 @@ export function Step0BasicInfo({ generating, onGenerate }: Step0BasicInfoProps) 
                           setGarminQuery('');
                           setShowGarmin(false);
                         }}
-                        className="w-full px-3 py-2 text-left text-xs font-mono text-on-surface hover:bg-surface-container-high"
+                        className="w-full px-3 py-2 text-left text-xs font-mono text-on-surface hover:bg-surface-3 transition-colors"
                       >
                         {e}
                       </button>

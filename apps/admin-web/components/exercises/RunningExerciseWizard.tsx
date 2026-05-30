@@ -2,12 +2,7 @@
 
 import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  CheckCircle2,
-} from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { generateExerciseContent } from '@/lib/api'
 import { SportType } from '@athlete-planner/contracts'
@@ -108,8 +103,28 @@ export function RunningExerciseWizard({
         sportType: SportType.RUNNING,
         runningType: watchedValues.runningType || undefined,
       })
-      if (result?.content?.vietnameseName) {
-        methods.setValue('vietnameseName', result.content.vietnameseName)
+      const c = result?.content
+      if (!c) return
+
+      if (c.vietnameseName) {
+        methods.setValue('vietnameseName', c.vietnameseName)
+      }
+
+      function toFields(arr: string[] | undefined) {
+        return (arr ?? []).filter(Boolean).map((v: string) => ({ value: v }))
+      }
+      function isEmpty(fields: { value: string }[]) {
+        return fields.every(f => !f.value.trim())
+      }
+
+      const en = methods.getValues('instructions_en')
+      const vi = methods.getValues('instructions_vi')
+
+      if (c.instructions_en?.length && isEmpty(en)) {
+        methods.setValue('instructions_en', toFields(c.instructions_en))
+      }
+      if (c.instructions_vi?.length && isEmpty(vi)) {
+        methods.setValue('instructions_vi', toFields(c.instructions_vi))
       }
     } catch (err: any) {
       setError(err.message)
@@ -122,7 +137,7 @@ export function RunningExerciseWizard({
     const stepFields: Record<number, (keyof RunningExerciseFormValues)[]> = {
       0: ['name', 'vietnameseName', 'runningType'],
       1: [],
-      2: [],
+      2: ['workoutStructure'],
     }
     const valid = await trigger(stepFields[step] ?? [])
     if (valid) setStep(s => s + 1)
@@ -136,6 +151,7 @@ export function RunningExerciseWizard({
       setSaved(true)
     } catch (err: any) {
       setError(err.message || 'Failed to save exercise')
+    } finally {
       setSubmitting(false)
     }
   }
@@ -147,14 +163,19 @@ export function RunningExerciseWizard({
           <div className='rounded-xl border border-accent/30 bg-accent/5 p-4'>
             <div className='flex items-center gap-2 mb-3'>
               <CheckCircle2 className='h-5 w-5 text-accent' />
-              <h3 className='text-sm font-semibold text-on-surface'>Saved successfully</h3>
+              <h3 className='text-sm font-semibold text-on-surface'>
+                Saved successfully
+              </h3>
             </div>
             <RunningStep3Review />
           </div>
           <div className='flex gap-3 pt-2'>
             <button
               type='button'
-              onClick={() => { setSaved(false); setStep(0) }}
+              onClick={() => {
+                setSaved(false)
+                setStep(0)
+              }}
               className='flex items-center gap-1.5 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors'
             >
               Edit again
@@ -187,7 +208,12 @@ export function RunningExerciseWizard({
     <FormProvider {...methods}>
       <WizardStepper steps={STEPS} currentStep={step} />
 
-      <form onSubmit={handleSubmit(handleFinalSubmit)} className='space-y-4'>
+      <form
+        onSubmit={handleSubmit(handleFinalSubmit, errors =>
+          console.log(errors),
+        )}
+        className='space-y-4'
+      >
         {step === 0 && (
           <RunningStep0BasicInfo
             generating={generating}

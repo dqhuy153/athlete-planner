@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
 interface WizardStepperProps {
-  steps: string[];
-  currentStep: number; // 0-indexed
+  steps: string[]
+  currentStep: number // 0-indexed
 }
 
 export function WizardStepper({ steps, currentStep }: WizardStepperProps) {
   return (
-    <div className="mb-8">
-      <div className="flex gap-1 mb-3">
+    <div className='mb-8'>
+      <div className='flex gap-1 mb-3'>
         {steps.map((_, i) => (
           <div
             key={i}
@@ -19,7 +19,7 @@ export function WizardStepper({ steps, currentStep }: WizardStepperProps) {
           />
         ))}
       </div>
-      <div className="flex gap-6">
+      <div className='grid grid-cols-4'>
         {steps.map((label, i) => (
           <span
             key={i}
@@ -37,5 +37,5 @@ export function WizardStepper({ steps, currentStep }: WizardStepperProps) {
         ))}
       </div>
     </div>
-  );
+  )
 }

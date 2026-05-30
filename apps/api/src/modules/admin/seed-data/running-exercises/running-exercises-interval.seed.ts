@@ -13,6 +13,7 @@ export interface RunningExerciseSeed {
   description: { vi: string; en: string };
   phases: Array<{
     id?: string;
+    phase: string; // User-facing name: "Warm-up", "Steady Effort", etc.
     type: 'warm_up' | 'interval' | 'recovery' | 'steady_state' | 'cool_down' | 'custom';
     duration_minutes?: number;
     distance_km?: number;
@@ -39,6 +40,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
     },
     phases: [
       {
+        phase: 'Warm-up',
         type: 'warm_up',
         duration_minutes: 10,
         distance_km: 1.5,
@@ -54,6 +56,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: '1K Repeats',
         type: 'interval',
         duration_minutes: 4,
         distance_km: 1.0,
@@ -71,6 +74,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Recovery',
         type: 'recovery',
         duration_minutes: 2,
         pace: { min: 6.5, max: 7 },
@@ -85,6 +89,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Cool-down',
         type: 'cool_down',
         duration_minutes: 5,
         distance_km: 0.8,
@@ -111,6 +116,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
     },
     phases: [
       {
+        phase: 'Warm-up',
         type: 'warm_up',
         duration_minutes: 10,
         distance_km: 1.5,
@@ -126,6 +132,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: '400m Repeats',
         type: 'interval',
         duration_minutes: 1,
         distance_km: 0.4,
@@ -143,6 +150,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Recovery',
         type: 'recovery',
         duration_minutes: 1,
         pace: { min: 6.5, max: 7 },
@@ -157,6 +165,7 @@ export const INTERVAL_SESSIONS: RunningExerciseSeed[] = [
         },
       },
       {
+        phase: 'Cool-down',
         type: 'cool_down',
         duration_minutes: 5,
         distance_km: 0.8,

@@ -6,7 +6,7 @@ import { format, addWeeks, startOfISOWeek, getISOWeek, getISOWeekYear } from 'da
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
-import { UserTier, DayStatus } from '@athlete-planner/contracts';
+import { UserTier, DayStatus, SportType } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
 import { useSchedule } from '@/lib/hooks/useSchedule';
@@ -15,8 +15,13 @@ import { DayStatusBar }         from '@/components/DayStatusBar';
 import { DisciplineRateWidget } from '@/components/DisciplineRateWidget';
 import { DailyScheduleView }    from '@/components/DailyScheduleView';
 import { UpgradePrompt }        from '@/components/UpgradePrompt';
-import { Download, Archive, Copy, CalendarRange, Plus } from 'lucide-react';
+import { Download, Archive, Copy, CalendarRange, Plus, Play } from 'lucide-react';
 import { AuthGate } from '@/components/AuthGate';
+import { useWorkoutStore } from '@/lib/store/workout';
+import { WorkoutMode } from '@/lib/types/workout';
+import type { WorkoutItem } from '@/lib/types/workout';
+import { WorkoutSessionSheet } from '@/components/workout/WorkoutSessionSheet';
+import { WorkoutResumePrompt } from '@/components/workout/WorkoutResumePrompt';
 
 const ExercisePicker = dynamic(
   () => import('@/components/ExercisePicker').then(m => ({ default: m.ExercisePicker })),
@@ -36,6 +41,7 @@ import type { PickedExercise } from '@/components/ExercisePicker';
 export default function SchedulePage() {
   const t       = useTranslations('schedule');
   const tExport = useTranslations('export');
+  const tWorkout = useTranslations('workout');
   const { data: session, status } = useSession();
 
   const token    = (session?.accessToken as string) ?? '';
@@ -120,6 +126,21 @@ export default function SchedulePage() {
   const [upgradePromptOpen, setUpgradePromptOpen] = useState(false);
   const [exportingDay,      setExportingDay]     = useState(false);
   const [exportingWeek,     setExportingWeek]    = useState(false);
+  const [workoutOpen,       setWorkoutOpen]      = useState(false);
+  const [showReplaceWorkout, setShowReplaceWorkout] = useState(false);
+
+  const {
+    session: workoutSession,
+    startSession,
+    discardSession,
+    checkAndDiscardExpired,
+  } = useWorkoutStore();
+
+  // Discard expired session on mount
+  useEffect(() => {
+    checkAndDiscardExpired();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const _pendingLabel = { current: '' };
 
@@ -172,6 +193,62 @@ export default function SchedulePage() {
   const sourceWeekBase = addWeeks(startOfISOWeek(new Date()), weekOffset);
   const sourceWeekNum  = getISOWeek(sourceWeekBase);
   const sourceWeekYear = getISOWeekYear(sourceWeekBase);
+
+  function buildMultiItems(): WorkoutItem[] {
+    if (!activeSchedule) return [];
+    return activeSchedule.items.map((item) => {
+      const label =
+        labelMap.get(item.id) ??
+        gymExercises.find((e) => e.id === item.gymMasterId)?.vietnameseName ??
+        gymExercises.find((e) => e.id === item.gymMasterId)?.name ??
+        runningExercises.find((e) => e.id === item.runningMasterId)?.vietnameseName ??
+        runningExercises.find((e) => e.id === item.runningMasterId)?.name ??
+        privateExercises.find((e) => e.id === item.privateExerciseId)?.name ??
+        'Exercise';
+
+      const runningEx = item.runningMasterId
+        ? runningExercises.find((e) => e.id === item.runningMasterId)
+        : undefined;
+
+      const gymSets = item.gymPayload?.sets.map((s) => ({
+        setNumber: s.set_number,
+        weight_kg: s.weight_kg,
+        reps: s.reps,
+        completed: false as const,
+      })) ?? [
+        { setNumber: 1, weight_kg: 0, reps: 10, completed: false as const },
+        { setNumber: 2, weight_kg: 0, reps: 10, completed: false as const },
+        { setNumber: 3, weight_kg: 0, reps: 10, completed: false as const },
+      ];
+
+      const workoutItem: WorkoutItem = {
+        id: item.id,
+        sportType: item.sportType,
+        label,
+        gymMasterId: item.gymMasterId ?? undefined,
+        runningMasterId: item.runningMasterId ?? undefined,
+        privateExerciseId: item.privateExerciseId ?? undefined,
+        workoutStructure: runningEx?.workoutStructure,
+        gymPayload: item.gymPayload ?? undefined,
+        runningPayload: item.runningPayload ?? undefined,
+        sets: item.sportType === SportType.GYM ? gymSets : [],
+        currentPhaseIndex: 0,
+        done: false,
+      };
+      return workoutItem;
+    });
+  }
+
+  function handleStartWorkout() {
+    if (workoutSession) {
+      setShowReplaceWorkout(true);
+      return;
+    }
+    const items = buildMultiItems();
+    if (items.length === 0) return;
+    startSession(items, WorkoutMode.MULTI, activeSchedule?.id, selectedDate);
+    setWorkoutOpen(true);
+  }
 
   function triggerDownload(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob);
@@ -231,11 +308,22 @@ export default function SchedulePage() {
             />
           </div>
 
-          <div className="p-4">
+          <div className="p-4 flex flex-col gap-2">
+            {/* Start Workout — shown when day has items */}
+            {(activeSchedule?.items?.length ?? 0) > 0 && (
+              <button
+                type="button"
+                onClick={handleStartWorkout}
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Play size={15} aria-hidden />
+                {tWorkout('startWorkout')}
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setPickerOpen(true)}
-              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-3 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <Plus size={16} aria-hidden />
               {t('addWorkout')}
@@ -351,6 +439,16 @@ export default function SchedulePage() {
 
           {/* Mobile: bottom action bar */}
           <div className="lg:hidden flex gap-2 border-t border-border p-3">
+            {(activeSchedule?.items?.length ?? 0) > 0 && (
+              <button
+                type="button"
+                onClick={handleStartWorkout}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-accent py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px]"
+              >
+                <Play size={13} aria-hidden />
+                {tWorkout('startWorkout')}
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setCopyDayOpen(true)}
@@ -415,6 +513,60 @@ export default function SchedulePage() {
         onClose={() => setUpgradePromptOpen(false)}
         featureHint="export.upgradeToExport"
       />
+
+      {/* Workout session sheet */}
+      {workoutOpen && (
+        <WorkoutSessionSheet onClose={() => setWorkoutOpen(false)} />
+      )}
+
+      {/* Resume prompt — shown when a session exists and the sheet is not open */}
+      {workoutSession && !workoutOpen && (
+        <WorkoutResumePrompt onResume={() => setWorkoutOpen(true)} />
+      )}
+
+      {/* Replace existing session confirm */}
+      {showReplaceWorkout && (
+        <div className="fixed inset-0 z-50 flex items-end bg-black/50">
+          <div className="w-full rounded-t-2xl bg-surface-1 border-t border-border p-5 pb-8">
+            <div className="flex justify-center mb-4">
+              <div className="h-1 w-10 rounded-full bg-border" />
+            </div>
+            <p className="text-base font-semibold text-text-primary text-center mb-1">
+              {tWorkout('replaceTitle')}
+            </p>
+            <p className="text-sm text-text-tertiary text-center mb-5">
+              {tWorkout('replaceBody')}
+            </p>
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  discardSession();
+                  const items = buildMultiItems();
+                  if (items.length > 0) {
+                    startSession(items, WorkoutMode.MULTI, activeSchedule?.id, selectedDate);
+                  }
+                  setShowReplaceWorkout(false);
+                  setWorkoutOpen(true);
+                }}
+                className="min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {tWorkout('replaceConfirm')}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowReplaceWorkout(false);
+                  setWorkoutOpen(true);
+                }}
+                className="min-h-[48px] rounded-xl border border-border text-sm text-text-secondary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {tWorkout('replaceCancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
     </AuthGate>
   );

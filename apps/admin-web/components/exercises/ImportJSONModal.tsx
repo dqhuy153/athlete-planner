@@ -186,7 +186,7 @@ export function ImportJSONModal({
           {step === 'upload' && (
             <div className="space-y-4">
               {/* Download skill link */}
-              <div className="flex items-center justify-between rounded-lg border border-border bg-surface-container px-4 py-3">
+              <div className="flex items-center justify-between rounded-lg border border-border bg-surface-2 px-4 py-3">
                 <div>
                   <p className="text-sm font-medium text-on-surface">Need the right format?</p>
                   <p className="text-xs text-on-surface-variant mt-0.5">
