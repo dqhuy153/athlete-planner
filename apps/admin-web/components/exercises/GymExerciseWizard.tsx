@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, FormProvider, useWatch } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { ArrowLeft, ArrowRight, Check, Sparkles } from 'lucide-react';
 import { FormLabel } from '@athlete-planner/ui';
 import { useAuth } from '@/lib/auth-context';
@@ -90,8 +90,8 @@ export function GymExerciseWizard({
     },
   });
 
-  const { register, handleSubmit, trigger } = methods;
-  const watchedValues = useWatch();
+  const { register, handleSubmit, trigger, watch } = methods;
+  const watchedValues = watch();
 
   async function handleGenerate() {
     if (!session?.accessToken || !watchedValues.name) return;
