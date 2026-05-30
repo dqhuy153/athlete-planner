@@ -171,7 +171,8 @@ export function RunningExerciseWizard({
     },
   });
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger } = methods;
+  const { register, handleSubmit, watch, trigger, formState } = methods;
+  const { errors } = formState;
   const watchedValues = watch();
 
   async function handleGenerate() {

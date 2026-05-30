@@ -35,7 +35,8 @@ function getPhaseColor(type: string): string {
 }
 
 export function WorkoutStructureEditor() {
-  const { control, register, watch, formState: { errors } } = useFormContext<RunningExerciseFormValues>();
+  const { control, register, watch, formState } = useFormContext<RunningExerciseFormValues>();
+  const { errors } = formState;
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'workoutStructure',

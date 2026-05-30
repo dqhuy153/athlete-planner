@@ -12,7 +12,8 @@ interface InstructionsEditorProps {
 }
 
 export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsEditorProps) {
-  const { control, register, formState: { errors } } = useFormContext();
+  const { control, register, formState } = useFormContext();
+  const { errors } = formState;
 
   const levelIndex = activeLevel === 'BEGINNER' ? 0 : 1;
   const instructionErrors = (errors.instructions as any)?.[levelIndex];
