@@ -5,13 +5,13 @@ import { AIGenerateGymExercisesCommand } from './ai-generate-gym-exercises.comma
 export interface AIGeneratedGymExercise {
   name: string;
   vietnameseName: string;
-  targetMuscleGroup: string;
+  targetMuscleGroup: 'Chest' | 'Back' | 'Shoulders' | 'Arms' | 'Legs' | 'Abs';
   secondaryMuscleGroups: string[];
-  garminExerciseEnum?: string;
+  garminExerciseEnum?: string | null;
   instructions: Array<{
-    level: string;
-    steps: string[];
-    form_cues: string[];
+    level: 'BEGINNER' | 'ADVANCED';
+    steps: { vi: string[]; en: string[] };
+    form_cues: { vi: string[]; en: string[] };
   }>;
 }
 
@@ -27,31 +27,49 @@ export class AIGenerateGymExercisesHandler
     const muscleGroups = ['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs'];
     const muscleFilter = muscleGroup ? `Focus on muscle group: ${muscleGroup}.` : '';
 
-    const systemPrompt = `You are a professional strength and conditioning coach. Generate gym exercise data following the exact JSON schema provided.
+    const systemPrompt = `You are a bilingual Vietnamese/English strength and conditioning coach. Generate gym exercise data following the EXACT JSON schema. All text fields must be in BOTH Vietnamese (vi) and English (en).`;
 
-MUSCLE GROUPS (use exactly one of): ${muscleGroups.join(', ')}
-GARMIN_EXERCISE_ENUM: use SNAKE_CASE gym exercise names like SQUAT, BENCH_PRESS, DEADLIFT, etc.`;
+    const userPrompt = `Generate ${count} gym exercises based on: "${prompt}". ${muscleFilter}
 
-    const userPrompt = `Generate ${count} gym exercises based on this theme: "${prompt}".
-${muscleFilter}
-
-Return ONLY a valid JSON array with exactly ${count} objects. Each object must match this schema:
+Return ONLY a valid JSON array with exactly ${count} objects. Each object MUST match this exact schema:
 {
   "name": "Exercise Name in English",
   "vietnameseName": "Tên bài tập tiếng Việt",
-  "targetMuscleGroup": "one of: Chest|Back|Shoulders|Arms|Legs|Abs",
-  "secondaryMuscleGroups": ["string"],
-  "garminExerciseEnum": "SNAKE_CASE_ENUM or null",
+  "targetMuscleGroup": "one of: Chest | Back | Shoulders | Arms | Legs | Abs",
+  "secondaryMuscleGroups": ["string array of secondary muscles in English"],
+  "garminExerciseEnum": "SNAKE_CASE like BENCH_PRESS or null",
   "instructions": [
     {
-      "level": "beginner",
-      "steps": ["step 1", "step 2", "step 3"],
-      "form_cues": ["cue 1", "cue 2"]
+      "level": "BEGINNER",
+      "steps": {
+        "vi": ["Bước 1 tiếng Việt", "Bước 2 tiếng Việt", "Bước 3 tiếng Việt"],
+        "en": ["Step 1 in English", "Step 2 in English", "Step 3 in English"]
+      },
+      "form_cues": {
+        "vi": ["Lưu ý kỹ thuật 1 tiếng Việt", "Lưu ý 2 tiếng Việt"],
+        "en": ["Form cue 1 in English", "Form cue 2 in English"]
+      }
+    },
+    {
+      "level": "ADVANCED",
+      "steps": {
+        "vi": ["Bước nâng cao 1", "Bước nâng cao 2", "Bước nâng cao 3"],
+        "en": ["Advanced step 1", "Advanced step 2", "Advanced step 3"]
+      },
+      "form_cues": {
+        "vi": ["Lưu ý nâng cao 1", "Lưu ý nâng cao 2"],
+        "en": ["Advanced cue 1", "Advanced cue 2"]
+      }
     }
   ]
 }
 
-No markdown, no explanation, just the JSON array.`;
+RULES:
+- level must be exactly "BEGINNER" or "ADVANCED" (uppercase)
+- steps.vi and steps.en must have the SAME number of items (3-5 items each)
+- form_cues.vi and form_cues.en must have the SAME number of items (2-4 items each)
+- targetMuscleGroup must be exactly one of the listed values
+- No markdown, no explanation, only the JSON array.`;
 
     const result = await this.aiService.generateText({
       prompt: userPrompt,
