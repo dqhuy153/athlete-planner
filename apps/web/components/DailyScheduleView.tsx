@@ -58,7 +58,7 @@ export function DailyScheduleView({
   }
 
   return (
-    <div className="flex flex-col gap-3 px-4 pb-4">
+    <div className="flex flex-col gap-3 px-4 pb-2 lg:pb-4">
       {items.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-10 text-center">
           <p className="text-body text-text-tertiary">{t('emptyDay')}</p>

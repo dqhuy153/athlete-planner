@@ -67,7 +67,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
 
   return (
     <div>
-      <div className="mx-auto max-w-2xl pb-24">
+      <div className="mx-auto max-w-2xl pb-12 lg:pb-24">
       {/* Back */}
       <Link
         href={`/${locale}/library`}
@@ -96,10 +96,10 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
         <p className="mt-0.5 text-caption text-text-tertiary">{exercise.name}</p>
       </div>
 
-      {/* Customize & Save Copy — only for master exercises (gym or running) */}
-      {(isGym(exercise) || isRunning(exercise)) && (
-        <div className="mt-5">
-          <CustomizeSaveButton
+       {/* Customize & Save Copy — only for master exercises (gym or running) */}
+       {(isGym(exercise) || isRunning(exercise)) && (
+         <div className="mt-3">
+           <CustomizeSaveButton
             exerciseId={exercise.id}
             exerciseName={(exercise as any).vietnameseName || exercise.name || 'Exercise'}
             sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
