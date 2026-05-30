@@ -38,11 +38,12 @@ export class ExercisesController {
   async getGymLibrary(
     @Query('muscleGroup') muscleGroup?: string,
     @Query('includeInactive') includeInactive?: string,
+    @Query('search') search?: string,
     @Req() req?: Request,
   ) {
     const isAdmin = !!(req?.headers?.authorization) && includeInactive === 'true';
     return this.queryBus.execute(
-      new GetExerciseLibraryQuery('gym', { muscleGroup, includeInactive: isAdmin }),
+      new GetExerciseLibraryQuery('gym', { muscleGroup, includeInactive: isAdmin, search }),
     );
   }
 
@@ -50,11 +51,12 @@ export class ExercisesController {
   async getRunningLibrary(
     @Query('runningType') runningType?: string,
     @Query('includeInactive') includeInactive?: string,
+    @Query('search') search?: string,
     @Req() req?: Request,
   ) {
     const isAdmin = !!(req?.headers?.authorization) && includeInactive === 'true';
     return this.queryBus.execute(
-      new GetExerciseLibraryQuery('running', { runningType, includeInactive: isAdmin }),
+      new GetExerciseLibraryQuery('running', { runningType, includeInactive: isAdmin, search }),
     );
   }
 

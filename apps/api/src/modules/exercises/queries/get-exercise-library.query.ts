@@ -5,6 +5,7 @@ export class GetExerciseLibraryQuery {
       muscleGroup?: string;
       runningType?: string;
       includeInactive?: boolean;
+      search?: string;
     },
   ) {}
 }

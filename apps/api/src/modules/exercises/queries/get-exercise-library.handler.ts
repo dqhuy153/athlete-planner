@@ -10,6 +10,15 @@ export class GetExerciseLibraryHandler implements IQueryHandler<GetExerciseLibra
     const { type, filter } = query;
     const showAll = filter?.includeInactive === true;
 
+    const searchFilter = filter?.search
+      ? {
+          OR: [
+            { name: { contains: filter.search, mode: 'insensitive' as const } },
+            { vietnameseName: { contains: filter.search, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
+
     if (type === 'gym') {
       return this.prisma.gymExerciseMaster.findMany({
         where: {
@@ -17,6 +26,7 @@ export class GetExerciseLibraryHandler implements IQueryHandler<GetExerciseLibra
           ...(filter?.muscleGroup
             ? { targetMuscleGroup: filter.muscleGroup as MuscleGroup }
             : {}),
+          ...searchFilter,
         },
         orderBy: { createdAt: 'desc' },
       });
@@ -26,6 +36,7 @@ export class GetExerciseLibraryHandler implements IQueryHandler<GetExerciseLibra
       where: {
         ...(showAll ? {} : { isActive: true }),
         ...(filter?.runningType ? { runningType: filter.runningType as RunningType } : {}),
+        ...searchFilter,
       },
       orderBy: { createdAt: 'desc' },
     });
