@@ -143,7 +143,23 @@
     "customizeSave": "Customize & Save Copy",
     "customizeSaveHint": "Creates a personal copy — counts toward {count}/10 limit",
     "customizeSaveFull": "10 exercise limit reached",
-    "customizeSaving": "Saving..."
+    "customizeSaving": "Saving...",
+    "searchPlaceholder": "Search exercises...",
+    "addToToday": "Add to today",
+    "addToSchedule": "Add to schedule",
+    "startWorkout": "Start workout",
+    "addedToday": "Added to today",
+    "addedToSchedule": "Added to schedule",
+    "signInToAdd": "Sign in to add to schedule",
+    "workoutTitle": "Workout",
+    "stepOf": "Step {current} of {total}",
+    "formCues": "Form cues",
+    "nextStep": "Next step",
+    "prevStep": "Previous step",
+    "closeWorkout": "Close",
+    "selectDate": "Select date",
+    "confirmDate": "Confirm",
+    "adding": "Adding..."
   },
   "blog": {
     "title": "Articles",
@@ -168,7 +184,13 @@
     "langVi": "Tiếng Việt",
     "langEn": "English",
     "notSignedIn": "Not signed in",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "instructionLevel": "Instruction level",
+    "instructionLevelBeginner": "Beginner",
+    "instructionLevelAdvanced": "Advanced",
+    "instructionLevelHint": "Sets your default tab in the exercise library",
+    "upgradeTitle": "Upgrade to PRO",
+    "upgradeBenefits": "Garmin export, unlimited exercises, lifetime history"
   },
   "tier": {
     "upgradeTitle": "Upgrade to Pro",

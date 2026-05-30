@@ -109,9 +109,9 @@ export default function ProfilePage() {
         <div className="mb-6 overflow-hidden rounded-xl border border-accent/30 bg-accent/5">
           <div className="flex items-center justify-between p-4">
             <div>
-              <p className="text-sm font-semibold text-text-primary">Upgrade to PRO</p>
+              <p className="text-sm font-semibold text-text-primary">{t('upgradeTitle')}</p>
               <p className="mt-0.5 text-xs text-text-secondary">
-                Garmin export, unlimited exercises, lifetime history
+                {t('upgradeBenefits')}
               </p>
             </div>
             <Link
@@ -129,7 +129,7 @@ export default function ProfilePage() {
         {/* Preferred instruction level */}
         <div className="border-b border-border px-4 py-3">
           <p className="text-sm font-medium text-text-primary mb-2">
-            Instruction level
+            {t('instructionLevel')}
             {levelSaved && (
               <CheckCircle2 size={14} className="inline ml-2 text-accent" aria-hidden />
             )}
@@ -149,12 +149,12 @@ export default function ProfilePage() {
                   levelSaving && 'opacity-60 cursor-not-allowed',
                 )}
               >
-                {level === 'BEGINNER' ? 'Cơ bản' : 'Nâng cao'}
+                {level === 'BEGINNER' ? t('instructionLevelBeginner') : t('instructionLevelAdvanced')}
               </button>
             ))}
           </div>
           <p className="mt-1.5 text-xs text-text-tertiary">
-            Hiển thị hướng dẫn phù hợp trong thư viện bài tập
+            {t('instructionLevelHint')}
           </p>
         </div>
 

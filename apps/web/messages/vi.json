@@ -144,7 +144,23 @@
     "customizeSave": "Tùy chỉnh & Lưu bản sao",
     "customizeSaveHint": "Tạo bản sao cá nhân — tính vào giới hạn {count}/10",
     "customizeSaveFull": "Đã đạt giới hạn 10 bài tập",
-    "customizeSaving": "Đang lưu..."
+    "customizeSaving": "Đang lưu...",
+    "searchPlaceholder": "Tìm kiếm bài tập...",
+    "addToToday": "Thêm vào hôm nay",
+    "addToSchedule": "Thêm vào lịch",
+    "startWorkout": "Bắt đầu tập",
+    "addedToday": "Đã thêm vào hôm nay",
+    "addedToSchedule": "Đã thêm vào lịch",
+    "signInToAdd": "Đăng nhập để thêm vào lịch",
+    "workoutTitle": "Luyện tập",
+    "stepOf": "Bước {current}/{total}",
+    "formCues": "Kỹ thuật",
+    "nextStep": "Bước tiếp",
+    "prevStep": "Bước trước",
+    "closeWorkout": "Đóng",
+    "selectDate": "Chọn ngày",
+    "confirmDate": "Xác nhận",
+    "adding": "Đang thêm..."
   },
   "blog": {
     "title": "Bài viết",
@@ -169,7 +185,13 @@
     "langVi": "Tiếng Việt",
     "langEn": "English",
     "notSignedIn": "Chưa đăng nhập",
-    "signIn": "Đăng nhập"
+    "signIn": "Đăng nhập",
+    "instructionLevel": "Cấp độ hướng dẫn",
+    "instructionLevelBeginner": "Cơ bản",
+    "instructionLevelAdvanced": "Nâng cao",
+    "instructionLevelHint": "Hiển thị hướng dẫn phù hợp trong thư viện bài tập",
+    "upgradeTitle": "Nâng cấp lên PRO",
+    "upgradeBenefits": "Xuất Garmin, bài tập không giới hạn, lịch sử trọn đời"
   },
   "tier": {
     "upgradeTitle": "Nâng cấp Pro",

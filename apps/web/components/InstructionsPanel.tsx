@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import type { GymExerciseMaster } from '@athlete-planner/contracts';
 
 interface InstructionsPanelProps {
@@ -12,6 +13,7 @@ interface InstructionsPanelProps {
 type Level = 'BEGINNER' | 'ADVANCED';
 
 export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsPanelProps) {
+  const t = useTranslations('library');
   const { data: session } = useSession();
   const userLevel = (session?.user as any)?.preferredLevel as Level | null | undefined;
 
@@ -53,7 +55,7 @@ export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsP
                   : 'bg-surface-2 text-text-secondary hover:text-text-primary',
               ].join(' ')}
             >
-              {level === 'BEGINNER' ? 'Cơ bản' : 'Nâng cao'}
+              {level === 'BEGINNER' ? t('beginner') : t('advanced')}
             </button>
           ))}
         </div>
