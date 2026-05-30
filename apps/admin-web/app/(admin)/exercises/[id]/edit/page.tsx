@@ -88,8 +88,8 @@ export default function EditExercisePage({ params }: PageProps) {
             vietnameseName: ex.vietnameseName,
             targetMuscleGroup: ex.targetMuscleGroup as any,
             secondaryMuscleGroups: Array.isArray(ex.secondaryMuscleGroups)
-              ? ex.secondaryMuscleGroups.join(', ')
-              : '',
+              ? ex.secondaryMuscleGroups
+              : [],
             youtubeEmbedUrl: ex.youtubeEmbedUrl ?? '',
             gifUrl: ex.gifUrl ?? '',
             garminExerciseEnum: ex.garminExerciseEnum ?? '',

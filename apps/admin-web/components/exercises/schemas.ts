@@ -14,7 +14,7 @@ export const GymExerciseSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   vietnameseName: z.string().min(1, 'Vietnamese name is required'),
   targetMuscleGroup: z.enum(['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs']),
-  secondaryMuscleGroups: z.string().optional(),
+  secondaryMuscleGroups: z.array(z.string()).default([]),
   garminExerciseEnum: z.string().optional(),
   instructions: z.array(InstructionLevelSchema).default([
     {

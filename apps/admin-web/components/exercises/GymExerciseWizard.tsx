@@ -27,9 +27,7 @@ export function gymFormToPayload(data: GymExerciseFormValues) {
     name: data.name.trim(),
     vietnameseName: data.vietnameseName.trim(),
     targetMuscleGroup: data.targetMuscleGroup,
-    secondaryMuscleGroups: data.secondaryMuscleGroups
-      ? data.secondaryMuscleGroups.split(',').map((s) => s.trim()).filter(Boolean)
-      : [],
+    secondaryMuscleGroups: Array.isArray(data.secondaryMuscleGroups) ? data.secondaryMuscleGroups.filter(Boolean) : [],
     garminExerciseEnum: data.garminExerciseEnum?.trim() || undefined,
     youtubeEmbedUrl: data.youtubeEmbedUrl?.trim() || undefined,
     gifUrl: data.gifUrl?.trim() || undefined,
@@ -66,7 +64,7 @@ export function GymExerciseWizard({
       name: '',
       vietnameseName: '',
       targetMuscleGroup: 'Chest',
-      secondaryMuscleGroups: '',
+      secondaryMuscleGroups: [],
       garminExerciseEnum: '',
       instructions: [
         {
