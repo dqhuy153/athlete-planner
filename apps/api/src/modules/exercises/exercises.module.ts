@@ -12,6 +12,8 @@ import { CreateRunningMasterHandler } from './commands/create-running-master.han
 import { CreatePrivateExerciseHandler } from './commands/create-private-exercise.handler';
 import { UpdateExerciseHandler } from './commands/update-exercise.handler';
 import { ToggleExerciseActiveHandler } from './commands/toggle-exercise-active.handler';
+import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handler';
+import { ImportRunningExercisesHandler } from './commands/import-running-exercises.handler';
 
 // Queries
 import { GetExerciseLibraryHandler } from './queries/get-exercise-library.handler';
@@ -24,6 +26,8 @@ const CommandHandlers = [
   CreatePrivateExerciseHandler,
   UpdateExerciseHandler,
   ToggleExerciseActiveHandler,
+  ImportGymExercisesHandler,
+  ImportRunningExercisesHandler,
 ];
 
 const QueryHandlers = [

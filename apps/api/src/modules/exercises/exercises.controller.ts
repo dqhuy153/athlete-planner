@@ -26,6 +26,9 @@ import { GetExerciseDetailQuery } from './queries/get-exercise-detail.query';
 import { CreateGymExerciseDto } from './dto/create-gym-exercise.dto';
 import { CreateRunningExerciseDto } from './dto/create-running-exercise.dto';
 import { CreatePrivateExerciseDto } from './dto/create-private-exercise.dto';
+import { ImportGymExercisesDto, ImportRunningExercisesDto } from './dto/import-exercises.dto';
+import { ImportGymExercisesCommand } from './commands/import-gym-exercises.command';
+import { ImportRunningExercisesCommand } from './commands/import-running-exercises.command';
 
 @Controller('exercises')
 export class ExercisesController {
@@ -78,9 +81,31 @@ export class ExercisesController {
   }
 
   @UseGuards(AdminGuard)
+  @Post('gym/import')
+  async importGymExercises(
+    @Body() body: ImportGymExercisesDto,
+    @Query('dryRun') dryRun?: string,
+  ) {
+    return this.commandBus.execute(
+      new ImportGymExercisesCommand(body.exercises, dryRun === 'true'),
+    );
+  }
+
+  @UseGuards(AdminGuard)
   @Post('running')
   async createRunningMaster(@Body() body: CreateRunningExerciseDto) {
     return this.commandBus.execute(new CreateRunningMasterCommand(body));
+  }
+
+  @UseGuards(AdminGuard)
+  @Post('running/import')
+  async importRunningExercises(
+    @Body() body: ImportRunningExercisesDto,
+    @Query('dryRun') dryRun?: string,
+  ) {
+    return this.commandBus.execute(
+      new ImportRunningExercisesCommand(body.exercises, dryRun === 'true'),
+    );
   }
 
   @UseGuards(AdminGuard)
