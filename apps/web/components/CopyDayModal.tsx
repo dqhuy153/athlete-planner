@@ -23,6 +23,7 @@ export function CopyDayModal({
   onConfirm,
 }: CopyDayModalProps) {
   const t = useTranslations('schedule');
+  const tCommon = useTranslations('common');
 
   const tomorrow = format(addDays(new Date(sourceDateString + 'T00:00:00'), 1), 'yyyy-MM-dd');
   const [targetDate, setTargetDate] = useState(tomorrow);
@@ -66,7 +67,7 @@ export function CopyDayModal({
         <div className="flex items-center gap-2 rounded-lg bg-surface-3 px-3 py-2.5">
           <Copy className="h-4 w-4 shrink-0 text-accent" aria-hidden />
           <div>
-            <p className="text-micro text-text-tertiary">Source</p>
+            <p className="text-micro text-text-tertiary">{t('source')}</p>
             <p className="font-data text-body font-medium text-text-primary">{sourceDateString}</p>
           </div>
         </div>
@@ -123,7 +124,7 @@ export function CopyDayModal({
             onClick={onClose}
             className="flex-1 rounded-lg bg-surface-2 py-3 text-body font-medium text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
           >
-            Cancel
+            {tCommon('cancel')}
           </button>
           <button
             type="button"

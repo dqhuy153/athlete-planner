@@ -115,7 +115,7 @@ export function ScheduleItemCard({
     if (!guideExercise) {
       return (
         <p className="px-4 pb-6 text-caption text-text-tertiary">
-          Không có hướng dẫn.
+          {t('noGuide')}
         </p>
       );
     }
@@ -124,7 +124,7 @@ export function ScheduleItemCard({
     if (isGym && 'instructions' in guideExercise && Array.isArray(guideExercise.instructions)) {
       const gymEx = guideExercise as GymExerciseMaster;
       if (!gymEx.instructions.length) {
-        return <p className="px-4 pb-6 text-caption text-text-tertiary">Không có hướng dẫn.</p>;
+        return <p className="px-4 pb-6 text-caption text-text-tertiary">{t('noGuide')}</p>;
       }
       return (
         <div className="px-4 pb-6">
@@ -142,7 +142,7 @@ export function ScheduleItemCard({
       [];
 
     if (!runSteps.length) {
-      return <p className="px-4 pb-6 text-caption text-text-tertiary">Không có hướng dẫn.</p>;
+      return <p className="px-4 pb-6 text-caption text-text-tertiary">{t('noGuide')}</p>;
     }
 
     return (
@@ -166,7 +166,7 @@ export function ScheduleItemCard({
           type="button"
           {...attributes}
           {...listeners}
-          aria-label="Drag to reorder"
+          aria-label={t('dragToReorder')}
           className="touch-none text-text-tertiary hover:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded p-1"
         >
           <GripVertical className="h-4 w-4" aria-hidden />
@@ -183,13 +183,13 @@ export function ScheduleItemCard({
           <p className="truncate text-body font-medium text-text-primary">{label}</p>
           {isGym && setCount > 0 && (
             <p className="text-micro text-text-tertiary">
-              {setCount} {t('sets')} · <span className="font-data">{totalVol.toFixed(1)}</span> kg total
+              {setCount} {t('sets')} · <span className="font-data">{totalVol.toFixed(1)}</span> {t('kgTotal')}
             </p>
           )}
           {!isGym && item.runningPayload?.target_distance_km && (
             <p className="text-micro text-text-tertiary font-data">
               {item.runningPayload.target_distance_km} km
-              {item.runningPayload.duration_minutes ? ` · ${item.runningPayload.duration_minutes} min` : ''}
+              {item.runningPayload.duration_minutes ? ` · ${item.runningPayload.duration_minutes} ${t('minUnit')}` : ''}
             </p>
           )}
         </div>
@@ -199,7 +199,7 @@ export function ScheduleItemCard({
           type="button"
           onClick={() => setExpanded(v => !v)}
           aria-expanded={expanded}
-          aria-label={expanded ? 'Collapse' : 'Expand'}
+          aria-label={expanded ? t('collapse') : t('expand')}
           className="flex h-8 w-8 items-center justify-center rounded text-text-tertiary hover:bg-surface-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
         >
           {expanded
@@ -212,7 +212,7 @@ export function ScheduleItemCard({
         <button
           type="button"
           onClick={() => onRemove(item.id)}
-          aria-label={`Remove ${label}`}
+          aria-label={t('removeItem', { name: label })}
           className="flex h-8 w-8 items-center justify-center rounded text-text-tertiary hover:text-error focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
         >
           <Trash2 className="h-4 w-4" aria-hidden />
@@ -244,11 +244,11 @@ export function ScheduleItemCard({
             <button
               type="button"
               onClick={handleOpenGuide}
-              aria-label="View exercise guide"
+              aria-label={t('viewGuide')}
               className="flex items-center justify-center gap-1.5 rounded-lg bg-surface-3 px-3 py-2 text-caption text-text-secondary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px]"
             >
               <BookOpen className="h-3.5 w-3.5" aria-hidden />
-              Guide
+              {t('exerciseGuide')}
             </button>
           )}
         </div>

@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { getISOWeek, getISOWeekYear } from 'date-fns';
 import type { DailySchedule, GymPayload, RunningPayload } from '@athlete-planner/contracts';
+import { ExerciseSourceType, SportType } from '@athlete-planner/contracts';
 import type { PickedExercise } from '../../components/ExercisePicker';
 import { api } from '../api';
 
@@ -11,13 +12,24 @@ interface UseScheduleOptions {
 }
 
 export function useSchedule({ token }: UseScheduleOptions) {
-  const [schedules, setSchedules]       = useState<Map<string, DailySchedule>>(new Map());
+  const [schedules, _setSchedules]      = useState<Map<string, DailySchedule>>(new Map());
   const [activeSchedule, setActive]     = useState<DailySchedule | null>(null);
   const [loading, setLoading]           = useState(false);
   const [disciplineRate, setDisciplineRate] = useState({ rate: 0, completedDays: 0, totalDays: 0 });
   const [weekOffset, setWeekOffset]     = useState(0);
 
-  const loadingRef = useRef(false);
+  const loadingRef    = useRef(false);
+  // Always-fresh ref so selectDate never captures a stale schedules closure
+  const schedulesRef  = useRef<Map<string, DailySchedule>>(new Map());
+
+  // Keep ref in sync with state
+  const setSchedules = useCallback((updater: Map<string, DailySchedule> | ((prev: Map<string, DailySchedule>) => Map<string, DailySchedule>)) => {
+    _setSchedules(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      schedulesRef.current = next;
+      return next;
+    });
+  }, []);
 
   const loadWeek = useCallback(async (offset: number) => {
     if (loadingRef.current) return;
@@ -48,12 +60,12 @@ export function useSchedule({ token }: UseScheduleOptions) {
     }
   }, [token]);
 
-  const selectDate = useCallback(async (dateString: string) => {
-    // Check cache first
-    const cached = schedules.get(dateString);
+  const selectDate = useCallback(async (dateString: string): Promise<DailySchedule | null> => {
+    // Use ref to always get fresh schedules without recreating on every change
+    const cached = schedulesRef.current.get(dateString);
     if (cached) {
       setActive(cached);
-      return;
+      return cached;
     }
     // Fetch or create
     try {
@@ -63,10 +75,12 @@ export function useSchedule({ token }: UseScheduleOptions) {
       }
       setSchedules(prev => new Map(prev).set(dateString, schedule!));
       setActive(schedule);
+      return schedule;
     } catch {
       setActive(null);
+      return null;
     }
-  }, [token, schedules]);
+  }, [token, setSchedules]);
 
   const updateStatus = useCallback(async (scheduleId: string, status: string, dateString: string) => {
     try {
@@ -79,9 +93,9 @@ export function useSchedule({ token }: UseScheduleOptions) {
   const addItem = useCallback(async (scheduleId: string, dateString: string, picked: PickedExercise) => {
     try {
       const item = await api.addScheduleItem(token, scheduleId, {
-        exerciseType: picked.sourceType as 'GYM_MASTER' | 'RUNNING_MASTER' | 'PRIVATE',
+        exerciseType: picked.sourceType as ExerciseSourceType,
         exerciseId: picked.gymMasterId ?? picked.runningMasterId ?? picked.privateExerciseId ?? '',
-        sportType: picked.sportType as 'GYM' | 'RUNNING',
+        sportType: picked.sportType as SportType,
       });
       setSchedules(prev => {
         const map = new Map(prev);

@@ -3,6 +3,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AdminLoginCommand } from './admin-login.command';
 import { PrismaService } from '@athlete-planner/database';
+import { UserRole } from '@athlete-planner/contracts';
 import { AuthTokenService } from '../services/auth-token.service';
 
 @CommandHandler(AdminLoginCommand)
@@ -27,15 +28,15 @@ export class AdminLoginHandler implements ICommandHandler<AdminLoginCommand> {
       throw new UnauthorizedException('Invalid admin credentials');
     }
 
-    // Upsert admin user — always ensure role is 'root'
+    // Upsert admin user — always ensure role is root
     const user = await this.prisma.user.upsert({
       where: { email },
-      update: { role: 'root', name: 'Admin' },
+      update: { role: UserRole.ROOT, name: 'Admin' },
       create: {
         email,
         name: 'Admin',
         googleId: `admin-root-${email}`,
-        role: 'root',
+        role: UserRole.ROOT,
       },
     });
 

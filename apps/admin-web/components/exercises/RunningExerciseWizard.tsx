@@ -6,9 +6,11 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  CheckCircle2,
 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { generateExerciseContent } from '@/lib/api'
+import { SportType } from '@athlete-planner/contracts'
 import { WizardStepper } from './WizardStepper'
 import { WorkoutStructureEditor } from './WorkoutStructureEditor'
 import { RunningStep0BasicInfo } from './RunningStep0BasicInfo'
@@ -26,6 +28,8 @@ interface RunningExerciseWizardProps {
   initialValues?: Partial<RunningExerciseFormValues>
   onSubmit: (data: RunningExerciseFormValues) => Promise<void>
   submitLabel?: string
+  /** Called when user clicks "Done" on the success screen. Use for navigation. */
+  onAfterSave?: () => void
 }
 
 /** Transform RHF form data → API payload shape */
@@ -67,11 +71,13 @@ export function RunningExerciseWizard({
   initialValues,
   onSubmit,
   submitLabel = 'Create exercise',
+  onAfterSave,
 }: RunningExerciseWizardProps) {
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState('')
+  const [saved, setSaved] = useState(false)
   const { session } = useAuth()
 
   const methods = useForm<RunningExerciseFormValues>({
@@ -99,7 +105,7 @@ export function RunningExerciseWizard({
     try {
       const result = await generateExerciseContent(session.accessToken, {
         name: watchedValues.name,
-        sportType: 'RUNNING',
+        sportType: SportType.RUNNING,
         runningType: watchedValues.runningType || undefined,
       })
       if (result?.content?.vietnameseName) {
@@ -127,10 +133,54 @@ export function RunningExerciseWizard({
     setError('')
     try {
       await onSubmit(data)
+      setSaved(true)
     } catch (err: any) {
       setError(err.message || 'Failed to save exercise')
       setSubmitting(false)
     }
+  }
+
+  if (saved) {
+    return (
+      <FormProvider {...methods}>
+        <div className='space-y-4'>
+          <div className='rounded-xl border border-accent/30 bg-accent/5 p-4'>
+            <div className='flex items-center gap-2 mb-3'>
+              <CheckCircle2 className='h-5 w-5 text-accent' />
+              <h3 className='text-sm font-semibold text-on-surface'>Saved successfully</h3>
+            </div>
+            <RunningStep3Review />
+          </div>
+          <div className='flex gap-3 pt-2'>
+            <button
+              type='button'
+              onClick={() => { setSaved(false); setStep(0) }}
+              className='flex items-center gap-1.5 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors'
+            >
+              Edit again
+            </button>
+            {onAfterSave ? (
+              <button
+                type='button'
+                onClick={onAfterSave}
+                className='ml-auto flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-on-primary hover:bg-primary/90 transition-colors'
+              >
+                <Check className='h-4 w-4' />
+                Done
+              </button>
+            ) : (
+              <a
+                href='/exercises'
+                className='ml-auto flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-on-primary hover:bg-primary/90 transition-colors'
+              >
+                <Check className='h-4 w-4' />
+                Done
+              </a>
+            )}
+          </div>
+        </div>
+      </FormProvider>
+    )
   }
 
   return (

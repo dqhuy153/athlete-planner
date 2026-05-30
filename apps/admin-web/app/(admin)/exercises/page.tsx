@@ -10,8 +10,12 @@ import {
   Sparkles,
   Loader2,
   Upload,
+  Trash2,
+  AlertTriangle,
+  X,
 } from 'lucide-react';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import { UserRole } from '@athlete-planner/contracts';
 import { useAuth } from '@/lib/auth-context';
 import {
   getGymExercises,
@@ -19,16 +23,31 @@ import {
   toggleExercise,
   seedGymExercises,
   seedRunningExercises,
+  getExerciseUsage,
+  deleteExercise,
+  type ExerciseUsage,
 } from '@/lib/api';
 import { AIGenerateModal } from '@/components/AIGenerateModal';
 import { ImportJSONModal } from '@/components/exercises/ImportJSONModal';
 
 type Tab = 'gym' | 'running';
 
+interface DeleteModalState {
+  id: string;
+  name: string;
+  type: Tab;
+  usage: ExerciseUsage | null;
+  loading: boolean;
+  deleting: boolean;
+  error: string;
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ExercisesPage() {
   const { session } = useAuth();
+  const isRoot = session?.role === UserRole.ROOT;
+
   const [tab, setTab] = useState<Tab>('gym');
   const [gymExercises, setGymExercises] = useState<GymExerciseMaster[]>([]);
   const [runningExercises, setRunningExercises] = useState<RunningExerciseMaster[]>([]);
@@ -37,6 +56,7 @@ export default function ExercisesPage() {
   const [seedMsg, setSeedMsg] = useState('');
   const [showAIModal, setShowAIModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<DeleteModalState | null>(null);
 
   const loadExercises = useCallback(async () => {
     if (!session?.accessToken) return;
@@ -97,6 +117,30 @@ export default function ExercisesPage() {
     } finally {
       setSeeding(false);
       setTimeout(() => setSeedMsg(''), 5000);
+    }
+  }
+
+  async function openDeleteModal(id: string, name: string, type: Tab) {
+    if (!session?.accessToken) return;
+    const state: DeleteModalState = { id, name, type, usage: null, loading: true, deleting: false, error: '' };
+    setDeleteModal(state);
+    try {
+      const usage = await getExerciseUsage(session.accessToken, id, type);
+      setDeleteModal((prev) => prev ? { ...prev, usage, loading: false } : null);
+    } catch (err: any) {
+      setDeleteModal((prev) => prev ? { ...prev, loading: false, error: err.message || 'Failed to load usage' } : null);
+    }
+  }
+
+  async function handleDelete(force: boolean) {
+    if (!deleteModal || !session?.accessToken) return;
+    setDeleteModal((prev) => prev ? { ...prev, deleting: true, error: '' } : null);
+    try {
+      await deleteExercise(session.accessToken, deleteModal.id, deleteModal.type, force);
+      setDeleteModal(null);
+      await loadExercises();
+    } catch (err: any) {
+      setDeleteModal((prev) => prev ? { ...prev, deleting: false, error: err.message || 'Delete failed' } : null);
     }
   }
 
@@ -220,12 +264,22 @@ export default function ExercisesPage() {
                     </button>
                   </td>
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/exercises/${ex.id}/edit${tab === 'running' ? '?type=running' : ''}`}
-                      className="text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded"
-                    >
-                      Edit
-                    </Link>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/exercises/${ex.id}/edit${tab === 'running' ? '?type=running' : ''}`}
+                        className="text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => openDeleteModal(ex.id, ex.name, tab)}
+                        aria-label={`Delete ${ex.name}`}
+                        className="text-xs text-error/70 hover:text-error transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-error rounded"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -252,6 +306,119 @@ export default function ExercisesPage() {
           onClose={() => setShowImportModal(false)}
           onImported={() => { setShowImportModal(false); loadExercises(); }}
         />
+      )}
+
+      {/* Delete Modal */}
+      {deleteModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => !deleteModal.deleting && setDeleteModal(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-xl border border-border bg-surface p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 shrink-0 text-error" aria-hidden />
+                <h2 className="text-base font-semibold text-on-surface">Delete Exercise</h2>
+              </div>
+              {!deleteModal.deleting && (
+                <button
+                  type="button"
+                  onClick={() => setDeleteModal(null)}
+                  className="rounded p-1 text-on-surface-variant hover:bg-surface-container-high transition-colors"
+                >
+                  <X className="h-4 w-4" aria-hidden />
+                </button>
+              )}
+            </div>
+
+            {/* Exercise name */}
+            <p className="mb-4 rounded-lg bg-surface-container px-3 py-2 text-sm font-medium text-on-surface truncate">
+              {deleteModal.name}
+            </p>
+
+            {/* Usage info */}
+            {deleteModal.loading ? (
+              <div className="mb-4 flex items-center gap-2 text-sm text-on-surface-variant">
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                Checking schedule usage…
+              </div>
+            ) : deleteModal.usage ? (
+              deleteModal.usage.total > 0 ? (
+                <div className="mb-4 rounded-lg border border-error/30 bg-error/5 p-3 text-sm">
+                  <p className="font-medium text-error mb-2">
+                    Used in {deleteModal.usage.total} schedule item{deleteModal.usage.total !== 1 ? 's' : ''}
+                  </p>
+                  <div className="flex gap-4 text-xs text-on-surface-variant">
+                    <span>Past: <span className="font-medium text-on-surface">{deleteModal.usage.past}</span></span>
+                    <span>Today: <span className="font-medium text-on-surface">{deleteModal.usage.current}</span></span>
+                    <span>Future: <span className="font-medium text-on-surface">{deleteModal.usage.future}</span></span>
+                  </div>
+                  {!isRoot && (
+                    <p className="mt-2 text-xs text-on-surface-variant">
+                      Deactivate the exercise instead of deleting it. Force delete is root-only.
+                    </p>
+                  )}
+                  {isRoot && (
+                    <p className="mt-2 text-xs text-on-surface-variant">
+                      As root, you can force-delete. Schedule items will have their exercise reference cleared (set to null).
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="mb-4 text-sm text-on-surface-variant">
+                  This exercise is not used in any schedule. It can be safely deleted.
+                </p>
+              )
+            ) : null}
+
+            {/* Error */}
+            {deleteModal.error && (
+              <p className="mb-4 text-sm text-error">{deleteModal.error}</p>
+            )}
+
+            {/* Actions */}
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setDeleteModal(null)}
+                disabled={deleteModal.deleting}
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              {/* Normal delete — only enabled when usage is 0 */}
+              {deleteModal.usage && deleteModal.usage.total === 0 && (
+                <button
+                  type="button"
+                  onClick={() => handleDelete(false)}
+                  disabled={deleteModal.deleting}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-error px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-60"
+                >
+                  {deleteModal.deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" aria-hidden />}
+                  Delete
+                </button>
+              )}
+
+              {/* Force delete — root only, usage > 0 */}
+              {isRoot && deleteModal.usage && deleteModal.usage.total > 0 && (
+                <button
+                  type="button"
+                  onClick={() => handleDelete(true)}
+                  disabled={deleteModal.deleting}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-error px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-60"
+                >
+                  {deleteModal.deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <AlertTriangle className="h-4 w-4" aria-hidden />}
+                  Force Delete
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

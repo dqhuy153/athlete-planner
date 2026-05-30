@@ -1,5 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
+import { BlogStatus } from '@athlete-planner/contracts';
 import { CreateBlogPostCommand } from '../commands/create-blog-post.command';
 
 @CommandHandler(CreateBlogPostCommand)
@@ -17,9 +18,9 @@ export class CreateBlogPostHandler implements ICommandHandler<CreateBlogPostComm
         coverImage: dto.coverImage,
         tags: dto.tags || [],
         categoryKey: dto.category || dto.categoryKey,
-        status: dto.status || 'draft',
+        status: dto.status || BlogStatus.DRAFT,
         readingTime: dto.readingTime || 5,
-        publishedAt: dto.status === 'published' ? new Date() : null,
+        publishedAt: dto.status === BlogStatus.PUBLISHED ? new Date() : null,
         authorId,
       },
     });

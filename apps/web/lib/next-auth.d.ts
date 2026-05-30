@@ -1,4 +1,5 @@
 import { DefaultSession } from 'next-auth';
+import { ExperienceLevel } from '@athlete-planner/contracts';
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
@@ -7,7 +8,7 @@ declare module 'next-auth' {
       id: string;
       role: string;
       tier: string;
-      preferredLevel?: 'BEGINNER' | 'ADVANCED' | null;
+      preferredLevel?: ExperienceLevel | null;
     } & DefaultSession['user'];
   }
 }

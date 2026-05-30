@@ -1,5 +1,5 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, DayStatus } from '@athlete-planner/database';
 import { GetDisciplineRateQuery } from './get-discipline-rate.query';
 
 @QueryHandler(GetDisciplineRateQuery)
@@ -13,8 +13,8 @@ export class GetDisciplineRateHandler implements IQueryHandler<GetDisciplineRate
       where: { userId, year, weekNumber },
     });
 
-    const nonRestDays = schedules.filter((s) => s.dayStatus !== 'REST');
-    const completedDays = nonRestDays.filter((s) => s.dayStatus === 'COMPLETED');
+    const nonRestDays = schedules.filter((s) => s.dayStatus !== DayStatus.REST);
+    const completedDays = nonRestDays.filter((s) => s.dayStatus === DayStatus.COMPLETED);
     const totalDays = nonRestDays.length;
 
     return {

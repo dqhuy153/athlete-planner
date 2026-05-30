@@ -37,7 +37,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     id: 'free-tier',
     title: 'Free Tier Limits',
     description: 'Resource limits enforced for FREE-tier users.',
-    icon: <Shield size={18} className="text-[#00D4AA]" />,
+    icon: <Shield size={18} className="text-accent" />,
     items: [
       { key: 'FREE_TIER_MAX_EXERCISES', label: 'Max Private Exercises', description: 'Maximum number of user-created private exercises.', type: 'number', defaultValue: 10, min: 1, max: 100 },
       { key: 'FREE_TIER_PLANNING_DAYS', label: 'Planning Horizon', description: 'How many days ahead FREE users can plan.', type: 'number', defaultValue: 14, unit: 'days', min: 1, max: 90 },
@@ -49,7 +49,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     id: 'features',
     title: 'Feature Flags',
     description: 'Toggle product features on or off globally.',
-    icon: <Zap size={18} className="text-[#F59E0B]" />,
+    icon: <Zap size={18} className="text-warning" />,
     items: [
       { key: 'GARMIN_EXPORT_ENABLED', label: 'Garmin FIT Export', description: 'Allow PRO users to export workouts as Garmin FIT files.', type: 'boolean', defaultValue: true },
       { key: 'AI_GENERATE_ENABLED', label: 'Content Generation', description: 'Allow admins to generate exercise content via AI.', type: 'boolean', defaultValue: true },
@@ -71,7 +71,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     id: 'app-info',
     title: 'App Info',
     description: 'General application metadata.',
-    icon: <Info size={18} className="text-[#A3A3A3]" />,
+    icon: <Info size={18} className="text-on-surface-variant" />,
     items: [
       { key: 'APP_NAME', label: 'Application Name', description: 'Display name used in the app UI and emails.', type: 'string', defaultValue: 'The Sport Notebook' },
     ],
@@ -100,8 +100,8 @@ function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
       <button
         type="button"
         onClick={() => { const next = !checked; onChange(next); onSave?.(next); }}
-        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#00D4AA] focus:ring-offset-2 focus:ring-offset-[#141414] ${
-          checked ? 'bg-[#00D4AA]' : 'bg-[#242424]'
+        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface ${
+          checked ? 'bg-accent' : 'bg-surface-3'
         }`}
       >
         <span
@@ -121,9 +121,9 @@ function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
           min={def.min}
           max={def.max}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-28 px-3 py-1.5 text-sm bg-[#0A0A0A] border border-[#242424] rounded-lg text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-[#00D4AA]"
+          className="w-28 px-3 py-1.5 text-sm bg-background border border-border rounded-lg text-foreground font-mono focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        {def.unit && <span className="text-sm text-[#525252]">{def.unit}</span>}
+        {def.unit && <span className="text-sm text-on-surface-variant">{def.unit}</span>}
       </div>
     );
   }
@@ -132,7 +132,7 @@ function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
       type="text"
       value={value ?? String(def.defaultValue)}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full max-w-xs px-3 py-1.5 text-sm bg-[#0A0A0A] border border-[#242424] rounded-lg text-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#00D4AA]"
+      className="w-full max-w-xs px-3 py-1.5 text-sm bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
     />
   );
 }
@@ -201,19 +201,19 @@ export default function ConfigPage() {
 
   if (loading) {
     return (
-      <div className="p-8 text-[#A3A3A3] text-sm">Loading config…</div>
+      <div className="p-8 text-on-surface-variant text-sm">Loading config…</div>
     );
   }
 
   return (
     <div className="p-6 lg:p-8 max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#FAFAFA]">App Config</h1>
-        <p className="text-sm text-[#A3A3A3] mt-1">Runtime configuration for The Sport Notebook.</p>
+        <h1 className="text-2xl font-bold text-foreground">App Config</h1>
+        <p className="text-sm text-on-surface-variant mt-1">Runtime configuration for The Sport Notebook.</p>
       </div>
 
       {error && (
-        <div className="mb-6 flex items-start gap-2 p-3 rounded-xl bg-[#EF4444]/10 border border-[#EF4444]/20 text-sm text-[#EF4444]">
+        <div className="mb-6 flex items-start gap-2 p-3 rounded-xl bg-error/10 border border-error/20 text-sm text-error">
           <AlertTriangle size={16} className="shrink-0 mt-0.5" />
           {error}
         </div>
@@ -221,18 +221,18 @@ export default function ConfigPage() {
 
       <div className="space-y-6">
         {CONFIG_SECTIONS.map((section) => (
-          <div key={section.id} className="rounded-2xl border border-[#242424] bg-[#141414] overflow-hidden">
+          <div key={section.id} className="rounded-2xl border border-border bg-surface overflow-hidden">
             {/* Section header */}
-            <div className="flex items-start gap-3 px-5 py-4 border-b border-[#242424]">
+            <div className="flex items-start gap-3 px-5 py-4 border-b border-border">
               <div className="mt-0.5">{section.icon}</div>
               <div>
-                <h2 className="text-sm font-semibold text-[#FAFAFA]">{section.title}</h2>
-                <p className="text-xs text-[#A3A3A3] mt-0.5">{section.description}</p>
+                <h2 className="text-sm font-semibold text-foreground">{section.title}</h2>
+                <p className="text-xs text-on-surface-variant mt-0.5">{section.description}</p>
               </div>
             </div>
 
             {/* Config items */}
-            <div className="divide-y divide-[#1A1A1A]">
+            <div className="divide-y divide-surface-2">
               {section.items.map((def) => {
                 const dirty = isDirty(def.key);
                 const saved = savedKeys.has(def.key);
@@ -241,9 +241,9 @@ export default function ConfigPage() {
                 return (
                   <div key={def.key} className="flex items-center gap-4 px-5 py-4">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-[#FAFAFA]">{def.label}</p>
-                      <p className="text-xs text-[#525252] mt-0.5">{def.description}</p>
-                      <p className="text-[10px] text-[#525252]/60 font-mono mt-1">{def.key}</p>
+                      <p className="text-sm font-medium text-foreground">{def.label}</p>
+                      <p className="text-xs text-on-surface-variant mt-0.5">{def.description}</p>
+                      <p className="text-[10px] text-on-surface-variant/60 font-mono mt-1">{def.key}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <ConfigInput
@@ -263,7 +263,7 @@ export default function ConfigPage() {
                             <button
                               onClick={() => resetKey(def)}
                               title="Reset to saved"
-                              className="p-1.5 rounded-lg text-[#525252] hover:text-[#A3A3A3] hover:bg-[#242424] transition-colors"
+                              className="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface-variant hover:bg-surface-3 transition-colors"
                             >
                               <RotateCcw size={13} />
                             </button>
@@ -276,8 +276,8 @@ export default function ConfigPage() {
                               saved
                                 ? 'bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20'
                                 : dirty
-                                ? 'bg-[#00D4AA] text-black hover:opacity-90'
-                                : 'border border-[#242424] text-[#525252] cursor-default'
+                                ? 'bg-accent text-black hover:opacity-90'
+                                : 'border border-border text-on-surface-variant cursor-default'
                             }`}
                           >
                             {saved ? (

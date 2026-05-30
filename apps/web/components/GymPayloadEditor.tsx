@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { GymPayload, GymSet } from '@athlete-planner/contracts';
 
@@ -136,7 +136,7 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
             <button
               type="button"
               onClick={() => removeSet(idx)}
-              aria-label={`Remove set ${set.set_number}`}
+              aria-label={t('removeSet', { n: set.set_number })}
               disabled={sets.length === 1}
               className="ml-1 flex h-8 w-8 shrink-0 items-center justify-center rounded text-text-tertiary hover:text-error transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
             >
@@ -159,8 +159,9 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
         type="button"
         onClick={handleSave}
         disabled={saving}
-        className="mt-1 rounded-lg bg-accent px-4 py-3 text-body font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
+        className="mt-1 flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 text-body font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
       >
+        {saving && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
         {t('savePayload')}
       </button>
     </div>

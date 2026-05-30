@@ -15,7 +15,6 @@ export default function NewRunningExercisePage() {
   async function handleSubmit(data: RunningExerciseFormValues) {
     if (!session?.accessToken) throw new Error('Not authenticated');
     await createRunningExercise(session.accessToken, runningFormToPayload(data));
-    router.push('/exercises');
   }
 
   return (
@@ -28,7 +27,11 @@ export default function NewRunningExercisePage() {
         Exercises
       </Link>
       <h1 className="mb-6 text-xl font-semibold text-on-surface">New Running Exercise</h1>
-      <RunningExerciseWizard onSubmit={handleSubmit} submitLabel="Create exercise" />
+      <RunningExerciseWizard
+        onSubmit={handleSubmit}
+        submitLabel="Create exercise"
+        onAfterSave={() => router.push('/exercises')}
+      />
     </div>
   );
 }

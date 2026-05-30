@@ -11,6 +11,11 @@ export enum UserRole {
   ROOT = 'root',
 }
 
+export enum ExperienceLevel {
+  BEGINNER = 'BEGINNER',
+  ADVANCED = 'ADVANCED',
+}
+
 // ─── User Types ─────────────────────────────────────────────────────────────
 
 export interface User {
@@ -21,7 +26,7 @@ export interface User {
   avatarUrl: string | null;
   tier: UserTier;
   role: UserRole;
-  preferredLevel: 'BEGINNER' | 'ADVANCED' | null;
+  preferredLevel: ExperienceLevel | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +62,15 @@ export enum ExerciseSourceType {
   PRIVATE = 'PRIVATE',
 }
 
+export enum WorkoutPhaseType {
+  INTERVAL = 'interval',
+  RECOVERY = 'recovery',
+  STEADY_STATE = 'steady_state',
+  WARM_UP = 'warm_up',
+  COOL_DOWN = 'cool_down',
+  CUSTOM = 'custom',
+}
+
 // ─── Exercise Types ─────────────────────────────────────────────────────────
 
 export interface LocalizedStringArray {
@@ -65,14 +79,14 @@ export interface LocalizedStringArray {
 }
 
 export interface ExerciseInstruction {
-  level: 'BEGINNER' | 'ADVANCED';
+  level: ExperienceLevel;
   steps: LocalizedStringArray;
   form_cues: LocalizedStringArray;
 }
 
 export interface WorkoutPhase {
   phase: string;
-  type: 'interval' | 'recovery' | 'steady_state' | 'warm_up' | 'cool_down' | 'custom';
+  type: WorkoutPhaseType;
   duration_minutes?: number;
   distance_meters?: number;
   hr_zone?: number;

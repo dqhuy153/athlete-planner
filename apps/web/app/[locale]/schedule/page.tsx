@@ -125,10 +125,23 @@ export default function SchedulePage() {
 
   const handlePick = useCallback(async (picked: PickedExercise) => {
     setPickerOpen(false);
-    if (!activeSchedule) return;
+    // Guard against stale activeSchedule when switching dates quickly:
+    // prefer activeSchedule if it matches selectedDate, else fall back to
+    // the schedules map (populated by selectDate) or re-fetch.
+    let schedule =
+      activeSchedule?.dateString === selectedDate
+        ? activeSchedule
+        : (schedules.get(selectedDate) ?? null);
+
+    if (!schedule) {
+      // selectDate was not yet resolved — wait for it now (uses cache or creates)
+      schedule = await selectDate(selectedDate);
+    }
+    if (!schedule) return;
+
     _pendingLabel.current = picked.label;
-    await addItem(activeSchedule.id, selectedDate, picked);
-  }, [activeSchedule, selectedDate, addItem]);
+    await addItem(schedule.id, selectedDate, picked);
+  }, [activeSchedule, schedules, selectedDate, selectDate, addItem]);
 
   useEffect(() => {
     if (!activeSchedule || !_pendingLabel.current) return;

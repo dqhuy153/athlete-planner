@@ -12,6 +12,7 @@ interface ExerciseCardProps {
   locale: string;
   isPrivate?: boolean;
   isInactive?: boolean;
+  privateBadgeLabel?: string;
 }
 
 export function ExerciseCard({
@@ -23,6 +24,7 @@ export function ExerciseCard({
   locale,
   isPrivate,
   isInactive,
+  privateBadgeLabel = 'Mine',
 }: ExerciseCardProps) {
   return (
     <Link
@@ -52,7 +54,7 @@ export function ExerciseCard({
         )}
         {isPrivate && (
           <div className="absolute right-2 top-2 rounded-md bg-warning/20 px-1.5 py-0.5 text-xs font-medium text-warning">
-            My
+            {privateBadgeLabel}
           </div>
         )}
       </div>

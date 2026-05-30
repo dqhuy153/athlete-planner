@@ -7,8 +7,6 @@ import type { DailySchedule, DayStatus } from '@athlete-planner/contracts';
 import { UserTier } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
 
-const DAY_ABBR = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-
 const STATUS_DOT: Record<DayStatus | 'none', string> = {
   COMPLETED: 'bg-success',
   SKIPPED:   'bg-error/70',
@@ -35,6 +33,7 @@ export function WeekCalendar({
   onChangeWeek,
 }: WeekCalendarProps) {
   const t = useTranslations('schedule');
+  const DAY_ABBR = [t('dayMo'), t('dayTu'), t('dayWe'), t('dayTh'), t('dayFr'), t('daySa'), t('daySu')];
   const baseMonday = addWeeks(startOfISOWeek(new Date()), weekOffset);
   const weekNum    = getISOWeek(baseMonday);
   const weekYear   = getISOWeekYear(baseMonday);
@@ -46,7 +45,7 @@ export function WeekCalendar({
         <button
           type="button"
           onClick={() => onChangeWeek(-1)}
-          aria-label="Previous week"
+          aria-label={t('prevWeek')}
           className="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-2 hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -60,7 +59,7 @@ export function WeekCalendar({
         <button
           type="button"
           onClick={() => onChangeWeek(1)}
-          aria-label="Next week"
+          aria-label={t('nextWeek')}
           className="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-2 hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
         >
           <ChevronRight className="h-4 w-4" aria-hidden />
@@ -84,7 +83,7 @@ export function WeekCalendar({
               type="button"
               role="tab"
               aria-selected={isActive}
-              aria-label={`${DAY_ABBR[i]} ${format(day, 'd MMM')}${isLocked ? ' (locked)' : ''}`}
+              aria-label={`${DAY_ABBR[i]} ${format(day, 'd MMM')}${isLocked ? ` ${t('lockedSuffix')}` : ''}`}
               disabled={isLocked}
               onClick={() => !isLocked && onSelectDate(dateStr)}
               className={cn(

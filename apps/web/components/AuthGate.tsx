@@ -3,6 +3,7 @@
 import { signIn } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Lock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useAuthView } from '@/lib/hooks/useAuthView';
 
 interface AuthGateProps {
@@ -16,6 +17,7 @@ interface AuthGateProps {
 export function AuthGate({ children, callbackUrl, message }: AuthGateProps) {
   const { authView, isLoading } = useAuthView();
   const pathname = usePathname();
+  const t = useTranslations('authGate');
 
   // Show children for authenticated users (or while loading)
   if (isLoading || authView !== 'guest') {
@@ -44,7 +46,7 @@ export function AuthGate({ children, callbackUrl, message }: AuthGateProps) {
             </div>
           </div>
           <p className="mb-6 text-sm text-text-secondary leading-relaxed">
-            {message ?? 'Sign in to access your training data'}
+            {message ?? t('defaultMessage')}
           </p>
           <button
             type="button"
@@ -58,7 +60,7 @@ export function AuthGate({ children, callbackUrl, message }: AuthGateProps) {
               <path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.039l3.007-2.332z"/>
               <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/>
             </svg>
-            Sign in with Google
+            {t('signInButton')}
           </button>
         </div>
       </div>

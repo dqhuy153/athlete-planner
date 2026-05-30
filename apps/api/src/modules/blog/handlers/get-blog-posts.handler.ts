@@ -1,5 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
+import { BlogStatus } from '@athlete-planner/contracts';
 import { GetBlogPostsQuery } from '../queries/get-blog-posts.query';
 
 @QueryHandler(GetBlogPostsQuery)
@@ -14,7 +15,7 @@ export class GetBlogPostsHandler implements IQueryHandler<GetBlogPostsQuery> {
 
     const where: any = {};
     if (filters.status) where.status = filters.status;
-    else where.status = 'published';
+    else where.status = BlogStatus.PUBLISHED;
     if (filters.category) where.categoryKey = filters.category;
 
     const [posts, total] = await this.prisma.$transaction([

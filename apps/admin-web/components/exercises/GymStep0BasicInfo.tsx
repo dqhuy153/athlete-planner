@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useWatch, useFormContext, Controller } from 'react-hook-form';
 import { Sparkles } from 'lucide-react';
-import { FormLabel } from '@athlete-planner/ui';
+import { FormLabel, Select } from '@athlete-planner/ui';
 import { FormFieldError } from './FormFieldError';
 import { TagInput } from './TagInput';
 import { GARMIN_EXERCISE_ENUMS } from './garmin-exercises';
@@ -65,15 +65,14 @@ export function Step0BasicInfo({ generating, onGenerate }: Step0BasicInfoProps) 
       {/* Target muscle group */}
       <div>
         <FormLabel htmlFor="targetMuscleGroup" required>Target muscle group</FormLabel>
-        <select
+        <Select
           id="targetMuscleGroup"
           {...register('targetMuscleGroup')}
-          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
         >
           {MUSCLE_GROUPS.map((mg) => (
             <option key={mg} value={mg}>{mg}</option>
           ))}
-        </select>
+        </Select>
         <FormFieldError name="targetMuscleGroup" />
       </div>
 

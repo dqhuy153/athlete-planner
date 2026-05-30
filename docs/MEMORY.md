@@ -273,10 +273,154 @@ modules/
 
 ---
 
-## Known Trade-offs
+### 2026-05-30 (session 2): Bug Fixes + UI/i18n Polish + Admin Delete
+
+**Bug fixes:**
+- `apps/web/app/[locale]/layout.tsx`: Replaced `<script>` with `<Script strategy="beforeInteractive">` from `next/script` (Next.js warning fix)
+- `apps/web/app/[locale]/library/[id]/page.tsx`: Added `?.length` null-safe checks for `exercise.instructions` and `exercise.workoutStructure`
+- `packages/ui/package.json`: Removed `"next": "^15.3.0"` from devDependencies — was conflicting with `next@16.2.6` in app, causing Turbopack panic on `/profile`
+- `apps/web/lib/api.ts`: Fixed `updateGymPayload`/`updateRunningPayload` to wrap body as `{ payload }` (DTO expects `{ payload: any }` not raw fields at root)
+
+**i18n additions (vi.json + en.json):**
+- `library`: `myBadge`, `noGuide`, `exerciseGuide`, `intervalType/easyType/tempoType/longRunType`, `customizeSaveConfirmTitle/Desc/Btn`, `customizeSaveFull`, `customizeSaving`
+- `library`: Shortened `addToToday` → "Hôm nay"/"Today", `addToSchedule` → "Lịch"/"Schedule", `addedToday/addedToSchedule`
+- `schedule`: Added `noGuide`, `exerciseGuide` keys
+- `en.json`: Added missing `"sets": "Sets"` key
+
+**i18n component updates:**
+- `MuscleGroupFilter.tsx`: All labels use `useTranslations('library')`
+- `RunningTypeFilter.tsx`: Running type labels use `getRunningTypeLabel()` via t() calls
+- `ExerciseCard.tsx`: `privateBadgeLabel` prop added (default `'Mine'`)
+- `library/page.tsx`: Badge uses translated muscle group from `muscleGroupLabels` map
+- `library/[id]/page.tsx`: Tags styled with primary (accent-muted bg, uppercase) / secondary (surface-3 border) / running (success/20 bg)
+- `ScheduleItemCard.tsx`: Replaced hardcoded "Không có hướng dẫn." and "Guide" with `t('noGuide')` / `t('exerciseGuide')` from schedule namespace
+
+**CustomizeSaveButton.tsx (apps/web/app/[locale]/library/[id]/):**
+- Added inline confirmation modal before saving copy (no ConfirmModal dependency)
+- Shows exercise name, limit hint, Cancel + Confirm buttons
+- Uses `customizeSaveConfirmTitle/Desc/Btn` i18n keys
+
+**ExerciseActionBar.tsx (apps/web/components/):**
+- Full rewrite: sticky `bottom-[88px] md:bottom-0 z-30` (sits above BottomNav on mobile)
+- Glass effect: `bg-surface-1/85 backdrop-blur-xl shadow-[0_-12px_40px_rgba(0,0,0,0.45)]`
+- Buttons: Start Workout (primary CTA, full-width flex-1), Add to Today, Add to Schedule (date picker toggle)
+- Date picker panel expands inline below bar
+
+**Admin delete exercise (full stack):**
+- API — `GetExerciseUsageQuery` + `GetExerciseUsageHandler`: returns `{ total, past, current, future }` by counting ScheduleItem refs split by date
+- API — `DeleteExerciseCommand` + `DeleteExerciseHandler`: blocks if `total > 0 && !force`; throws `ConflictException` for normal admin
+- API — New endpoints on `ExercisesController`:
+  - `GET /exercises/:id/usage?type=gym|running` (AdminGuard)
+  - `DELETE /exercises/:id?type=gym|running&force=true` (AdminGuard; `force=true` requires `role=root` checked in controller)
+- API — Both new handlers registered in `exercises.module.ts`
+- Admin-web `lib/api.ts`: Added `getExerciseUsage()`, `deleteExercise()`, `ExerciseUsage` type
+- Admin-web `exercises/page.tsx`: Delete (trash) button per row; modal shows usage breakdown (past/current/future); regular admin sees "deactivate instead" hint; root sees "Force Delete (N)" button
 
 1. Google OAuth only = users without Google accounts cannot use the app
 2. PayOS only = limited to Vietnamese market initially
 3. Rolling 30-day = FREE users lose workout detail data (intentional monetization)
 4. No real-time sync = offline edits may conflict (future consideration)
 5. FIT export = requires Garmin device ecosystem (core persona)
+
+---
+
+### 2026-05-30 (session 3): i18n Comprehensive Audit + GymPayloadEditor Spinner
+
+**GymPayloadEditor.tsx:**
+- Added `Loader2` import from lucide-react
+- Save button now shows spinning `<Loader2>` icon when `saving=true`
+
+**i18n — new keys added (vi.json + en.json):**
+- `common`: `lightMode`, `darkMode`, `switchToLight`, `switchToDark`, `userAlt`
+- `authGate`: `defaultMessage`
+- `schedule`: `source`, `kgTotal`, `minUnit`, `collapse`, `expand`, `removeItem`, `removeSet`, `dragToReorder`, `prevWeek`, `nextWeek`, `lockedSuffix`, `viewGuide`, `resetTimer`, `pauseTimer`, `workoutItems`, `dayStatus`, `dayMo`–`daySu` (day abbreviations)
+- `library`: `noSteps`, `step`, `addFailed`, `saveFailed`, `copySaved`
+- `profile`: `instructionLevelSaved`
+
+**Components updated for i18n:**
+- `AuthGate.tsx`: Default message + "Sign in with Google" button text use `authGate.*` keys
+- `CopyDayModal.tsx` / `CopyWeekModal.tsx`: "Source" → `t('source')`; "Cancel" → `tCommon('cancel')`
+- `InstructionsPanel.tsx`: "Form Cues" heading → `t('form_cues')` (already existed)
+- `SideNav.tsx`: "Upgrade to PRO" → `t('profile.upgrade')`; theme title/text → `common.switchTo*` / `common.*Mode`; user image alt → `common.userAlt`; sign-out title → `auth.signOut`
+- `WorkoutTimerSheet.tsx`: "No steps..." → `t('noSteps')`; "Step" label → `t('step')`; "Sign in with Google" → `tAuth('signInButton')` (second `useTranslations('authGate')` instance)
+- `ScheduleItemCard.tsx`: "kg total" → `t('kgTotal')`; " min" → `t('minUnit')`; drag/expand/collapse/remove/viewGuide aria-labels all i18n'd
+- `WeekCalendar.tsx`: `DAY_ABBR` moved inside component body using `dayMo`–`daySu` keys; prevWeek/nextWeek/lockedSuffix aria-labels i18n'd
+- `GymPayloadEditor.tsx`: "Remove set N" aria-label → `t('removeSet', { n })`
+- `RestTimer.tsx`: "Reset timer" aria-label → `t('resetTimer')`; "Pause timer" aria-label → `t('pauseTimer')`
+- `ExerciseActionBar.tsx`: Both "Failed to add" fallbacks → `t('addFailed')`
+- `profile/page.tsx`: `{t('instructionLevel')} saved` → `{t('instructionLevelSaved')}`
+- `CustomizeSaveButton.tsx`: "Saved" state text → `t('copySaved')`; "Failed to save" → `t('saveFailed')`
+
+**Remaining hardcoded strings (not addressed — lower priority or intentional):**
+- `landing/page.tsx`: "dev only" label, "Vietnam only", "Coming soon for international users"
+- `upgrade/page.tsx`: "Vietnam only", "International payments are coming soon...", "International gateway coming soon", error messages
+- `privacy/page.tsx` / `terms/page.tsx`: Inline ternary locale checks — technically correct but not using `t()`
+- aria-labels on `DailyScheduleView`, `DayStatusBar`, `ExercisePicker`, `VideoPlayer`, `UpgradePrompt` — accessibility-only
+- PRO/FREE badge text in SideNav — intentionally kept as-is (tier labels)
+
+**Admin delete condition — STILL NEEDS CLARIFICATION:**
+- Current impl: regular admin blocked if `total > 0`; root can force-delete
+- User asked to re-clarify this condition — awaiting response
+
+---
+
+### 2026-05-30 (session 4): Enum Audit + JWT Refresh + ActionBar Light Mode + Mobile Theme Toggle
+
+**Enum audit — all string literals replaced with typed enums across entire codebase:**
+
+*`packages/contracts/src/index.ts` (source of truth):*
+- `ExperienceLevel { BEGINNER, ADVANCED }` — added this session
+- `WorkoutPhaseType { INTERVAL, RECOVERY, STEADY_STATE, WARM_UP, COOL_DOWN, CUSTOM }` — added this session
+- `SportType { GYM, RUNNING }`, `ExerciseSourceType { GYM_MASTER, RUNNING_MASTER, PRIVATE }`, `DayStatus { PENDING, COMPLETED, SKIPPED, REST }`, `BlogStatus { DRAFT, PUBLISHED, ARCHIVED }`, `UserRole { USER, ADMIN, ROOT }`, `UserTier { FREE, PRO }` — pre-existing
+
+*Web app (`apps/web`):*
+- `lib/auth.ts`: `'FREE'` → `UserTier.FREE`; JWT callback `trigger === 'update'` handler added for mid-session preferredLevel refresh; `ExperienceLevel` import added
+- `lib/next-auth.d.ts`: `preferredLevel: ExperienceLevel | null`
+- `lib/api.ts`: `updatePreferredLevel` param → `ExperienceLevel | null`; `createPrivateExercise.sportType` → `SportType`; `addScheduleItem.exerciseType` → `ExerciseSourceType`, `.sportType` → `SportType`; imports added
+- `lib/hooks/useSchedule.ts`: casts replaced with `ExerciseSourceType` / `SportType` imports
+- `app/[locale]/profile/page.tsx`: local `type PreferredLevel` removed; uses `ExperienceLevel` from contracts; `update({ preferredLevel })` called after save for JWT refresh
+- `app/[locale]/library/[id]/page.tsx`: `sportType` prop → `SportType.GYM/RUNNING`
+- `app/[locale]/library/[id]/CustomizeSaveButton.tsx`: `sportType` prop → `SportType`
+- `components/InstructionsPanel.tsx`: `type Level` removed; uses `ExperienceLevel`; `Object.values(ExperienceLevel)` for tab rendering
+- `components/WorkoutTimerSheet.tsx`: string comparisons → `ExperienceLevel.ADVANCED/BEGINNER`
+- `components/ExerciseActionBar.tsx`: `ExerciseSourceType` / `SportType` imports added; all string literals replaced
+
+*API (`apps/api`):*
+- `modules/schedules/queries/get-discipline-rate.handler.ts`: `'REST'`/`'COMPLETED'` → `DayStatus.REST/COMPLETED` from `@athlete-planner/database`
+- `modules/exercises/exercises.controller.ts`: `'root'` → `UserRole.ROOT` from contracts
+- `modules/blog/handlers/get-blog-posts.handler.ts`: `'published'` → `BlogStatus.PUBLISHED`
+- `modules/blog/handlers/create-blog-post.handler.ts`: `'draft'`/`'published'` → `BlogStatus.DRAFT/PUBLISHED`
+- `modules/blog/handlers/update-blog-post.handler.ts`: `'published'` → `BlogStatus.PUBLISHED`
+- `modules/blog/handlers/get-related-posts.handler.ts`: `'published'` → `BlogStatus.PUBLISHED`
+- `modules/admin/admin.controller.ts`: `['user', 'admin']` → `[UserRole.USER, UserRole.ADMIN]`; `'root'` → `UserRole.ROOT`
+- `modules/auth/commands/admin-login.handler.ts`: `role: 'root'` → `UserRole.ROOT`
+- `modules/admin/root-admin.bootstrap.ts`: `role: 'root'` → `UserRole.ROOT`
+- `modules/users/users.controller.ts`: `preferredLevel?: string` in DTO body (runtime is fine; TypeScript strict typing not enforced on plain `@Body()` properties)
+
+*Admin-web (`apps/admin-web`):*
+- `lib/api.ts`: `'GYM' | 'RUNNING'` → `SportType`; `'BEGINNER' | 'ADVANCED'` → `ExperienceLevel`; imports added
+- `components/exercises/schemas.ts`: `z.enum(['BEGINNER', 'ADVANCED'])` → `z.nativeEnum(ExperienceLevel)`; default values use enum
+- `components/exercises/InstructionsEditor.tsx`: `type Level` removed; `ExperienceLevel` imported; `Object.values(ExperienceLevel)` for tabs; comparison → `ExperienceLevel.BEGINNER/ADVANCED`
+- `components/exercises/GymExerciseWizard.tsx`: `activeLevel` state type → `ExperienceLevel`; default values use enum; `'GYM'` → `SportType.GYM`
+- `components/exercises/RunningExerciseWizard.tsx`: `'RUNNING'` → `SportType.RUNNING`
+- `app/(admin)/exercises/[id]/edit/page.tsx`: `Record<'BEGINNER'|'ADVANCED', ...>` → `Record<ExperienceLevel, ...>`; all string comparisons → enum
+- `app/(admin)/exercises/page.tsx`: `session?.role === 'root'` → `UserRole.ROOT`
+- `app/(admin)/users/page.tsx`: `'admin' | 'root'` comparisons → `UserRole.ADMIN | UserRole.ROOT`
+
+**TypeScript verification: all three apps (`web`, `api`, `admin-web`) pass `tsc --noEmit` with zero errors.**
+
+**Profile instruction level JWT refresh:**
+- `apps/web/lib/auth.ts`: added `trigger === 'update'` branch in jwt callback; patches `token.preferredLevel` from `sessionUpdate.preferredLevel`
+- `apps/web/app/[locale]/profile/page.tsx`: `useSession()` now destructures `update`; calls `await update({ preferredLevel: level })` after successful API save
+
+**ExerciseActionBar light mode fix:**
+- `apps/web/components/ExerciseActionBar.tsx`: replaced `border-t border-white/10` with `border-t border-border` (theme-aware); replaced hardcoded dark shadow with `shadow-[0_-8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_-20px_56px_rgba(0,0,0,0.7),0_-1px_0_rgba(255,255,255,0.07),inset_0_1px_0_rgba(255,255,255,0.04)]`
+
+**Mobile theme toggle (Profile page):**
+- `apps/web/app/[locale]/profile/page.tsx`:
+  - Refactored settings section into single unified card with `divide-y divide-border`
+  - Moved locale switch + sign-out buttons inside the card (were orphaned outside card before)
+  - Removed duplicate `instructionLevelHint` paragraph that was incorrectly placed outside instruction section
+  - Added theme toggle row (`md:hidden`) between instruction level and language rows
+  - Uses `useTheme` from `next-themes`; shows `Sun`/`Moon` icons; `setTheme` toggles dark/light
+  - Displays `t('common.lightMode')` / `t('common.darkMode')` labels (existing i18n keys)

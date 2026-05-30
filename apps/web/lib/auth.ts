@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { UserTier, ExperienceLevel } from '@athlete-planner/contracts';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const isDev = process.env.NODE_ENV === 'development';
@@ -38,7 +39,7 @@ if (isDev) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               email: credentials.email,
-              tier: credentials.tier ?? 'FREE',
+              tier: credentials.tier ?? UserTier.FREE,
             }),
           });
           if (!res.ok) return null;
@@ -88,7 +89,12 @@ const authConfig = NextAuth({
       // CredentialsProvider: authorize() already populated user.accessToken
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session: sessionUpdate }: any) {
+      // Handle session update (e.g., preferredLevel change from profile page)
+      if (trigger === 'update' && sessionUpdate?.preferredLevel !== undefined) {
+        token.preferredLevel = sessionUpdate.preferredLevel;
+        return token;
+      }
       // On initial sign-in from either Google or dev credentials
       if (user && (account?.provider === 'google' || account?.provider === 'dev-credentials')) {
         token.accessToken = (user as any).accessToken;
@@ -113,7 +119,7 @@ const authConfig = NextAuth({
           id: token.userId as string,
           role: token.role as string,
           tier: token.tier as string,
-          preferredLevel: (token.preferredLevel as 'BEGINNER' | 'ADVANCED' | null) ?? null,
+          preferredLevel: (token.preferredLevel as ExperienceLevel | null) ?? null,
         },
         accessToken: token.accessToken as string,
       };

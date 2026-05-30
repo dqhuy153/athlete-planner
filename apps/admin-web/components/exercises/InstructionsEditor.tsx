@@ -3,12 +3,11 @@
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
 import { FormLabel, FormError } from '@athlete-planner/ui';
-
-type Level = 'BEGINNER' | 'ADVANCED';
+import { ExperienceLevel } from '@athlete-planner/contracts';
 
 interface InstructionsEditorProps {
-  activeLevel: Level;
-  onLevelChange: (level: Level) => void;
+  activeLevel: ExperienceLevel;
+  onLevelChange: (level: ExperienceLevel) => void;
 }
 
 interface LevelFieldsPanelProps {
@@ -165,7 +164,7 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
     <div className="space-y-6">
       {/* Level tabs */}
       <div className="flex gap-2">
-        {(['BEGINNER', 'ADVANCED'] as Level[]).map((level) => (
+        {(Object.values(ExperienceLevel) as ExperienceLevel[]).map((level) => (
           <button
             key={level}
             type="button"
@@ -177,18 +176,18 @@ export function InstructionsEditor({ activeLevel, onLevelChange }: InstructionsE
                 : 'border-border text-on-surface-variant hover:bg-surface-container-high',
             ].join(' ')}
           >
-            {level === 'BEGINNER' ? 'Cơ bản' : 'Nâng cao'}
+            {level === ExperienceLevel.BEGINNER ? 'Cơ bản' : 'Nâng cao'}
           </button>
         ))}
       </div>
 
       {/* BEGINNER panel — always mounted, hidden when inactive */}
-      <div className={activeLevel !== 'BEGINNER' ? 'hidden' : ''}>
+      <div className={activeLevel !== ExperienceLevel.BEGINNER ? 'hidden' : ''}>
         <LevelFieldsPanel levelIndex={0} />
       </div>
 
       {/* ADVANCED panel — always mounted, hidden when inactive */}
-      <div className={activeLevel !== 'ADVANCED' ? 'hidden' : ''}>
+      <div className={activeLevel !== ExperienceLevel.ADVANCED ? 'hidden' : ''}>
         <LevelFieldsPanel levelIndex={1} />
       </div>
     </div>

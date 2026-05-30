@@ -94,7 +94,7 @@ export function RestTimer({ defaultSeconds = 90, onDone }: RestTimerProps) {
         <button
           type="button"
           onClick={reset}
-          aria-label="Reset timer"
+          aria-label={t('resetTimer')}
           className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-2 text-text-secondary hover:bg-surface-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
         >
           <TimerReset className="h-5 w-5" aria-hidden />
@@ -103,7 +103,7 @@ export function RestTimer({ defaultSeconds = 90, onDone }: RestTimerProps) {
         <button
           type="button"
           onClick={toggle}
-          aria-label={running ? 'Pause timer' : t('startRest')}
+          aria-label={running ? t('pauseTimer') : t('startRest')}
           className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-opacity"
         >
           {running

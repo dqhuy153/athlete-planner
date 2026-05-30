@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { ExperienceLevel } from '@athlete-planner/contracts';
 
 // ── Gym Exercise Schema ────────────────────────────────────────────────────────
 
 const InstructionLevelSchema = z.object({
-  level: z.enum(['BEGINNER', 'ADVANCED']),
+  level: z.nativeEnum(ExperienceLevel),
   steps_en: z.array(z.object({ value: z.string() })).default([{ value: '' }]),
   steps_vi: z.array(z.object({ value: z.string() })).default([{ value: '' }]),
   form_cues_en: z.array(z.object({ value: z.string() })).default([{ value: '' }]),
@@ -18,14 +19,14 @@ export const GymExerciseSchema = z.object({
   garminExerciseEnum: z.string().optional(),
   instructions: z.array(InstructionLevelSchema).default([
     {
-      level: 'BEGINNER',
+      level: ExperienceLevel.BEGINNER,
       steps_en: [{ value: '' }],
       steps_vi: [{ value: '' }],
       form_cues_en: [{ value: '' }],
       form_cues_vi: [{ value: '' }],
     },
     {
-      level: 'ADVANCED',
+      level: ExperienceLevel.ADVANCED,
       steps_en: [{ value: '' }],
       steps_vi: [{ value: '' }],
       form_cues_en: [{ value: '' }],

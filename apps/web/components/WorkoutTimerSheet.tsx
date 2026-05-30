@@ -6,6 +6,7 @@ import { X, ChevronLeft, ChevronRight, Dumbbell, Timer } from 'lucide-react';
 import { useSession, signIn } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
+import { ExperienceLevel } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
 
 type Exercise = GymExerciseMaster | RunningExerciseMaster | PrivateExercise;
@@ -25,10 +26,13 @@ interface WorkoutTimerSheetProps {
 
 export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerSheetProps) {
   const t = useTranslations('library');
+  const tAuth = useTranslations('authGate');
   const { data: session } = useSession();
   const pathname = usePathname();
   const [stepIndex, setStepIndex] = useState(0);
-  const activeLevel = (session?.user as any)?.preferredLevel === 'ADVANCED' ? 'ADVANCED' : 'BEGINNER';
+  const activeLevel = (session?.user as any)?.preferredLevel === ExperienceLevel.ADVANCED
+    ? ExperienceLevel.ADVANCED
+    : ExperienceLevel.BEGINNER;
 
   const gymSteps: string[] = isGymExercise(exercise)
     ? (() => {
@@ -62,7 +66,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
               <h2 className="text-base font-bold text-text-primary">{displayName}</h2>
               <p className="text-xs text-text-tertiary mt-0.5">
                 {t('workoutTitle')}
-                {isGym && ` · ${activeLevel === 'BEGINNER' ? t('beginner') : t('advanced')}`}
+                {isGym && ` · ${activeLevel === ExperienceLevel.BEGINNER ? t('beginner') : t('advanced')}`}
               </p>
             </div>
             <button type="button" onClick={onClose}
@@ -74,7 +78,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
 
           {total === 0 ? (
             <div className="py-8 text-center text-sm text-text-tertiary">
-              No steps available for this exercise.
+              {t('noSteps')}
             </div>
           ) : (
             <>
@@ -97,7 +101,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
                   <>
                     <div className="flex items-center gap-2 mb-2">
                       <Dumbbell size={14} className="text-accent" />
-                      <span className="text-xs font-semibold text-accent uppercase tracking-wide">Step</span>
+                      <span className="text-xs font-semibold text-accent uppercase tracking-wide">{t('step')}</span>
                     </div>
                     <p className="text-sm text-text-primary leading-relaxed">{gymSteps[stepIndex] ?? ''}</p>
                   </>
@@ -153,7 +157,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
               <button type="button"
                 onClick={() => signIn('google', { callbackUrl: pathname })}
                 className="text-xs font-semibold text-accent hover:underline">
-                Sign in with Google
+                {tAuth('signInButton')}
               </button>
             </div>
           )}

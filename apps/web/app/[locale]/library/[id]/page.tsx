@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import { MuscleGroup, RunningType, SportType } from '@athlete-planner/contracts';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { InstructionsPanel } from '@/components/InstructionsPanel';
 import { ExerciseActionBar } from '@/components/ExerciseActionBar';
@@ -42,6 +43,28 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
 
   if (!exercise) notFound();
 
+  function translateMuscleGroup(mg: string): string {
+    const map: Record<string, string> = {
+      [MuscleGroup.CHEST]: t('chest'),
+      [MuscleGroup.BACK]: t('back'),
+      [MuscleGroup.SHOULDERS]: t('shoulders'),
+      [MuscleGroup.ARMS]: t('arms'),
+      [MuscleGroup.LEGS]: t('legs'),
+      [MuscleGroup.ABS]: t('abs'),
+    };
+    return map[mg] ?? mg;
+  }
+
+  function translateRunningType(rt: string): string {
+    const map: Record<string, string> = {
+      [RunningType.INTERVAL]: t('intervalType'),
+      [RunningType.EASY]: t('easyType'),
+      [RunningType.TEMPO]: t('tempoType'),
+      [RunningType.LONG_RUN]: t('longRunType'),
+    };
+    return map[rt] ?? rt;
+  }
+
   return (
     <div>
       <div className="mx-auto max-w-2xl pb-24">
@@ -79,7 +102,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
           <CustomizeSaveButton
             exerciseId={exercise.id}
             exerciseName={(exercise as any).vietnameseName || exercise.name || 'Exercise'}
-            sportType={isGym(exercise) ? 'GYM' : 'RUNNING'}
+            sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
             targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
             runningType={isRunning(exercise) ? exercise.runningType : undefined}
           />
@@ -89,12 +112,12 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
       {/* Gym metadata */}
       {isGym(exercise) && (
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="rounded-sm bg-accent-muted px-2 py-1 text-micro font-medium text-accent">
-            {exercise.targetMuscleGroup}
+          <span className="rounded-md bg-accent-muted px-2.5 py-1 text-micro font-semibold text-accent tracking-wide uppercase">
+            {translateMuscleGroup(exercise.targetMuscleGroup)}
           </span>
-          {exercise.secondaryMuscleGroups.map((m: string) => (
-            <span key={m} className="rounded-sm bg-surface-2 px-2 py-1 text-micro text-text-secondary border border-border">
-              {m}
+          {(exercise.secondaryMuscleGroups ?? []).map((m: string) => (
+            <span key={m} className="rounded-md bg-surface-3 px-2.5 py-1 text-micro text-text-secondary border border-border/60">
+              {translateMuscleGroup(m)}
             </span>
           ))}
         </div>
@@ -103,8 +126,8 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
       {/* Running metadata */}
       {isRunning(exercise) && (
         <div className="mt-4">
-          <span className="rounded-sm bg-accent-muted px-2 py-1 text-micro font-medium text-accent">
-            {exercise.runningType}
+          <span className="rounded-md bg-success/20 px-2.5 py-1 text-micro font-semibold text-success tracking-wide uppercase">
+            {translateRunningType(exercise.runningType)}
           </span>
         </div>
       )}
@@ -130,7 +153,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
       )}
 
       {/* Gym instructions */}
-      {isGym(exercise) && exercise.instructions.length > 0 && (
+      {isGym(exercise) && (exercise.instructions?.length ?? 0) > 0 && (
         <section className="mt-6" aria-labelledby="instructions-heading">
           <h2 id="instructions-heading" className="mb-3 text-caption font-semibold uppercase tracking-wider text-text-tertiary">
             {t('instructions')}
@@ -142,7 +165,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
       )}
 
       {/* Running workout structure */}
-      {isRunning(exercise) && exercise.workoutStructure.length > 0 && (
+      {isRunning(exercise) && (exercise.workoutStructure?.length ?? 0) > 0 && (
         <section className="mt-6" aria-labelledby="structure-heading">
           <h2 id="structure-heading" className="mb-3 text-caption font-semibold uppercase tracking-wider text-text-tertiary">
             {t('workoutStructure')}

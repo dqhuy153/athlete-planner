@@ -4,25 +4,30 @@ import {
   Post,
   Put,
   Patch,
+  Delete,
   Body,
   Param,
   Query,
   UseGuards,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../admin/admin.guard';
 import { AuthenticatedRequest } from '../../common/interfaces/authenticated-request.interface';
+import { UserRole } from '@athlete-planner/contracts';
 import { CreateGymMasterCommand } from './commands/create-gym-master.command';
 import { CreateRunningMasterCommand } from './commands/create-running-master.command';
 import { CreatePrivateExerciseCommand } from './commands/create-private-exercise.command';
 import { UpdateExerciseCommand } from './commands/update-exercise.command';
 import { ToggleExerciseActiveCommand } from './commands/toggle-exercise-active.command';
+import { DeleteExerciseCommand } from './commands/delete-exercise.command';
 import { GetExerciseLibraryQuery } from './queries/get-exercise-library.query';
 import { GetPrivateExercisesQuery } from './queries/get-private-exercises.query';
 import { GetExerciseDetailQuery } from './queries/get-exercise-detail.query';
+import { GetExerciseUsageQuery } from './queries/get-exercise-usage.query';
 import { CreateGymExerciseDto } from './dto/create-gym-exercise.dto';
 import { CreateRunningExerciseDto } from './dto/create-running-exercise.dto';
 import { CreatePrivateExerciseDto } from './dto/create-private-exercise.dto';
@@ -122,6 +127,37 @@ export class ExercisesController {
   @Patch(':id/toggle')
   async toggleExercise(@Param('id') id: string, @Query('type') type: 'gym' | 'running' = 'gym') {
     return this.commandBus.execute(new ToggleExerciseActiveCommand(id, type));
+  }
+
+  /** Returns how many schedule items reference this exercise (past / current / future) */
+  @UseGuards(AdminGuard)
+  @Get(':id/usage')
+  async getExerciseUsage(
+    @Param('id') id: string,
+    @Query('type') type: 'gym' | 'running' = 'gym',
+  ) {
+    return this.queryBus.execute(new GetExerciseUsageQuery(id, type));
+  }
+
+  /**
+   * Delete a master exercise.
+   * - Normal admin: blocked if the exercise is referenced in any schedule item.
+   * - Root admin: can pass force=true to delete regardless (FK SetNull takes effect).
+   */
+  @UseGuards(AdminGuard)
+  @Delete(':id')
+  async deleteExercise(
+    @Param('id') id: string,
+    @Query('type') type: 'gym' | 'running' = 'gym',
+    @Query('force') force: string,
+    @Req() req: Request,
+  ) {
+    const user = (req as any).user as { role?: string } | undefined;
+    const isForce = force === 'true';
+    if (isForce && user?.role !== UserRole.ROOT) {
+      throw new ForbiddenException('Force delete requires root role');
+    }
+    return this.commandBus.execute(new DeleteExerciseCommand(id, type, isForce));
   }
 
   @UseGuards(JwtAuthGuard)

@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { signIn, useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, X } from 'lucide-react';
 import { cn } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
+import { SportType } from '@athlete-planner/contracts';
 
 interface CustomizeSaveButtonProps {
   exerciseId: string;
   exerciseName: string;
-  sportType: 'GYM' | 'RUNNING';
+  sportType: SportType;
   targetMuscleGroup?: string;
   runningType?: string;
 }
@@ -29,6 +30,7 @@ export function CustomizeSaveButton({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFull, setIsFull] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const token = (session as any)?.accessToken as string | undefined;
 
@@ -38,6 +40,12 @@ export function CustomizeSaveButton({
       return;
     }
     if (isFull) return;
+    setShowConfirm(true);
+  }
+
+  async function handleConfirm() {
+    if (!token) return;
+    setShowConfirm(false);
     setSaving(true);
     setError(null);
     try {
@@ -54,7 +62,7 @@ export function CustomizeSaveButton({
       if (msg.toLowerCase().includes('limit') || msg.includes('10')) {
         setIsFull(true);
       } else {
-        setError(msg || 'Failed to save');
+        setError(msg || t('saveFailed'));
       }
     } finally {
       setSaving(false);
@@ -65,7 +73,7 @@ export function CustomizeSaveButton({
     return (
       <div className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-accent/30 bg-accent/10 px-5 text-sm font-medium text-accent">
         <Check size={15} aria-hidden />
-        {t('customizeSave')} — saved
+        {t('copySaved')}
       </div>
     );
   }
@@ -87,7 +95,56 @@ export function CustomizeSaveButton({
         <Copy size={15} aria-hidden />
         {saving ? t('customizeSaving') : isFull ? t('customizeSaveFull') : t('customizeSave')}
       </button>
+
       {error && <p className="text-center text-xs text-error">{error}</p>}
+
+      {/* Confirmation modal */}
+      {showConfirm && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-background/70 backdrop-blur-sm"
+          onClick={() => setShowConfirm(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl border border-border bg-surface-1 p-5 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-semibold text-text-primary">{t('customizeSaveConfirmTitle')}</h3>
+                <p className="mt-1 text-xs text-text-secondary leading-relaxed">
+                  {t('customizeSaveConfirmDesc', { count: 10 })}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowConfirm(false)}
+                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-text-tertiary hover:text-text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <X size={14} aria-hidden />
+              </button>
+            </div>
+            <p className="mb-4 truncate rounded-lg bg-surface-2 px-3 py-2 text-xs font-medium text-text-primary">
+              {exerciseName}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 min-h-[44px] rounded-xl border border-border text-sm font-medium text-text-secondary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {t('closeWorkout')}
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirm}
+                className="flex-1 min-h-[44px] rounded-xl bg-accent text-sm font-semibold text-accent-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {t('customizeSaveConfirmBtn')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

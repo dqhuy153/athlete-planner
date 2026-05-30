@@ -15,6 +15,7 @@ import { GymExerciseWizard, gymFormToPayload } from '@/components/exercises/GymE
 import { RunningExerciseWizard, runningFormToPayload } from '@/components/exercises/RunningExerciseWizard';
 import type { GymExerciseFormValues, RunningExerciseFormValues } from '@/components/exercises/schemas';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import { ExperienceLevel } from '@athlete-planner/contracts';
 
 type ExerciseType = 'gym' | 'running';
 
@@ -33,13 +34,13 @@ function mapGymInstructions(
     form_cues_vi: [{ value: '' }],
   };
 
-  const mapped: Record<'BEGINNER' | 'ADVANCED', typeof blank & { level: 'BEGINNER' | 'ADVANCED' }> = {
-    BEGINNER: { level: 'BEGINNER', ...blank },
-    ADVANCED: { level: 'ADVANCED', ...blank },
+  const mapped: Record<ExperienceLevel, typeof blank & { level: ExperienceLevel }> = {
+    [ExperienceLevel.BEGINNER]: { level: ExperienceLevel.BEGINNER, ...blank },
+    [ExperienceLevel.ADVANCED]: { level: ExperienceLevel.ADVANCED, ...blank },
   };
 
   for (const inst of instructions) {
-    const level = inst.level === 'BEGINNER' ? 'BEGINNER' : 'ADVANCED';
+    const level = inst.level === ExperienceLevel.BEGINNER ? ExperienceLevel.BEGINNER : ExperienceLevel.ADVANCED;
     const stepsEn = (inst.steps as any)?.en ?? [];
     const stepsVi = (inst.steps as any)?.vi ?? [];
     const cuesEn = (inst.form_cues as any)?.en ?? [];
@@ -54,7 +55,7 @@ function mapGymInstructions(
     };
   }
 
-  return [mapped.BEGINNER, mapped.ADVANCED];
+  return [mapped[ExperienceLevel.BEGINNER], mapped[ExperienceLevel.ADVANCED]];
 }
 
 export default function EditExercisePage({ params }: PageProps) {
@@ -144,13 +145,11 @@ export default function EditExercisePage({ params }: PageProps) {
   async function handleGymSubmit(data: GymExerciseFormValues) {
     if (!session?.accessToken || !id) throw new Error('Not authenticated');
     await updateGymExercise(session.accessToken, id, gymFormToPayload(data));
-    router.push('/exercises');
   }
 
   async function handleRunningSubmit(data: RunningExerciseFormValues) {
     if (!session?.accessToken || !id) throw new Error('Not authenticated');
     await updateRunningExercise(session.accessToken, id, runningFormToPayload(data));
-    router.push('/exercises');
   }
 
   if (loading || (type === 'gym' && !gymInitial) || (type === 'running' && !runningInitial)) {
@@ -190,6 +189,7 @@ export default function EditExercisePage({ params }: PageProps) {
           initialValues={gymInitial}
           onSubmit={handleGymSubmit}
           submitLabel="Save changes"
+          onAfterSave={() => router.push('/exercises')}
         />
       )}
 
@@ -198,6 +198,7 @@ export default function EditExercisePage({ params }: PageProps) {
           initialValues={runningInitial}
           onSubmit={handleRunningSubmit}
           submitLabel="Save changes"
+          onAfterSave={() => router.push('/exercises')}
         />
       )}
     </div>

@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@athlete-planner/database';
+import { BlogStatus } from '@athlete-planner/contracts';
 import { UpdateBlogPostCommand } from '../commands/update-blog-post.command';
 
 @CommandHandler(UpdateBlogPostCommand)
@@ -24,7 +25,7 @@ export class UpdateBlogPostHandler implements ICommandHandler<UpdateBlogPostComm
         categoryKey: dto.category || dto.categoryKey,
         status: dto.status,
         readingTime: dto.readingTime,
-        publishedAt: dto.status === 'published' && !post.publishedAt ? new Date() : post.publishedAt,
+        publishedAt: dto.status === BlogStatus.PUBLISHED && !post.publishedAt ? new Date() : post.publishedAt,
       },
     });
   }

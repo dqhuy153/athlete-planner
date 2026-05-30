@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { SportType, MuscleGroup, RunningType } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
+import { Select } from '@athlete-planner/ui';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -127,21 +128,17 @@ export default function NewPrivateExercisePage({ params }: PageProps) {
             <label htmlFor="muscle-group" className="mb-1.5 block text-caption font-medium text-text-secondary">
               {t('muscleGroupLabel')}
             </label>
-            <select
+            <Select
               id="muscle-group"
               value={muscleGroup}
               onChange={(e) => setMuscleGroup(e.target.value as MuscleGroup)}
-              className={[
-                'w-full rounded-md border border-border bg-surface-2 px-3 py-2.5 text-caption text-text-primary',
-                'focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent',
-                'min-h-[48px]',
-              ].join(' ')}
+              className="bg-surface-2 text-text-primary border-border focus:ring-accent min-h-[48px]"
             >
               <option value="">{t('selectMuscleGroup')}</option>
               {Object.values(MuscleGroup).map((mg) => (
                 <option key={mg} value={mg}>{mg}</option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 
@@ -151,21 +148,17 @@ export default function NewPrivateExercisePage({ params }: PageProps) {
             <label htmlFor="running-type" className="mb-1.5 block text-caption font-medium text-text-secondary">
               {t('runningTypeLabel')}
             </label>
-            <select
+            <Select
               id="running-type"
               value={runningType}
               onChange={(e) => setRunningType(e.target.value as RunningType)}
-              className={[
-                'w-full rounded-md border border-border bg-surface-2 px-3 py-2.5 text-caption text-text-primary',
-                'focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent',
-                'min-h-[48px]',
-              ].join(' ')}
+              className="bg-surface-2 text-text-primary border-border focus:ring-accent min-h-[48px]"
             >
               <option value="">{t('selectRunningType')}</option>
               {Object.values(RunningType).map((rt) => (
                 <option key={rt} value={rt}>{rt}</option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 

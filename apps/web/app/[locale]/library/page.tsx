@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { getTranslations } from 'next-intl/server'
 import type { GymExerciseMaster } from '@athlete-planner/contracts'
+import { MuscleGroup } from '@athlete-planner/contracts'
 import { ExerciseCard } from '@/components/ExerciseCard'
 import { MuscleGroupFilter } from '@/components/MuscleGroupFilter'
 import { LibrarySearch } from '@/components/LibrarySearch'
@@ -46,6 +47,15 @@ export default async function GymLibraryPage({
     getTranslations('library'),
   ])
 
+  const muscleGroupLabels: Record<string, string> = {
+    [MuscleGroup.CHEST]: t('chest'),
+    [MuscleGroup.BACK]: t('back'),
+    [MuscleGroup.SHOULDERS]: t('shoulders'),
+    [MuscleGroup.ARMS]: t('arms'),
+    [MuscleGroup.LEGS]: t('legs'),
+    [MuscleGroup.ABS]: t('abs'),
+  }
+
   return (
     <div className='flex flex-col h-full'>
       <div className='sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur-sm py-3 space-y-2'>
@@ -75,7 +85,7 @@ export default async function GymLibraryPage({
                   name={ex.name}
                   vietnameseName={ex.vietnameseName}
                   gifUrl={ex.gifUrl}
-                  badge={ex.targetMuscleGroup}
+                  badge={muscleGroupLabels[ex.targetMuscleGroup] ?? ex.targetMuscleGroup}
                   locale={locale}
                 />
               </li>

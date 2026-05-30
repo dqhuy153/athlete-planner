@@ -17,6 +17,8 @@ import {
   ExternalLink, Check, Cloud, HardDrive, ImageIcon, Film,
   FileText as FileIcon, RefreshCw,
 } from 'lucide-react';
+import { ConfirmModal } from '@athlete-planner/ui';
+import { useToast } from '@/components/ui/toast';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -32,9 +34,9 @@ function fileExt(name: string): string {
 }
 
 function AssetIcon({ mimeType }: { mimeType: string | null }) {
-  if (mimeType?.startsWith('image/')) return <ImageIcon size={28} className="text-[#525252]" />;
-  if (mimeType?.startsWith('video/')) return <Film size={28} className="text-[#525252]" />;
-  return <FileIcon size={28} className="text-[#525252]" />;
+  if (mimeType?.startsWith('image/')) return <ImageIcon size={28} className="text-on-surface-variant" />;
+  if (mimeType?.startsWith('video/')) return <Film size={28} className="text-on-surface-variant" />;
+  return <FileIcon size={28} className="text-on-surface-variant" />;
 }
 
 function ProviderBadge({ provider }: { provider: StorageProvider }) {
@@ -94,18 +96,18 @@ function PreviewModal({ asset, assets, onClose, onDelete, onNavigate }: PreviewM
       onClick={onClose}
     >
       <div
-        className="relative flex w-full max-w-5xl mx-4 max-h-[90vh] rounded-2xl overflow-hidden border border-[#242424] bg-[#141414] shadow-2xl"
+        className="relative flex w-full max-w-5xl mx-4 max-h-[90vh] rounded-2xl overflow-hidden border border-border bg-surface shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Media area */}
-        <div className="flex-1 flex items-center justify-center bg-[#0A0A0A] min-h-64 relative">
+        <div className="flex-1 flex items-center justify-center bg-background min-h-64 relative">
           {isImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={asset.url} alt={asset.fileName} className="max-w-full max-h-[80vh] object-contain" />
           ) : isVideo ? (
             <video src={asset.url} controls className="max-w-full max-h-[80vh]" />
           ) : (
-            <div className="flex flex-col items-center gap-3 text-[#525252]">
+            <div className="flex flex-col items-center gap-3 text-on-surface-variant">
               <FileIcon size={56} />
               <span className="text-sm">{fileExt(asset.fileName).toUpperCase()}</span>
             </div>
@@ -131,10 +133,10 @@ function PreviewModal({ asset, assets, onClose, onDelete, onNavigate }: PreviewM
         </div>
 
         {/* Info sidebar */}
-        <div className="w-64 shrink-0 flex flex-col border-l border-[#242424] p-4 overflow-y-auto">
+        <div className="w-64 shrink-0 flex flex-col border-l border-border p-4 overflow-y-auto">
           <div className="flex items-start justify-between mb-4">
-            <p className="text-sm font-medium text-[#FAFAFA] break-all leading-snug">{asset.fileName}</p>
-            <button onClick={onClose} className="ml-2 p-1 text-[#A3A3A3] hover:text-[#FAFAFA] shrink-0 transition-colors">
+            <p className="text-sm font-medium text-foreground break-all leading-snug">{asset.fileName}</p>
+            <button onClick={onClose} className="ml-2 p-1 text-on-surface-variant hover:text-foreground shrink-0 transition-colors">
               <X size={16} />
             </button>
           </div>
@@ -148,12 +150,12 @@ function PreviewModal({ asset, assets, onClose, onDelete, onNavigate }: PreviewM
           </div>
 
           {/* URL */}
-          <div className="mt-4 pt-4 border-t border-[#242424]">
-            <p className="text-xs text-[#A3A3A3] mb-1.5">URL</p>
-            <div className="flex items-center gap-1 p-2 rounded-lg bg-[#0A0A0A] border border-[#242424]">
-              <p className="flex-1 text-[10px] text-[#525252] font-mono truncate">{asset.url}</p>
-              <button onClick={copy} className="shrink-0 p-1 text-[#A3A3A3] hover:text-[#00D4AA] transition-colors">
-                {copied ? <Check size={12} className="text-[#00D4AA]" /> : <Copy size={12} />}
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-xs text-on-surface-variant mb-1.5">URL</p>
+            <div className="flex items-center gap-1 p-2 rounded-lg bg-background border border-border">
+              <p className="flex-1 text-[10px] text-on-surface-variant font-mono truncate">{asset.url}</p>
+              <button onClick={copy} className="shrink-0 p-1 text-on-surface-variant hover:text-accent transition-colors">
+                {copied ? <Check size={12} className="text-accent" /> : <Copy size={12} />}
               </button>
             </div>
           </div>
@@ -163,13 +165,13 @@ function PreviewModal({ asset, assets, onClose, onDelete, onNavigate }: PreviewM
               href={asset.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs border border-[#242424] rounded-lg text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#525252] transition-colors"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs border border-border rounded-lg text-on-surface-variant hover:text-foreground hover:border-border/60 transition-colors"
             >
               <ExternalLink size={12} /> Open
             </a>
             <button
               onClick={() => onDelete(asset.id)}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs border border-[#EF4444]/20 rounded-lg text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+              className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs border border-error/20 rounded-lg text-error hover:bg-error/10 transition-colors"
             >
               <Trash2 size={12} />
             </button>
@@ -183,9 +185,9 @@ function PreviewModal({ asset, assets, onClose, onDelete, onNavigate }: PreviewM
 function Row({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div>
-      <p className="text-[10px] text-[#525252] mb-0.5">{label}</p>
+      <p className="text-[10px] text-on-surface-variant mb-0.5">{label}</p>
       {typeof value === 'string' ? (
-        <p className={`text-xs text-[#FAFAFA] ${mono ? 'font-mono' : ''}`}>{value}</p>
+        <p className={`text-xs text-foreground ${mono ? 'font-mono' : ''}`}>{value}</p>
       ) : (
         value
       )}
@@ -210,10 +212,13 @@ type ProviderFilter = 'all' | 'r2' | 'cloudinary';
 
 export default function AssetsPage() {
   const { session } = useAuth();
+  const { push } = useToast();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const [providerFilter, setProviderFilter] = useState<ProviderFilter>('all');
   const [preview, setPreview] = useState<Asset | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [uploadState, setUploadState] = useState<UploadState>({
     provider: 'r2',
     dragging: false,
@@ -303,7 +308,7 @@ export default function AssetsPage() {
       setUploadState((s) => ({ ...s, progress: '' }));
       loadAssets();
     } catch (e: any) {
-      alert(e.message || 'Upload failed');
+      push({ title: e.message || 'Upload failed', tone: 'error' });
     } finally {
       setUploadState((s) => ({ ...s, uploading: false, dragging: false, progress: '' }));
     }
@@ -331,13 +336,21 @@ export default function AssetsPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!session || !confirm('Delete this asset? This cannot be undone.')) return;
+    setConfirmDeleteId(id);
+  }
+
+  async function executeDelete(id: string) {
+    if (!session) return;
+    setDeleting(true);
     try {
       await deleteAsset(session.accessToken, id);
       setPreview(null);
       loadAssets();
     } catch (e: any) {
-      alert(e.message);
+      push({ title: e.message || 'Failed to delete asset', tone: 'error' });
+    } finally {
+      setDeleting(false);
+      setConfirmDeleteId(null);
     }
   }
 
@@ -349,11 +362,11 @@ export default function AssetsPage() {
   return (
     <div className="p-6 lg:p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#FAFAFA]">Assets</h1>
+        <h1 className="text-2xl font-bold text-foreground">Assets</h1>
         <button
           onClick={loadAssets}
           disabled={loading}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-[#A3A3A3] hover:text-[#FAFAFA] border border-[#242424] rounded-lg hover:border-[#525252] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-2 text-sm text-on-surface-variant hover:text-foreground border border-border rounded-lg hover:border-border/60 transition-colors disabled:opacity-50"
         >
           <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           Refresh
@@ -364,8 +377,8 @@ export default function AssetsPage() {
       <div
         className={`mb-6 rounded-2xl border-2 border-dashed transition-colors cursor-pointer ${
           uploadState.dragging
-            ? 'border-[#00D4AA] bg-[#00D4AA]/5'
-            : 'border-[#242424] hover:border-[#525252] bg-[#141414]'
+            ? 'border-accent bg-accent/5'
+            : 'border-border hover:border-border/60 bg-surface'
         }`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
@@ -375,21 +388,21 @@ export default function AssetsPage() {
         <div className="flex flex-col items-center justify-center py-8 gap-3">
           {uploadState.uploading ? (
             <>
-              <RefreshCw size={28} className="text-[#00D4AA] animate-spin" />
-              <p className="text-sm text-[#A3A3A3]">{uploadState.progress}</p>
+              <RefreshCw size={28} className="text-accent animate-spin" />
+              <p className="text-sm text-on-surface-variant">{uploadState.progress}</p>
             </>
           ) : (
             <>
-              <Upload size={28} className={uploadState.dragging ? 'text-[#00D4AA]' : 'text-[#525252]'} />
+              <Upload size={28} className={uploadState.dragging ? 'text-accent' : 'text-on-surface-variant'} />
               <div className="text-center">
-                <p className="text-sm font-medium text-[#A3A3A3]">
+                <p className="text-sm font-medium text-on-surface-variant">
                   {uploadState.dragging ? 'Drop to upload' : 'Drag & drop or click to upload'}
                 </p>
-                <p className="text-xs text-[#525252] mt-0.5">Images, videos, and other files</p>
+                <p className="text-xs text-on-surface-variant mt-0.5">Images, videos, and other files</p>
               </div>
               {/* Provider selector */}
               <div
-                className="flex items-center gap-1 rounded-lg border border-[#242424] bg-[#0A0A0A] p-1"
+                className="flex items-center gap-1 rounded-lg border border-border bg-background p-1"
                 onClick={(e) => e.stopPropagation()}
               >
                 {(['r2', 'cloudinary'] as UploadProvider[]).map((p) => (
@@ -398,8 +411,8 @@ export default function AssetsPage() {
                     onClick={() => setUploadState((s) => ({ ...s, provider: p }))}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       uploadState.provider === p
-                        ? 'bg-[#242424] text-[#FAFAFA]'
-                        : 'text-[#525252] hover:text-[#A3A3A3]'
+                        ? 'bg-surface-3 text-foreground'
+                        : 'text-on-surface-variant hover:text-on-surface-variant'
                     }`}
                   >
                     {p === 'r2' ? <HardDrive size={12} /> : <Cloud size={12} />}
@@ -421,15 +434,15 @@ export default function AssetsPage() {
       />
 
       {/* Filter tabs */}
-      <div className="flex gap-1 mb-5 border-b border-[#242424]">
+      <div className="flex gap-1 mb-5 border-b border-border">
         {(['all', 'r2', 'cloudinary'] as ProviderFilter[]).map((f) => (
           <button
             key={f}
             onClick={() => setProviderFilter(f)}
             className={`px-4 py-2 text-sm font-medium capitalize border-b-2 -mb-px transition-colors ${
               providerFilter === f
-                ? 'border-[#00D4AA] text-[#00D4AA]'
-                : 'border-transparent text-[#A3A3A3] hover:text-[#FAFAFA]'
+                ? 'border-accent text-accent'
+                : 'border-transparent text-on-surface-variant hover:text-foreground'
             }`}
           >
             {f === 'all' ? `All (${assets.length})` : f === 'r2' ? `R2 (${assets.filter((a) => a.storageProvider === StorageProvider.R2).length})` : `Cloudinary (${assets.filter((a) => a.storageProvider === StorageProvider.CLOUDINARY).length})`}
@@ -438,12 +451,12 @@ export default function AssetsPage() {
       </div>
 
       {loading ? (
-        <div className="text-[#A3A3A3] text-sm">Loading…</div>
+        <div className="text-on-surface-variant text-sm">Loading…</div>
       ) : filteredAssets.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <ImageIcon size={40} className="text-[#525252] mb-3" />
-          <p className="text-[#A3A3A3] text-sm">No assets yet</p>
-          <p className="text-[#525252] text-xs mt-1">Upload files to get started</p>
+          <ImageIcon size={40} className="text-on-surface-variant mb-3" />
+          <p className="text-on-surface-variant text-sm">No assets yet</p>
+          <p className="text-on-surface-variant text-xs mt-1">Upload files to get started</p>
         </div>
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
@@ -451,9 +464,9 @@ export default function AssetsPage() {
             <div
               key={asset.id}
               onClick={() => setPreview(asset)}
-              className="group cursor-pointer rounded-xl border border-[#242424] bg-[#141414] overflow-hidden hover:border-[#525252] transition-colors"
+              className="group cursor-pointer rounded-xl border border-border bg-surface overflow-hidden hover:border-border/60 transition-colors"
             >
-              <div className="aspect-square bg-[#0A0A0A] flex items-center justify-center overflow-hidden relative">
+              <div className="aspect-square bg-background flex items-center justify-center overflow-hidden relative">
                 {asset.mimeType?.startsWith('image/') ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -462,7 +475,7 @@ export default function AssetsPage() {
                     className="w-full h-full object-cover transition-transform group-hover:scale-105"
                   />
                 ) : asset.mimeType?.startsWith('video/') ? (
-                  <Film size={28} className="text-[#525252]" />
+                  <Film size={28} className="text-on-surface-variant" />
                 ) : (
                   <AssetIcon mimeType={asset.mimeType} />
                 )}
@@ -474,22 +487,22 @@ export default function AssetsPage() {
                     </span>
                   ) : (
                     <span className="p-1 rounded-md bg-black/60 backdrop-blur-sm">
-                      <HardDrive size={10} className="text-[#00D4AA]" />
+                      <HardDrive size={10} className="text-accent" />
                     </span>
                   )}
                 </div>
                 {/* Copy button overlay */}
                 <button
                   onClick={(e) => copyUrl(asset.url, e)}
-                  className="absolute bottom-1.5 right-1.5 p-1.5 rounded-md bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-[#00D4AA]"
+                  className="absolute bottom-1.5 right-1.5 p-1.5 rounded-md bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-accent"
                   title="Copy URL"
                 >
                   <Copy size={11} />
                 </button>
               </div>
               <div className="px-2 py-1.5">
-                <p className="text-[10px] text-[#A3A3A3] truncate">{asset.fileName}</p>
-                <p className="text-[10px] text-[#525252] font-mono">{formatBytes(asset.size)}</p>
+                <p className="text-[10px] text-on-surface-variant truncate">{asset.fileName}</p>
+                <p className="text-[10px] text-on-surface-variant font-mono">{formatBytes(asset.size)}</p>
               </div>
             </div>
           ))}
@@ -505,6 +518,17 @@ export default function AssetsPage() {
           onNavigate={setPreview}
         />
       )}
+
+      <ConfirmModal
+        open={confirmDeleteId !== null}
+        title="Delete asset"
+        message="This asset will be permanently deleted and cannot be recovered."
+        confirmLabel="Delete"
+        destructive
+        loading={deleting}
+        onConfirm={() => confirmDeleteId && executeDelete(confirmDeleteId)}
+        onCancel={() => setConfirmDeleteId(null)}
+      />
     </div>
   );
 }

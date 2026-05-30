@@ -10,6 +10,7 @@ import type {
   BlogCategory,
   User,
 } from '@athlete-planner/contracts';
+import { SportType, ExerciseSourceType, ExperienceLevel } from '@athlete-planner/contracts';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -64,7 +65,7 @@ class ApiClient {
     });
   }
 
-  updatePreferredLevel(accessToken: string, userId: string, preferredLevel: string | null) {
+  updatePreferredLevel(accessToken: string, userId: string, preferredLevel: ExperienceLevel | null) {
     return this.request<User>(`/users/${userId}/profile`, {
       method: 'PUT',
       headers: this.authHeaders(accessToken),
@@ -122,7 +123,7 @@ class ApiClient {
   createPrivateExercise(
     token: string,
     data: {
-      sportType: string;
+      sportType: SportType;
       name: string;
       targetMuscleGroup?: string;
       runningType?: string;
@@ -201,9 +202,9 @@ class ApiClient {
     token: string,
     scheduleId: string,
     data: {
-      exerciseType: 'GYM_MASTER' | 'RUNNING_MASTER' | 'PRIVATE';
+      exerciseType: ExerciseSourceType;
       exerciseId: string;
-      sportType: 'GYM' | 'RUNNING';
+      sportType: SportType;
     },
   ) {
     return this.request<ScheduleItem>(`/schedules/day/${scheduleId}/items`, {
@@ -232,7 +233,7 @@ class ApiClient {
     return this.request<ScheduleItem>(`/schedules/items/${itemId}/gym-payload`, {
       method: 'PATCH',
       headers: this.authHeaders(token),
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ payload }),
     });
   }
 
@@ -240,7 +241,7 @@ class ApiClient {
     return this.request<ScheduleItem>(`/schedules/items/${itemId}/running-payload`, {
       method: 'PATCH',
       headers: this.authHeaders(token),
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ payload }),
     });
   }
 

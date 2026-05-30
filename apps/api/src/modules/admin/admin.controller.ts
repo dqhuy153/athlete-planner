@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
+import { UserRole } from '@athlete-planner/contracts';
 import { S3Service } from '../shared/s3.service';
 import { CloudinarySignService } from '../shared/cloudinary-sign.service';
 import { AIService } from '../shared/ai.service';
@@ -169,13 +170,13 @@ Respond with JSON only:
 
   @Put('users/:id/role')
   async updateUserRole(@Param('id') id: string, @Body() body: { role: string }) {
-    const validRoles = ['user', 'admin'];
-    if (!validRoles.includes(body.role)) {
+    const validRoles = [UserRole.USER, UserRole.ADMIN];
+    if (!validRoles.includes(body.role as UserRole)) {
       throw new BadRequestException(`Invalid role. Must be one of: ${validRoles.join(', ')}`);
     }
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User not found');
-    if (user.role === 'root') throw new BadRequestException('Cannot change ROOT user role');
+    if (user.role === UserRole.ROOT) throw new BadRequestException('Cannot change ROOT user role');
 
     return this.prisma.user.update({
       where: { id },

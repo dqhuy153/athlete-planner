@@ -14,11 +14,13 @@ import { UpdateExerciseHandler } from './commands/update-exercise.handler';
 import { ToggleExerciseActiveHandler } from './commands/toggle-exercise-active.handler';
 import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handler';
 import { ImportRunningExercisesHandler } from './commands/import-running-exercises.handler';
+import { DeleteExerciseHandler } from './commands/delete-exercise.handler';
 
 // Queries
 import { GetExerciseLibraryHandler } from './queries/get-exercise-library.handler';
 import { GetPrivateExercisesHandler } from './queries/get-private-exercises.handler';
 import { GetExerciseDetailHandler } from './queries/get-exercise-detail.handler';
+import { GetExerciseUsageHandler } from './queries/get-exercise-usage.handler';
 
 const CommandHandlers = [
   CreateGymMasterHandler,
@@ -28,12 +30,14 @@ const CommandHandlers = [
   ToggleExerciseActiveHandler,
   ImportGymExercisesHandler,
   ImportRunningExercisesHandler,
+  DeleteExerciseHandler,
 ];
 
 const QueryHandlers = [
   GetExerciseLibraryHandler,
   GetPrivateExercisesHandler,
   GetExerciseDetailHandler,
+  GetExerciseUsageHandler,
 ];
 
 @Module({

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Sparkles, X, Loader2 } from 'lucide-react';
+import { Select } from '@athlete-planner/ui';
 import {
   aiGenerateGymExercises,
   aiGenerateRunningExercises,
@@ -182,27 +183,27 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
               <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                 Count
               </label>
-              <select
+              <Select
                 value={count}
                 onChange={(e) => setCount(Number(e.target.value))}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                className="bg-background"
               >
                 {[3, 5, 7, 10].map((n) => (
                   <option key={n} value={n}>
                     {n} exercises
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
             {tab === 'gym' && (
               <div className="flex-1">
                 <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                   Muscle group (optional)
                 </label>
-                <select
+                <Select
                   value={muscleGroup}
                   onChange={(e) => setMuscleGroup(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="bg-background"
                 >
                   <option value="">Any</option>
                   {['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs'].map((mg) => (
@@ -210,7 +211,7 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
                       {mg}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             )}
             {tab === 'running' && (
@@ -218,10 +219,10 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
                 <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                   Running type (optional)
                 </label>
-                <select
+                <Select
                   value={runningType}
                   onChange={(e) => setRunningType(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="bg-background"
                 >
                   <option value="">Any</option>
                   {['Interval', 'Easy', 'Tempo', 'Long_Run'].map((rt) => (
@@ -229,7 +230,7 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
                       {rt}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             )}
           </div>

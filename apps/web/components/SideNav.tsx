@@ -141,7 +141,7 @@ export function SideNav({ locale }: SideNavProps) {
             )}
           >
             <Zap size={16} className="shrink-0 text-accent" aria-hidden />
-            <span className="hidden lg:block text-xs font-semibold text-accent">Upgrade to PRO</span>
+            <span className="hidden lg:block text-xs font-semibold text-accent">{t('profile.upgrade')}</span>
           </Link>
         </div>
       )}
@@ -151,7 +151,7 @@ export function SideNav({ locale }: SideNavProps) {
         <button
           type="button"
           onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-          title={resolvedTheme === 'dark' ? 'Switch to light' : 'Switch to dark'}
+          title={resolvedTheme === 'dark' ? t('common.switchToLight') : t('common.switchToDark')}
           className={cn(
             'flex items-center gap-3 rounded-lg transition-colors duration-150 w-full',
             'min-h-[40px] px-3',
@@ -165,7 +165,7 @@ export function SideNav({ locale }: SideNavProps) {
             : <Moon size={16} className="shrink-0" aria-hidden />
           }
           <span className="hidden lg:block text-xs font-medium leading-none">
-            {resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+            {resolvedTheme === 'dark' ? t('common.lightMode') : t('common.darkMode')}
           </span>
         </button>
       </div>
@@ -177,7 +177,7 @@ export function SideNav({ locale }: SideNavProps) {
             {user.image ? (
               <Image
                 src={user.image}
-                alt={user.name ?? 'User'}
+                alt={user.name ?? t('common.userAlt')}
                 width={32}
                 height={32}
                 className="h-8 w-8 shrink-0 rounded-full object-cover ring-1 ring-border"
@@ -203,7 +203,7 @@ export function SideNav({ locale }: SideNavProps) {
             <button
               type="button"
               onClick={() => signOut({ callbackUrl: `/${locale}` })}
-              title="Sign out"
+              title={t('auth.signOut')}
               className="hidden lg:flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:text-error hover:bg-error/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <LogOut size={14} aria-hidden />

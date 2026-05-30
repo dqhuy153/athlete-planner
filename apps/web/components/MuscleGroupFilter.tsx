@@ -1,22 +1,37 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { cn } from '@athlete-planner/ui'
 
-const MUSCLE_GROUPS = [
-  { value: '', label: 'All' },
-  { value: 'Chest', label: 'Chest' },
-  { value: 'Back', label: 'Back' },
-  { value: 'Shoulders', label: 'Shoulders' },
-  { value: 'Arms', label: 'Arms' },
-  { value: 'Legs', label: 'Legs' },
-  { value: 'Abs', label: 'Abs' },
+const MUSCLE_GROUP_KEYS = [
+  { value: '' },
+  { value: 'Chest' },
+  { value: 'Back' },
+  { value: 'Shoulders' },
+  { value: 'Arms' },
+  { value: 'Legs' },
+  { value: 'Abs' },
 ]
 
 export function MuscleGroupFilter() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const t = useTranslations('library')
   const active = searchParams.get('muscleGroup') ?? ''
+
+  function getLabel(value: string): string {
+    const keyMap: Record<string, string> = {
+      '': t('all'),
+      Chest: t('chest'),
+      Back: t('back'),
+      Shoulders: t('shoulders'),
+      Arms: t('arms'),
+      Legs: t('legs'),
+      Abs: t('abs'),
+    }
+    return keyMap[value] ?? value
+  }
 
   function handleSelect(value: string) {
     const params = new URLSearchParams(searchParams.toString())
@@ -32,9 +47,9 @@ export function MuscleGroupFilter() {
     <div
       className='no-scrollbar flex overflow-x-auto gap-2 pb-1'
       role='group'
-      aria-label='Filter by muscle group'
+      aria-label={t('filterByMuscle')}
     >
-      {MUSCLE_GROUPS.map(({ value, label }) => {
+      {MUSCLE_GROUP_KEYS.map(({ value }) => {
         const isActive = active === value
         return (
           <button
@@ -52,7 +67,7 @@ export function MuscleGroupFilter() {
                 : 'border border-border bg-surface-2 text-text-secondary hover:border-accent/50 hover:text-text-primary',
             )}
           >
-            {label}
+            {getLabel(value)}
           </button>
         )
       })}

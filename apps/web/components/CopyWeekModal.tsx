@@ -46,6 +46,7 @@ export function CopyWeekModal({
   onConfirm,
 }: CopyWeekModalProps) {
   const t = useTranslations('schedule');
+  const tCommon = useTranslations('common');
 
   const source = isoWeekFromOffset(sourceWeekOffset);
   const nextWeekDefault = isoWeekFromOffset(sourceWeekOffset + 1);
@@ -101,7 +102,7 @@ export function CopyWeekModal({
         <div className="flex items-center gap-2 rounded-lg bg-surface-3 px-3 py-2.5">
           <Copy className="h-4 w-4 shrink-0 text-accent" aria-hidden />
           <div>
-            <p className="text-micro text-text-tertiary">Source</p>
+            <p className="text-micro text-text-tertiary">{t('source')}</p>
             <p className="font-data text-body font-medium text-text-primary">
               {weekLabel(source.week, source.year)}
             </p>
@@ -159,7 +160,7 @@ export function CopyWeekModal({
             onClick={onClose}
             className="flex-1 rounded-lg bg-surface-2 py-3 text-body font-medium text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
           >
-            Cancel
+            {tCommon('cancel')}
           </button>
           <button
             type="button"

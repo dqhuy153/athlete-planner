@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '@athlete-planner/database';
+import { UserRole } from '@athlete-planner/contracts';
 
 @Injectable()
 export class RootAdminBootstrap implements OnModuleInit {
@@ -20,11 +21,11 @@ export class RootAdminBootstrap implements OnModuleInit {
 
     await this.prisma.user.upsert({
       where: { email: adminEmail },
-      update: { role: 'root' },
+      update: { role: UserRole.ROOT },
       create: {
         email: adminEmail,
         name: 'Admin',
-        role: 'root',
+        role: UserRole.ROOT,
       },
     });
 

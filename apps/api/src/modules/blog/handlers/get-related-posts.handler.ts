@@ -1,5 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
+import { BlogStatus } from '@athlete-planner/contracts';
 import { GetRelatedPostsQuery } from '../queries/get-related-posts.query';
 
 @QueryHandler(GetRelatedPostsQuery)
@@ -17,7 +18,7 @@ export class GetRelatedPostsHandler implements IQueryHandler<GetRelatedPostsQuer
     // Find posts in same category, excluding current
     const related = await this.prisma.blogPost.findMany({
       where: {
-        status: 'published',
+        status: BlogStatus.PUBLISHED,
         id: { not: current.id },
         ...(current.categoryKey ? { categoryKey: current.categoryKey } : {}),
       },

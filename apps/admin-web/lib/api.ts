@@ -1,4 +1,5 @@
 import type { User, BlogPost, BlogCategory, Asset, GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import { SportType, ExperienceLevel } from '@athlete-planner/contracts';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -384,11 +385,35 @@ export function toggleExercise(
   return apiFetch(`/exercises/${id}/toggle?type=${type}`, accessToken, { method: 'PATCH' });
 }
 
+export interface ExerciseUsage {
+  total: number;
+  past: number;
+  current: number;
+  future: number;
+}
+
+export function getExerciseUsage(
+  accessToken: string,
+  id: string,
+  type: 'gym' | 'running',
+): Promise<ExerciseUsage> {
+  return apiFetch(`/exercises/${id}/usage?type=${type}`, accessToken);
+}
+
+export function deleteExercise(
+  accessToken: string,
+  id: string,
+  type: 'gym' | 'running',
+  force = false,
+): Promise<{ deleted: boolean; id: string }> {
+  return apiFetch(`/exercises/${id}?type=${type}&force=${force}`, accessToken, { method: 'DELETE' });
+}
+
 export function generateExerciseContent(
   accessToken: string,
   data: {
     name: string;
-    sportType: 'GYM' | 'RUNNING';
+    sportType: SportType;
     muscleGroup?: string;
     runningType?: string;
   },
@@ -427,7 +452,7 @@ export interface GymInstructionSteps {
 }
 
 export interface GymInstruction {
-  level: 'BEGINNER' | 'ADVANCED';
+  level: ExperienceLevel;
   steps: GymInstructionSteps;
   form_cues: GymInstructionSteps;
 }

@@ -4,10 +4,14 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { getUsers, updateUserRole } from '@/lib/api';
 import type { User } from '@athlete-planner/contracts';
+import { UserRole } from '@athlete-planner/contracts';
 import { Input } from '@/components/ui/input';
+import { Select } from '@athlete-planner/ui';
+import { useToast } from '@/components/ui/toast';
 
 export default function UsersPage() {
   const { session } = useAuth();
+  const { push } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +44,7 @@ export default function UsersPage() {
       await updateUserRole(session.accessToken, userId, role);
       loadUsers();
     } catch (e: any) {
-      alert(e.message);
+      push({ title: e.message || 'Failed to update role', tone: 'error' });
     }
   }
 
@@ -95,7 +99,7 @@ export default function UsersPage() {
                     <td className="px-4 py-3">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                          user.role === 'admin' || user.role === 'root'
+                          user.role === UserRole.ADMIN || user.role === UserRole.ROOT
                             ? 'bg-primary/10 text-primary'
                             : 'bg-surface-variant text-on-surface-variant'
                         }`}
@@ -116,15 +120,15 @@ export default function UsersPage() {
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3">
-                      <select
+                      <Select
                         value={user.role}
                         onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                        className="text-xs bg-surface border border-outline rounded px-2 py-1 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                        className="h-7 text-xs px-2 py-1"
                       >
                         <option value="user">user</option>
                         <option value="admin">admin</option>
                         <option value="root">root</option>
-                      </select>
+                      </Select>
                     </td>
                   </tr>
                 ))}

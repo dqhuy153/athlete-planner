@@ -4,25 +4,23 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import type { GymExerciseMaster } from '@athlete-planner/contracts';
+import { ExperienceLevel } from '@athlete-planner/contracts';
 
 interface InstructionsPanelProps {
   instructions: GymExerciseMaster['instructions'];
   locale?: string;
 }
 
-type Level = 'BEGINNER' | 'ADVANCED';
-
 export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsPanelProps) {
   const t = useTranslations('library');
   const { data: session } = useSession();
-  const userLevel = (session?.user as any)?.preferredLevel as Level | null | undefined;
+  const userLevel = (session?.user as any)?.preferredLevel as ExperienceLevel | null | undefined;
 
-  const [activeLevel, setActiveLevel] = useState<Level>(
-    userLevel === 'ADVANCED' ? 'ADVANCED' : 'BEGINNER',
+  const [activeLevel, setActiveLevel] = useState<ExperienceLevel>(
+    userLevel === ExperienceLevel.ADVANCED ? ExperienceLevel.ADVANCED : ExperienceLevel.BEGINNER,
   );
 
-  const inst = instructions.find((i) => i.level === activeLevel) ?? instructions[0];
-  if (!inst) return null;
+  const inst = instructions.find((i) => i.level === activeLevel) ?? instructions[0];  if (!inst) return null;
 
   const steps: string[] =
     (inst.steps as any)?.[locale] ??
@@ -36,14 +34,14 @@ export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsP
     (inst.form_cues as any)?.en ??
     [];
 
-  const hasAdvanced = instructions.some((i) => i.level === 'ADVANCED');
+  const hasAdvanced = instructions.some((i) => i.level === ExperienceLevel.ADVANCED);
 
   return (
     <div className="space-y-4">
       {/* Level tabs — only show if both levels exist */}
       {hasAdvanced && (
         <div className="flex gap-2">
-          {(['BEGINNER', 'ADVANCED'] as Level[]).map((level) => (
+          {(Object.values(ExperienceLevel) as ExperienceLevel[]).map((level) => (
             <button
               key={level}
               type="button"
@@ -55,7 +53,7 @@ export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsP
                   : 'bg-surface-2 text-text-secondary hover:text-text-primary',
               ].join(' ')}
             >
-              {level === 'BEGINNER' ? t('beginner') : t('advanced')}
+              {level === ExperienceLevel.BEGINNER ? t('beginner') : t('advanced')}
             </button>
           ))}
         </div>
@@ -77,7 +75,7 @@ export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsP
       {cues.length > 0 && (
         <div className="border-t border-border pt-3">
           <p className="mb-1.5 text-micro font-semibold uppercase tracking-wider text-text-secondary">
-            Form Cues
+            {t('form_cues')}
           </p>
           <ul className="space-y-1" role="list">
             {cues.map((cue, i) => (

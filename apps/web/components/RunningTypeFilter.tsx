@@ -6,19 +6,22 @@ import { RunningType } from '@athlete-planner/contracts'
 
 const RUNNING_TYPES = Object.values(RunningType)
 
-const RUNNING_TYPE_LABELS: Record<string, string> = {
-  [RunningType.INTERVAL]: 'Interval',
-  [RunningType.EASY]: 'Easy',
-  [RunningType.TEMPO]: 'Tempo',
-  [RunningType.LONG_RUN]: 'Long Run',
-}
-
 export function RunningTypeFilter() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const t = useTranslations('library')
   const active = searchParams.get('runningType') ?? ''
+
+  function getRunningTypeLabel(type: string): string {
+    const labelMap: Record<string, string> = {
+      [RunningType.INTERVAL]: t('intervalType'),
+      [RunningType.EASY]: t('easyType'),
+      [RunningType.TEMPO]: t('tempoType'),
+      [RunningType.LONG_RUN]: t('longRunType'),
+    }
+    return labelMap[type] ?? type
+  }
 
   function handleSelect(value: string) {
     const params = new URLSearchParams(searchParams.toString())
@@ -53,7 +56,7 @@ export function RunningTypeFilter() {
           aria-pressed={active === rt}
           className={chipClass(active === rt)}
         >
-          {RUNNING_TYPE_LABELS[rt] ?? rt}
+          {getRunningTypeLabel(rt)}
         </button>
       ))}
     </div>
