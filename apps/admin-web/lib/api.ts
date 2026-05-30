@@ -334,13 +334,39 @@ export function seedFreeExerciseDb(
 
 // ── AI Bulk Generate ──────────────────────────────────────────────────────────
 
+export interface GymInstructionSteps {
+  vi: string[];
+  en: string[];
+}
+
+export interface GymInstruction {
+  level: 'BEGINNER' | 'ADVANCED';
+  steps: GymInstructionSteps;
+  form_cues: GymInstructionSteps;
+}
+
 export interface AIGeneratedGymExercise {
   name: string;
   vietnameseName: string;
   targetMuscleGroup: string;
   secondaryMuscleGroups: string[];
-  garminExerciseEnum?: string;
-  instructions: Array<{ level: string; steps: string[]; form_cues: string[] }>;
+  garminExerciseEnum?: string | null;
+  instructions: GymInstruction[];
+}
+
+export interface WorkoutPhaseImport {
+  phase: string;
+  type: 'interval' | 'recovery' | 'steady_state' | 'warm_up' | 'cool_down' | 'custom';
+  duration_minutes?: number;
+  distance_meters?: number;
+  hr_zone?: number;
+  pace_min_per_km?: string;
+  pace_max_per_km?: string;
+  rpe?: number;
+  cadence?: number;
+  repeat_count?: number;
+  repeat_rest_seconds?: number;
+  notes?: { vi: string; en: string };
 }
 
 export interface AIGeneratedRunningExercise {
@@ -348,7 +374,7 @@ export interface AIGeneratedRunningExercise {
   vietnameseName: string;
   runningType: string;
   instructions: { vi: string[]; en: string[] };
-  workoutStructure: Array<{ phase: string; duration_minutes?: number; distance_meters?: number }>;
+  workoutStructure: WorkoutPhaseImport[];
 }
 
 export function aiGenerateGymExercises(
@@ -368,5 +394,49 @@ export function aiGenerateRunningExercises(
   return apiFetch('/admin/exercises/ai-generate/running', accessToken, {
     method: 'POST',
     body: JSON.stringify({ count: 5, ...data }),
+  });
+}
+
+// ── Import Pipeline ───────────────────────────────────────────────────────────
+
+export interface ImportPreviewResultItem {
+  index: number;
+  name: string;
+  status: 'new' | 'duplicate' | 'error';
+  existingId?: string;
+  changedFields?: string[];
+  errors?: string[];
+}
+
+export interface ImportPreviewResponse {
+  results: ImportPreviewResultItem[];
+  summary: { new: number; duplicate: number; errors: number };
+}
+
+export interface ImportExecuteResponse {
+  imported: number;
+  updated: number;
+  skipped: number;
+}
+
+export function importGymExercises(
+  accessToken: string,
+  exercises: AIGeneratedGymExercise[],
+  dryRun: boolean,
+): Promise<ImportPreviewResponse | ImportExecuteResponse> {
+  return apiFetch(`/exercises/gym/import?dryRun=${dryRun}`, accessToken, {
+    method: 'POST',
+    body: JSON.stringify({ exercises }),
+  });
+}
+
+export function importRunningExercises(
+  accessToken: string,
+  exercises: AIGeneratedRunningExercise[],
+  dryRun: boolean,
+): Promise<ImportPreviewResponse | ImportExecuteResponse> {
+  return apiFetch(`/exercises/running/import?dryRun=${dryRun}`, accessToken, {
+    method: 'POST',
+    body: JSON.stringify({ exercises }),
   });
 }

@@ -92,6 +92,31 @@ AppConfig → Runtime configuration
 
 ---
 
+## Exercise Import Pipeline
+
+### Canonical JSON Format
+Both the AI Generate button and JSON Import use the same canonical format — the DB format.
+
+**Gym:** `name`, `vietnameseName`, `targetMuscleGroup` (enum), `secondaryMuscleGroups[]`, `garminExerciseEnum?`, `instructions[]` with `level: BEGINNER|ADVANCED`, `steps: {vi, en}`, `form_cues: {vi, en}`
+
+**Running:** `name`, `vietnameseName`, `runningType` (enum: `Interval|Easy|Tempo|Long_Run`), `instructions: {vi[], en[]}`, `workoutStructure[]` with full phase details — `distance_meters` (not km), `cadence` (not rpm), `pace_min/max_per_km` as `"M:SS"` strings
+
+### Two Flows, Shared Pipeline
+- **AI Generate** (`POST /admin/exercises/ai-generate/gym|running`) — backend generates via AI prompt, then calls `dryRun=true` for status check, shows `ExercisePreviewTable`
+- **JSON Import** (`POST /exercises/gym|running/import?dryRun=true|false`) — admin uploads `.json` file, validates + detects duplicates, shows `ExercisePreviewTable`
+- Both flows use `ExercisePreviewTable` (`apps/admin-web/components/exercises/ExercisePreviewTable.tsx`)
+
+### Duplicate Detection
+- Gym: match by `name` (case-insensitive) + `targetMuscleGroup`
+- Running: match by `name` (case-insensitive) + `runningType`
+- Duplicates shown in yellow with changed field list; admin can overwrite or skip
+
+### Skill Files (downloadable)
+- `apps/admin-web/public/skills/gym-exercise-import.md` — prompt + schema for gym exercises
+- `apps/admin-web/public/skills/running-exercise-import.md` — prompt + schema for running workouts
+
+---
+
 ## Tier Guardrails
 
 | Check | FREE Limit | Error Code |

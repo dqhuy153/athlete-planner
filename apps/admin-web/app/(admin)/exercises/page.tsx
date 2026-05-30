@@ -9,6 +9,7 @@ import {
   Download,
   Sparkles,
   Loader2,
+  Upload,
 } from 'lucide-react';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { useAuth } from '@/lib/auth-context';
@@ -20,6 +21,7 @@ import {
   seedRunningExercises,
 } from '@/lib/api';
 import { AIGenerateModal } from '@/components/AIGenerateModal';
+import { ImportJSONModal } from '@/components/exercises/ImportJSONModal';
 
 type Tab = 'gym' | 'running';
 
@@ -34,6 +36,7 @@ export default function ExercisesPage() {
   const [seeding, setSeeding] = useState(false);
   const [seedMsg, setSeedMsg] = useState('');
   const [showAIModal, setShowAIModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
 
   const loadExercises = useCallback(async () => {
     if (!session?.accessToken) return;
@@ -112,6 +115,14 @@ export default function ExercisesPage() {
           >
             <Sparkles className="h-4 w-4" aria-hidden />
             Generate
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowImportModal(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          >
+            <Upload className="h-4 w-4" aria-hidden />
+            Import JSON
           </button>
           <button
             type="button"
@@ -230,6 +241,16 @@ export default function ExercisesPage() {
           accessToken={session.accessToken}
           onClose={() => setShowAIModal(false)}
           onInserted={loadExercises}
+        />
+      )}
+
+      {/* Import JSON Modal */}
+      {showImportModal && session?.accessToken && (
+        <ImportJSONModal
+          initialTab={tab}
+          accessToken={session.accessToken}
+          onClose={() => setShowImportModal(false)}
+          onImported={() => { setShowImportModal(false); loadExercises(); }}
         />
       )}
     </div>

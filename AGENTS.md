@@ -30,6 +30,15 @@ packages/
 - Shared services: S3Service, AIService (Vercel AI SDK), CloudinarySignService
 - Key modules: health, auth, users, exercises, schedules, tier-guard, admin, blog, shared, cron
 
+### Exercise Import Endpoints
+- `POST /exercises/gym/import?dryRun=true` — validate + detect duplicates, return preview (AdminGuard)
+- `POST /exercises/gym/import?dryRun=false` — execute bulk upsert (AdminGuard)
+- `POST /exercises/running/import?dryRun=true` — same for running
+- `POST /exercises/running/import?dryRun=false` — same for running
+- Body: `{ exercises: ExerciseImportItem[] }`
+- Response (dry run): `{ results: ImportPreviewResultItem[], summary: { new, duplicate, errors } }`
+- Response (execute): `{ imported, updated, skipped }`
+
 ## Frontend (apps/web)
 
 - Framework: Next.js 16 App Router, React 19
