@@ -73,11 +73,11 @@ export const CHEST_EXERCISES: GymExerciseSeed[] = [
           ],
         },
         form_cues: {
-          vi: [
-            'Duy trì căng toàn bộ cơ thể từ khi cắm đến khi để lại',
-            'KỘng gõ tạ, chiều đi xuống và đi lên phải là một đường thẳng',
-            'Khít gối lại gần cơ thể, không xoay tay cổ',
-          ],
+           vi: [
+             'Duy trì căng toàn bộ cơ thể từ khi cắm đến khi để lại',
+             'Không gõ tạ, chiều đi xuống và đi lên phải là một đường thẳng',
+             'Khít gối lại gần cơ thể, không xoay tay cổ',
+           ],
           en: [
             'Maintain full-body tension from unracking to racking',
             'Move the bar in a straight vertical line with no bouncing',
@@ -141,12 +141,12 @@ export const CHEST_EXERCISES: GymExerciseSeed[] = [
             'Use heavier weight with lower repetitions',
           ],
         },
-        form_cues: {
-          vi: [
-            'Tạo cung chuyển động to lớn, các cơ xương chế không hạn chế',
-            'Cơ lõm bụng giật chặt, hông không nâng lên',
-            'Khi đẩy lên, tạ có thể gần sát nhau nhưng không va chạm',
-          ],
+         form_cues: {
+           vi: [
+             'Tạo cung chuyển động to lớn, không bị hạn chế bởi cơ xương',
+             'Siết chặt cơ lõm bụng (core), hông không nâng lên khỏi ghế',
+             'Khi đẩy lên, tạ có thể gần sát nhau nhưng không va chạm',
+           ],
           en: [
             'Maximize range of motion with a deep stretch and full contraction',
             'Brace your core and keep your hips on the bench',
