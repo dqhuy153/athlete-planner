@@ -76,7 +76,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
         <div className="mt-5">
           <CustomizeSaveButton
             exerciseId={exercise.id}
-            exerciseName={exercise.vietnameseName ?? exercise.name}
+            exerciseName={(exercise as any).vietnameseName || exercise.name || 'Exercise'}
             sportType={isGym(exercise) ? 'GYM' : 'RUNNING'}
             targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
             runningType={isRunning(exercise) ? exercise.runningType : undefined}
