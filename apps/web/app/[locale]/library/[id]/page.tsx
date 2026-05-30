@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { InstructionsPanel } from '@/components/InstructionsPanel';
+import { ExerciseActionBar } from '@/components/ExerciseActionBar';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { CustomizeSaveButton } from './CustomizeSaveButton';
@@ -42,7 +43,8 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
   if (!exercise) notFound();
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div>
+      <div className="mx-auto max-w-2xl pb-24">
       {/* Back */}
       <Link
         href={`/${locale}/library`}
@@ -167,6 +169,8 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
           </div>
         </section>
       )}
+    </div>
+      <ExerciseActionBar exercise={exercise} locale={locale} />
     </div>
   );
 }
