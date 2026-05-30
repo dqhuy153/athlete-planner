@@ -171,7 +171,9 @@
     "noPostsHint": "Quay lại sau nhé.",
     "back": "Quay lại bài viết",
     "publishedOn": "Đăng ngày {date}",
-    "tags": "Chủ đề"
+    "tags": "Chủ đề",
+    "filteringBy": "Đang lọc theo",
+    "relatedPosts": "Bài viết liên quan"
   },
   "profile": {
     "title": "Hồ sơ",

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Import Flow</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 24px; }
+    h1 { font-size: 20px; margin-bottom: 6px; color: #fff; }
+    .subtitle { color: #888; font-size: 14px; margin-bottom: 24px; }
+    .flow { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+    .step { background: #111; border: 1px solid #333; border-radius: 8px; padding: 12px 16px; font-size: 13px; text-align: center; min-width: 100px; }
+    .step.active { border-color: #00D4AA; background: rgba(0,212,170,0.08); color: #00D4AA; }
+    .arrow { color: #444; font-size: 18px; }
+    .options { display: flex; flex-direction: column; gap: 16px; }
+    .option { border: 2px solid #333; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; }
+    .option:hover { border-color: #00D4AA; background: rgba(0,212,170,0.05); }
+    .option.selected { border-color: #00D4AA; background: rgba(0,212,170,0.08); }
+    .option .letter { position: absolute; top: 16px; right: 16px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: #888; }
+    .option.selected .letter { background: #00D4AA; color: #000; border-color: #00D4AA; }
+    .option h3 { font-size: 15px; margin-bottom: 8px; color: #fff; }
+    .option p { font-size: 13px; color: #999; line-height: 1.5; }
+    .json-preview { margin-top: 12px; background: #111; border-radius: 8px; padding: 12px; font-family: 'SF Mono', Monaco, monospace; font-size: 11px; color: #aaa; overflow-x: auto; white-space: pre; border: 1px solid #222; max-height: 200px; overflow-y: auto; }
+    .json-preview .key { color: #00D4AA; }
+    .json-preview .string { color: #f0a500; }
+    .json-preview .bracket { color: #666; }
+    .tag { display: inline-block; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; padding: 2px 8px; font-size: 11px; margin-right: 6px; margin-top: 8px; }
+    .tag.green { border-color: #00D4AA; color: #00D4AA; }
+    .tag.yellow { border-color: #f0a500; color: #f0a500; }
+    .tag.red { border-color: #ff4444; color: #ff4444; }
+  </style>
+</head>
+<body>
+  <h1>JSON Import Flow</h1>
+  <p class="subtitle">Simplified flow — JSON only, skip CSV</p>
+
+  <div class="flow">
+    <div class="step active">Admin asks AI</div>
+    <div class="arrow">→</div>
+    <div class="step active">AI generates JSON</div>
+    <div class="arrow">→</div>
+    <div class="step active">Upload JSON</div>
+    <div class="arrow">→</div>
+    <div class="step active">Validate & Parse</div>
+    <div class="arrow">→</div>
+    <div class="step active">Preview & Edit</div>
+    <div class="arrow">→</div>
+    <div class="step active">Bulk Import</div>
+  </div>
+
+  <h2 style="font-size:16px; margin-bottom:16px;">Question: JSON Format</h2>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <h3>Seed Format — Full Structure</h3>
+      <p>JSON matches the seed data exactly. Includes bilingual fields, full instruction structure (BEGINNER + ADVANCED with steps_vi/en, form_cues_vi/en), all running phase details. AI must follow strict schema.</p>
+      <div class="json-preview"><span class="bracket">{</span>
+  <span class="key">"name"</span>: <span class="string">"Barbell Bench Press"</span>,
+  <span class="key">"vietnameseName"</span>: <span class="string">"Đẩy Tạ Đòn Nằm"</span>,
+  <span class="key">"targetMuscleGroup"</span>: <span class="string">"Chest"</span>,
+  <span class="key">"secondaryMuscleGroups"</span>: [<span class="string">"Triceps"</span>, <span class="string">"Shoulders"</span>],
+  <span class="key">"garminExerciseEnum"</span>: <span class="string">"BENCH_PRESS"</span>,
+  <span class="key">"instructions"</span>: <span class="bracket">[</span>
+    <span class="bracket">{</span> <span class="key">"level"</span>: <span class="string">"BEGINNER"</span>,
+      <span class="key">"steps"</span>: <span class="bracket">{</span> <span class="key">"vi"</span>: [<span class="string">"Nằm"</span>], <span class="key">"en"</span>: [<span class="string">"Lie down"</span>] <span class="bracket">}</span>,
+      <span class="key">"form_cues"</span>: <span class="bracket">{</span> <span class="key">"vi"</span>: [<span class="string">"Lưng cong"</span>], <span class="key">"en"</span>: [<span class="string">"Arch back"</span>] <span class="bracket">}</span> <span class="bracket">}</span>,
+    <span class="bracket">{</span> <span class="key">"level"</span>: <span class="string">"ADVANCED"</span>, ... <span class="bracket">}</span>
+  <span class="bracket">]</span>
+<span class="bracket">}</span></div>
+      <div><span class="tag green">Complete data</span> <span class="tag green">Matches seed exactly</span> <span class="tag red">AI must follow strict schema</span></div>
+    </div>
+
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <h3>Simplified — Vietnamese Only, BEGINNER Default</h3>
+      <p>AI only provides Vietnamese fields + basic info. System auto-fills: English translations via AI at import time, defaults to BEGINNER level, empty secondary muscles. Simpler prompt for AI.</p>
+      <div class="json-preview"><span class="bracket">{</span>
+  <span class="key">"name"</span>: <span class="string">"Barbell Bench Press"</span>,
+  <span class="key">"vietnameseName"</span>: <span class="string">"Đẩy Tạ Đòn Nằm"</span>,
+  <span class="key">"targetMuscleGroup"</span>: <span class="string">"Chest"</span>,
+  <span class="key">"steps_vi"</span>: [<span class="string">"Nằm trên ghế"</span>, <span class="string">"Chân chạm sàn"</span>],
+  <span class="key">"form_cues_vi"</span>: [<span class="string">"Lưng hơi cong"</span>, <span class="string">"Hít sâu"</span>]
+<span class="bracket">}</span></div>
+      <div><span class="tag green">Simple for AI</span> <span class="tag green">Fewer errors</span> <span class="tag yellow">System fills defaults</span></div>
+    </div>
+
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <h3>Flat — Single Instruction Level</h3>
+      <p>AI provides one set of instructions (no level distinction). Admin chooses BEGINNER or ADVANCED after import. Balanced complexity.</p>
+      <div class="json-preview"><span class="bracket">{</span>
+  <span class="key">"name"</span>: <span class="string">"Barbell Bench Press"</span>,
+  <span class="key">"vietnameseName"</span>: <span class="string">"Đẩy Tạ Đòn Nằm"</span>,
+  <span class="key">"targetMuscleGroup"</span>: <span class="string">"Chest"</span>,
+  <span class="key">"secondaryMuscleGroups"</span>: [<span class="string">"Triceps"</span>],
+  <span class="key">"steps_vi"</span>: [<span class="string">"Nằm"</span>, <span class="string">"Đẩy"</span>],
+  <span class="key">"form_cues_vi"</span>: [<span class="string">"Lưng cong"</span>],
+  <span class="key">"steps_en"</span>: [<span class="string">"Lie down"</span>, <span class="string">"Press"</span>],
+  <span class="key">"form_cues_en"</span>: [<span class="string">"Arch back"</span>],
+  <span class="key">"level"</span>: <span class="string">"BEGINNER"</span>
+<span class="bracket">}</span></div>
+      <div><span class="tag green">Bilingual</span> <span class="tag green">Moderate complexity</span> <span class="tag yellow">No ADVANCED in import</span></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSelect(el) {
+      document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      if (window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'select', choice: el.dataset.choice }, '*');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<h2>Admin Blog Editor — Layout Options</h2>
+<p class="subtitle">How should the post editor look?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Split Pane — Editor + Live Preview</h3>
+      <p>Left side: Markdown editor with toolbar. Right side: live rendered preview. Cover image, tags, SEO fields above the split. Best for content-heavy workflows.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Blog Editor — Split Pane</div>
+        <div class="mockup-body" style="padding:12px">
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <input class="mock-input" placeholder="Post title" style="flex:1;font-size:14px">
+            <select class="mock-input" style="width:120px"><option>Category</option></select>
+            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary)"><input type="checkbox" checked> Published</label>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <input class="mock-input" placeholder="Cover image URL" style="flex:1;font-size:11px">
+            <input class="mock-input" placeholder="Meta description" style="flex:1;font-size:11px">
+          </div>
+          <div style="display:flex;gap:4px;margin-bottom:8px">
+            <span style="background:var(--primary);color:#000;padding:2px 8px;border-radius:12px;font-size:10px">Fitness</span>
+            <span style="background:var(--primary);color:#000;padding:2px 8px;border-radius:12px;font-size:10px">+ Add tag</span>
+          </div>
+          <div style="display:flex;gap:8px;height:200px">
+            <div style="flex:1;background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;padding:8px;font-family:monospace;font-size:10px;color:var(--text-secondary);overflow:hidden">
+              # Hello World<br><br>This is a **blog post** about fitness...<br><br>## Section 1<br>Content here
+            </div>
+            <div style="flex:1;background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;padding:8px;font-size:10px;color:var(--text-primary);overflow:hidden">
+              <h3 style="font-size:12px;margin:0 0 4px">Hello World</h3>
+              <p style="margin:0;font-size:9px;color:var(--text-secondary)">This is a <strong>blog post</strong> about fitness...</p>
+              <h4 style="font-size:10px;margin:8px 0 4px">Section 1</h4>
+              <p style="margin:0;font-size:9px;color:var(--text-secondary)">Content here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Full-Width Editor with Preview Toggle</h3>
+      <p>Full-width Markdown editor with a toggle button to switch between Edit and Preview modes. Simpler layout, more space for writing. Cover image and metadata in a collapsible sidebar panel.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Blog Editor — Full Width + Toggle</div>
+        <div class="mockup-body" style="padding:12px">
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <input class="mock-input" placeholder="Post title" style="flex:1;font-size:14px">
+            <button class="mock-button" style="font-size:10px;padding:4px 12px">Edit</button>
+            <button class="mock-button" style="font-size:10px;padding:4px 12px;opacity:0.5">Preview</button>
+          </div>
+          <div style="display:flex;gap:8px;height:200px">
+            <div style="width:180px;background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;padding:8px;font-size:9px">
+              <div style="color:var(--text-secondary);margin-bottom:4px">Settings</div>
+              <input class="mock-input" placeholder="Cover image" style="width:100%;font-size:9px;margin-bottom:4px">
+              <select class="mock-input" style="width:100%;font-size:9px;margin-bottom:4px"><option>Category</option></select>
+              <input class="mock-input" placeholder="Tags (comma separated)" style="width:100%;font-size:9px;margin-bottom:4px">
+              <input class="mock-input" placeholder="Meta description" style="width:100%;font-size:9px">
+            </div>
+            <div style="flex:1;background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;padding:8px;font-family:monospace;font-size:10px;color:var(--text-secondary)">
+              # Hello World<br><br>This is a **blog post** about fitness...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

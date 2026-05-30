@@ -170,7 +170,9 @@
     "noPostsHint": "Check back soon.",
     "back": "Back to articles",
     "publishedOn": "Published {date}",
-    "tags": "Topics"
+    "tags": "Topics",
+    "filteringBy": "Filtering by",
+    "relatedPosts": "Related posts"
   },
   "profile": {
     "title": "Profile",

@@ -16,11 +16,9 @@ async function apiFetch<T>(
     ...init,
   });
   if (!res.ok) {
-    // 401 from any admin route means the session is invalid — redirect to login
     if (res.status === 401 && typeof window !== 'undefined') {
       localStorage.removeItem('admin_web_session');
       window.location.href = '/';
-      // Throw to stop execution — the redirect will happen asynchronously
       throw new Error('Unauthorized — redirecting to login');
     }
     const text = await res.text();
@@ -42,9 +40,6 @@ export interface LoginResponse {
 }
 
 export async function loginUser(email: string, password: string): Promise<LoginResponse> {
-  // Calls POST /auth/admin-login — validates email + password against
-  // ROOT_ADMIN_EMAIL / ROOT_ADMIN_PASSWORD env vars on the API.
-  // Returns a JWT with role=root if credentials match.
   const res = await fetch(`${API_URL}/api/auth/admin-login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -75,8 +70,8 @@ export function getUsers(
 }
 
 export function updateUserRole(accessToken: string, userId: string, role: string): Promise<User> {
-  return apiFetch(`/admin/users/${userId}`, accessToken, {
-    method: 'PATCH',
+  return apiFetch(`/admin/users/${userId}/role`, accessToken, {
+    method: 'PUT',
     body: JSON.stringify({ role }),
   });
 }
@@ -88,20 +83,35 @@ export function deleteUser(accessToken: string, userId: string): Promise<{ succe
 // ── Blog ────────────────────────────────────────────────────────────────────
 export function getBlogPosts(
   accessToken: string,
-  params?: { page?: number; limit?: number; categoryKey?: string },
+  params?: { page?: number; limit?: number; category?: string; status?: string },
 ): Promise<{ posts: BlogPost[]; total: number; page: number; limit: number }> {
   const query = new URLSearchParams();
   if (params?.page) query.set('page', String(params.page));
   if (params?.limit) query.set('limit', String(params.limit));
-  if (params?.categoryKey) query.set('categoryKey', params.categoryKey);
+  if (params?.category) query.set('category', params.category);
+  if (params?.status) query.set('status', params.status);
   return apiFetch(`/blog?${query}`, accessToken);
+}
+
+export function getBlogPost(accessToken: string, slug: string): Promise<BlogPost> {
+  return apiFetch(`/blog/slug/${slug}`, accessToken);
 }
 
 export function createBlogPost(
   accessToken: string,
-  data: { title: string; slug: string; content: string; categoryKey?: string; published?: boolean },
+  data: {
+    title: string;
+    slug: string;
+    excerpt?: string;
+    content?: string;
+    coverImage?: string;
+    tags?: string[];
+    categoryKey?: string;
+    status?: string;
+    readingTime?: number;
+  },
 ): Promise<BlogPost> {
-  return apiFetch('/admin/blog', accessToken, {
+  return apiFetch('/blog', accessToken, {
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -110,16 +120,26 @@ export function createBlogPost(
 export function updateBlogPost(
   accessToken: string,
   id: string,
-  data: Partial<{ title: string; slug: string; content: string; categoryKey: string; published: boolean }>,
+  data: Partial<{
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    coverImage: string;
+    tags: string[];
+    categoryKey: string;
+    status: string;
+    readingTime: number;
+  }>,
 ): Promise<BlogPost> {
-  return apiFetch(`/admin/blog/${id}`, accessToken, {
+  return apiFetch(`/blog/${id}`, accessToken, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export function deleteBlogPost(accessToken: string, id: string): Promise<{ success: boolean }> {
-  return apiFetch(`/admin/blog/${id}`, accessToken, { method: 'DELETE' });
+  return apiFetch(`/blog/${id}`, accessToken, { method: 'DELETE' });
 }
 
 export function getBlogCategories(accessToken: string): Promise<BlogCategory[]> {
@@ -128,26 +148,85 @@ export function getBlogCategories(accessToken: string): Promise<BlogCategory[]> 
 
 export function createBlogCategory(
   accessToken: string,
-  data: { key: string; label: string; emoji?: string },
+  data: { key: string; label: string; description?: string; imageUrl?: string; order?: number },
 ): Promise<BlogCategory> {
-  return apiFetch('/admin/blog/categories', accessToken, {
+  return apiFetch('/blog/categories', accessToken, {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export function deleteBlogCategory(
+export function updateBlogCategory(
   accessToken: string,
-  key: string,
-): Promise<{ success: boolean }> {
-  return apiFetch(`/admin/blog/categories/${key}`, accessToken, { method: 'DELETE' });
+  id: string,
+  data: Partial<{ label: string; description: string; imageUrl: string; order: number }>,
+): Promise<BlogCategory> {
+  return apiFetch(`/blog/categories/${id}`, accessToken, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export function deleteBlogCategory(accessToken: string, id: string): Promise<{ deleted: boolean }> {
+  return apiFetch(`/blog/categories/${id}`, accessToken, { method: 'DELETE' });
 }
 
 // ── Assets ──────────────────────────────────────────────────────────────────
-export function getAssets(accessToken: string): Promise<Asset[]> {
-  return apiFetch('/admin/assets', accessToken);
+export function getAssets(
+  accessToken: string,
+  params?: { provider?: string; category?: string },
+): Promise<Asset[]> {
+  const query = new URLSearchParams();
+  if (params?.provider) query.set('provider', params.provider);
+  if (params?.category) query.set('category', params.category);
+  return apiFetch(`/admin/assets?${query}`, accessToken);
 }
 
+export function deleteAsset(accessToken: string, id: string): Promise<{ deleted: boolean }> {
+  return apiFetch(`/admin/assets/${id}`, accessToken, { method: 'DELETE' });
+}
+
+// R2 upload flow: presign → PUT to uploadUrl → confirm
+export function presignAssetUpload(
+  accessToken: string,
+  data: { contentType: string; ext: string; category?: string },
+): Promise<{ uploadUrl: string; key: string }> {
+  const q = new URLSearchParams({ contentType: data.contentType, ext: data.ext });
+  if (data.category) q.set('category', data.category);
+  return apiFetch(`/admin/assets/presign-upload?${q}`, accessToken);
+}
+
+export function confirmAssetUpload(
+  accessToken: string,
+  data: { key: string; fileName: string; mimeType?: string; size?: number; category?: string; userId?: string },
+): Promise<Asset> {
+  return apiFetch('/admin/assets/confirm-upload', accessToken, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+// Cloudinary upload flow: presign → POST to Cloudinary → confirm
+export function getCloudinaryPresign(
+  accessToken: string,
+  data: { contentType: string; category?: string },
+): Promise<{ signature: string; timestamp: number; apiKey: string; cloudName: string; folder: string; publicId: string }> {
+  const q = new URLSearchParams({ contentType: data.contentType });
+  if (data.category) q.set('category', data.category);
+  return apiFetch(`/admin/assets/cloudinary-presign?${q}`, accessToken);
+}
+
+export function confirmCloudinaryUpload(
+  accessToken: string,
+  data: { secureUrl: string; publicId?: string; fileName: string; mimeType?: string; size?: number; category?: string; userId?: string },
+): Promise<Asset> {
+  return apiFetch('/admin/assets/confirm-cloudinary', accessToken, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+// Legacy: kept for backward compat during transition
 export function getUploadUrl(
   accessToken: string,
   data: { filename: string; contentType: string },
@@ -159,17 +238,25 @@ export function getUploadUrl(
 }
 
 // ── Config ──────────────────────────────────────────────────────────────────
-export function getAppConfig(accessToken: string): Promise<Record<string, any>> {
+export interface AppConfigEntry {
+  key: string;
+  value: any;
+  label?: string | null;
+}
+
+export function getAppConfigs(accessToken: string): Promise<AppConfigEntry[]> {
   return apiFetch('/admin/config', accessToken);
 }
 
-export function updateAppConfig(
+export function updateAppConfigKey(
   accessToken: string,
-  config: Record<string, any>,
-): Promise<Record<string, any>> {
-  return apiFetch('/admin/config', accessToken, {
+  key: string,
+  value: any,
+  label?: string,
+): Promise<AppConfigEntry> {
+  return apiFetch(`/admin/config/${key}`, accessToken, {
     method: 'PUT',
-    body: JSON.stringify(config),
+    body: JSON.stringify({ value, label }),
   });
 }
 

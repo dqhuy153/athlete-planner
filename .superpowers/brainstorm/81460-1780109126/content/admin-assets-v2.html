@@ -1,0 +1,127 @@
+<h2>Assets Manager — Updated</h2>
+<p class="subtitle">Smaller thumbnails + click-to-preview modal (ZenTarot CardLightbox pattern)</p>
+
+<div class="mockup">
+  <div class="mockup-header">Asset Manager</div>
+  <div class="mockup-body" style="padding:12px">
+    <!-- Provider tabs + search -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <div style="display:flex;gap:2px;background:var(--surface-container);border-radius:6px;padding:2px">
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:var(--primary);color:#000;font-weight:600;border:none">All (24)</button>
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:transparent;color:var(--text-secondary);border:none">R2 (18)</button>
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:transparent;color:var(--text-secondary);border:none">Cloudinary (6)</button>
+      </div>
+      <input class="mock-input" placeholder="Search files..." style="flex:1;font-size:10px">
+      <select class="mock-input" style="width:100px;font-size:10px"><option>All types</option><option>Images</option><option>Videos</option></select>
+    </div>
+
+    <!-- Upload zone -->
+    <div style="border:2px dashed var(--outline-variant);border-radius:10px;padding:16px;text-align:center;margin-bottom:12px;background:var(--surface);cursor:pointer">
+      <p style="font-size:11px;color:var(--text-primary);margin:0 0 2px;font-weight:500">Drop files here or click to upload</p>
+      <p style="font-size:9px;color:var(--text-tertiary);margin:0 0 6px">Images, videos, GIFs · Max 10MB</p>
+      <div style="display:flex;justify-content:center;gap:8px">
+        <label style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-secondary);cursor:pointer"><input type="radio" name="provider" checked style="accent-color:var(--primary)"> R2</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-secondary);cursor:pointer"><input type="radio" name="provider" style="accent-color:var(--primary)"> Cloudinary</label>
+      </div>
+    </div>
+
+    <!-- Asset grid — smaller thumbnails -->
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer;position:relative">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#1a1a2e,#16213e)"></div>
+        <div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">squat.gif</p></div>
+        <div style="position:absolute;top:2px;right:2px;display:flex;gap:1px;opacity:0;transition:opacity .15s" class="hover-show">
+          <button style="width:16px;height:16px;border-radius:3px;background:rgba(0,0,0,0.7);border:none;color:white;font-size:7px;cursor:pointer">🔗</button>
+          <button style="width:16px;height:16px;border-radius:3px;background:rgba(239,68,68,0.8);border:none;color:white;font-size:7px;cursor:pointer">✕</button>
+        </div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer;position:relative">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#0f3443,#34e89e)"></div>
+        <div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">deadlift.mp4</p></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer;position:relative">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#2d1b69,#11998e)"></div>
+        <div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">bench.gif</p></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer;position:relative">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#fc5c7d,#6a82fb)"></div>
+        <div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">pull-up.gif</p></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer;position:relative">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#f093fb,#f5576c)"></div>
+        <div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">hero-banner.jpg</p></div>
+      </div>
+      <div style="border:2px dashed var(--outline-variant);border-radius:6px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--text-tertiary)">
+        <div style="font-size:14px">+</div>
+      </div>
+      <!-- row 2 -->
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer"><div style="aspect-ratio:1;background:linear-gradient(135deg,#4facfe,#00f2fe)"></div><div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">lunge.gif</p></div></div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer"><div style="aspect-ratio:1;background:linear-gradient(135deg,#43e97b,#38f9d7)"></div><div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">plank.gif</p></div></div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer"><div style="aspect-ratio:1;background:linear-gradient(135deg,#fa709a,#fee140)"></div><div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">row.gif</p></div></div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer"><div style="aspect-ratio:1;background:linear-gradient(135deg,#a18cd1,#fbc2eb)"></div><div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">curl.gif</p></div></div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer"><div style="aspect-ratio:1;background:linear-gradient(135deg,#ffecd2,#fcb69f)"></div><div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">cover.png</p></div></div>
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:6px;overflow:hidden;cursor:pointer"><div style="aspect-ratio:1;background:linear-gradient(135deg,#ff9a9e,#fecfef)"></div><div style="padding:4px"><p style="font-size:8px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">logo.svg</p></div></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid var(--outline-variant)">
+      <span style="font-size:9px;color:var(--text-tertiary)">24 assets · 142.3 MB</span>
+      <span style="font-size:9px;color:var(--text-tertiary)">Page 1 of 3</span>
+    </div>
+  </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="mockup" style="margin-top:16px">
+  <div class="mockup-header">Asset Preview Modal (on click)</div>
+  <div class="mockup-body" style="padding:0;position:relative;min-height:300px;background:rgba(0,0,0,0.85)">
+    <!-- Close button -->
+    <button style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.1);border:none;color:white;font-size:12px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center">✕</button>
+
+    <!-- Nav arrows -->
+    <button style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:6px;background:rgba(255,255,255,0.1);border:none;color:white;font-size:14px;cursor:pointer;z-index:10">‹</button>
+    <button style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:6px;background:rgba(255,255,255,0.1);border:none;color:white;font-size:14px;cursor:pointer;z-index:10">›</button>
+
+    <div style="display:flex;height:300px">
+      <!-- Preview area -->
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px">
+        <div style="max-width:100%;max-height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:8px;aspect-ratio:4/3;width:280px;display:flex;align-items:center;justify-content:center">
+          <span style="font-size:48px">🏋️</span>
+        </div>
+      </div>
+
+      <!-- Info sidebar -->
+      <div style="width:220px;padding:16px;border-left:1px solid rgba(255,255,255,0.1);overflow-y:auto">
+        <p style="font-size:12px;font-weight:600;color:white;margin:0 0 12px">squat-form.gif</p>
+
+        <div style="margin-bottom:12px">
+          <p style="font-size:9px;color:rgba(255,255,255,0.4);margin:0 0 4px;text-transform:uppercase">Type</p>
+          <p style="font-size:10px;color:rgba(255,255,255,0.8);margin:0">image/gif</p>
+        </div>
+        <div style="margin-bottom:12px">
+          <p style="font-size:9px;color:rgba(255,255,255,0.4);margin:0 0 4px;text-transform:uppercase">Size</p>
+          <p style="font-size:10px;color:rgba(255,255,255,0.8);margin:0">2.4 MB</p>
+        </div>
+        <div style="margin-bottom:12px">
+          <p style="font-size:9px;color:rgba(255,255,255,0.4);margin:0 0 4px;text-transform:uppercase">Provider</p>
+          <p style="font-size:10px;color:rgba(255,255,255,0.8);margin:0">R2 Storage</p>
+        </div>
+        <div style="margin-bottom:12px">
+          <p style="font-size:9px;color:rgba(255,255,255,0.4);margin:0 0 4px;text-transform:uppercase">Uploaded</p>
+          <p style="font-size:10px;color:rgba(255,255,255,0.8);margin:0">May 28, 2026</p>
+        </div>
+        <div style="margin-bottom:12px">
+          <p style="font-size:9px;color:rgba(255,255,255,0.4);margin:0 0 4px;text-transform:uppercase">URL</p>
+          <div style="display:flex;gap:4px">
+            <input class="mock-input" value="https://cdn.example.com/squat.gif" readonly style="flex:1;font-size:8px;background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)">
+            <button style="padding:4px 8px;border-radius:4px;background:var(--primary);color:#000;font-size:8px;border:none;cursor:pointer;font-weight:600">Copy</button>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:16px">
+          <button style="width:100%;padding:6px;border-radius:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-size:10px;cursor:pointer">Open in new tab</button>
+          <button style="width:100%;padding:6px;border-radius:6px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:10px;cursor:pointer">Delete asset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

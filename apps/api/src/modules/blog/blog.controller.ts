@@ -22,6 +22,7 @@ import { DeleteBlogCategoryCommand } from './commands/delete-blog-category.comma
 import { GetBlogPostsQuery } from './queries/get-blog-posts.query';
 import { GetBlogPostBySlugQuery } from './queries/get-blog-post-by-slug.query';
 import { GetBlogCategoriesQuery } from './queries/get-blog-categories.query';
+import { GetRelatedPostsQuery } from './queries/get-related-posts.query';
 import {
   CreateBlogPostDto,
   UpdateBlogPostDto,
@@ -51,6 +52,11 @@ export class BlogController {
   @Get('slug/:slug')
   async findBySlug(@Param('slug') slug: string) {
     return this.queryBus.execute(new GetBlogPostBySlugQuery(slug));
+  }
+
+  @Get('related')
+  async findRelated(@Query('slug') slug: string, @Query('limit') limit?: string) {
+    return this.queryBus.execute(new GetRelatedPostsQuery(slug, limit ? parseInt(limit, 10) : 3));
   }
 
   @UseGuards(AdminGuard)

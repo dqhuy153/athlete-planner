@@ -22,6 +22,6 @@ export class GetBlogPostsHandler implements IQueryHandler<GetBlogPostsQuery> {
       this.prisma.blogPost.count({ where }),
     ]);
 
-    return { data: posts, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+    return { posts, total, page, limit };
   }
 }

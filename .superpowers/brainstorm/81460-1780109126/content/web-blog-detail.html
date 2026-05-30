@@ -1,0 +1,151 @@
+<h2>Blog Post Detail — with TOC</h2>
+<p class="subtitle">Reading progress, breadcrumbs, TOC sidebar, MarkdownRenderer, related posts</p>
+
+<div class="mockup">
+  <div class="mockup-header">Blog Post Detail — /[locale]/blog/[slug]</div>
+  <div class="mockup-body" style="padding:0;overflow:hidden;position:relative">
+    <!-- Reading Progress Bar -->
+    <div style="height:2px;background:var(--surface-container);position:relative">
+      <div style="height:100%;width:35%;background:linear-gradient(90deg,var(--primary),#b8952b);transition:width 0.15s"></div>
+    </div>
+
+    <!-- TOC Toggle Button (desktop, fixed left) -->
+    <div style="position:absolute;left:8px;top:80px;z-index:20;width:36px;height:36px;border-radius:50%;background:var(--surface-container);border:1px solid var(--outline-variant);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);font-size:14px" title="Table of Contents">☰</div>
+
+    <div style="display:flex">
+      <!-- TOC Sidebar (desktop) -->
+      <div style="width:200px;min-width:200px;background:var(--surface-container);border-right:1px solid var(--outline-variant);padding:16px 12px;max-height:calc(100vh - 100px);overflow-y:auto">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--outline-variant)">
+          <span style="font-size:11px;font-weight:600;color:var(--text-primary)">Contents</span>
+          <span style="font-size:10px;color:var(--text-tertiary);cursor:pointer">✕</span>
+        </div>
+        <nav>
+          <ul style="list-style:none;padding:0;margin:0">
+            <li><a style="display:block;font-size:10px;padding:5px 8px;border-radius:6px;color:var(--primary);background:rgba(0,212,170,0.1);cursor:pointer;text-decoration:none;font-weight:600">The Foundation: Strength First</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px 5px 16px;border-radius:6px;color:var(--text-secondary);cursor:pointer;text-decoration:none">Weekly Split Example</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px 5px 16px;border-radius:6px;color:var(--text-secondary);cursor:pointer;text-decoration:none">Programming Principles</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px 5px 24px;border-radius:6px;color:var(--text-secondary);font-size:9px;cursor:pointer;text-decoration:none">Volume Management</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px 5px 24px;border-radius:6px;color:var(--text-secondary);font-size:9px;cursor:pointer;text-decoration:none">Intensity Zones</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px;border-radius:6px;color:var(--text-secondary);cursor:pointer;text-decoration:none">Recovery Protocols</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px 5px 16px;border-radius:6px;color:var(--text-secondary);cursor:pointer;text-decoration:none">Sleep Optimization</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px;border-radius:6px;color:var(--text-secondary);cursor:pointer;text-decoration:none">Nutrition Timing</a></li>
+            <li><a style="display:block;font-size:10px;padding:5px 8px 5px 16px;border-radius:6px;color:var(--text-secondary);cursor:pointer;text-decoration:none">Post-Workout Window</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div style="flex:1;min-width:0">
+        <!-- Hero Section -->
+        <div style="background:var(--surface);border-bottom:1px solid var(--outline-variant);padding:20px 24px">
+          <nav style="font-size:10px;color:var(--text-secondary);margin-bottom:12px">
+            <span style="cursor:pointer">Home</span> <span style="color:var(--text-tertiary)">›</span>
+            <span style="cursor:pointer">Blog</span> <span style="color:var(--text-tertiary)">›</span>
+            <span style="cursor:pointer;color:var(--primary)">Strength</span> <span style="color:var(--text-tertiary)">›</span>
+            <span style="color:var(--text-primary)">How to Build Muscle...</span>
+          </nav>
+
+          <div style="display:flex;gap:4px;margin-bottom:10px">
+            <span style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">strength</span>
+            <span style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">hybrid</span>
+          </div>
+
+          <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0 0 10px;line-height:1.2">How to Build Muscle as a Hybrid Athlete</h1>
+
+          <div style="display:flex;align-items:center;gap:10px;font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;border-top:1px solid var(--outline-variant);padding-top:10px">
+            <span>May 28, 2026</span>
+            <span style="color:var(--text-tertiary)">•</span>
+            <span>⏱ 4 min read</span>
+          </div>
+        </div>
+
+        <!-- Cover Image -->
+        <div style="padding:16px 24px 0">
+          <div style="border-radius:10px;overflow:hidden;border:1px solid var(--outline-variant);box-shadow:0 10px 40px -10px rgba(0,0,0,0.3)">
+            <div style="width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+              <span style="font-size:32px">🏋️</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Article Content (MarkdownRenderer) -->
+        <div style="padding:16px 24px 24px;font-size:12px;color:var(--text-secondary);line-height:1.8">
+          <p style="margin:0 0 12px">Combining strength training with running is the ultimate test of athletic programming. Most training plans are designed for single-discipline athletes — but hybrid athletes need a different approach.</p>
+
+          <h2 id="the-foundation-strength-first" style="font-size:16px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(0,212,170,0.2)">The Foundation: Strength First</h2>
+          <p style="margin:0 0 12px">Your strength sessions should always come <strong style="color:rgba(0,212,170,0.9)">before</strong> your running sessions within the same day. This ensures you're fresh for heavy compound lifts.</p>
+
+          <h3 id="weekly-split-example" style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">Weekly Split Example</h3>
+          <ul style="margin:0 0 12px;padding-left:20px;list-style:none">
+            <li style="position:relative;padding-left:16px;margin-bottom:4px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Monday:</strong> Squat + Bench Press</li>
+            <li style="position:relative;padding-left:16px;margin-bottom:4px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Tuesday:</strong> Easy Run 5K (Zone 2)</li>
+            <li style="position:relative;padding-left:16px;margin-bottom:4px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Wednesday:</strong> Deadlift + Pull-ups</li>
+            <li style="position:relative;padding-left:16px;margin-bottom:4px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Thursday:</strong> Rest or light yoga</li>
+            <li style="position:relative;padding-left:16px;margin-bottom:4px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Friday:</strong> Overhead Press + Rows</li>
+            <li style="position:relative;padding-left:16px;margin-bottom:4px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Saturday:</strong> Long Run 10K</li>
+            <li style="position:relative;padding-left:16px"><span style="position:absolute;left:0;color:rgba(0,212,170,0.6);font-size:8px;top:3px">✦</span><strong>Sunday:</strong> Full rest</li>
+          </ul>
+
+          <h3 id="programming-principles" style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">Programming Principles</h3>
+          <p style="margin:0 0 8px">The key to hybrid training is managing fatigue across both modalities. Here are the core principles:</p>
+
+          <h4 id="volume-management" style="font-size:11px;font-weight:700;color:var(--text-primary);margin:12px 0 6px">Volume Management</h4>
+          <p style="margin:0 0 12px">Keep strength volume at 60-70% of a dedicated powerlifter. Focus on compound movements with 3-4 working sets per exercise.</p>
+
+          <h4 id="intensity-zones" style="font-size:11px;font-weight:700;color:var(--text-primary);margin:12px 0 6px">Intensity Zones</h4>
+          <p style="margin:0 0 12px">Running should be 80% Zone 2 (easy pace). Only 20% should be high-intensity intervals or tempo work.</p>
+
+          <h2 id="recovery-protocols" style="font-size:16px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(0,212,170,0.2)">Recovery Protocols</h2>
+          <p style="margin:0 0 12px">Recovery is where the magic happens. Without adequate recovery, you'll accumulate fatigue and plateau on both fronts.</p>
+
+          <h3 id="sleep-optimization" style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">Sleep Optimization</h3>
+          <p style="margin:0 0 12px">Aim for 7-9 hours. Sleep is when growth hormone peaks and muscle repair occurs. Consider sleep hygiene practices like consistent bedtimes and blue-light reduction.</p>
+
+          <h2 id="nutrition-timing" style="font-size:16px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(0,212,170,0.2)">Nutrition Timing</h2>
+
+          <h3 id="post-workout-window" style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">Post-Workout Window</h3>
+          <p style="margin:0 0 12px">Consume 20-40g protein within 2 hours of training. For double sessions (AM run + PM lift), space meals to support both.</p>
+
+          <blockquote style="border-left:3px solid var(--primary);padding:8px 12px;background:rgba(0,212,170,0.05);border-radius:0 6px 6px 0;margin:12px 0;font-style:italic"><strong style="color:var(--primary)">Pro tip:</strong> Keep your heaviest compounds on non-running days for optimal recovery.</blockquote>
+
+          <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:11px">
+            <thead><tr style="border-bottom:1px solid var(--outline-variant)"><th style="text-align:left;padding:6px 8px;color:var(--primary);font-size:9px;text-transform:uppercase;letter-spacing:0.5px">Day</th><th style="text-align:left;padding:6px 8px;color:var(--primary);font-size:9px;text-transform:uppercase;letter-spacing:0.5px">Strength</th><th style="text-align:left;padding:6px 8px;color:var(--primary);font-size:9px;text-transform:uppercase;letter-spacing:0.5px">Running</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:6px 8px;color:var(--text-secondary)">Mon</td><td style="padding:6px 8px;color:var(--text-primary)">Squat + Bench</td><td style="padding:6px 8px;color:var(--text-secondary)">—</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:6px 8px;color:var(--text-secondary)">Tue</td><td style="padding:6px 8px;color:var(--text-secondary)">—</td><td style="padding:6px 8px;color:var(--text-primary)">Easy 5K</td></tr>
+              <tr><td style="padding:6px 8px;color:var(--text-secondary)">Wed</td><td style="padding:6px 8px;color:var(--text-primary)">Deadlift + Pull</td><td style="padding:6px 8px;color:var(--text-secondary)">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tags Footer -->
+        <div style="padding:0 24px 16px;border-top:1px solid var(--outline-variant);margin-top:8px;padding-top:16px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">strength</span>
+            <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">hybrid</span>
+            <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">programming</span>
+          </div>
+        </div>
+
+        <!-- Related Posts -->
+        <div style="padding:0 24px 24px">
+          <h2 style="font-size:15px;font-weight:700;color:var(--text-primary);margin:0 0 12px">Related articles</h2>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div style="border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(0,212,170,0.3)'" onmouseout="this.style.borderColor='var(--outline-variant)'">
+              <div style="aspect-ratio:16/10;background:linear-gradient(135deg,#0f3443,#34e89e);transition:transform 0.5s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'"></div>
+              <div style="padding:8px"><h3 style="font-size:11px;font-weight:600;color:var(--text-primary);margin:0 0 4px;line-height:1.3">Zone 2 Running Guide</h3><p style="font-size:9px;color:var(--text-tertiary);margin:0">⏱ 6 min read</p></div>
+            </div>
+            <div style="border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(0,212,170,0.3)'" onmouseout="this.style.borderColor='var(--outline-variant)'">
+              <div style="aspect-ratio:16/10;background:linear-gradient(135deg,#2d1b69,#11998e);transition:transform 0.5s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'"></div>
+              <div style="padding:8px"><h3 style="font-size:11px;font-weight:600;color:var(--text-primary);margin:0 0 4px;line-height:1.3">Protein Timing</h3><p style="font-size:9px;color:var(--text-tertiary);margin:0">⏱ 3 min read</p></div>
+            </div>
+            <div style="border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(0,212,170,0.3)'" onmouseout="this.style.borderColor='var(--outline-variant)'">
+              <div style="aspect-ratio:16/10;background:linear-gradient(135deg,#fc5c7d,#6a82fb);transition:transform 0.5s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'"></div>
+              <div style="padding:8px"><h3 style="font-size:11px;font-weight:600;color:var(--text-primary);margin:0 0 4px;line-height:1.3">Recovery Strategies</h3><p style="font-size:9px;color:var(--text-tertiary);margin:0">⏱ 5 min read</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

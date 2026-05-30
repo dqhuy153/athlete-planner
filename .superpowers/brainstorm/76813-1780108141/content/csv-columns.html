@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Column Options</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 24px; }
+    h1 { font-size: 20px; margin-bottom: 6px; color: #fff; }
+    .subtitle { color: #888; font-size: 14px; margin-bottom: 24px; }
+    .options { display: flex; flex-direction: column; gap: 16px; }
+    .option { border: 2px solid #333; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; }
+    .option:hover { border-color: #00D4AA; background: rgba(0,212,170,0.05); }
+    .option.selected { border-color: #00D4AA; background: rgba(0,212,170,0.08); }
+    .option .letter { position: absolute; top: 16px; right: 16px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: #888; }
+    .option.selected .letter { background: #00D4AA; color: #000; border-color: #00D4AA; }
+    .option h3 { font-size: 15px; margin-bottom: 8px; color: #fff; }
+    .option p { font-size: 13px; color: #999; line-height: 1.5; }
+    .csv-preview { margin-top: 12px; background: #111; border-radius: 8px; padding: 12px; font-family: 'SF Mono', Monaco, monospace; font-size: 11px; color: #aaa; overflow-x: auto; white-space: pre; border: 1px solid #222; }
+    .csv-preview .header { color: #00D4AA; font-weight: 600; }
+    .csv-preview .row { color: #666; }
+    .tag { display: inline-block; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; padding: 2px 8px; font-size: 11px; margin-right: 6px; }
+    .tag.green { border-color: #00D4AA; color: #00D4AA; }
+    .tag.yellow { border-color: #f0a500; color: #f0a500; }
+    .tag.red { border-color: #ff4444; color: #ff4444; }
+    .divider { border-top: 1px solid #222; margin: 12px 0; }
+    .note { font-size: 12px; color: #666; margin-top: 12px; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Gym CSV Template — Column Options</h1>
+  <p class="subtitle">Choose the CSV column structure for Gym Exercise import</p>
+
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <h3>Minimal (5 columns)</h3>
+      <p>Only essential fields. System auto-fills vietnameseName, defaults to BEGINNER level, empty secondary muscles. Admin completes extra fields via form after import.</p>
+      <div class="csv-preview"><span class="header">name_vi,muscle_group,steps_vi,form_cues_vi,youtube_url</span>
+<span class="row">Đẩy Tạ Đòn Nằm,Chest,Bước 1|Bước 2|Bước 3,Lưu ý 1|Lưu ý 2,</span>
+<span class="row">Kéo Cable Ngực,Chest,Bước 1|Bước 2,Lưu ý 1|Lưu ý 2,</span></div>
+      <div class="note"><span class="tag green">Easy for AI</span> <span class="tag green">Few errors</span> <span class="tag yellow">Less control</span></div>
+    </div>
+
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <h3>Complete (12 columns)</h3>
+      <p>All DB fields flattened. Full control over both BEGINNER + ADVANCED levels, secondary muscles, Garmin enum, media URLs. More columns but everything in one file.</p>
+      <div class="csv-preview"><span class="header">name_vi,vietnameseName,muscle_group,secondary_muscles,garmin_enum,steps_beginner_vi,form_cues_beginner_vi,steps_advanced_vi,form_cues_advanced_vi,youtube_url,gif_url,level</span>
+<span class="row">Đẩy Tạ Đòn Nằm,Barbell Bench Press,Chest,"Triceps|Shoulders",BENCH_PRESS,Bước 1|Bước 2,Lưu ý 1|Lưu ý 2,Bước 1|Bước 2,Lưu ý 1|Lưu ý 2,,,BEGINNER+ADVANCED</span></div>
+      <div class="note"><span class="tag green">Full control</span> <span class="tag red">More complex</span> <span class="tag red">AI may struggle</span></div>
+    </div>
+
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <h3>Essential + English (7 columns)</h3>
+      <p>Includes Vietnamese + English for both steps and form cues (bilingual from import). System auto-fills derived fields. Good balance of control and simplicity.</p>
+      <div class="csv-preview"><span class="header">name_vi,name_en,muscle_group,steps_vi,form_cues_vi,steps_en,form_cues_en</span>
+<span class="row">Đẩy Tạ Đòn Nằm,Barbell Bench Press,Chest,Bước 1|Bước 2,Lưu ý 1|Lưu ý 2,Step 1|Step 2,Note 1|Note 2</span>
+<span class="row">Kéo Cable Ngực,Cable Chest Fly,Chest,Bước 1|Bước 2,Lưuokie 1|Lưu ý 2,Step 1|Step 2,Note 1|Note 2</span></div>
+      <div class="note"><span class="tag green">Bilingual</span> <span class="tag green">Moderate columns</span> <span class="tag yellow">BEGINNER only, add ADVANCED via form</span></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSelect(el) {
+      document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      if (window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'select', choice: el.dataset.choice }, '*');
+      }
+    }
+  </script>
+</body>
+</html>

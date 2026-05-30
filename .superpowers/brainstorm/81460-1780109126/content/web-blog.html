@@ -1,0 +1,210 @@
+<h2>Web Blog — ZenTarot Pattern</h2>
+<p class="subtitle">Rich blog list + post detail with reading progress, TOC, related posts</p>
+
+<!-- Blog List Mockup -->
+<div class="mockup">
+  <div class="mockup-header">Blog List — /[locale]/blog</div>
+  <div class="mockup-body" style="padding:0;overflow:hidden">
+    <!-- Hero -->
+    <div style="background:linear-gradient(180deg,rgba(0,212,170,0.05),transparent);padding:32px 24px;text-align:center">
+      <h1 style="font-size:28px;font-weight:700;color:var(--text-primary);margin:0 0 6px"><span style="color:var(--primary)">Sport</span> Blog</h1>
+      <p style="font-size:12px;color:var(--text-secondary);margin:0">Training tips, nutrition guides, and athlete stories for hybrid athletes.</p>
+    </div>
+
+    <!-- Category Image Cards (horizontal scroll) -->
+    <div style="display:flex;gap:8px;padding:0 24px 12px;overflow-x:auto">
+      <div style="min-width:110px;height:72px;border-radius:8px;overflow:hidden;position:relative;cursor:pointer;border:2px solid var(--primary)">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:4px;left:6px"><p style="font-size:9px;font-weight:700;color:white;margin:0">🏋️ Strength</p><p style="font-size:8px;color:rgba(255,255,255,0.7);margin:0">8 articles</p></div>
+      </div>
+      <div style="min-width:110px;height:72px;border-radius:8px;overflow:hidden;position:relative;cursor:pointer;border:2px solid transparent;opacity:0.8">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#0f3443,#34e89e)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:4px;left:6px"><p style="font-size:9px;font-weight:700;color:white;margin:0">🏃 Running</p><p style="font-size:8px;color:rgba(255,255,255,0.7);margin:0">5 articles</p></div>
+      </div>
+      <div style="min-width:110px;height:72px;border-radius:8px;overflow:hidden;position:relative;cursor:pointer;border:2px solid transparent;opacity:0.8">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#2d1b69,#11998e)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:4px;left:6px"><p style="font-size:9px;font-weight:700;color:white;margin:0">🥗 Nutrition</p><p style="font-size:8px;color:rgba(255,255,255,0.7);margin:0">6 articles</p></div>
+      </div>
+      <div style="min-width:110px;height:72px;border-radius:8px;overflow:hidden;position:relative;cursor:pointer;border:2px solid transparent;opacity:0.8">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#fc5c7d,#6a82fb)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:4px;left:6px"><p style="font-size:9px;font-weight:700;color:white;margin:0">💤 Recovery</p><p style="font-size:8px;color:rgba(255,255,255,0.7);margin:0">3 articles</p></div>
+      </div>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div style="display:flex;gap:6px;padding:0 24px 16px;flex-wrap:wrap">
+      <button style="padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(0,212,170,0.15);border:1px solid rgba(0,212,170,0.4);color:var(--primary);cursor:pointer">✦ All <span style="font-size:9px;opacity:0.7;margin-left:2px">22</span></button>
+      <button style="padding:5px 14px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);cursor:pointer">🏋️ Strength <span style="font-size:9px;opacity:0.5;margin-left:2px">8</span></button>
+      <button style="padding:5px 14px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);cursor:pointer">🏃 Running <span style="font-size:9px;opacity:0.5;margin-left:2px">5</span></button>
+      <button style="padding:5px 14px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);cursor:pointer">🥗 Nutrition <span style="font-size:9px;opacity:0.5;margin-left:2px">6</span></button>
+      <button style="padding:5px 14px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);cursor:pointer">💤 Recovery <span style="font-size:9px;opacity:0.5;margin-left:2px">3</span></button>
+    </div>
+
+    <!-- Post Feed -->
+    <div style="padding:0 24px 24px;display:flex;flex-direction:column;gap:20px">
+      <!-- Post Card 1 — flex-row on desktop -->
+      <div style="display:flex;gap:16px;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='none'">
+        <div style="width:33%;min-width:140px;aspect-ratio:16/10;border-radius:10px;overflow:hidden;flex-shrink:0;border:1px solid var(--outline-variant)">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e);transition:transform 0.5s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='none'"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:12px;background:rgba(0,212,170,0.15);border:1px solid rgba(0,212,170,0.3);color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">🏋️ Strength</span>
+            <span style="font-size:9px;color:var(--text-tertiary)">•</span>
+            <time style="font-size:9px;color:var(--text-tertiary)">May 28, 2026</time>
+          </div>
+          <h2 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:0 0 6px;line-height:1.3">How to Build Muscle as a Hybrid Athlete</h2>
+          <p style="font-size:11px;color:var(--text-secondary);margin:0 0 8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">Combining strength training with running requires smart programming. Here's how to structure your weekly split for maximum gains without burning out.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">⏱ 4 min read</span>
+            <span style="font-size:10px;color:var(--primary);transition:transform 0.2s">Read more →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post Card 2 -->
+      <div style="display:flex;gap:16px;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='none'">
+        <div style="width:33%;min-width:140px;aspect-ratio:16/10;border-radius:10px;overflow:hidden;flex-shrink:0;border:1px solid var(--outline-variant)">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#0f3443,#34e89e)"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:12px;background:rgba(52,232,158,0.15);border:1px solid rgba(52,232,158,0.3);color:#34e89e;text-transform:uppercase;letter-spacing:0.5px">🏃 Running</span>
+            <span style="font-size:9px;color:var(--text-tertiary)">•</span>
+            <time style="font-size:9px;color:var(--text-tertiary)">May 25, 2026</time>
+          </div>
+          <h2 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:0 0 6px;line-height:1.3">Zone 2 Running: The Complete Guide for Gym-First Athletes</h2>
+          <p style="font-size:11px;color:var(--text-secondary);margin:0 0 8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">Zone 2 training is the foundation of endurance. Learn how to incorporate easy runs without sacrificing your strength gains.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">⏱ 6 min read</span>
+            <span style="font-size:10px;color:var(--primary)">Read more →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post Card 3 — no image -->
+      <div style="display:flex;gap:16px;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='none'">
+        <div style="width:33%;min-width:140px;aspect-ratio:16/10;border-radius:10px;overflow:hidden;flex-shrink:0;border:1px solid var(--outline-variant);display:flex;align-items:center;justify-content:center;background:var(--surface-container)">
+          <span style="font-size:32px;font-weight:700;color:rgba(0,212,170,0.15)">N</span>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:12px;background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.3);color:#fbbf24;text-transform:uppercase;letter-spacing:0.5px">🥗 Nutrition</span>
+            <span style="font-size:9px;color:var(--text-tertiary)">•</span>
+            <time style="font-size:9px;color:var(--text-tertiary)">May 22, 2026</time>
+          </div>
+          <h2 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:0 0 6px;line-height:1.3">Protein Timing for the Dual-Training Athlete</h2>
+          <p style="font-size:11px;color:var(--text-secondary);margin:0 0 8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">When you train both strength and endurance, protein timing becomes critical. Here's the science-backed approach.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">⏱ 3 min read</span>
+            <span style="font-size:10px;color:var(--primary)">Read more →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More -->
+    <div style="text-align:center;padding:0 24px 24px">
+      <button style="padding:10px 32px;border-radius:24px;font-size:11px;font-weight:600;background:var(--surface);border:1px solid rgba(0,212,170,0.2);color:var(--text-primary);cursor:pointer">Load more articles ↓</button>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Post Detail Mockup -->
+<div class="mockup" style="margin-top:16px">
+  <div class="mockup-header">Blog Post Detail — /[locale]/blog/[slug]</div>
+  <div class="mockup-body" style="padding:0;overflow:hidden">
+    <!-- Reading Progress Bar -->
+    <div style="height:2px;background:var(--surface-container);position:relative">
+      <div style="height:100%;width:35%;background:linear-gradient(90deg,var(--primary),#b8952b);transition:width 0.15s"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <div style="background:var(--surface);border-bottom:1px solid var(--outline-variant);padding:20px 24px">
+      <!-- Breadcrumbs -->
+      <nav style="font-size:10px;color:var(--text-secondary);margin-bottom:12px">
+        <span style="cursor:pointer">Home</span> <span style="color:var(--text-tertiary)">›</span>
+        <span style="cursor:pointer">Blog</span> <span style="color:var(--text-tertiary)">›</span>
+        <span style="cursor:pointer;color:var(--primary)">Strength</span> <span style="color:var(--text-tertiary)">›</span>
+        <span style="color:var(--text-primary)">How to Build Muscle...</span>
+      </nav>
+
+      <!-- Tags -->
+      <div style="display:flex;gap:4px;margin-bottom:10px">
+        <span style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">strength</span>
+        <span style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">hybrid</span>
+        <span style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.2);color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">muscle</span>
+      </div>
+
+      <h1 style="font-size:24px;font-weight:700;color:var(--text-primary);margin:0 0 10px;line-height:1.2">How to Build Muscle as a Hybrid Athlete</h1>
+
+      <div style="display:flex;align-items:center;gap:10px;font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;border-top:1px solid var(--outline-variant);padding-top:10px">
+        <span>May 28, 2026</span>
+        <span style="color:var(--text-tertiary)">•</span>
+        <span>⏱ 4 min read</span>
+      </div>
+    </div>
+
+    <!-- Cover Image -->
+    <div style="padding:20px 24px 0">
+      <div style="border-radius:10px;overflow:hidden;border:1px solid var(--outline-variant);box-shadow:0 10px 40px -10px rgba(0,0,0,0.3)">
+        <div style="width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+          <span style="font-size:32px">🏋️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div style="padding:20px 24px">
+      <div style="font-size:12px;color:var(--text-secondary);line-height:1.8">
+        <p style="margin:0 0 12px">Combining strength training with running is the ultimate test of athletic programming. Most training plans are designed for single-discipline athletes — but hybrid athletes need a different approach.</p>
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">The Foundation: Strength First</h3>
+        <p style="margin:0 0 12px">Your strength sessions should always come <strong>before</strong> your running sessions within the same day. This ensures you're fresh for heavy compound lifts.</p>
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin:16px 0 8px">Weekly Split Example</h3>
+        <ul style="margin:0 0 12px;padding-left:20px">
+          <li><strong>Monday:</strong> Squat + Bench Press (Upper/Lower split)</li>
+          <li><strong>Tuesday:</strong> Easy Run 5K (Zone 2)</li>
+          <li><strong>Wednesday:</strong> Deadlift + Pull-ups</li>
+          <li><strong>Thursday:</strong> Rest or light yoga</li>
+          <li><strong>Friday:</strong> Overhead Press + Rows</li>
+          <li><strong>Saturday:</strong> Long Run 10K</li>
+          <li><strong>Sunday:</strong> Full rest</li>
+        </ul>
+        <blockquote style="border-left:3px solid var(--primary);padding:8px 12px;background:rgba(0,212,170,0.05);border-radius:0 6px 6px 0;margin:12px 0"><strong>Pro tip:</strong> Keep your heaviest compounds on non-running days for optimal recovery.</blockquote>
+      </div>
+    </div>
+
+    <!-- Tags Footer -->
+    <div style="padding:0 24px 16px;border-top:1px solid var(--outline-variant);margin-top:16px;padding-top:16px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">strength</span>
+        <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">hybrid</span>
+        <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">muscle</span>
+        <span style="font-size:9px;font-weight:700;padding:4px 12px;border-radius:16px;background:var(--surface-container);border:1px solid var(--outline-variant);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">programming</span>
+      </div>
+    </div>
+
+    <!-- Related Posts -->
+    <div style="padding:0 24px 24px">
+      <h2 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:0 0 12px">Related articles</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div style="border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(0,212,170,0.3)'" onmouseout="this.style.borderColor='var(--outline-variant)'">
+          <div style="aspect-ratio:16/10;background:linear-gradient(135deg,#0f3443,#34e89e)"></div>
+          <div style="padding:8px"><h3 style="font-size:11px;font-weight:600;color:var(--text-primary);margin:0 0 4px;line-height:1.3">Zone 2 Running Guide</h3><p style="font-size:9px;color:var(--text-tertiary);margin:0">⏱ 6 min read</p></div>
+        </div>
+        <div style="border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(0,212,170,0.3)'" onmouseout="this.style.borderColor='var(--outline-variant)'">
+          <div style="aspect-ratio:16/10;background:linear-gradient(135deg,#2d1b69,#11998e)"></div>
+          <div style="padding:8px"><h3 style="font-size:11px;font-weight:600;color:var(--text-primary);margin:0 0 4px;line-height:1.3">Protein Timing</h3><p style="font-size:9px;color:var(--text-tertiary);margin:0">⏱ 3 min read</p></div>
+        </div>
+        <div style="border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(0,212,170,0.3)'" onmouseout="this.style.borderColor='var(--outline-variant)'">
+          <div style="aspect-ratio:16/10;background:linear-gradient(135deg,#fc5c7d,#6a82fb)"></div>
+          <div style="padding:8px"><h3 style="font-size:11px;font-weight:600;color:var(--text-primary);margin:0 0 4px;line-height:1.3">Recovery Strategies</h3><p style="font-size:9px;color:var(--text-tertiary);margin:0">⏱ 5 min read</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

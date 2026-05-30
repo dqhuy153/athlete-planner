@@ -9,6 +9,7 @@ import { DeleteBlogPostHandler } from './handlers/delete-blog-post.handler';
 import { GetBlogPostsHandler } from './handlers/get-blog-posts.handler';
 import { GetBlogPostBySlugHandler } from './handlers/get-blog-post-by-slug.handler';
 import { GetBlogCategoriesHandler } from './handlers/get-blog-categories.handler';
+import { GetRelatedPostsHandler } from './handlers/get-related-posts.handler';
 import { CreateBlogCategoryHandler } from './commands/create-blog-category.handler';
 import { UpdateBlogCategoryHandler } from './commands/update-blog-category.handler';
 import { DeleteBlogCategoryHandler } from './commands/delete-blog-category.handler';
@@ -18,7 +19,7 @@ const CommandHandlers = [
   CreateBlogPostHandler, UpdateBlogPostHandler, DeleteBlogPostHandler,
   CreateBlogCategoryHandler, UpdateBlogCategoryHandler, DeleteBlogCategoryHandler,
 ];
-const QueryHandlers = [GetBlogPostsHandler, GetBlogPostBySlugHandler, GetBlogCategoriesHandler];
+const QueryHandlers = [GetBlogPostsHandler, GetBlogPostBySlugHandler, GetBlogCategoriesHandler, GetRelatedPostsHandler];
 
 @Module({
   imports: [

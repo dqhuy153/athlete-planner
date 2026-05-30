@@ -2,15 +2,151 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { getAppConfig, updateAppConfig } from '@/lib/api';
-import { Save } from 'lucide-react';
+import { getAppConfigs, updateAppConfigKey } from '@/lib/api';
+import type { AppConfigEntry } from '@/lib/api';
+import {
+  Save, RotateCcw, Shield, Zap, CreditCard, Info,
+  Check, AlertTriangle,
+} from 'lucide-react';
+
+// ── Config schema ─────────────────────────────────────────────────────────────
+
+type ConfigType = 'number' | 'boolean' | 'string';
+
+interface ConfigDef {
+  key: string;
+  label: string;
+  description: string;
+  type: ConfigType;
+  defaultValue: string | number | boolean;
+  unit?: string;
+  min?: number;
+  max?: number;
+}
+
+interface ConfigSection {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  items: ConfigDef[];
+}
+
+const CONFIG_SECTIONS: ConfigSection[] = [
+  {
+    id: 'free-tier',
+    title: 'Free Tier Limits',
+    description: 'Resource limits enforced for FREE-tier users.',
+    icon: <Shield size={18} className="text-[#00D4AA]" />,
+    items: [
+      { key: 'FREE_TIER_MAX_EXERCISES', label: 'Max Private Exercises', description: 'Maximum number of user-created private exercises.', type: 'number', defaultValue: 10, min: 1, max: 100 },
+      { key: 'FREE_TIER_PLANNING_DAYS', label: 'Planning Horizon', description: 'How many days ahead FREE users can plan.', type: 'number', defaultValue: 14, unit: 'days', min: 1, max: 90 },
+      { key: 'FREE_TIER_HISTORY_DAYS', label: 'History Retention', description: 'Rolling window of schedule history available to FREE users.', type: 'number', defaultValue: 30, unit: 'days', min: 7, max: 365 },
+      { key: 'FREE_TIER_MAX_ITEMS_PER_DAY', label: 'Max Items per Day', description: 'Maximum schedule items per day for FREE users.', type: 'number', defaultValue: 8, min: 1, max: 50 },
+    ],
+  },
+  {
+    id: 'features',
+    title: 'Feature Flags',
+    description: 'Toggle product features on or off globally.',
+    icon: <Zap size={18} className="text-[#F59E0B]" />,
+    items: [
+      { key: 'GARMIN_EXPORT_ENABLED', label: 'Garmin FIT Export', description: 'Allow PRO users to export workouts as Garmin FIT files.', type: 'boolean', defaultValue: true },
+      { key: 'AI_GENERATE_ENABLED', label: 'Content Generation', description: 'Allow admins to generate exercise content via AI.', type: 'boolean', defaultValue: true },
+      { key: 'BLOG_ENABLED', label: 'Blog Section', description: 'Show the blog section in the web app navigation.', type: 'boolean', defaultValue: true },
+      { key: 'MAINTENANCE_MODE', label: 'Maintenance Mode', description: 'Block all user access and show maintenance page.', type: 'boolean', defaultValue: false },
+    ],
+  },
+  {
+    id: 'payment',
+    title: 'Payment Settings',
+    description: 'Pricing and currency configuration.',
+    icon: <CreditCard size={18} className="text-[#7C3AED]" />,
+    items: [
+      { key: 'PRO_PRICE_VND', label: 'PRO Price', description: 'One-time PRO tier price charged via PayOS.', type: 'number', defaultValue: 199000, unit: 'VND', min: 1000 },
+      { key: 'CURRENCY', label: 'Currency Code', description: 'ISO 4217 currency code for payment display.', type: 'string', defaultValue: 'VND' },
+    ],
+  },
+  {
+    id: 'app-info',
+    title: 'App Info',
+    description: 'General application metadata.',
+    icon: <Info size={18} className="text-[#A3A3A3]" />,
+    items: [
+      { key: 'APP_NAME', label: 'Application Name', description: 'Display name used in the app UI and emails.', type: 'string', defaultValue: 'The Sport Notebook' },
+    ],
+  },
+];
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function getDefault(def: ConfigDef): any {
+  return def.defaultValue;
+}
+
+// ── ConfigInput ───────────────────────────────────────────────────────────────
+
+interface ConfigInputProps {
+  def: ConfigDef;
+  value: any;
+  onChange: (val: any) => void;
+  onSave?: (val: any) => void;
+}
+
+function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
+  if (def.type === 'boolean') {
+    const checked = value === true || value === 'true';
+    return (
+      <button
+        type="button"
+        onClick={() => { const next = !checked; onChange(next); onSave?.(next); }}
+        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#00D4AA] focus:ring-offset-2 focus:ring-offset-[#141414] ${
+          checked ? 'bg-[#00D4AA]' : 'bg-[#242424]'
+        }`}
+      >
+        <span
+          className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${
+            checked ? 'translate-x-4' : 'translate-x-0.5'
+          }`}
+        />
+      </button>
+    );
+  }
+  if (def.type === 'number') {
+    return (
+      <div className="flex items-center gap-2">
+        <input
+          type="number"
+          value={value ?? def.defaultValue}
+          min={def.min}
+          max={def.max}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="w-28 px-3 py-1.5 text-sm bg-[#0A0A0A] border border-[#242424] rounded-lg text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-[#00D4AA]"
+        />
+        {def.unit && <span className="text-sm text-[#525252]">{def.unit}</span>}
+      </div>
+    );
+  }
+  return (
+    <input
+      type="text"
+      value={value ?? String(def.defaultValue)}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full max-w-xs px-3 py-1.5 text-sm bg-[#0A0A0A] border border-[#242424] rounded-lg text-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#00D4AA]"
+    />
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function ConfigPage() {
   const { session } = useAuth();
-  const [config, setConfig] = useState<Record<string, any>>({});
+  const [configMap, setConfigMap] = useState<Record<string, any>>({});
+  const [pendingMap, setPendingMap] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState<string | null>(null); // key being saved
+  const [savedKeys, setSavedKeys] = useState<Set<string>>(new Set());
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!session) return;
@@ -19,87 +155,154 @@ export default function ConfigPage() {
 
   async function loadConfig() {
     setLoading(true);
+    setError('');
     try {
-      const res = await getAppConfig(session!.accessToken);
-      setConfig(res);
+      const entries = await getAppConfigs(session!.accessToken);
+      const map: Record<string, any> = {};
+      for (const e of entries) map[e.key] = e.value;
+      setConfigMap(map);
+      setPendingMap(map);
     } catch (e: any) {
-      console.error(e);
+      setError(e.message || 'Failed to load config.');
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleSave() {
+  function handleChange(key: string, value: any) {
+    setPendingMap((m) => ({ ...m, [key]: value }));
+  }
+
+  function isDirty(key: string): boolean {
+    // Deep compare using JSON
+    return JSON.stringify(pendingMap[key]) !== JSON.stringify(configMap[key]);
+  }
+
+  async function saveKey(def: ConfigDef, overrideValue?: any) {
     if (!session) return;
-    setSaving(true);
+    const value = overrideValue !== undefined ? overrideValue : (pendingMap[def.key] ?? def.defaultValue);
+    setSaving(def.key);
+    setError('');
     try {
-      await updateAppConfig(session.accessToken, config);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      await updateAppConfigKey(session.accessToken, def.key, value, def.label);
+      setConfigMap((m) => ({ ...m, [def.key]: value }));
+      setSavedKeys((s) => new Set([...s, def.key]));
+      setTimeout(() => setSavedKeys((s) => { const n = new Set(s); n.delete(def.key); return n; }), 2000);
     } catch (e: any) {
-      alert(e.message);
+      setError(e.message || `Failed to save ${def.key}.`);
     } finally {
-      setSaving(false);
+      setSaving(null);
     }
   }
 
-  function updateValue(key: string, value: any) {
-    setConfig((c) => ({ ...c, [key]: value }));
+  function resetKey(def: ConfigDef) {
+    setPendingMap((m) => ({ ...m, [def.key]: def.defaultValue }));
+  }
+
+  if (loading) {
+    return (
+      <div className="p-8 text-[#A3A3A3] text-sm">Loading config…</div>
+    );
   }
 
   return (
-    <div className="p-8 max-w-2xl">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-on-surface">App Config</h1>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-sm font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          <Save size={16} />
-          {saved ? 'Saved!' : saving ? 'Saving...' : 'Save Changes'}
-        </button>
+    <div className="p-6 lg:p-8 max-w-3xl">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-[#FAFAFA]">App Config</h1>
+        <p className="text-sm text-[#A3A3A3] mt-1">Runtime configuration for The Sport Notebook.</p>
       </div>
 
-      {loading ? (
-        <div className="text-on-surface-variant">Loading...</div>
-      ) : (
-        <div className="space-y-4">
-          {Object.entries(config).map(([key, value]) => (
-            <div key={key}>
-              <label className="block text-sm font-medium text-on-surface mb-1">{key}</label>
-              {typeof value === 'boolean' ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={value}
-                    onChange={(e) => updateValue(key, e.target.checked)}
-                    className="accent-primary"
-                  />
-                  <span className="text-sm text-on-surface-variant">{value ? 'Enabled' : 'Disabled'}</span>
-                </div>
-              ) : typeof value === 'number' ? (
-                <input
-                  type="number"
-                  value={value}
-                  onChange={(e) => updateValue(key, Number(e.target.value))}
-                  className="w-full px-3 py-2 text-sm bg-background border border-outline rounded-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={String(value ?? '')}
-                  onChange={(e) => updateValue(key, e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-background border border-outline rounded-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              )}
-            </div>
-          ))}
-          {Object.keys(config).length === 0 && (
-            <p className="text-on-surface-variant text-sm">No config entries yet. Add them via the API.</p>
-          )}
+      {error && (
+        <div className="mb-6 flex items-start gap-2 p-3 rounded-xl bg-[#EF4444]/10 border border-[#EF4444]/20 text-sm text-[#EF4444]">
+          <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+          {error}
         </div>
       )}
+
+      <div className="space-y-6">
+        {CONFIG_SECTIONS.map((section) => (
+          <div key={section.id} className="rounded-2xl border border-[#242424] bg-[#141414] overflow-hidden">
+            {/* Section header */}
+            <div className="flex items-start gap-3 px-5 py-4 border-b border-[#242424]">
+              <div className="mt-0.5">{section.icon}</div>
+              <div>
+                <h2 className="text-sm font-semibold text-[#FAFAFA]">{section.title}</h2>
+                <p className="text-xs text-[#A3A3A3] mt-0.5">{section.description}</p>
+              </div>
+            </div>
+
+            {/* Config items */}
+            <div className="divide-y divide-[#1A1A1A]">
+              {section.items.map((def) => {
+                const dirty = isDirty(def.key);
+                const saved = savedKeys.has(def.key);
+                const isSaving = saving === def.key;
+
+                return (
+                  <div key={def.key} className="flex items-center gap-4 px-5 py-4">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-[#FAFAFA]">{def.label}</p>
+                      <p className="text-xs text-[#525252] mt-0.5">{def.description}</p>
+                      <p className="text-[10px] text-[#525252]/60 font-mono mt-1">{def.key}</p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <ConfigInput
+                        def={def}
+                        value={pendingMap[def.key] ?? configMap[def.key]}
+                        onChange={(val) => handleChange(def.key, val)}
+                        onSave={(val) => {
+                          if (def.type === 'boolean') {
+                            handleChange(def.key, val);
+                            saveKey(def, val);
+                          }
+                        }}
+                      />
+                      {def.type !== 'boolean' && (
+                        <>
+                          {dirty && (
+                            <button
+                              onClick={() => resetKey(def)}
+                              title="Reset to saved"
+                              className="p-1.5 rounded-lg text-[#525252] hover:text-[#A3A3A3] hover:bg-[#242424] transition-colors"
+                            >
+                              <RotateCcw size={13} />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => saveKey(def)}
+                            disabled={!dirty || isSaving}
+                            title="Save"
+                            className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                              saved
+                                ? 'bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20'
+                                : dirty
+                                ? 'bg-[#00D4AA] text-black hover:opacity-90'
+                                : 'border border-[#242424] text-[#525252] cursor-default'
+                            }`}
+                          >
+                            {saved ? (
+                              <><Check size={12} /> Saved</>
+                            ) : isSaving ? (
+                              'Saving…'
+                            ) : (
+                              <><Save size={12} /> Save</>
+                            )}
+                          </button>
+                        </>
+                      )}
+                      {def.type === 'boolean' && saved && (
+                        <span className="flex items-center gap-1 text-xs text-[#22C55E]">
+                          <Check size={12} /> Saved
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,0 +1,106 @@
+<h2>Assets Manager — Dual Provider</h2>
+<p class="subtitle">Upload to R2 or Cloudinary, manage all media in one place</p>
+
+<div class="mockup">
+  <div class="mockup-header">Asset Manager</div>
+  <div class="mockup-body" style="padding:12px">
+    <!-- Provider tabs + search -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <div style="display:flex;gap:2px;background:var(--surface-container);border-radius:6px;padding:2px">
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:var(--primary);color:#000;font-weight:600;border:none">All (24)</button>
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:transparent;color:var(--text-secondary);border:none">R2 (18)</button>
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:transparent;color:var(--text-secondary);border:none">Cloudinary (6)</button>
+      </div>
+      <input class="mock-input" placeholder="Search files..." style="flex:1;font-size:10px">
+      <select class="mock-input" style="width:100px;font-size:10px"><option>All types</option><option>Images</option><option>Videos</option></select>
+    </div>
+
+    <!-- Upload zone -->
+    <div style="border:2px dashed var(--outline-variant);border-radius:12px;padding:24px;text-align:center;margin-bottom:12px;background:var(--surface);cursor:pointer">
+      <div style="font-size:20px;margin-bottom:4px">↑</div>
+      <p style="font-size:11px;color:var(--text-primary);margin:0 0 2px;font-weight:500">Drop files here or click to upload</p>
+      <p style="font-size:9px;color:var(--text-tertiary);margin:0">Supports images, videos, GIFs · Max 10MB</p>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:8px">
+        <label style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-secondary);cursor:pointer">
+          <input type="radio" name="provider" checked style="accent-color:var(--primary)"> R2 Storage
+        </label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-secondary);cursor:pointer">
+          <input type="radio" name="provider" style="accent-color:var(--primary)"> Cloudinary
+        </label>
+      </div>
+    </div>
+
+    <!-- Asset grid -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      <!-- Asset card 1 -->
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;position:relative">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+          <div style="width:100%;height:100%;background:var(--surface-container);display:flex;align-items:center;justify-content:center;font-size:24px">🏋️</div>
+        </div>
+        <div style="padding:6px">
+          <p style="font-size:9px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">squat-form.gif</p>
+          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">2.4 MB · R2</p>
+        </div>
+        <div style="position:absolute;top:4px;right:4px;display:flex;gap:2px">
+          <button title="Copy URL" style="width:20px;height:20px;border-radius:4px;background:rgba(0,0,0,0.6);border:none;color:white;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center">🔗</button>
+          <button title="Delete" style="width:20px;height:20px;border-radius:4px;background:rgba(239,68,68,0.8);border:none;color:white;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+        </div>
+      </div>
+
+      <!-- Asset card 2 -->
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;position:relative">
+        <div style="aspect-ratio:1;background:var(--surface-container);display:flex;align-items:center;justify-content:center">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#0f3443,#34e89e);display:flex;align-items:center;justify-content:center;font-size:24px">🎬</div>
+        </div>
+        <div style="padding:6px">
+          <p style="font-size:9px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">deadlift-tutorial.mp4</p>
+          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">18.7 MB · Cloudinary</p>
+        </div>
+        <div style="position:absolute;top:4px;right:4px;display:flex;gap:2px">
+          <button title="Copy URL" style="width:20px;height:20px;border-radius:4px;background:rgba(0,0,0,0.6);border:none;color:white;font-size:8px;cursor:pointer">🔗</button>
+          <button title="Delete" style="width:20px;height:20px;border-radius:4px;background:rgba(239,68,68,0.8);border:none;color:white;font-size:8px;cursor:pointer">✕</button>
+        </div>
+      </div>
+
+      <!-- Asset card 3 -->
+      <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:8px;overflow:hidden;position:relative">
+        <div style="aspect-ratio:1;background:var(--surface-container);display:flex;align-items:center;justify-content:center">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#2d1b69,#11998e);display:flex;align-items:center;justify-content:center;font-size:24px">💪</div>
+        </div>
+        <div style="padding:6px">
+          <p style="font-size:9px;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">bench-press.gif</p>
+          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">3.1 MB · R2</p>
+        </div>
+        <div style="position:absolute;top:4px;right:4px;display:flex;gap:2px">
+          <button title="Copy URL" style="width:20px;height:20px;border-radius:4px;background:rgba(0,0,0,0.6);border:none;color:white;font-size:8px;cursor:pointer">🔗</button>
+          <button title="Delete" style="width:20px;height:20px;border-radius:4px;background:rgba(239,68,68,0.8);border:none;color:white;font-size:8px;cursor:pointer">✕</button>
+        </div>
+      </div>
+
+      <!-- Asset card 4 - placeholder -->
+      <div style="border:2px dashed var(--outline-variant);border-radius:8px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--text-tertiary)">
+        <div style="font-size:16px;margin-bottom:2px">+</div>
+        <p style="font-size:9px;margin:0">Upload more</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:8px;border-top:1px solid var(--outline-variant)">
+      <span style="font-size:9px;color:var(--text-tertiary)">24 assets · 142.3 MB total</span>
+      <span style="font-size:9px;color:var(--text-tertiary)">Page 1 of 3</span>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <h3>Asset Manager Features</h3>
+  <ul style="font-size:13px;color:var(--text-secondary);line-height:1.8">
+    <li><strong>Dual provider:</strong> Upload to R2 (presign → PUT) or Cloudinary (presign → upload → confirm)</li>
+    <li><strong>Drag-and-drop zone:</strong> Drop files or click to upload, choose provider via radio buttons</li>
+    <li><strong>Provider filter tabs:</strong> All / R2 / Cloudinary with counts</li>
+    <li><strong>File grid:</strong> 4-column responsive grid with image previews, file size, provider badge</li>
+    <li><strong>Quick actions:</strong> Copy URL (one click), Delete (with confirmation)</li>
+    <li><strong>Search + type filter:</strong> Filter by filename or file type (images/videos)</li>
+    <li><strong>Pagination:</strong> Bottom bar with total count and page info</li>
+  </ul>
+</div>

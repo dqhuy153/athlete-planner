@@ -210,6 +210,67 @@ modules/
 | Phase 5 | COMPLETED | PayOS payments, Garmin FIT export, UpgradePrompt UI |
 | Phase 6 | IN PROGRESS | Blog, profile page, PWA, deployment configs |
 
+### 2026-05-30: Blog/Assets/Config Redesign + API Fixes
+
+**API bug fixes (critical):**
+- `get-blog-posts.handler.ts`: response shape `{data, meta}` → `{posts, total, page, limit}` — was breaking both admin-web and web app
+- `blog.controller.ts`: added `GET /blog/related?slug=...&limit=3` endpoint for related posts
+- `config.controller.ts`: updated `DEFAULT_CONFIGS` to athlete planner domain keys (FREE_TIER_*, GARMIN_EXPORT_ENABLED, PRO_PRICE_VND, etc.)
+- Web blog detail URL: `/api/blog/${slug}` → `/api/blog/slug/${slug}` (matching actual route `GET /blog/slug/:slug`)
+- Web blog category filter: `?categoryKey=` → `?category=` (matching `GetBlogPostsQuery.filters.category`)
+- `blog.module.ts`: registered `GetRelatedPostsHandler`
+
+**Admin-web API (`lib/api.ts`):**
+- Fixed `updateUserRole`: `/admin/users/${id}` → `/admin/users/${id}/role` with PUT
+- Fixed blog write paths: `/admin/blog` → `/blog` (matching `@Controller('blog')` with AdminGuard)
+- Fixed `deleteBlogCategory`: takes `id` (Prisma UUID) not `key`
+- Added `updateBlogCategory`, `getBlogPost`, `presignAssetUpload`, `confirmAssetUpload`, `getCloudinaryPresign`, `confirmCloudinaryUpload`, `deleteAsset`, `getAppConfigs`, `updateAppConfigKey`
+- Added `AppConfigEntry` interface for typed config API
+
+**Admin blog page redesign:**
+- Split-pane editor (raw / split / preview views)
+- Metadata sidebar: slug, excerpt, cover image URL, category, tags (comma-separated with pills), reading time
+- Title + markdown content + MarkdownRenderer preview
+- Post list: cover thumbnail, status badge, slug, category, reading time, tags — hover reveals edit/delete
+- Category list: image, label, key, description — inline edit/delete
+- Category form: key (new only), label, description, image URL
+- Auto-slug from title, auto reading time from word count
+
+**Admin assets page redesign:**
+- 6-column thumbnail grid (responsive)
+- Drag-and-drop upload zone with R2/Cloudinary provider radio selector
+- Provider filter tabs (All / R2 / Cloudinary) with counts
+- Preview modal: dark overlay, media viewer, prev/next arrows, keyboard nav (arrows + Escape)
+- Info sidebar: filename, type, size, provider badge, date, URL copy, open in new tab, delete
+- Cloudinary upload: presign → FormData POST → confirm (3-step flow)
+- R2 upload: presign → PUT → confirm (3-step flow)
+
+**Admin config page redesign:**
+- Domain-grouped cards: Free Tier Limits, Feature Flags, Payment Settings, App Info
+- Each card has icon, title, description, key label
+- Type-aware inputs: toggle switches for booleans, number inputs with min/max/unit, text inputs
+- Per-key save buttons (boolean toggles auto-save)
+- Reset-to-defaults per key, dirty state indicator
+- Success feedback with animated checkmark
+
+**Web blog list redesign:**
+- Featured post card with full-width cover image, category pill, excerpt, reading time
+- Post feed: flex-row cards with image/placeholder, title, excerpt, category pill, reading time, tag
+- Animated filter tabs (CSS transitions)
+- Empty state with icon
+
+**Web blog detail redesign:**
+- Breadcrumb nav: Blog → Category
+- Cover image (full-width rounded)
+- Category pill (clickable link to filtered list)
+- Title, reading time, published date row
+- Tags pills (border, subtle hover)
+- MarkdownRenderer for content (was dangerouslySetInnerHTML)
+- Related posts: 3-column grid (cover image + title + reading time), fetched via `GET /blog/related`
+
+**i18n:**
+- Added `blog.filteringBy` and `blog.relatedPosts` to vi.json and en.json
+
 ---
 
 ## Known Trade-offs

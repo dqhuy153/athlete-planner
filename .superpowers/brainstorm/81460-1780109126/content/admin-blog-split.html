@@ -1,0 +1,101 @@
+<h2>Blog Editor — ZenTarot Pattern</h2>
+<p class="subtitle">Three-mode editor: Raw / Split / Preview — matching ZenTarot's BlogTab</p>
+
+<div class="mockup">
+  <div class="mockup-header">Blog Post Editor — Split Mode (default)</div>
+  <div class="mockup-body" style="padding:0;overflow:hidden">
+    <!-- Toolbar -->
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--outline-variant);background:var(--surface)">
+      <input class="mock-input" placeholder="Post title..." style="flex:1;font-size:13px;font-weight:600">
+      <div style="display:flex;gap:2px;background:var(--surface-container);border-radius:6px;padding:2px">
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:transparent;color:var(--text-secondary);border:none;cursor:pointer">Edit</button>
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:var(--primary);color:#000;font-weight:600;border:none;cursor:pointer">Split</button>
+        <button style="padding:4px 10px;border-radius:4px;font-size:10px;background:transparent;color:var(--text-secondary);border:none;cursor:pointer">Preview</button>
+      </div>
+    </div>
+
+    <!-- Metadata row -->
+    <div style="display:flex;gap:8px;padding:8px 12px;border-bottom:1px solid var(--outline-variant);background:var(--surface)">
+      <input class="mock-input" placeholder="Cover image URL" style="flex:1;font-size:10px">
+      <select class="mock-input" style="width:110px;font-size:10px"><option>Fitness</option><option>Nutrition</option><option>Recovery</option></select>
+      <input class="mock-input" placeholder="meta-description" style="flex:1;font-size:10px">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="background:var(--primary);color:#000;padding:2px 6px;border-radius:10px;font-size:9px">strength</span>
+        <span style="background:var(--primary);color:#000;padding:2px 6px;border-radius:10px;font-size:9px">+ Add</span>
+      </div>
+      <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary)"><input type="checkbox" checked> Published</label>
+    </div>
+
+    <!-- Split pane -->
+    <div style="display:flex;height:220px">
+      <!-- Left: textarea -->
+      <div style="width:50%;border-right:1px solid var(--outline-variant);display:flex;flex-direction:column">
+        <div style="padding:4px 12px;font-size:9px;color:var(--text-tertiary);background:var(--surface);border-bottom:1px solid var(--outline-variant)">Markdown</div>
+        <textarea style="flex:1;background:var(--surface-container-high);color:var(--text-primary);font-family:'JetBrains Mono',monospace;font-size:10px;padding:12px;resize:none;border:none;outline:none" placeholder="Write markdown here..."># How to Build Muscle as a Runner
+
+## Why Hybrid Training Works
+
+Combining **strength training** with running gives you:
+
+- Better injury resilience
+- Improved power output
+- Balanced physique
+
+## Sample Weekly Split
+
+| Day | Workout |
+|-----|---------|
+| Mon | Squats + Intervals |
+| Tue | Easy Run 5K |
+| Wed | Bench Press + Pull-ups |
+| Thu | Rest or Yoga |
+| Fri | Deadlift + Tempo Run |
+| Sat | Long Run 10K |
+| Sun | Rest |
+
+> **Tip:** Keep heavy compounds on non-running days for recovery.</textarea>
+      </div>
+      <!-- Right: preview -->
+      <div style="width:50%;overflow-y:auto;padding:12px;background:var(--surface)">
+        <h3 style="font-size:14px;color:var(--text-primary);margin:0 0 8px">How to Build Muscle as a Runner</h3>
+        <h4 style="font-size:11px;color:var(--text-primary);margin:0 0 4px">Why Hybrid Training Works</h4>
+        <p style="font-size:10px;color:var(--text-secondary);margin:0 0 4px">Combining <strong>strength training</strong> with running gives you:</p>
+        <ul style="font-size:10px;color:var(--text-secondary);margin:0 0 8px;padding-left:16px">
+          <li>Better injury resilience</li>
+          <li>Improved power output</li>
+          <li>Balanced physique</li>
+        </ul>
+        <h4 style="font-size:11px;color:var(--text-primary);margin:0 0 4px">Sample Weekly Split</h4>
+        <table style="width:100%;font-size:9px;border-collapse:collapse;margin-bottom:8px">
+          <tr style="border-bottom:1px solid var(--outline-variant)"><th style="text-align:left;padding:4px;color:var(--text-primary)">Day</th><th style="text-align:left;padding:4px;color:var(--text-primary)">Workout</th></tr>
+          <tr><td style="padding:4px;color:var(--text-secondary)">Mon</td><td style="padding:4px;color:var(--text-secondary)">Squats + Intervals</td></tr>
+          <tr><td style="padding:4px;color:var(--text-secondary)">Tue</td><td style="padding:4px;color:var(--text-secondary)">Easy Run 5K</td></tr>
+        </table>
+        <blockquote style="border-left:3px solid var(--primary);padding:4px 8px;font-size:9px;color:var(--text-secondary);background:var(--primary);background:rgba(0,212,170,0.1);border-radius:0 4px 4px 0;margin:0"><strong>Tip:</strong> Keep heavy compounds on non-running days for recovery.</blockquote>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-top:1px solid var(--outline-variant);background:var(--surface)">
+      <span style="font-size:9px;color:var(--text-tertiary)">Auto-slug: how-to-build-muscle-as-a-runner · 4 min read</span>
+      <div style="display:flex;gap:6px">
+        <button class="mock-button" style="font-size:10px;padding:4px 12px">Cancel</button>
+        <button class="mock-button" style="font-size:10px;padding:4px 12px;background:var(--primary);color:#000">Save Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <h3>Key Features (matching ZenTarot)</h3>
+  <ul style="font-size:13px;color:var(--text-secondary);line-height:1.8">
+    <li><strong>Three view modes:</strong> Edit (textarea only) / Split (50/50) / Preview (rendered only)</li>
+    <li><strong>MarkdownRenderer:</strong> react-markdown + remark-gfm + rehype-highlight for GFM tables, task lists, code blocks</li>
+    <li><strong>Auto-slug:</strong> URL slug auto-generated from title</li>
+    <li><strong>Cover image:</strong> URL input with optional preview thumbnail</li>
+    <li><strong>Category:</strong> dropdown from existing categories</li>
+    <li><strong>Tags:</strong> inline pills with add/remove</li>
+    <li><strong>SEO:</strong> meta description field</li>
+    <li><strong>Auto reading time:</strong> calculated from content length</li>
+  </ul>
+</div>

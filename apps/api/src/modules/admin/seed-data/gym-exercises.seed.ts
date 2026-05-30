@@ -10,7 +10,7 @@
  * - gym-exercises-legs.seed.ts (3 leg exercises)
  * - gym-exercises-abs.seed.ts (1 ab exercise)
  * 
- * Total: 18 exercises
+ * Total: 15 exercises
  */
 
 import { CHEST_EXERCISES } from './gym-exercises/gym-exercises-chest.seed';
@@ -24,7 +24,7 @@ export type { GymExerciseSeed } from './gym-exercises/gym-exercises-chest.seed';
 
 /**
  * Consolidated gym exercise seed data
- * Contains 18 exercises across 6 muscle groups
+ * Contains 15 exercises across 6 muscle groups
  */
 export const GYM_EXERCISES_SEED = [
   ...CHEST_EXERCISES,
