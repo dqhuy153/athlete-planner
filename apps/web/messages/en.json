@@ -294,7 +294,8 @@
     "exportDay": "Export Day",
     "exportWeek": "Export Week",
     "exporting": "Exporting...",
-    "freeExportHint": "1 Free Export Remaining"
+    "freeExportHint": "1 Free Export Remaining",
+    "trialExhausted": "You've used your free trial. Upgrade to PRO for unlimited Garmin exports."
   },
   "landing": {
     "heroTitle": "Train with a plan.",

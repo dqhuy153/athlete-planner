@@ -33,8 +33,9 @@ model User {
   avatarUrl      String?
   tier           UserTier @default(FREE)
   role           UserRole @default(user)
-  preferredLevel String?  // 'BEGINNER' | 'ADVANCED'
-  createdAt      DateTime @default(now())
+  preferredLevel    String?  // 'BEGINNER' | 'ADVANCED'
+  hasUsedFreeExport Boolean  @default(false)
+  createdAt         DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   privateExercises PrivateExercise[]

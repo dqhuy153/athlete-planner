@@ -27,7 +27,7 @@ export class ExportController {
     private readonly zipExport: ZipExportService,
   ) {}
 
-  /** Download a single-day FIT export (PRO only) */
+  /** Download a single-day FIT export (PRO or 1-time FREE trial) */
   @Get('day/:dateString')
   async exportDay(
     @Param('dateString') dateString: string,
@@ -35,9 +35,19 @@ export class ExportController {
     @Res() res: Response,
   ): Promise<void> {
     const user = await this.prisma.user.findUnique({ where: { id: req.user.userId } });
-    if (!user || user.tier !== UserTier.PRO) {
-      throw new ForbiddenException('Garmin export is a PRO feature');
+    if (!user) throw new ForbiddenException('User not found');
+
+    if (user.tier === UserTier.FREE) {
+      if (user.hasUsedFreeExport) {
+        throw new ForbiddenException('TRIAL_EXHAUSTED');
+      }
+      // Consume the free trial
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { hasUsedFreeExport: true },
+      });
     }
+    // PRO users fall through
 
     const schedule = await this.prisma.dailySchedule.findUnique({
       where: { userId_dateString: { userId: req.user.userId, dateString } },

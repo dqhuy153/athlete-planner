@@ -294,7 +294,8 @@
     "exportDay": "Xuất ngày",
     "exportWeek": "Xuất tuần",
     "exporting": "Đang xuất...",
-    "freeExportHint": "Còn 1 lượt xuất miễn phí"
+    "freeExportHint": "Còn 1 lượt xuất miễn phí",
+    "trialExhausted": "Bạn đã dùng lượt xuất miễn phí. Nâng cấp PRO để xuất không giới hạn."
   },
   "landing": {
     "heroTitle": "Tập luyện có kế hoạch.",
