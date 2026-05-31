@@ -188,6 +188,14 @@ class ApiClient {
       customNotes?: string;
       gifUrl?: string;
       sourceGymMasterId?: string;
+      youtubeEmbedUrl?: string;
+      instructions?: string[];
+      defaultSets?: number;
+      defaultReps?: number;
+      defaultWeightKg?: number;
+      defaultRpe?: number;
+      restTimeSecs?: number;
+      restBetweenExercisesSecs?: number;
     },
   ) {
     return this.request<PrivateExercise>('/exercises/private', {
@@ -207,6 +215,8 @@ class ApiClient {
       targetMuscleGroup: string;
       runningType: string;
       mediaUrls: string[];
+      instructions: string[];
+      youtubeEmbedUrl: string;
     }>,
   ) {
     return this.request<PrivateExercise>(`/exercises/private/${id}`, {

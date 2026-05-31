@@ -13,6 +13,8 @@ import { Button } from '@athlete-planner/ui';
 import { GymExerciseConfig } from './GymExerciseConfig';
 import { RunningExerciseConfig } from './RunningExerciseConfig';
 import { MediaUrlsManager } from '@/components/MediaUrlsManager';
+import { PrivateInstructionsEditor } from '@/components/exercises/PrivateInstructionsEditor';
+import { parseYouTubeEmbedUrl } from '@/lib/youtube';
 
 const MUSCLE_GROUPS = Object.values(MuscleGroup);
 const RUNNING_TYPES = Object.values(RunningType);
@@ -39,6 +41,8 @@ export function PrivateExerciseDetailClient({
   const [runningType, setRunningType] = useState<RunningType | ''>(exercise.runningType ?? '');
   const [notes, setNotes] = useState(exercise.customNotes ?? '');
   const [mediaUrls, setMediaUrls] = useState<string[]>(exercise.mediaUrls ?? []);
+  const [instructions, setInstructions] = useState<string[]>(exercise.instructions ?? []);
+  const [youtubeEmbedUrl, setYoutubeEmbedUrl] = useState(exercise.youtubeEmbedUrl ?? '');
 
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -64,6 +68,8 @@ export function PrivateExerciseDetailClient({
         name: name.trim(),
         customNotes: notes,
         mediaUrls,
+        instructions: instructions.filter((s) => s.trim()),
+        youtubeEmbedUrl: youtubeEmbedUrl.trim() || undefined,
         ...(exercise.sportType === SportType.GYM && muscleGroup
           ? { targetMuscleGroup: muscleGroup }
           : {}),
@@ -174,6 +180,41 @@ export function PrivateExerciseDetailClient({
             rows={3}
             placeholder={t('notesPlaceholder')}
             className="w-full resize-none rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+
+        {/* YouTube guide */}
+        <div>
+          <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+            {t('youtubeLabel')}
+          </label>
+          <input
+            type="text"
+            value={youtubeEmbedUrl}
+            onChange={(e) => setYoutubeEmbedUrl(e.target.value)}
+            placeholder="https://youtube.com/watch?v=..."
+            className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+          {youtubeEmbedUrl && parseYouTubeEmbedUrl(youtubeEmbedUrl) && (
+            <div className="mt-2 aspect-video w-full rounded-xl overflow-hidden bg-black">
+              <iframe
+                src={parseYouTubeEmbedUrl(youtubeEmbedUrl)!}
+                className="w-full h-full"
+                allowFullScreen
+                title="Exercise guide"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Instructions */}
+        <div>
+          <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+            {t('instructionsLabel')}
+          </label>
+          <PrivateInstructionsEditor
+            steps={instructions.length > 0 ? instructions : ['']}
+            onChange={setInstructions}
           />
         </div>
 
