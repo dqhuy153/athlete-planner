@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Plus, Download, Sparkles, Loader2, Upload } from 'lucide-react';
+import { Plus, Download, Sparkles, Loader2, Upload, CheckCircle2, XCircle, Trash2 } from 'lucide-react';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { UserRole } from '@athlete-planner/contracts';
 import { useAuth } from '@/lib/auth-context';
@@ -56,6 +56,8 @@ export default function ExercisesPage() {
   const [showAIModal, setShowAIModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState<DeleteModalState | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkLoading, setBulkLoading] = useState(false);
 
   const loadExercises = useCallback(async () => {
     if (!session?.accessToken) return;
@@ -77,6 +79,12 @@ export default function ExercisesPage() {
   useEffect(() => {
     loadExercises();
   }, [loadExercises]);
+
+  function handleTabChange(newTab: Tab) {
+    setTab(newTab);
+    setSelectedIds([]);
+    setSeedMsg('');
+  }
 
   async function handleToggle(id: string, type: Tab, current: boolean) {
     if (!session?.accessToken) return;
@@ -146,6 +154,43 @@ export default function ExercisesPage() {
     }
   }
 
+  async function handleBulkActivate(activate: boolean) {
+    if (!session?.accessToken || selectedIds.length === 0) return;
+    setBulkLoading(true);
+    try {
+      const currentList = tab === 'gym' ? gymExercises : runningExercises;
+      await Promise.all(
+        selectedIds
+          .map(id => {
+            const ex = currentList.find(e => e.id === id);
+            if (!ex || ex.isActive === activate) return null;
+            return toggleExercise(session.accessToken, id, tab);
+          })
+          .filter(Boolean),
+      );
+      await loadExercises();
+      setSelectedIds([]);
+    } finally {
+      setBulkLoading(false);
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (!session?.accessToken || selectedIds.length === 0) return;
+    if (!window.confirm(`Delete ${selectedIds.length} exercise(s)? This cannot be undone.`)) return;
+    setBulkLoading(true);
+    try {
+      await Promise.all(selectedIds.map(id => deleteExercise(session.accessToken, id, tab)));
+      await loadExercises();
+      setSelectedIds([]);
+    } catch {
+      await loadExercises();
+      setSelectedIds([]);
+    } finally {
+      setBulkLoading(false);
+    }
+  }
+
   const exercises = tab === 'gym' ? gymExercises : runningExercises;
 
   return (
@@ -212,7 +257,7 @@ export default function ExercisesPage() {
         tab={tab}
         gymCount={gymExercises.length}
         runningCount={runningExercises.length}
-        onTabChange={(t) => { setTab(t); setSeedMsg(''); }}
+        onTabChange={handleTabChange}
       />
 
       {loading ? (
@@ -221,6 +266,8 @@ export default function ExercisesPage() {
         <ExerciseTable
           exercises={exercises}
           tab={tab}
+          selectedIds={selectedIds}
+          onSelectionChange={setSelectedIds}
           onToggle={handleToggle}
           onDeleteClick={openDeleteModal}
         />
@@ -254,6 +301,52 @@ export default function ExercisesPage() {
           onClose={() => setDeleteModal(null)}
           onDelete={handleDelete}
         />
+      )}
+
+      {/* Bulk Action FAB */}
+      {selectedIds.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-2xl border border-border bg-surface-container shadow-2xl px-4 py-3">
+          <span className="text-sm font-medium text-on-surface mr-2 tabular-nums">
+            {selectedIds.length} selected
+          </span>
+          <button
+            type="button"
+            onClick={() => handleBulkActivate(true)}
+            disabled={bulkLoading}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-success/10 px-3 py-1.5 text-xs font-medium text-success hover:bg-success/20 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success"
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
+            Activate
+          </button>
+          <button
+            type="button"
+            onClick={() => handleBulkActivate(false)}
+            disabled={bulkLoading}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-on-surface/10 px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-on-surface/20 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <XCircle className="h-3.5 w-3.5" aria-hidden />
+            Deactivate
+          </button>
+          <div className="mx-1 h-5 w-px bg-border" />
+          <button
+            type="button"
+            onClick={handleBulkDelete}
+            disabled={bulkLoading}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-error/10 px-3 py-1.5 text-xs font-medium text-error hover:bg-error/20 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error"
+          >
+            <Trash2 className="h-3.5 w-3.5" aria-hidden />
+            Delete {selectedIds.length}
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedIds([])}
+            disabled={bulkLoading}
+            className="ml-1 rounded-lg p-1.5 text-on-surface-variant hover:bg-surface-container-high transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="Clear selection"
+          >
+            <XCircle className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
       )}
     </div>
   );
