@@ -172,6 +172,10 @@ export function useSchedule({ token }: UseScheduleOptions) {
     setActive(prev => prev ? { ...prev, items: prev.items.map(i => i.id === itemId ? updated : i) } : prev);
   }, [token]);
 
+  const shiftToTomorrow = useCallback(async (dateString: string): Promise<{ shifted: number }> => {
+    return api.shiftScheduleToTomorrow(token, dateString);
+  }, [token]);
+
   return {
     schedules,
     activeSchedule,
@@ -187,5 +191,6 @@ export function useSchedule({ token }: UseScheduleOptions) {
     reorderItems,
     saveGymPayload,
     saveRunningPayload,
+    shiftToTomorrow,
   };
 }

@@ -23,6 +23,8 @@ import { UpdateRunningPayloadCommand } from './commands/update-running-payload.c
 import { CopyDayCommand } from './commands/copy-day.command';
 import { CopyWeekCommand } from './commands/copy-week.command';
 import { BridgeGuestScheduleCommand } from './commands/bridge-guest-schedule.command';
+import { ShiftScheduleCommand } from './commands/shift-schedule.command';
+import { ShiftScheduleDto } from './dto/shift-schedule.dto';
 import { GetWeekScheduleQuery } from './queries/get-week-schedule.query';
 import { GetDailyScheduleQuery } from './queries/get-daily-schedule.query';
 import { GetDisciplineRateQuery } from './queries/get-discipline-rate.query';
@@ -146,6 +148,11 @@ export class SchedulesController {
         dto.targetWeek,
       ),
     );
+  }
+
+  @Post('shift-day')
+  async shiftDay(@Body() dto: ShiftScheduleDto, @Req() req: AuthenticatedRequest) {
+    return this.commandBus.execute(new ShiftScheduleCommand(req.user.sub, dto.dateString));
   }
 
   @Post('bridge-guest')

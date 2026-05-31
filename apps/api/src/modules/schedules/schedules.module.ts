@@ -15,6 +15,7 @@ import { UpdateRunningPayloadHandler } from './commands/update-running-payload.h
 import { CopyDayHandler } from './commands/copy-day.handler';
 import { CopyWeekHandler } from './commands/copy-week.handler';
 import { BridgeGuestScheduleHandler } from './commands/bridge-guest-schedule.handler';
+import { ShiftScheduleHandler } from './commands/shift-schedule.handler';
 
 // Queries
 import { GetWeekScheduleHandler } from './queries/get-week-schedule.handler';
@@ -32,6 +33,7 @@ const CommandHandlers = [
   CopyDayHandler,
   CopyWeekHandler,
   BridgeGuestScheduleHandler,
+  ShiftScheduleHandler,
 ];
 
 const QueryHandlers = [

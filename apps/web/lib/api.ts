@@ -332,6 +332,14 @@ class ApiClient {
       }),
     });
   }
+
+  shiftScheduleToTomorrow(token: string, dateString: string): Promise<{ shifted: number }> {
+    return this.request<{ shifted: number }>('/schedules/shift-day', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ dateString }),
+    });
+  }
   // ─── Payments ───────────────────────────────────────────────────────────────
 
   async createPaymentLink(token: string, returnUrl: string, cancelUrl: string): Promise<{ checkoutUrl: string }> {

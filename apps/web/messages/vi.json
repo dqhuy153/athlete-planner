@@ -133,7 +133,11 @@
     "dayRestDay": "Ngày nghỉ",
     "authRequired": "Đăng nhập để xem và lên kế hoạch tập luyện",
     "fetchError": "Không tải được dữ liệu",
-    "addExerciseFailed": "Không thêm được bài tập"
+    "addExerciseFailed": "Không thêm được bài tập",
+    "shiftToTomorrow": "Chuyển chưa xong sang ngày mai",
+    "shifting": "Đang chuyển...",
+    "shiftSuccess": "Đã chuyển bài tập sang ngày mai",
+    "shiftError": "Không chuyển được bài tập"
   },
   "library": {
     "title": "Thư viện bài tập",

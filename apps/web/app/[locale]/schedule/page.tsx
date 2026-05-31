@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import {
   format,
@@ -120,6 +120,7 @@ export default function SchedulePage() {
     reorderItems,
     saveGymPayload,
     saveRunningPayload,
+    shiftToTomorrow,
     schedules,
   } = useSchedule({ token })
 
@@ -163,6 +164,27 @@ export default function SchedulePage() {
     },
     [activeSchedule, selectedDate, updateStatus],
   )
+
+  const canShift = useMemo(() => {
+    if (!activeSchedule) return false;
+    const isPastOrToday = activeSchedule.dateString <= todayStr;
+    const hasPending = activeSchedule.items.length > 0;
+    return isPastOrToday && hasPending && activeSchedule.dayStatus === DayStatus.PENDING;
+  }, [activeSchedule, todayStr]);
+
+  const handleShift = useCallback(async () => {
+    if (!activeSchedule) return;
+    try {
+      const result = await shiftToTomorrow(activeSchedule.dateString);
+      if (result.shifted > 0) {
+        pushToast({ title: t('shiftSuccess'), tone: 'success' });
+        await loadWeek(weekOffset);
+        await selectDate(activeSchedule.dateString);
+      }
+    } catch {
+      pushToast({ title: t('shiftError'), tone: 'error' });
+    }
+  }, [activeSchedule, shiftToTomorrow, pushToast, t, loadWeek, weekOffset, selectDate]);
 
   const [pickerOpen, setPickerOpen] = useState(false)
   const [copyDayOpen, setCopyDayOpen] = useState(false)
@@ -596,6 +618,8 @@ export default function SchedulePage() {
                   )
                 }
                 isLocked={activeSchedule?.dayStatus !== DayStatus.PENDING}
+                canShift={canShift}
+                onShift={handleShift}
               />
             </div>
 

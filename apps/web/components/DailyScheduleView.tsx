@@ -14,8 +14,9 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from '@dnd-kit/sortable';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowRightCircle, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import type { ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
 import { ScheduleItemCard } from './ScheduleItemCard';
 import { Button } from '@athlete-planner/ui';
@@ -29,6 +30,8 @@ interface DailyScheduleViewProps {
   onSaveGym:     (itemId: string, payload: GymPayload) => Promise<void>;
   onSaveRunning: (itemId: string, payload: RunningPayload) => Promise<void>;
   isLocked?: boolean;
+  canShift?: boolean;
+  onShift?: () => Promise<void>;
 }
 
 export function DailyScheduleView({
@@ -40,6 +43,8 @@ export function DailyScheduleView({
   onSaveGym,
   onSaveRunning,
   isLocked,
+  canShift,
+  onShift,
 }: DailyScheduleViewProps) {
   const t = useTranslations('schedule');
 
@@ -99,6 +104,10 @@ export function DailyScheduleView({
             </SortableContext>
           </DndContext>
 
+          {canShift && onShift && (
+            <ShiftButton onShift={onShift} />
+          )}
+
           {!isLocked && (
             <button
               type="button"
@@ -114,3 +123,33 @@ export function DailyScheduleView({
     </div>
   );
 }
+
+function ShiftButton({ onShift }: { onShift: () => Promise<void> }) {
+  const t = useTranslations('schedule');
+  const [shifting, setShifting] = useState(false);
+
+  async function handleShift() {
+    setShifting(true);
+    try {
+      await onShift();
+    } finally {
+      setShifting(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleShift}
+      disabled={shifting}
+      className="flex items-center justify-center gap-2 w-full rounded-lg border border-border px-4 py-3 text-caption text-text-secondary hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px] disabled:opacity-60"
+    >
+      {shifting
+        ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+        : <ArrowRightCircle className="h-4 w-4" aria-hidden />
+      }
+      {shifting ? t('shifting') : t('shiftToTomorrow')}
+    </button>
+  );
+}
+
