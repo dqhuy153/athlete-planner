@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronRight, Timer } from 'lucide-react';
+import { ChevronRight, SkipForward, Timer } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
 import { Button } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { WorkoutPhaseType } from '@athlete-planner/contracts';
 import type { WorkoutItem } from '@/lib/types/workout';
+import { triggerRestDone } from '@/lib/workout-alerts';
 
 interface WorkoutRunningItemProps {
   item: WorkoutItem;
@@ -20,10 +21,21 @@ function pad(n: number) {
 
 export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps) {
   const t = useTranslations('workout');
-  const { session, advancePhase } = useWorkoutStore();
+  const {
+    session,
+    automationMode,
+    restBetweenExercisesActive,
+    currentBetweenExercisesSeconds,
+    restBetweenExercisesSeconds,
+    advancePhase,
+    completeItem,
+    startRestBetweenExercises,
+    stopRestBetweenExercises,
+  } = useWorkoutStore();
 
   const phases = item.workoutStructure ?? [];
   const currentPhase = phases[item.currentPhaseIndex];
+  const isLastPhase = item.currentPhaseIndex >= phases.length - 1;
 
   const totalSeconds = currentPhase?.duration_minutes
     ? Math.round(currentPhase.duration_minutes * 60)
@@ -52,20 +64,59 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
   // Auto-advance when countdown hits 0
   useEffect(() => {
     if (remaining === 0 && totalSeconds > 0 && session?.autoAdvance && running === false) {
-      advancePhase(itemIndex);
+      handleAdvance();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remaining]);
 
-  // Separate effect to stop timer and trigger advance
+  // Stop timer when countdown ends
   useEffect(() => {
     if (remaining <= 0 && running) {
       setRunning(false);
     }
   }, [remaining, running]);
 
+  // Between-exercises rest timer (local countdown)
+  const [betweenRemaining, setBetweenRemaining] = useState(currentBetweenExercisesSeconds);
+
+  useEffect(() => {
+    if (restBetweenExercisesActive) {
+      setBetweenRemaining(currentBetweenExercisesSeconds);
+    }
+  }, [restBetweenExercisesActive, currentBetweenExercisesSeconds]);
+
+  useEffect(() => {
+    if (!restBetweenExercisesActive || item.done) return;
+    if (betweenRemaining <= 0) {
+      triggerRestDone(session?.soundEnabled ?? false, session?.vibrationEnabled ?? true);
+      stopRestBetweenExercises();
+      completeItem(itemIndex);
+      return;
+    }
+    const id = setInterval(() => setBetweenRemaining((r) => r - 1), 1000);
+    return () => clearInterval(id);
+  }, [restBetweenExercisesActive, betweenRemaining, item.done, itemIndex, session, completeItem, stopRestBetweenExercises]);
+
   function handleAdvance() {
-    advancePhase(itemIndex);
+    if (isLastPhase) {
+      // Last phase: start between-exercises rest or complete directly
+      const restSecs = item.restBetweenExercisesSecs ?? restBetweenExercisesSeconds;
+      if (restSecs > 0 && automationMode === 'auto') {
+        // Mark phases done via advancePhase (will set done:true), then rest fires completeItem
+        advancePhase(itemIndex);
+        startRestBetweenExercises(restSecs);
+      } else {
+        advancePhase(itemIndex);
+        completeItem(itemIndex);
+      }
+    } else {
+      advancePhase(itemIndex);
+    }
+  }
+
+  function handleSkipBetween() {
+    stopRestBetweenExercises();
+    completeItem(itemIndex);
   }
 
   function getPhaseLabel(type: WorkoutPhaseType): string {
@@ -88,6 +139,32 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
     return (
       <div className="flex flex-col items-center justify-center py-12 text-text-tertiary text-sm">
         {t('noPhases')}
+      </div>
+    );
+  }
+
+  // Between-exercises rest screen
+  if (restBetweenExercisesActive && !item.done) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-4 px-4 rounded-2xl bg-surface-1 border border-border">
+        <p className="text-xs uppercase tracking-widest text-text-tertiary font-medium">
+          {t('restBetweenExercises')}
+        </p>
+        <span
+          className="font-mono text-4xl font-bold tabular-nums text-text-primary"
+          aria-live="polite"
+          aria-atomic
+        >
+          {pad(Math.floor(betweenRemaining / 60))}:{pad(betweenRemaining % 60)}
+        </span>
+        <button
+          type="button"
+          onClick={handleSkipBetween}
+          className="flex items-center gap-2 min-h-[44px] rounded-xl bg-surface-2 px-5 text-sm font-medium text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <SkipForward className="h-4 w-4" aria-hidden />
+          {t('skipRest')}
+        </button>
       </div>
     );
   }
@@ -142,11 +219,7 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
                   viewBox="0 0 100 100"
                   aria-hidden
                 >
-                  <circle
-                    cx="50" cy="50" r="44"
-                    fill="none" strokeWidth="5"
-                    className="stroke-border"
-                  />
+                  <circle cx="50" cy="50" r="44" fill="none" strokeWidth="5" className="stroke-border" />
                   <circle
                     cx="50" cy="50" r="44"
                     fill="none" strokeWidth="5"
@@ -182,16 +255,9 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
               <Chip label={t('hrZoneLabel', { zone: currentPhase.hr_zone })} />
             )}
             {currentPhase.pace_min_per_km && currentPhase.pace_max_per_km && (
-              <Chip
-                label={t('paceLabel', {
-                  min: currentPhase.pace_min_per_km,
-                  max: currentPhase.pace_max_per_km,
-                })}
-              />
+              <Chip label={t('paceLabel', { min: currentPhase.pace_min_per_km, max: currentPhase.pace_max_per_km })} />
             )}
-            {currentPhase.rpe && (
-              <Chip label={`RPE ${currentPhase.rpe}`} />
-            )}
+            {currentPhase.rpe && <Chip label={`RPE ${currentPhase.rpe}`} />}
           </div>
 
           {/* Notes */}
@@ -212,7 +278,7 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
         disabled={item.done}
         className="w-full gap-2"
       >
-        {item.currentPhaseIndex >= phases.length - 1 ? t('finishWorkout') : t('continuePhase')}
+        {isLastPhase ? t('finishWorkout') : t('continuePhase')}
         <ChevronRight size={16} aria-hidden />
       </Button>
     </div>
