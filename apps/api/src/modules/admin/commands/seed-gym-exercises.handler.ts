@@ -23,12 +23,12 @@ export class SeedGymExercisesHandler implements ICommandHandler<SeedGymExercises
         data: toCreate.map((seed) => ({
           name: seed.name,
           vietnameseName: seed.vietnameseName,
-          targetMuscleGroup: seed.targetMuscleGroup as any,
+          targetMuscleGroup: seed.targetMuscleGroup,
           secondaryMuscleGroups: seed.secondaryMuscleGroups,
           garminExerciseEnum: seed.garminExerciseEnum,
           instructions: seed.instructions,
           isActive: true,
-        })),
+        })) as any, // GymExerciseSeed seed data differs slightly from Prisma input type
       });
     }
 

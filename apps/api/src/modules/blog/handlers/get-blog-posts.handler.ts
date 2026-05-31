@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, Prisma } from '@athlete-planner/database';
 import { BlogStatus } from '@athlete-planner/contracts';
 import { GetBlogPostsQuery } from '../queries/get-blog-posts.query';
 
@@ -13,7 +13,7 @@ export class GetBlogPostsHandler implements IQueryHandler<GetBlogPostsQuery> {
     const limit = parseInt(filters.limit || '10');
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const where: Prisma.BlogPostWhereInput = {};
     if (filters.status) where.status = filters.status;
     else where.status = BlogStatus.PUBLISHED;
     if (filters.category) where.categoryKey = filters.category;

@@ -36,8 +36,9 @@ export class S3Service {
     try {
       const command = new PutObjectCommand({ Bucket: this.bucketName, Key: key, ContentType: contentType });
       return await getSignedUrl(this.s3, command, { expiresIn });
-    } catch (err: any) {
-      this.logger.error(`Failed to get signed PUT URL: ${err.message}`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      this.logger.error(`Failed to get signed PUT URL: ${errorMessage}`);
       return null;
     }
   }
@@ -47,8 +48,9 @@ export class S3Service {
     try {
       const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });
       return await getSignedUrl(this.s3, command, { expiresIn });
-    } catch (err: any) {
-      this.logger.error(`Failed to get signed GET URL: ${err.message}`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      this.logger.error(`Failed to get signed GET URL: ${errorMessage}`);
       return null;
     }
   }
@@ -62,8 +64,9 @@ export class S3Service {
     if (!this.s3) return;
     try {
       await this.s3.send(new DeleteObjectCommand({ Bucket: this.bucketName, Key: key }));
-    } catch (err: any) {
-      this.logger.error(`Failed to delete from S3: ${err.message}`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      this.logger.error(`Failed to delete from S3: ${errorMessage}`);
     }
   }
 }

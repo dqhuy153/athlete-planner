@@ -17,7 +17,7 @@ function mapMuscleGroup(primary: string[]): string {
   if (['biceps', 'triceps', 'forearms'].includes(p)) return 'Arms';
   if (['quadriceps', 'hamstrings', 'glutes', 'calves', 'adductors', 'abductors'].includes(p)) return 'Legs';
   if (['abdominals', 'abs'].includes(p)) return 'Abs';
-  // Fallback: map by category or default to Full Body → Legs (closest general)
+  // Fallback: map by category or default to Legs (closest general)
   return 'Legs';
 }
 
@@ -87,7 +87,7 @@ export class SeedFreeExerciseDbHandler
           name: ex.name,
           // Use English name as placeholder for vietnameseName
           vietnameseName: ex.name,
-          targetMuscleGroup: mapMuscleGroup(ex.primaryMuscles) as any,
+          targetMuscleGroup: mapMuscleGroup(ex.primaryMuscles),
           secondaryMuscleGroups: mapSecondaryMuscles(ex.secondaryMuscles),
           gifUrl:
             ex.images.length > 0
@@ -104,7 +104,7 @@ export class SeedFreeExerciseDbHandler
               ]
             : [],
           isActive: true,
-        })),
+        })) as any, // FreeExercise data structure differs from Prisma input
         skipDuplicates: true,
       });
       created += chunk.length;

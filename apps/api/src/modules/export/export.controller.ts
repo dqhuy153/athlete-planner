@@ -16,6 +16,7 @@ import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 import { PrismaService } from '@athlete-planner/database';
 import { FitBuilderService } from './services/fit-builder.service';
 import { ZipExportService } from './services/zip-export.service';
+import type { ScheduleItem } from '@athlete-planner/contracts';
 
 @Controller('export')
 @UseGuards(JwtAuthGuard)
@@ -45,12 +46,13 @@ export class ExportController {
 
     if (!schedule) throw new NotFoundException('No schedule for this date');
 
-    const items = schedule.items as any[];
+    const items = schedule.items;
     const { exerciseNames, gymEnums } = await this.resolveExerciseMetadata(items);
 
     const fits = this.fitBuilder.buildDayFits(
+      // any cast: DayStatus/SportType enums differ between Prisma and contracts
       schedule as any,
-      items,
+      items as any,
       exerciseNames,
       gymEnums,
     );
@@ -93,11 +95,12 @@ export class ExportController {
     const allFits: Array<{ filename: string; data: Uint8Array }> = [];
 
     for (const schedule of schedules) {
-      const items = schedule.items as any[];
+      const items = schedule.items;
       const { exerciseNames, gymEnums } = await this.resolveExerciseMetadata(items);
       const fits = this.fitBuilder.buildDayFits(
+        // any cast: DayStatus/SportType enums differ between Prisma and contracts
         schedule as any,
-        items,
+        items as any,
         exerciseNames,
         gymEnums,
       );
@@ -115,6 +118,7 @@ export class ExportController {
   }
 
   private async resolveExerciseMetadata(
+    // any[] due to SportType/DayStatus enum mismatch between Prisma client and contracts
     items: any[],
   ): Promise<{
     exerciseNames: Map<string, string>;

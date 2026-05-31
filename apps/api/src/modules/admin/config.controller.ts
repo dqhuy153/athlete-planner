@@ -56,7 +56,8 @@ export class ConfigController {
   @Get('public')
   async getPublicConfigs() {
     const configs = await this.prisma.appConfig.findMany();
-    const map: Record<string, any> = {};
+    // Config values are heterogeneous (string, number, boolean, JSON)
+    const map: Record<string, unknown> = {};
     for (const c of configs) map[c.key] = c.value;
     return map;
   }

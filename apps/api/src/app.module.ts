@@ -49,9 +49,17 @@ import { ExportModule } from './modules/export/export.module';
         const redisHost = config.get<string>('redis.host') || 'localhost';
         const redisPort = config.get<number>('redis.port') || 6379;
         const redisPassword = config.get<string>('redis.password');
-        const storeConfig: any = redisUrl
+        
+        interface RedisStoreConfig {
+          url?: string;
+          socket?: { host: string; port: number };
+          password?: string;
+        }
+        
+        const storeConfig: RedisStoreConfig = redisUrl
           ? { url: redisUrl }
           : { socket: { host: redisHost, port: redisPort }, password: redisPassword };
+        
         return {
           store: await redisStore(storeConfig),
           ttl: 60 * 1000,

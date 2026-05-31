@@ -17,6 +17,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../admin/admin.guard';
 import { AuthenticatedRequest } from '../../common/interfaces/authenticated-request.interface';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 import { UserRole } from '@athlete-planner/contracts';
 import { CreateGymMasterCommand } from './commands/create-gym-master.command';
 import { CreateRunningMasterCommand } from './commands/create-running-master.command';
@@ -152,9 +153,9 @@ export class ExercisesController {
     @Param('id') id: string,
     @Query('type') type: 'gym' | 'running' = 'gym',
     @Query('force') force: string,
-    @Req() req: Request,
+    @Req() req: Request & { user?: JwtPayload },
   ) {
-    const user = (req as any).user as { role?: string } | undefined;
+    const user = req.user;
     const isForce = force === 'true';
     if (isForce && user?.role !== UserRole.ROOT) {
       throw new ForbiddenException('Force delete requires root role');

@@ -10,10 +10,12 @@ import {
   UseGuards,
   BadRequestException,
   NotFoundException,
+  Request,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, Prisma } from '@athlete-planner/database';
 import { UserRole } from '@athlete-planner/contracts';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 import { S3Service } from '../shared/s3.service';
 import { CloudinarySignService } from '../shared/cloudinary-sign.service';
 import { AIService } from '../shared/ai.service';
@@ -119,7 +121,8 @@ Respond with JSON only (no markdown):
 
     const result = await this.aiService.generateText({ prompt });
 
-    let content: Record<string, any> = {};
+    // Dynamic accumulator — heterogeneous types (string, number, object)
+    let content: Record<string, unknown> = {};
     try {
       const jsonMatch = result.text.match(/\{[\s\S]*\}/);
       if (jsonMatch) content = JSON.parse(jsonMatch[0]);
@@ -174,7 +177,7 @@ Respond with JSON only (no markdown):
     const limitNum = Math.min(parseInt(limit || '50', 10), 200);
     const skip = (pageNum - 1) * limitNum;
 
-    const where: any = search
+    const where: Prisma.UserWhereInput = search
       ? { OR: [{ email: { contains: search, mode: 'insensitive' } }, { name: { contains: search, mode: 'insensitive' } }] }
       : {};
 
@@ -204,7 +207,7 @@ Respond with JSON only (no markdown):
 
     return this.prisma.user.update({
       where: { id },
-      data: { role: body.role as any },
+      data: { role: body.role as UserRole },
       select: { id: true, email: true, role: true },
     });
   }
@@ -213,7 +216,7 @@ Respond with JSON only (no markdown):
 
   @Get('assets')
   async getAssets(@Query('provider') provider?: string, @Query('category') category?: string) {
-    const where: any = {};
+    const where: Prisma.AssetWhereInput = {};
     if (provider) where.storageProvider = provider;
     if (category) where.category = category;
     return this.prisma.asset.findMany({ where, orderBy: { createdAt: 'desc' }, take: 200 });
