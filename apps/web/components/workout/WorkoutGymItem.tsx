@@ -27,6 +27,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
     restBetweenSetsSeconds,
     restBetweenExercisesActive,
     restBetweenExercisesSeconds,
+    currentBetweenExercisesSeconds,
     completeSet,
     completeItem,
     startRestTimer,
@@ -104,13 +105,13 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
   const allSetsCompleted = item.sets.length > 0 && item.sets.every((s) => s.completed);
 
   // Between-exercises rest timer (local countdown)
-  const [betweenRemaining, setBetweenRemaining] = useState(restBetweenExercisesSeconds);
+  const [betweenRemaining, setBetweenRemaining] = useState(currentBetweenExercisesSeconds);
 
   useEffect(() => {
     if (restBetweenExercisesActive) {
-      setBetweenRemaining(restBetweenExercisesSeconds);
+      setBetweenRemaining(currentBetweenExercisesSeconds);
     }
-  }, [restBetweenExercisesActive, restBetweenExercisesSeconds]);
+  }, [restBetweenExercisesActive, currentBetweenExercisesSeconds]);
 
   useEffect(() => {
     if (!restBetweenExercisesActive || !allSetsCompleted || item.done) return;

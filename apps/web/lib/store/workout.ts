@@ -15,6 +15,7 @@ interface WorkoutStore {
   // Persisted global settings (survive across sessions)
   restBetweenSetsSeconds: number;      // default 90
   restBetweenExercisesSeconds: number; // default 120
+  currentBetweenExercisesSeconds: number; // active timer value (may differ from global default)
   automationMode: AutomationMode;      // default 'auto'
 
   // actions
@@ -49,6 +50,7 @@ interface WorkoutStore {
   setAutomationMode: (mode: AutomationMode) => void;
   setRestBetweenSetsSeconds: (s: number) => void;
   setRestBetweenExercisesSeconds: (s: number) => void;
+  setItemRestAfterSecs: (itemIndex: number, secs: number) => void;
   setSettingsOpen: (v: boolean) => void;
   checkAndDiscardExpired: () => void;
 }
@@ -62,6 +64,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
       restBetweenExercisesActive: false,
       restBetweenSetsSeconds: 90,
       restBetweenExercisesSeconds: 120,
+      currentBetweenExercisesSeconds: 120,
       automationMode: 'auto',
 
       startSession: (items, mode, scheduleId, dateString) =>
@@ -224,7 +227,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
       stopRestTimer: () => set({ restTimerActive: false }),
 
       startRestBetweenExercises: (seconds) =>
-        set({ restBetweenExercisesActive: true, restBetweenExercisesSeconds: seconds }),
+        set({ restBetweenExercisesActive: true, currentBetweenExercisesSeconds: seconds }),
 
       stopRestBetweenExercises: () => set({ restBetweenExercisesActive: false }),
 
@@ -256,6 +259,15 @@ export const useWorkoutStore = create<WorkoutStore>()(
       setRestBetweenSetsSeconds: (s) => set({ restBetweenSetsSeconds: s }),
 
       setRestBetweenExercisesSeconds: (s) => set({ restBetweenExercisesSeconds: s }),
+
+      setItemRestAfterSecs: (itemIndex, secs) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) =>
+            i === itemIndex ? { ...item, restBetweenExercisesSecs: secs } : item,
+          );
+          return { session: { ...state.session, items } };
+        }),
 
       setSettingsOpen: (v) => set({ settingsOpen: v }),
 
