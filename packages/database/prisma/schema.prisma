@@ -26,19 +26,19 @@ enum UserRole {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  email          String   @unique
-  name           String?
-  googleId       String?  @unique
-  avatarUrl      String?
-  tier           UserTier @default(FREE)
-  role           UserRole @default(user)
-  preferredLevel    String?  // 'BEGINNER' | 'ADVANCED'
-  hasUsedFreeExport Boolean  @default(false)
-  referenceWeightKg      Float?
-  referencePaceMinPerKm  Float?
-  createdAt         DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                    String   @id @default(uuid())
+  email                 String   @unique
+  name                  String?
+  googleId              String?  @unique
+  avatarUrl             String?
+  tier                  UserTier @default(FREE)
+  role                  UserRole @default(user)
+  preferredLevel        String? // 'BEGINNER' | 'ADVANCED'
+  hasUsedFreeExport     Boolean  @default(false)
+  referenceWeightKg     Float?
+  referencePaceMinPerKm Float?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   privateExercises PrivateExercise[]
   dailySchedules   DailySchedule[]
@@ -74,9 +74,9 @@ model GymExerciseMaster {
   secondaryMuscleGroups String[]
   youtubeEmbedUrl       String?
   gifUrl                String?
-  mediaUrls             String[]  @default([])
+  mediaUrls             String[]    @default([])
   garminExerciseEnum    String?
-  instructions          Json        // Array of { level, steps, form_cues }
+  instructions          Json // Array of { level, steps, form_cues }
 
   // Default workout config — beginner level
   defaultBeginnerSets                     Int?
@@ -94,8 +94,8 @@ model GymExerciseMaster {
   defaultAdvancedRestTimeSecs             Int?
   defaultAdvancedRestBetweenExercisesSecs Int?
 
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   scheduleItems ScheduleItem[]
 
@@ -110,9 +110,9 @@ model RunningExerciseMaster {
   runningType      RunningType
   youtubeEmbedUrl  String?
   gifUrl           String?
-  mediaUrls        String[]  @default([])
-  instructions     Json        // LocalizedStringArray { vi: string[], en: string[] }
-  workoutStructure Json        // Array of { phase, duration_minutes?, distance_meters? }
+  mediaUrls        String[]    @default([])
+  instructions     Json // LocalizedStringArray { vi: string[], en: string[] }
+  workoutStructure Json // Array of { phase, duration_minutes?, distance_meters? }
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
@@ -128,40 +128,40 @@ model PrivateExercise {
   userId            String
   user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   isActive          Boolean      @default(true)
-  sportType         String       // GYM | RUNNING
+  sportType         String // GYM | RUNNING
   name              String
   targetMuscleGroup MuscleGroup?
   runningType       RunningType?
   customNotes       String?
   gifUrl            String?
-  instructions     Json?    // string[] — flat array of step strings
-  workoutStructure Json?    // WorkoutPhase[] — running interval structure
-  youtubeEmbedUrl  String?  // primary YouTube embed URL
-  mediaUrls         String[]  @default([])
+  instructions      Json? // string[] — flat array of step strings
+  workoutStructure  Json? // WorkoutPhase[] — running interval structure
+  youtubeEmbedUrl   String? // primary YouTube embed URL
+  mediaUrls         String[]     @default([])
 
   // Source system exercise (for media inheritance)
-  sourceGymMasterId            String?
+  sourceGymMasterId String?
 
   // User-configured workout defaults
-  defaultSets                  Int?
-  defaultReps                  Int?
-  defaultWeightKg              Float?
-  defaultRpe                   Int?
-  restTimeSecs                 Int?
-  restBetweenExercisesSecs     Int?
+  defaultSets              Int?
+  defaultReps              Int?
+  defaultWeightKg          Float?
+  defaultRpe               Int?
+  restTimeSecs             Int?
+  restBetweenExercisesSecs Int?
 
   // Running workout defaults (only populated when sportType = 'RUNNING')
-  defaultTargetDistanceKm  Float?
-  defaultDurationMinutes   Int?
-  defaultIntensityType     String?  // 'PACE' | 'HEART_RATE' | 'NONE'
-  defaultPaceMinSecPerKm   Int?     // stored as seconds/km, displayed as mm:ss
-  defaultPaceMaxSecPerKm   Int?
-  defaultHrZone            Int?     // 1–5
-  defaultHrMin             Int?     // bpm
-  defaultHrMax             Int?     // bpm
+  defaultTargetDistanceKm Float?
+  defaultDurationMinutes  Int?
+  defaultIntensityType    String? // 'PACE' | 'HEART_RATE' | 'NONE'
+  defaultPaceMinSecPerKm  Int? // stored as seconds/km, displayed as mm:ss
+  defaultPaceMaxSecPerKm  Int?
+  defaultHrZone           Int? // 1–5
+  defaultHrMin            Int? // bpm
+  defaultHrMax            Int? // bpm
 
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   scheduleItems ScheduleItem[]
 
@@ -181,9 +181,9 @@ model DailySchedule {
   id         String    @id @default(uuid())
   userId     String
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  dateString String    // YYYY-MM-DD format
-  weekNumber Int       // ISO 8601 week number
-  year       Int       // ISO 8601 week year
+  dateString String // YYYY-MM-DD format
+  weekNumber Int // ISO 8601 week number
+  year       Int // ISO 8601 week year
   dayStatus  DayStatus @default(PENDING)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -196,20 +196,20 @@ model DailySchedule {
 }
 
 model ScheduleItem {
-  id             String @id @default(uuid())
-  scheduleId     String
-  schedule       DailySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  sequenceOrder  Int
-  sportType      String // GYM | RUNNING
-  isPrivateExercise Boolean @default(false)
+  id                String        @id @default(uuid())
+  scheduleId        String
+  schedule          DailySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  sequenceOrder     Int
+  sportType         String // GYM | RUNNING
+  isPrivateExercise Boolean       @default(false)
 
   // Polymorphic FK: only ONE should be set
   gymMasterId       String?
-  gymMaster         GymExerciseMaster?    @relation(fields: [gymMasterId], references: [id], onDelete: SetNull)
+  gymMaster         GymExerciseMaster?     @relation(fields: [gymMasterId], references: [id], onDelete: SetNull)
   runningMasterId   String?
   runningMaster     RunningExerciseMaster? @relation(fields: [runningMasterId], references: [id], onDelete: SetNull)
   privateExerciseId String?
-  privateExercise   PrivateExercise?      @relation(fields: [privateExerciseId], references: [id], onDelete: SetNull)
+  privateExercise   PrivateExercise?       @relation(fields: [privateExerciseId], references: [id], onDelete: SetNull)
 
   // Payloads (nullable for FREE tier rolling cleanup)
   gymPayload     Json? // { rest_time_seconds, sets: [{ set_number, weight_kg, reps, rpe, is_completed }] }
@@ -225,20 +225,20 @@ model ScheduleItem {
 // ─── Blog / CMS ───────────────────────────────────────────────────────────────
 
 model BlogPost {
-  id          String        @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
-  slug        String        @unique
-  excerpt     String        @default("")
-  content     String        @default("")
+  slug        String    @unique
+  excerpt     String    @default("")
+  content     String    @default("")
   coverImage  String?
   tags        String[]
   categoryKey String?
-  status      String        @default("draft") // draft | published | archived
-  readingTime Int           @default(5)
+  status      String    @default("draft") // draft | published | archived
+  readingTime Int       @default(5)
   publishedAt DateTime?
   authorId    String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   category BlogCategory? @relation(fields: [categoryKey], references: [key])
 
@@ -296,13 +296,13 @@ model Payment {
   id          String   @id @default(uuid())
   userId      String
   orderCode   Int      @unique
-  amount      Int      // in VND
+  amount      Int // in VND
   status      String   @default("PENDING") // PENDING | PAID | CANCELLED | EXPIRED
   checkoutUrl String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("payments")
 }

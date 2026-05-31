@@ -1,5 +1,5 @@
-import 'dotenv/config';
-import { defineConfig } from 'prisma/config';
+import 'dotenv/config'
+import { defineConfig } from 'prisma/config'
 
 // DATABASE_URL is required for migrate/push commands.
 // prisma generate does not connect to the database, but v7 still requires
@@ -12,4 +12,4 @@ export default defineConfig({
   datasource: {
     url: process.env.DATABASE_URL ?? 'postgresql://localhost:5432/placeholder',
   },
-});
+})
