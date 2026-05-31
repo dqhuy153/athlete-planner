@@ -392,7 +392,8 @@
     "automationHint": "Auto-advance between sets and exercises",
     "restartExercise": "Restart Exercise",
     "restartFromSet": "Restart from Set {n}",
-    "completeSet": "Complete Set"
+    "completeSet": "Complete Set",
+    "restAfterExercise": "Rest after"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",
@@ -408,6 +409,20 @@
     "saving": "Saving...",
     "saveFailed": "Failed to save",
     "sourceFrom": "Based on: {name}",
-    "notes": "Notes"
+    "notes": "Notes",
+    "runningConfigTitle": "Running Defaults",
+    "intensityType": "Intensity",
+    "intensityNone": "None",
+    "intensityPace": "Pace",
+    "intensityHr": "Heart Rate",
+    "targetDistance": "Target Distance",
+    "targetDuration": "Target Duration",
+    "paceRange": "Pace Range",
+    "paceMin": "Fastest Pace",
+    "paceMax": "Slowest Pace",
+    "hrSection": "Heart Rate",
+    "hrZone": "HR Zone",
+    "hrMin": "Min BPM",
+    "hrMax": "Max BPM"
   }
 }

@@ -392,7 +392,8 @@
     "automationHint": "Tự động chuyển hiệp và bài tiếp theo",
     "restartExercise": "Làm lại bài tập",
     "restartFromSet": "Làm lại từ hiệp {n}",
-    "completeSet": "Xong hiệp"
+    "completeSet": "Xong hiệp",
+    "restAfterExercise": "Nghỉ sau bài"
   },
   "privateExercise": {
     "backToLibrary": "Quay lại thư viện",
@@ -408,6 +409,20 @@
     "saving": "Đang lưu...",
     "saveFailed": "Lưu thất bại",
     "sourceFrom": "Dựa trên: {name}",
-    "notes": "Ghi chú"
+    "notes": "Ghi chú",
+    "runningConfigTitle": "Mặc định chạy bộ",
+    "intensityType": "Cường độ",
+    "intensityNone": "Không",
+    "intensityPace": "Tốc độ",
+    "intensityHr": "Nhịp tim",
+    "targetDistance": "Quãng đường mục tiêu",
+    "targetDuration": "Thời gian mục tiêu",
+    "paceRange": "Dải tốc độ",
+    "paceMin": "Pace nhanh nhất",
+    "paceMax": "Pace chậm nhất",
+    "hrSection": "Nhịp tim",
+    "hrZone": "Vùng nhịp tim",
+    "hrMin": "Nhịp tim tối thiểu",
+    "hrMax": "Nhịp tim tối đa"
   }
 }
