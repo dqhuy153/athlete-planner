@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { useSession, signIn } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { PrivateExerciseDetailClient } from './PrivateExerciseDetailClient';
-import type { PrivateExercise, GymExerciseMaster } from '@athlete-planner/contracts';
+import type { PrivateExercise, GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 
 export default function PrivateExerciseDetailPage() {
@@ -13,7 +13,7 @@ export default function PrivateExerciseDetailPage() {
   const locale = params.locale;
   const id = params.id;
   const { data: session, status } = useSession();
-  const token = (session as any)?.accessToken as string | undefined;
+  const token = session?.accessToken;
 
   const [exercise, setExercise] = useState<PrivateExercise | null>(null);
   const [sourceGymName, setSourceGymName] = useState<string | null>(null);
@@ -34,13 +34,13 @@ export default function PrivateExerciseDetailPage() {
       .then(async (ex) => {
         setExercise(ex);
         if (ex.sourceGymMasterId) {
-          try {
-            const master = await api.getExerciseDetail(ex.sourceGymMasterId) as GymExerciseMaster;
-            setSourceGymName((master as any).vietnameseName ?? master.name ?? null);
-          } catch {
-            // no source name
-          }
-        }
+           try {
+             const master = await api.getExerciseDetail(ex.sourceGymMasterId) as GymExerciseMaster | RunningExerciseMaster;
+             setSourceGymName(master.vietnameseName ?? master.name ?? null);
+           } catch {
+             // no source name
+           }
+         }
       })
       .catch(() => setNotFoundState(true))
       .finally(() => setLoading(false));

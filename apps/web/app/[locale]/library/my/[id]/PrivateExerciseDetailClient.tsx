@@ -61,7 +61,7 @@ export function PrivateExerciseDetailClient({
 }: PrivateExerciseDetailClientProps) {
   const t = useTranslations('privateExercise');
   const { data: session } = useSession();
-  const token = (session as any)?.accessToken as string | undefined;
+  const token = session?.accessToken;
 
   const [defaultSets, setDefaultSets] = useState<number | null>(exercise.defaultSets);
   const [defaultReps, setDefaultReps] = useState<number | null>(exercise.defaultReps);
@@ -88,11 +88,12 @@ export function PrivateExerciseDetailClient({
         restTimeSecs,
         restBetweenExercisesSecs,
       });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    } catch (e: any) {
-      setError(e?.message || t('saveFailed'));
-    } finally {
+       setSaved(true);
+       setTimeout(() => setSaved(false), 3000);
+     } catch (e: unknown) {
+       const message = e instanceof Error ? e.message : undefined;
+       setError(message || t('saveFailed'));
+     } finally {
       setSaving(false);
     }
   }

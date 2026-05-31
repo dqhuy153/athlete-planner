@@ -52,8 +52,12 @@ export default function NewPrivateExercisePage({ params }: PageProps) {
         customNotes: customNotes.trim() || undefined,
       });
       router.push(`/${locale}/library/my`);
-    } catch (err: any) {
-      setError(err.message || 'Failed to create exercise');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to create exercise');
+      } else {
+        setError('Failed to create exercise');
+      }
     } finally {
       setSubmitting(false);
     }

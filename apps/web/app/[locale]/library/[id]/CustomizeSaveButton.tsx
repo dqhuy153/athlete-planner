@@ -63,16 +63,16 @@ export function CustomizeSaveButton({
         sourceGymMasterId: sportType === SportType.GYM ? exerciseId : undefined,
       });
       setSaved(true);
-      // Navigate to private exercise detail/config page
-      router.push(`/${locale}/library/my/${created.id}`);
-    } catch (e: any) {
-      const msg = e?.message ?? '';
-      if (msg.toLowerCase().includes('limit') || msg.includes('10')) {
-        setIsFull(true);
-      } else {
-        setError(msg || t('saveFailed'));
-      }
-    } finally {
+       // Navigate to private exercise detail/config page
+       router.push(`/${locale}/library/my/${created.id}`);
+     } catch (e: unknown) {
+       const msg = e instanceof Error ? e.message : '';
+       if (msg.toLowerCase().includes('limit') || msg.includes('10')) {
+         setIsFull(true);
+       } else {
+         setError(msg || t('saveFailed'));
+       }
+     } finally {
       setSaving(false);
     }
   }

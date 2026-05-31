@@ -6,7 +6,7 @@ import { CSS }         from '@dnd-kit/utilities';
 import { GripVertical, Trash2, ChevronDown, ChevronUp, Dumbbell, PersonStanding, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import type { ScheduleItem, GymPayload, RunningPayload, GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import type { ScheduleItem, GymPayload, RunningPayload, GymExerciseMaster, RunningExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
 import { SportType, RunningIntensityType } from '@athlete-planner/contracts';
 import { BottomSheet } from '@athlete-planner/ui';
 import { GymPayloadEditor }     from './GymPayloadEditor';
@@ -134,12 +134,13 @@ export function ScheduleItemCard({
     }
 
     // Running exercise — flat localized string array
-    const runEx = guideExercise as RunningExerciseMaster;
-    const runSteps: string[] =
-      (runEx.instructions as any)?.[locale] ??
-      (runEx.instructions as any)?.vi ??
-      (runEx.instructions as any)?.en ??
-      [];
+     const runEx = guideExercise as RunningExerciseMaster;
+     const localeKey = locale as keyof LocalizedStringArray;
+     const runSteps: string[] =
+       runEx.instructions?.[localeKey] ??
+       runEx.instructions?.vi ??
+       runEx.instructions?.en ??
+       [];
 
     if (!runSteps.length) {
       return <p className="px-4 pb-6 text-caption text-text-tertiary">{t('noGuide')}</p>;
