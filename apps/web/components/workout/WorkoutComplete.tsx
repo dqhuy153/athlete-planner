@@ -144,7 +144,7 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
             <div className="flex items-center gap-2 mb-1">
               <CheckCircle2 className="h-5 w-5 text-accent" aria-hidden />
               <span className="font-mono text-caption font-semibold text-accent uppercase tracking-widest">
-                Completed
+                {t('completedBadge')}
               </span>
             </div>
             <p className="font-mono text-xs text-text-tertiary">{todayDate}</p>

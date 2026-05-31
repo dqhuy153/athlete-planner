@@ -420,7 +420,8 @@
     "savingImage": "Đang lưu...",
     "saveImageError": "Không lưu được ảnh",
     "totalRunDistance": "Tổng khoảng cách",
-    "totalRunTime": "Tổng thời gian chạy"
+    "totalRunTime": "Tổng thời gian chạy",
+    "completedBadge": "Hoàn thành"
   },
   "privateExercise": {
     "backToLibrary": "Quay lại thư viện",

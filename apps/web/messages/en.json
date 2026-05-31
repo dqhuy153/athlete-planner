@@ -420,7 +420,8 @@
     "savingImage": "Saving...",
     "saveImageError": "Could not save image",
     "totalRunDistance": "Total Distance",
-    "totalRunTime": "Total Run Time"
+    "totalRunTime": "Total Run Time",
+    "completedBadge": "Completed"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",
