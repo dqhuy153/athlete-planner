@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { getUsers, updateUserRole } from '@/lib/api';
 import type { User } from '@athlete-planner/contracts';
-import { UserRole } from '@athlete-planner/contracts';
+import { UserRole, UserTier } from '@athlete-planner/contracts';
 import { Input } from '@/components/ui/input';
 import { Select } from '@athlete-planner/ui';
 import { useToast } from '@/components/ui/toast';
@@ -107,15 +107,15 @@ export default function UsersPage() {
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                        (user as any).tier === 'PRO'
-                          ? 'bg-primary/10 text-primary'
-                          : 'bg-surface-variant text-on-surface-variant'
-                      }`}>
-                        {(user as any).tier ?? 'FREE'}
-                      </span>
-                    </td>
+                     <td className="px-4 py-3">
+                       <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                         user.tier === UserTier.PRO
+                           ? 'bg-primary/10 text-primary'
+                           : 'bg-surface-variant text-on-surface-variant'
+                       }`}>
+                         {user.tier}
+                       </span>
+                     </td>
                     <td className="px-4 py-3 text-on-surface-variant">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>

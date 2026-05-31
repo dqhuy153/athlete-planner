@@ -81,7 +81,13 @@ const CONFIG_SECTIONS: ConfigSection[] = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function getDefault(def: ConfigDef): any {
+/**
+ * Config management system for heterogeneous configuration values.
+ * Different config entries have different types (number, string, boolean).
+ * Type safety is enforced through the ConfigDef schema for each entry.
+ */
+
+function getDefault(def: ConfigDef): unknown {
   return def.defaultValue;
 }
 
@@ -89,9 +95,9 @@ function getDefault(def: ConfigDef): any {
 
 interface ConfigInputProps {
   def: ConfigDef;
-  value: any;
-  onChange: (val: any) => void;
-  onSave?: (val: any) => void;
+  value: unknown;
+  onChange: (val: unknown) => void;
+  onSave?: (val: unknown) => void;
 }
 
 function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
@@ -114,11 +120,12 @@ function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
     );
   }
   if (def.type === 'number') {
+    const numValue = typeof value === 'number' ? value : (typeof def.defaultValue === 'number' ? def.defaultValue : 0);
     return (
       <div className="flex items-center gap-2">
         <input
           type="number"
-          value={value ?? def.defaultValue}
+          value={numValue}
           min={def.min}
           max={def.max}
           onChange={(e) => onChange(Number(e.target.value))}
@@ -131,7 +138,7 @@ function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
   return (
     <input
       type="text"
-      value={value ?? String(def.defaultValue)}
+      value={typeof value === 'string' ? value : String(def.defaultValue)}
       onChange={(e) => onChange(e.target.value)}
       className="w-full max-w-xs px-3 py-1.5 text-sm bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
     />
@@ -142,8 +149,8 @@ function ConfigInput({ def, value, onChange, onSave }: ConfigInputProps) {
 
 export default function ConfigPage() {
   const { session } = useAuth();
-  const [configMap, setConfigMap] = useState<Record<string, any>>({});
-  const [pendingMap, setPendingMap] = useState<Record<string, any>>({});
+  const [configMap, setConfigMap] = useState<Record<string, unknown>>({});
+  const [pendingMap, setPendingMap] = useState<Record<string, unknown>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null); // key being saved
   const [savedKeys, setSavedKeys] = useState<Set<string>>(new Set());
@@ -159,7 +166,7 @@ export default function ConfigPage() {
     setError('');
     try {
       const entries = await getAppConfigs(session!.accessToken);
-      const map: Record<string, any> = {};
+      const map: Record<string, unknown> = {};
       for (const e of entries) map[e.key] = e.value;
       setConfigMap(map);
       setPendingMap(map);
@@ -170,7 +177,7 @@ export default function ConfigPage() {
     }
   }
 
-  function handleChange(key: string, value: any) {
+  function handleChange(key: string, value: unknown) {
     setPendingMap((m) => ({ ...m, [key]: value }));
   }
 
@@ -179,7 +186,7 @@ export default function ConfigPage() {
     return JSON.stringify(pendingMap[key]) !== JSON.stringify(configMap[key]);
   }
 
-  async function saveKey(def: ConfigDef, overrideValue?: any) {
+  async function saveKey(def: ConfigDef, overrideValue?: unknown) {
     if (!session) return;
     const value = overrideValue !== undefined ? overrideValue : (pendingMap[def.key] ?? def.defaultValue);
     setSaving(def.key);

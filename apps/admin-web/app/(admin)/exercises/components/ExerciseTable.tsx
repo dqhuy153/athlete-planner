@@ -42,9 +42,12 @@ export function ExerciseTable({ exercises, tab, onToggle, onDeleteClick }: Exerc
             <tr key={ex.id} className="hover:bg-surface-3 transition-colors">
               <td className="px-4 py-3 font-medium text-on-surface">{ex.name}</td>
               <td className="px-4 py-3 text-on-surface-variant">{ex.vietnameseName}</td>
-              <td className="px-4 py-3 text-on-surface-variant">
-                {'targetMuscleGroup' in ex ? ex.targetMuscleGroup : (ex as any).runningType}
-              </td>
+               <td className="px-4 py-3 text-on-surface-variant">
+                 {(() => {
+                   if ('targetMuscleGroup' in ex) return ex.targetMuscleGroup;
+                   return ex.runningType;
+                 })()}
+               </td>
               <td className="px-4 py-3">
                 <button
                   type="button"

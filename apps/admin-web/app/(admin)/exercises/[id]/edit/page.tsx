@@ -14,8 +14,8 @@ import {
 import { GymExerciseWizard, gymFormToPayload } from '@/components/exercises/GymExerciseWizard';
 import { RunningExerciseWizard, runningFormToPayload } from '@/components/exercises/RunningExerciseWizard';
 import type { GymExerciseFormValues, RunningExerciseFormValues } from '@/components/exercises/schemas';
-import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
-import { ExperienceLevel } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
+import { ExperienceLevel, MuscleGroup, RunningType } from '@athlete-planner/contracts';
 
 type ExerciseType = 'gym' | 'running';
 
@@ -41,10 +41,11 @@ function mapGymInstructions(
 
   for (const inst of instructions) {
     const level = inst.level === ExperienceLevel.BEGINNER ? ExperienceLevel.BEGINNER : ExperienceLevel.ADVANCED;
-    const stepsEn = (inst.steps as any)?.en ?? [];
-    const stepsVi = (inst.steps as any)?.vi ?? [];
-    const cuesEn = (inst.form_cues as any)?.en ?? [];
-    const cuesVi = (inst.form_cues as any)?.vi ?? [];
+    // Safely extract localized arrays with fallback
+    const stepsEn = (inst.steps as LocalizedStringArray | undefined)?.en ?? [];
+    const stepsVi = (inst.steps as LocalizedStringArray | undefined)?.vi ?? [];
+    const cuesEn = (inst.form_cues as LocalizedStringArray | undefined)?.en ?? [];
+    const cuesVi = (inst.form_cues as LocalizedStringArray | undefined)?.vi ?? [];
 
     mapped[level] = {
       level,
@@ -82,26 +83,26 @@ export default function EditExercisePage({ params }: PageProps) {
       setLoading(true);
       setError('');
       try {
-        if (type === 'gym') {
-          const ex = await getGymExercise(session!.accessToken, id);
-          setGymInitial({
-            name: ex.name,
-            vietnameseName: ex.vietnameseName,
-            targetMuscleGroup: ex.targetMuscleGroup as any,
-            secondaryMuscleGroups: Array.isArray(ex.secondaryMuscleGroups)
-              ? ex.secondaryMuscleGroups
-              : [],
-            youtubeEmbedUrl: ex.youtubeEmbedUrl ?? '',
-            gifUrl: ex.gifUrl ?? '',
-            garminExerciseEnum: ex.garminExerciseEnum ?? '',
-            instructions: mapGymInstructions(ex.instructions),
-          });
-        } else {
-          const ex = await getRunningExercise(session!.accessToken, id);
-          const instructionsAny = ex.instructions as any;
-          const enArr: string[] = instructionsAny?.en ?? [];
-          const viArr: string[] = instructionsAny?.vi ?? [];
-          const structure: any[] = Array.isArray(ex.workoutStructure) ? ex.workoutStructure : [];
+         if (type === 'gym') {
+           const ex = await getGymExercise(session!.accessToken, id);
+           setGymInitial({
+             name: ex.name,
+             vietnameseName: ex.vietnameseName,
+             targetMuscleGroup: ex.targetMuscleGroup as unknown as MuscleGroup,
+             secondaryMuscleGroups: Array.isArray(ex.secondaryMuscleGroups)
+               ? ex.secondaryMuscleGroups
+               : [],
+             youtubeEmbedUrl: ex.youtubeEmbedUrl ?? '',
+             gifUrl: ex.gifUrl ?? '',
+             garminExerciseEnum: ex.garminExerciseEnum ?? '',
+             instructions: mapGymInstructions(ex.instructions),
+           });
+         } else {
+           const ex = await getRunningExercise(session!.accessToken, id);
+           const instructionsData = ex.instructions as LocalizedStringArray | undefined;
+           const enArr: string[] = instructionsData?.en ?? [];
+           const viArr: string[] = instructionsData?.vi ?? [];
+           const structure: any[] = Array.isArray(ex.workoutStructure) ? ex.workoutStructure : [];
 
           // Helper function to generate a default phase name from phase type
           const getPhaseName = (type: string): string => {
@@ -116,34 +117,34 @@ export default function EditExercisePage({ params }: PageProps) {
             return nameMap[type] || type;
           };
 
-          setRunningInitial({
-            name: ex.name,
-            vietnameseName: ex.vietnameseName,
-            runningType: ex.runningType as any,
-            youtubeEmbedUrl: ex.youtubeEmbedUrl ?? '',
-            gifUrl: ex.gifUrl ?? '',
-            instructions_en: enArr.length ? enArr.map((v) => ({ value: v })) : [{ value: '' }],
-            instructions_vi: viArr.length ? viArr.map((v) => ({ value: v })) : [{ value: '' }],
-            workoutStructure: structure.map((phase) => ({
-              id: crypto.randomUUID(),
-              phase: phase.phase || getPhaseName(phase.type || 'custom'),
-              type: phase.type ?? 'custom',
-              duration_minutes: phase.duration_minutes,
-              distance_meters: phase.distance_meters,
-              hr_zone: phase.hr_zone,
-              hr_min: phase.hr_min,
-              hr_max: phase.hr_max,
-              pace_min_per_km: phase.pace_min_per_km ?? '',
-              pace_max_per_km: phase.pace_max_per_km ?? '',
-              rpe: phase.rpe,
-              cadence: phase.cadence,
-              power_zone: phase.power_zone,
-              repeat_count: phase.repeat_count,
-              repeat_rest_seconds: phase.repeat_rest_seconds,
-              notes_en: phase.notes?.en ?? '',
-              notes_vi: phase.notes?.vi ?? '',
-            })),
-          });
+           setRunningInitial({
+             name: ex.name,
+             vietnameseName: ex.vietnameseName,
+             runningType: ex.runningType as unknown as RunningType,
+             youtubeEmbedUrl: ex.youtubeEmbedUrl ?? '',
+             gifUrl: ex.gifUrl ?? '',
+             instructions_en: enArr.length ? enArr.map((v) => ({ value: v })) : [{ value: '' }],
+             instructions_vi: viArr.length ? viArr.map((v) => ({ value: v })) : [{ value: '' }],
+             workoutStructure: structure.map((phase) => ({
+               id: crypto.randomUUID(),
+               phase: phase.phase || getPhaseName(phase.type || 'custom'),
+               type: phase.type ?? 'custom',
+               duration_minutes: phase.duration_minutes,
+               distance_meters: phase.distance_meters,
+               hr_zone: phase.hr_zone,
+               hr_min: phase.hr_min,
+               hr_max: phase.hr_max,
+               pace_min_per_km: phase.pace_min_per_km ?? '',
+               pace_max_per_km: phase.pace_max_per_km ?? '',
+               rpe: phase.rpe,
+               cadence: phase.cadence,
+               power_zone: phase.power_zone,
+               repeat_count: phase.repeat_count,
+               repeat_rest_seconds: phase.repeat_rest_seconds,
+               notes_en: phase.notes?.en ?? '',
+               notes_vi: phase.notes?.vi ?? '',
+             })),
+           });
         }
       } catch (err: any) {
         setError(err.message || 'Failed to load exercise');

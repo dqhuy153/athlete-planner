@@ -73,7 +73,7 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
         data,
         preview: preview.results[index] ?? {
           index,
-          name: (data as any).name ?? `Item ${index + 1}`,
+          name: (data as unknown as { name?: string }).name ?? `Item ${index + 1}`,
           status: 'new' as const,
           errors: [],
         },

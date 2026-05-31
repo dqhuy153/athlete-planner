@@ -13,6 +13,7 @@ import {
   deleteBlogCategory,
 } from '@/lib/api';
 import type { BlogPost, BlogCategory } from '@athlete-planner/contracts';
+import { BlogStatus } from '@athlete-planner/contracts';
 import { Plus } from 'lucide-react';
 import { ConfirmModal, Button } from '@athlete-planner/ui';
 import { useToast } from '@/components/ui/toast';
@@ -59,7 +60,7 @@ export default function BlogPage() {
     setLoading(true);
     try {
       const [postsRes, catsRes] = await Promise.all([
-        getBlogPosts(session!.accessToken, { limit: 100, status: 'all' } as any),
+        getBlogPosts(session!.accessToken, { limit: 100, status: BlogStatus.PUBLISHED }),
         getBlogCategories(session!.accessToken),
       ]);
       setPosts(postsRes?.posts ?? []);
@@ -90,7 +91,7 @@ export default function BlogPage() {
       coverImage: post.coverImage ?? '',
       tags: (post.tags ?? []).join(', '),
       categoryKey: post.categoryKey ?? '',
-      status: post.status as any,
+      status: post.status,
       readingTime: post.readingTime ?? 1,
     });
     setError('');
