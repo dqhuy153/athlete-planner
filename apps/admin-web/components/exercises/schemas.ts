@@ -35,6 +35,20 @@ export const GymExerciseSchema = z.object({
   ]),
   youtubeEmbedUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   gifUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  // Default config — beginner
+  defaultBeginnerSets: z.coerce.number().int().min(1).max(20).optional(),
+  defaultBeginnerReps: z.coerce.number().int().min(1).max(100).optional(),
+  defaultBeginnerWeightKg: z.coerce.number().min(0).max(1000).optional(),
+  defaultBeginnerRpe: z.coerce.number().int().min(1).max(10).optional(),
+  defaultBeginnerRestTimeSecs: z.coerce.number().int().min(0).max(600).optional(),
+  defaultBeginnerRestBetweenExercisesSecs: z.coerce.number().int().min(0).max(600).optional(),
+  // Default config — advanced
+  defaultAdvancedSets: z.coerce.number().int().min(1).max(20).optional(),
+  defaultAdvancedReps: z.coerce.number().int().min(1).max(100).optional(),
+  defaultAdvancedWeightKg: z.coerce.number().min(0).max(1000).optional(),
+  defaultAdvancedRpe: z.coerce.number().int().min(1).max(10).optional(),
+  defaultAdvancedRestTimeSecs: z.coerce.number().int().min(0).max(600).optional(),
+  defaultAdvancedRestBetweenExercisesSecs: z.coerce.number().int().min(0).max(600).optional(),
 });
 
 export type GymExerciseFormValues = z.infer<typeof GymExerciseSchema>;

@@ -128,6 +128,18 @@ export class ImportGymExercisesHandler implements ICommandHandler<ImportGymExerc
         youtubeEmbedUrl: ex.youtubeEmbedUrl ?? null,
         gifUrl: ex.gifUrl ?? null,
         instructions: (ex.instructions ?? []) as any,
+        defaultBeginnerSets: (ex as any).defaultBeginnerSets ?? null,
+        defaultBeginnerReps: (ex as any).defaultBeginnerReps ?? null,
+        defaultBeginnerWeightKg: (ex as any).defaultBeginnerWeightKg ?? null,
+        defaultBeginnerRpe: (ex as any).defaultBeginnerRpe ?? null,
+        defaultBeginnerRestTimeSecs: (ex as any).defaultBeginnerRestTimeSecs ?? null,
+        defaultBeginnerRestBetweenExercisesSecs: (ex as any).defaultBeginnerRestBetweenExercisesSecs ?? null,
+        defaultAdvancedSets: (ex as any).defaultAdvancedSets ?? null,
+        defaultAdvancedReps: (ex as any).defaultAdvancedReps ?? null,
+        defaultAdvancedWeightKg: (ex as any).defaultAdvancedWeightKg ?? null,
+        defaultAdvancedRpe: (ex as any).defaultAdvancedRpe ?? null,
+        defaultAdvancedRestTimeSecs: (ex as any).defaultAdvancedRestTimeSecs ?? null,
+        defaultAdvancedRestBetweenExercisesSecs: (ex as any).defaultAdvancedRestBetweenExercisesSecs ?? null,
       };
 
       if (result.status === 'duplicate' && result.existingId) {

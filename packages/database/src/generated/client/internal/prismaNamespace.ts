@@ -1294,6 +1294,18 @@ export const GymExerciseMasterScalarFieldEnum = {
   gifUrl: 'gifUrl',
   garminExerciseEnum: 'garminExerciseEnum',
   instructions: 'instructions',
+  defaultBeginnerSets: 'defaultBeginnerSets',
+  defaultBeginnerReps: 'defaultBeginnerReps',
+  defaultBeginnerWeightKg: 'defaultBeginnerWeightKg',
+  defaultBeginnerRpe: 'defaultBeginnerRpe',
+  defaultBeginnerRestTimeSecs: 'defaultBeginnerRestTimeSecs',
+  defaultBeginnerRestBetweenExercisesSecs: 'defaultBeginnerRestBetweenExercisesSecs',
+  defaultAdvancedSets: 'defaultAdvancedSets',
+  defaultAdvancedReps: 'defaultAdvancedReps',
+  defaultAdvancedWeightKg: 'defaultAdvancedWeightKg',
+  defaultAdvancedRpe: 'defaultAdvancedRpe',
+  defaultAdvancedRestTimeSecs: 'defaultAdvancedRestTimeSecs',
+  defaultAdvancedRestBetweenExercisesSecs: 'defaultAdvancedRestBetweenExercisesSecs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1328,6 +1340,13 @@ export const PrivateExerciseScalarFieldEnum = {
   runningType: 'runningType',
   customNotes: 'customNotes',
   gifUrl: 'gifUrl',
+  sourceGymMasterId: 'sourceGymMasterId',
+  defaultSets: 'defaultSets',
+  defaultReps: 'defaultReps',
+  defaultWeightKg: 'defaultWeightKg',
+  defaultRpe: 'defaultRpe',
+  restTimeSecs: 'restTimeSecs',
+  restBetweenExercisesSecs: 'restBetweenExercisesSecs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1589,20 +1608,6 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
- * Reference to a field of type 'RunningType'
- */
-export type EnumRunningTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunningType'>
-    
-
-
-/**
- * Reference to a field of type 'RunningType[]'
- */
-export type ListEnumRunningTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunningType[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1617,20 +1622,6 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'DayStatus'
- */
-export type EnumDayStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayStatus'>
-    
-
-
-/**
- * Reference to a field of type 'DayStatus[]'
- */
-export type ListEnumDayStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1641,6 +1632,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RunningType'
+ */
+export type EnumRunningTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunningType'>
+    
+
+
+/**
+ * Reference to a field of type 'RunningType[]'
+ */
+export type ListEnumRunningTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunningType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DayStatus'
+ */
+export type EnumDayStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DayStatus[]'
+ */
+export type ListEnumDayStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayStatus[]'>
     
 
 /**

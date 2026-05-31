@@ -10,6 +10,7 @@ export interface WorkoutSetRecord {
   setNumber: number;
   weight_kg: number;
   reps: number;
+  rpe?: number;
   completed: boolean;
 }
 
@@ -26,6 +27,8 @@ export interface WorkoutItem {
   sets: WorkoutSetRecord[];          // gym: live tracking
   currentPhaseIndex: number;         // running: phase cursor
   done: boolean;
+  restTimeSecs?: number;             // default rest between sets (seconds)
+  restBetweenExercisesSecs?: number; // default rest between exercises (seconds)
 }
 
 export interface WorkoutSession {

@@ -15,6 +15,18 @@ export interface GymExerciseSeed {
     steps: { vi: string[]; en: string[] };
     form_cues: { vi: string[]; en: string[] };
   }>;
+  defaultBeginnerSets?: number;
+  defaultBeginnerReps?: number;
+  defaultBeginnerWeightKg?: number;
+  defaultBeginnerRpe?: number;
+  defaultBeginnerRestTimeSecs?: number;
+  defaultBeginnerRestBetweenExercisesSecs?: number;
+  defaultAdvancedSets?: number;
+  defaultAdvancedReps?: number;
+  defaultAdvancedWeightKg?: number;
+  defaultAdvancedRpe?: number;
+  defaultAdvancedRestTimeSecs?: number;
+  defaultAdvancedRestBetweenExercisesSecs?: number;
 }
 
 export const BACK_EXERCISES: GymExerciseSeed[] = [
@@ -88,6 +100,18 @@ export const BACK_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 8,
+    defaultBeginnerWeightKg: 60,
+    defaultBeginnerRpe: 7,
+    defaultBeginnerRestTimeSecs: 90,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 5,
+    defaultAdvancedWeightKg: 90,
+    defaultAdvancedRpe: 9,
+    defaultAdvancedRestTimeSecs: 120,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
   {
     name: 'Pull-up',
@@ -159,6 +183,18 @@ export const BACK_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 5,
+    defaultBeginnerWeightKg: 0,
+    defaultBeginnerRpe: 7,
+    defaultBeginnerRestTimeSecs: 90,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 10,
+    defaultAdvancedWeightKg: 0,
+    defaultAdvancedRpe: 8,
+    defaultAdvancedRestTimeSecs: 75,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
   {
     name: 'Seated Cable Row',
@@ -230,5 +266,17 @@ export const BACK_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 10,
+    defaultBeginnerWeightKg: 40,
+    defaultBeginnerRpe: 6,
+    defaultBeginnerRestTimeSecs: 75,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 8,
+    defaultAdvancedWeightKg: 65,
+    defaultAdvancedRpe: 8,
+    defaultAdvancedRestTimeSecs: 90,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
 ];

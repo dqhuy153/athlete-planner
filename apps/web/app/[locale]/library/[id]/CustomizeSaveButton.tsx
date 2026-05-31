@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { signIn, useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Copy, Check, X } from 'lucide-react';
 import { cn } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
@@ -15,17 +15,21 @@ interface CustomizeSaveButtonProps {
   sportType: SportType;
   targetMuscleGroup?: string;
   runningType?: string;
+  locale: string;
 }
 
 export function CustomizeSaveButton({
+  exerciseId,
   exerciseName,
   sportType,
   targetMuscleGroup,
   runningType,
+  locale,
 }: CustomizeSaveButtonProps) {
   const t = useTranslations('library');
   const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,14 +53,17 @@ export function CustomizeSaveButton({
     setSaving(true);
     setError(null);
     try {
-      await api.createPrivateExercise(token, {
+      const created = await api.createPrivateExercise(token, {
         sportType,
         name: exerciseName,
         targetMuscleGroup,
         runningType,
         customNotes: `Copied from master library`,
+        sourceGymMasterId: sportType === SportType.GYM ? exerciseId : undefined,
       });
       setSaved(true);
+      // Navigate to private exercise detail/config page
+      router.push(`/${locale}/library/my/${created.id}`);
     } catch (e: any) {
       const msg = e?.message ?? '';
       if (msg.toLowerCase().includes('limit') || msg.includes('10')) {

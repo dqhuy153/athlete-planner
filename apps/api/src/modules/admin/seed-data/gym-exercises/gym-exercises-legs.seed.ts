@@ -15,6 +15,18 @@ export interface GymExerciseSeed {
     steps: { vi: string[]; en: string[] };
     form_cues: { vi: string[]; en: string[] };
   }>;
+  defaultBeginnerSets?: number;
+  defaultBeginnerReps?: number;
+  defaultBeginnerWeightKg?: number;
+  defaultBeginnerRpe?: number;
+  defaultBeginnerRestTimeSecs?: number;
+  defaultBeginnerRestBetweenExercisesSecs?: number;
+  defaultAdvancedSets?: number;
+  defaultAdvancedReps?: number;
+  defaultAdvancedWeightKg?: number;
+  defaultAdvancedRpe?: number;
+  defaultAdvancedRestTimeSecs?: number;
+  defaultAdvancedRestBetweenExercisesSecs?: number;
 }
 
 export const LEGS_EXERCISES: GymExerciseSeed[] = [
@@ -88,6 +100,18 @@ export const LEGS_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 8,
+    defaultBeginnerWeightKg: 70,
+    defaultBeginnerRpe: 7,
+    defaultBeginnerRestTimeSecs: 120,
+    defaultBeginnerRestBetweenExercisesSecs: 150,
+    defaultAdvancedSets: 5,
+    defaultAdvancedReps: 5,
+    defaultAdvancedWeightKg: 120,
+    defaultAdvancedRpe: 9,
+    defaultAdvancedRestTimeSecs: 180,
+    defaultAdvancedRestBetweenExercisesSecs: 120,
   },
   {
     name: 'Barbell Deadlift',
@@ -161,6 +185,18 @@ export const LEGS_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 5,
+    defaultBeginnerWeightKg: 80,
+    defaultBeginnerRpe: 8,
+    defaultBeginnerRestTimeSecs: 150,
+    defaultBeginnerRestBetweenExercisesSecs: 180,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 3,
+    defaultAdvancedWeightKg: 140,
+    defaultAdvancedRpe: 9,
+    defaultAdvancedRestTimeSecs: 180,
+    defaultAdvancedRestBetweenExercisesSecs: 120,
   },
   {
     name: 'Leg Press',
@@ -232,5 +268,17 @@ export const LEGS_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 10,
+    defaultBeginnerWeightKg: 100,
+    defaultBeginnerRpe: 6,
+    defaultBeginnerRestTimeSecs: 90,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 8,
+    defaultAdvancedWeightKg: 160,
+    defaultAdvancedRpe: 8,
+    defaultAdvancedRestTimeSecs: 90,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
 ];

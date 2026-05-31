@@ -107,6 +107,18 @@ export const GymExerciseMasterScalarFieldEnum = {
   gifUrl: 'gifUrl',
   garminExerciseEnum: 'garminExerciseEnum',
   instructions: 'instructions',
+  defaultBeginnerSets: 'defaultBeginnerSets',
+  defaultBeginnerReps: 'defaultBeginnerReps',
+  defaultBeginnerWeightKg: 'defaultBeginnerWeightKg',
+  defaultBeginnerRpe: 'defaultBeginnerRpe',
+  defaultBeginnerRestTimeSecs: 'defaultBeginnerRestTimeSecs',
+  defaultBeginnerRestBetweenExercisesSecs: 'defaultBeginnerRestBetweenExercisesSecs',
+  defaultAdvancedSets: 'defaultAdvancedSets',
+  defaultAdvancedReps: 'defaultAdvancedReps',
+  defaultAdvancedWeightKg: 'defaultAdvancedWeightKg',
+  defaultAdvancedRpe: 'defaultAdvancedRpe',
+  defaultAdvancedRestTimeSecs: 'defaultAdvancedRestTimeSecs',
+  defaultAdvancedRestBetweenExercisesSecs: 'defaultAdvancedRestBetweenExercisesSecs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -141,6 +153,13 @@ export const PrivateExerciseScalarFieldEnum = {
   runningType: 'runningType',
   customNotes: 'customNotes',
   gifUrl: 'gifUrl',
+  sourceGymMasterId: 'sourceGymMasterId',
+  defaultSets: 'defaultSets',
+  defaultReps: 'defaultReps',
+  defaultWeightKg: 'defaultWeightKg',
+  defaultRpe: 'defaultRpe',
+  restTimeSecs: 'restTimeSecs',
+  restBetweenExercisesSecs: 'restBetweenExercisesSecs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

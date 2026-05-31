@@ -113,6 +113,20 @@ export interface GymExerciseMaster {
   gifUrl: string | null;
   garminExerciseEnum: string | null;
   instructions: ExerciseInstruction[];
+  // Default workout config — beginner
+  defaultBeginnerSets: number | null;
+  defaultBeginnerReps: number | null;
+  defaultBeginnerWeightKg: number | null;
+  defaultBeginnerRpe: number | null;
+  defaultBeginnerRestTimeSecs: number | null;
+  defaultBeginnerRestBetweenExercisesSecs: number | null;
+  // Default workout config — advanced
+  defaultAdvancedSets: number | null;
+  defaultAdvancedReps: number | null;
+  defaultAdvancedWeightKg: number | null;
+  defaultAdvancedRpe: number | null;
+  defaultAdvancedRestTimeSecs: number | null;
+  defaultAdvancedRestBetweenExercisesSecs: number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -141,6 +155,15 @@ export interface PrivateExercise {
   runningType?: RunningType;
   customNotes: string | null;
   gifUrl: string | null;
+  // Source system exercise (for media inheritance)
+  sourceGymMasterId: string | null;
+  // User-configured workout defaults
+  defaultSets: number | null;
+  defaultReps: number | null;
+  defaultWeightKg: number | null;
+  defaultRpe: number | null;
+  restTimeSecs: number | null;
+  restBetweenExercisesSecs: number | null;
   createdAt: string;
   updatedAt: string;
 }

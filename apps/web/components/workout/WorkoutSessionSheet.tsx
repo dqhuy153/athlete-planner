@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { X, Settings, Dumbbell, PersonStanding, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, Settings, Dumbbell, PersonStanding, CheckCircle2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
@@ -30,6 +30,8 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
   const [showComplete, setShowComplete] = useState(false);
   const [completeFired, setCompleteFired] = useState(false);
 
+  const currentRef = useRef<HTMLDivElement | null>(null);
+
   const allDone = session ? session.items.every((i) => i.done) : false;
 
   // Fire completion once when all items are done
@@ -41,18 +43,24 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     }
   }, [allDone, completeFired, session]);
 
-  if (!session) return null;
+  // Scroll current item into view when it changes
+  useEffect(() => {
+    if (currentRef.current) {
+      currentRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [session?.currentItemIndex]);
 
-  const currentItem = session.items[session.currentItemIndex];
+  if (!session) return null;
 
   const progressPct =
     session.items.length > 0
       ? (session.items.filter((i) => i.done).length / session.items.length) * 100
       : 0;
 
+  const doneCount = session.items.filter((i) => i.done).length;
+
   function handleCloseAttempt() {
     if (showComplete) {
-      // Completion screen has its own close — shouldn't reach here normally
       onClose();
       return;
     }
@@ -68,55 +76,30 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     >
       {/* Header */}
       <div className="shrink-0 flex items-center gap-1 border-b border-border bg-surface-1 px-3 py-2.5">
-        {/* Prev exercise */}
-        <button
-          type="button"
-          onClick={() => setCurrentItem(Math.max(0, session.currentItemIndex - 1))}
-          disabled={session.currentItemIndex === 0 || showComplete}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-text-tertiary hover:bg-surface-2 disabled:opacity-30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          aria-label={t('prevExercise')}
-        >
-          <ChevronLeft size={18} aria-hidden />
-        </button>
-
-        {/* Title */}
-        <div className="flex-1 min-w-0 text-center">
-          <p className="text-xs text-text-tertiary">
-            {showComplete
-              ? t('complete')
-              : t('exerciseOf', {
-                  current: session.currentItemIndex + 1,
+        <div className="flex-1 min-w-0 pl-1">
+          {showComplete ? (
+            <p className="text-sm font-semibold text-text-primary">{t('complete')}</p>
+          ) : (
+            <>
+              <p className="text-xs text-text-tertiary">
+                {t('exerciseOf', {
+                  current: doneCount,
                   total: session.items.length,
                 })}
-          </p>
-          {!showComplete && currentItem && (
-            <div className="flex items-center justify-center gap-1.5 mt-0.5">
-              {currentItem.sportType === SportType.GYM ? (
-                <Dumbbell size={12} className="text-accent shrink-0" aria-hidden />
-              ) : (
-                <PersonStanding size={12} className="text-accent shrink-0" aria-hidden />
-              )}
-              <p className="text-sm font-semibold text-text-primary truncate max-w-[200px]">
-                {currentItem.label}
               </p>
-            </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                {session.items[session.currentItemIndex]?.sportType === SportType.GYM ? (
+                  <Dumbbell size={12} className="text-accent shrink-0" aria-hidden />
+                ) : (
+                  <PersonStanding size={12} className="text-accent shrink-0" aria-hidden />
+                )}
+                <p className="text-sm font-semibold text-text-primary truncate">
+                  {session.items[session.currentItemIndex]?.label}
+                </p>
+              </div>
+            </>
           )}
         </div>
-
-        {/* Next exercise */}
-        <button
-          type="button"
-          onClick={() =>
-            setCurrentItem(
-              Math.min(session.items.length - 1, session.currentItemIndex + 1),
-            )
-          }
-          disabled={session.currentItemIndex === session.items.length - 1 || showComplete}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-text-tertiary hover:bg-surface-2 disabled:opacity-30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          aria-label={t('nextExercise')}
-        >
-          <ChevronRight size={18} aria-hidden />
-        </button>
 
         {/* Settings */}
         {!showComplete && (
@@ -150,39 +133,109 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
         />
       </div>
 
-      {/* Exercise dot navigation — only when not complete */}
-      {!showComplete && (
-        <div className="shrink-0 flex items-center justify-center gap-1.5 py-2 px-4 overflow-x-auto">
-          {session.items.map((item, i) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setCurrentItem(i)}
-              className={cn(
-                'h-1.5 rounded-full transition-all shrink-0',
-                item.done
-                  ? 'w-4 bg-accent'
-                  : i === session.currentItemIndex
-                  ? 'w-4 bg-text-secondary'
-                  : 'w-1.5 bg-surface-3',
-              )}
-              aria-label={`Exercise ${i + 1}${item.done ? ' (done)' : ''}`}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Scrollable content */}
+      {/* Scrollable pipeline / complete screen */}
       <div className="relative flex-1 overflow-y-auto">
         {showComplete ? (
           <WorkoutComplete onClose={onClose} />
         ) : (
-          <div className="p-4">
-            {currentItem?.sportType === SportType.GYM ? (
-              <WorkoutGymItem item={currentItem} itemIndex={session.currentItemIndex} />
-            ) : currentItem ? (
-              <WorkoutRunningItem item={currentItem} itemIndex={session.currentItemIndex} />
-            ) : null}
+          <div className="p-3 space-y-2 pb-8">
+            {session.items.map((item, i) => {
+              const isDone = item.done;
+              const isCurrent = i === session.currentItemIndex;
+              const isUpcoming = !isDone && !isCurrent;
+
+              // ── Done row ──────────────────────────────────────────────
+              if (isDone) {
+                const completedSets = item.sets.filter((s) => s.completed).length;
+                const totalSets = item.sets.length;
+                const summaryKg =
+                  totalSets > 0
+                    ? Math.max(...item.sets.map((s) => s.weight_kg))
+                    : null;
+
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setCurrentItem(i)}
+                    className="w-full flex items-center gap-3 rounded-xl border border-border/30 bg-surface-1/60 px-3 py-2.5 text-left opacity-60 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    aria-label={`${item.label} — done`}
+                  >
+                    <CheckCircle2 size={14} className="text-accent shrink-0" aria-hidden />
+                    <span className="flex-1 text-sm text-text-secondary truncate">
+                      {item.label}
+                    </span>
+                    {item.sportType === SportType.GYM && totalSets > 0 && (
+                      <span className="text-xs font-mono text-text-tertiary shrink-0">
+                        {completedSets}×{summaryKg != null ? `${summaryKg}kg` : 'done'}
+                      </span>
+                    )}
+                  </button>
+                );
+              }
+
+              // ── Current item (expanded) ───────────────────────────────
+              if (isCurrent) {
+                return (
+                  <div
+                    key={item.id}
+                    ref={currentRef}
+                    className="rounded-xl border border-accent/40 bg-surface-2"
+                  >
+                    {/* Current item header */}
+                    <div className="flex items-center gap-2 px-3 pt-3 pb-2">
+                      <div className="h-2 w-2 rounded-full bg-accent shrink-0 animate-pulse" />
+                      {item.sportType === SportType.GYM ? (
+                        <Dumbbell size={13} className="text-accent shrink-0" aria-hidden />
+                      ) : (
+                        <PersonStanding size={13} className="text-accent shrink-0" aria-hidden />
+                      )}
+                      <span className="flex-1 text-sm font-semibold text-text-primary truncate">
+                        {item.label}
+                      </span>
+                      <span className="text-xs text-text-tertiary font-mono shrink-0">
+                        {i + 1}/{session.items.length}
+                      </span>
+                    </div>
+
+                    {/* Content */}
+                    <div className="px-3 pb-3">
+                      {item.sportType === SportType.GYM ? (
+                        <WorkoutGymItem item={item} itemIndex={i} />
+                      ) : (
+                        <WorkoutRunningItem item={item} itemIndex={i} />
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+
+              // ── Upcoming row ──────────────────────────────────────────
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setCurrentItem(i)}
+                  className="w-full flex items-center gap-3 rounded-xl border border-border/20 bg-surface-1 px-3 py-2.5 text-left opacity-40 hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-label={item.label}
+                >
+                  <div className="h-1.5 w-1.5 rounded-full bg-border shrink-0" />
+                  {item.sportType === SportType.GYM ? (
+                    <Dumbbell size={13} className="text-text-tertiary shrink-0" aria-hidden />
+                  ) : (
+                    <PersonStanding size={13} className="text-text-tertiary shrink-0" aria-hidden />
+                  )}
+                  <span className="flex-1 text-sm text-text-primary truncate">
+                    {item.label}
+                  </span>
+                  {item.sportType === SportType.GYM && item.sets.length > 0 && (
+                    <span className="text-xs font-mono text-text-tertiary shrink-0">
+                      {item.sets.length} sets
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
 

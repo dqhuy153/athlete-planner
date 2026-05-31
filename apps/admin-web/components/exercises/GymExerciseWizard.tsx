@@ -14,8 +14,9 @@ import { safeZodResolver } from './safe-zod-resolver';
 import { Step0BasicInfo } from './GymStep0BasicInfo';
 import { Step2Media } from './GymStep2Media';
 import { Step3Review } from './GymStep3Review';
+import { GymStep3DefaultConfig } from './GymStep3DefaultConfig';
 
-const STEPS = ['Basic Info', 'Instructions', 'Media', 'Review'];
+const STEPS = ['Basic Info', 'Instructions', 'Media', 'Default Config', 'Review'];
 
 interface GymExerciseWizardProps {
   initialValues?: Partial<GymExerciseFormValues>;
@@ -45,6 +46,18 @@ export function gymFormToPayload(data: GymExerciseFormValues) {
         vi: inst.form_cues_vi.map((c) => c.value).filter(Boolean),
       },
     })),
+    defaultBeginnerSets: data.defaultBeginnerSets || undefined,
+    defaultBeginnerReps: data.defaultBeginnerReps || undefined,
+    defaultBeginnerWeightKg: data.defaultBeginnerWeightKg || undefined,
+    defaultBeginnerRpe: data.defaultBeginnerRpe || undefined,
+    defaultBeginnerRestTimeSecs: data.defaultBeginnerRestTimeSecs || undefined,
+    defaultBeginnerRestBetweenExercisesSecs: data.defaultBeginnerRestBetweenExercisesSecs || undefined,
+    defaultAdvancedSets: data.defaultAdvancedSets || undefined,
+    defaultAdvancedReps: data.defaultAdvancedReps || undefined,
+    defaultAdvancedWeightKg: data.defaultAdvancedWeightKg || undefined,
+    defaultAdvancedRpe: data.defaultAdvancedRpe || undefined,
+    defaultAdvancedRestTimeSecs: data.defaultAdvancedRestTimeSecs || undefined,
+    defaultAdvancedRestBetweenExercisesSecs: data.defaultAdvancedRestBetweenExercisesSecs || undefined,
   };
 }
 
@@ -89,6 +102,18 @@ export function GymExerciseWizard({
       ],
       youtubeEmbedUrl: '',
       gifUrl: '',
+      defaultBeginnerSets: undefined,
+      defaultBeginnerReps: undefined,
+      defaultBeginnerWeightKg: undefined,
+      defaultBeginnerRpe: undefined,
+      defaultBeginnerRestTimeSecs: undefined,
+      defaultBeginnerRestBetweenExercisesSecs: undefined,
+      defaultAdvancedSets: undefined,
+      defaultAdvancedReps: undefined,
+      defaultAdvancedWeightKg: undefined,
+      defaultAdvancedRpe: undefined,
+      defaultAdvancedRestTimeSecs: undefined,
+      defaultAdvancedRestBetweenExercisesSecs: undefined,
       ...initialValues,
     },
   });
@@ -161,6 +186,7 @@ export function GymExerciseWizard({
       0: ['name', 'vietnameseName', 'targetMuscleGroup'],
       1: ['instructions'],
       2: ['youtubeEmbedUrl', 'gifUrl'],
+      3: [], // Default Config — all optional
     };
     const valid = await trigger(stepFields[step] ?? []);
     if (valid) setStep((s) => s + 1);
@@ -237,7 +263,9 @@ export function GymExerciseWizard({
 
         {step === 2 && <Step2Media />}
 
-        {step === 3 && <Step3Review />}
+        {step === 3 && <GymStep3DefaultConfig />}
+
+        {step === 4 && <Step3Review />}
 
         {error && (
           <p role="alert" className="text-sm text-error">

@@ -72,6 +72,7 @@ export default function SchedulePage() {
 
   const token = (session?.accessToken as string) ?? ''
   const userTier = (session?.user as { tier?: UserTier })?.tier ?? UserTier.FREE
+  const preferredLevel = (session?.user as { preferredLevel?: string | null })?.preferredLevel ?? null
 
   const [gymExercises, setGymExercises] = useState<GymExerciseMaster[]>([])
   const [runningExercises, setRunningExercises] = useState<
@@ -246,6 +247,7 @@ export default function SchedulePage() {
 
   function buildMultiItems(): WorkoutItem[] {
     if (!activeSchedule) return []
+    const isAdvanced = preferredLevel === 'ADVANCED'
     return activeSchedule.items.map(item => {
       const label =
         labelMap.get(item.id) ??
@@ -261,16 +263,101 @@ export default function SchedulePage() {
         ? runningExercises.find(e => e.id === item.runningMasterId)
         : undefined
 
-      const gymSets = item.gymPayload?.sets.map(s => ({
-        setNumber: s.set_number,
-        weight_kg: s.weight_kg,
-        reps: s.reps,
-        completed: false as const,
-      })) ?? [
-        { setNumber: 1, weight_kg: 0, reps: 10, completed: false as const },
-        { setNumber: 2, weight_kg: 0, reps: 10, completed: false as const },
-        { setNumber: 3, weight_kg: 0, reps: 10, completed: false as const },
-      ]
+      const gymMaster = item.gymMasterId
+        ? gymExercises.find(e => e.id === item.gymMasterId)
+        : undefined
+
+      const privateEx = item.privateExerciseId
+        ? privateExercises.find(e => e.id === item.privateExerciseId)
+        : undefined
+
+      // Resolve gym set defaults from master exercise or private exercise
+      let gymSets: WorkoutItem['sets']
+      let restTimeSecs: number | undefined
+      let restBetweenExercisesSecs: number | undefined
+
+      if (item.sportType === SportType.GYM) {
+        if (gymMaster) {
+          const sets = isAdvanced
+            ? (gymMaster.defaultAdvancedSets ?? gymMaster.defaultBeginnerSets ?? 3)
+            : (gymMaster.defaultBeginnerSets ?? 3)
+          const reps = isAdvanced
+            ? (gymMaster.defaultAdvancedReps ?? gymMaster.defaultBeginnerReps ?? 10)
+            : (gymMaster.defaultBeginnerReps ?? 10)
+          const weight = isAdvanced
+            ? (gymMaster.defaultAdvancedWeightKg ?? gymMaster.defaultBeginnerWeightKg ?? 0)
+            : (gymMaster.defaultBeginnerWeightKg ?? 0)
+          const rpe = isAdvanced
+            ? (gymMaster.defaultAdvancedRpe ?? gymMaster.defaultBeginnerRpe ?? undefined)
+            : (gymMaster.defaultBeginnerRpe ?? undefined)
+          restTimeSecs = isAdvanced
+            ? (gymMaster.defaultAdvancedRestTimeSecs ?? gymMaster.defaultBeginnerRestTimeSecs ?? 90)
+            : (gymMaster.defaultBeginnerRestTimeSecs ?? 90)
+          const rawBetween = isAdvanced
+            ? (gymMaster.defaultAdvancedRestBetweenExercisesSecs ?? gymMaster.defaultBeginnerRestBetweenExercisesSecs)
+            : gymMaster.defaultBeginnerRestBetweenExercisesSecs
+          restBetweenExercisesSecs = rawBetween ?? undefined
+
+          // Use saved payload sets if they have data, else use master defaults
+          const savedSets = item.gymPayload?.sets ?? []
+          gymSets = savedSets.length > 0
+            ? savedSets.map(s => ({
+                setNumber: s.set_number,
+                weight_kg: s.weight_kg,
+                reps: s.reps,
+                rpe: rpe,
+                completed: false as const,
+              }))
+            : Array.from({ length: sets }, (_, i) => ({
+                setNumber: i + 1,
+                weight_kg: weight ?? 0,
+                reps: reps ?? 10,
+                rpe: rpe ?? undefined,
+                completed: false as const,
+              }))
+        } else if (privateEx) {
+          const privSets = privateEx.defaultSets ?? 3
+          const privReps = privateEx.defaultReps ?? 10
+          const privWeight = privateEx.defaultWeightKg ?? 0
+          const privRpe = privateEx.defaultRpe ?? undefined
+          restTimeSecs = privateEx.restTimeSecs ?? 90
+          restBetweenExercisesSecs = privateEx.restBetweenExercisesSecs ?? undefined
+
+          const savedSets = item.gymPayload?.sets ?? []
+          gymSets = savedSets.length > 0
+            ? savedSets.map(s => ({
+                setNumber: s.set_number,
+                weight_kg: s.weight_kg,
+                reps: s.reps,
+                rpe: privRpe,
+                completed: false as const,
+              }))
+            : Array.from({ length: privSets }, (_, i) => ({
+                setNumber: i + 1,
+                weight_kg: privWeight,
+                reps: privReps,
+                rpe: privRpe,
+                completed: false as const,
+              }))
+        } else {
+          // Fallback: use saved payload or simple defaults
+          const savedSets = item.gymPayload?.sets ?? []
+          gymSets = savedSets.length > 0
+            ? savedSets.map(s => ({
+                setNumber: s.set_number,
+                weight_kg: s.weight_kg,
+                reps: s.reps,
+                completed: false as const,
+              }))
+            : [
+                { setNumber: 1, weight_kg: 0, reps: 10, completed: false as const },
+                { setNumber: 2, weight_kg: 0, reps: 10, completed: false as const },
+                { setNumber: 3, weight_kg: 0, reps: 10, completed: false as const },
+              ]
+        }
+      } else {
+        gymSets = []
+      }
 
       const workoutItem: WorkoutItem = {
         id: item.id,
@@ -285,6 +372,8 @@ export default function SchedulePage() {
         sets: item.sportType === SportType.GYM ? gymSets : [],
         currentPhaseIndex: 0,
         done: false,
+        restTimeSecs,
+        restBetweenExercisesSecs,
       }
       return workoutItem
     })

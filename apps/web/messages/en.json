@@ -371,8 +371,26 @@
     "distanceLabel": "m",
     "hrZoneLabel": "Zone {zone}",
     "paceLabel": "{min}–{max} /km",
+    "rpe": "RPE",
+    "restBetweenExercises": "Rest before next exercise",
     "noPhases": "No phases defined",
     "continuePhase": "Continue",
     "startWorkout": "Start Workout"
+  },
+  "privateExercise": {
+    "backToLibrary": "Back to Library",
+    "configTitle": "Workout Defaults",
+    "defaultSets": "Sets",
+    "defaultReps": "Reps per set",
+    "defaultWeight": "Starting weight (kg)",
+    "defaultRpe": "Target RPE (1–10)",
+    "restTimeSecs": "Rest between sets (sec)",
+    "restBetweenExercisesSecs": "Rest before next exercise (sec)",
+    "saveConfig": "Save defaults",
+    "savedConfig": "Saved",
+    "saving": "Saving...",
+    "saveFailed": "Failed to save",
+    "sourceFrom": "Based on: {name}",
+    "notes": "Notes"
   }
 }

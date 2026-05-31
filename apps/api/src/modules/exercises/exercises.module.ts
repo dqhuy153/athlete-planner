@@ -10,6 +10,7 @@ import { AdminGuard } from '../admin/admin.guard';
 import { CreateGymMasterHandler } from './commands/create-gym-master.handler';
 import { CreateRunningMasterHandler } from './commands/create-running-master.handler';
 import { CreatePrivateExerciseHandler } from './commands/create-private-exercise.handler';
+import { ConfigPrivateExerciseHandler } from './commands/config-private-exercise.handler';
 import { UpdateExerciseHandler } from './commands/update-exercise.handler';
 import { ToggleExerciseActiveHandler } from './commands/toggle-exercise-active.handler';
 import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handler';
@@ -26,6 +27,7 @@ const CommandHandlers = [
   CreateGymMasterHandler,
   CreateRunningMasterHandler,
   CreatePrivateExerciseHandler,
+  ConfigPrivateExerciseHandler,
   UpdateExerciseHandler,
   ToggleExerciseActiveHandler,
   ImportGymExercisesHandler,

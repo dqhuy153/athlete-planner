@@ -11,6 +11,8 @@ interface WorkoutStore {
   settingsOpen: boolean;
   restTimerActive: boolean;
   restTimerDefaultSeconds: number;
+  restBetweenExercisesActive: boolean;
+  restBetweenExercisesSeconds: number;
   // actions
   startSession: (
     items: WorkoutItem[],
@@ -23,12 +25,14 @@ interface WorkoutStore {
   completeSet: (
     itemIndex: number,
     setIndex: number,
-    updates: { weight_kg: number; reps: number },
+    updates: { weight_kg: number; reps: number; rpe?: number },
   ) => void;
   advancePhase: (itemIndex: number) => void;
   completeItem: (itemIndex: number) => void;
   startRestTimer: (seconds: number) => void;
   stopRestTimer: () => void;
+  startRestBetweenExercises: (seconds: number) => void;
+  stopRestBetweenExercises: () => void;
   setSoundEnabled: (v: boolean) => void;
   setVibrationEnabled: (v: boolean) => void;
   setAutoAdvance: (v: boolean) => void;
@@ -43,6 +47,8 @@ export const useWorkoutStore = create<WorkoutStore>()(
       settingsOpen: false,
       restTimerActive: false,
       restTimerDefaultSeconds: 90,
+      restBetweenExercisesActive: false,
+      restBetweenExercisesSeconds: 60,
 
       startSession: (items, mode, scheduleId, dateString) =>
         set({
@@ -59,10 +65,11 @@ export const useWorkoutStore = create<WorkoutStore>()(
             autoAdvance: true,
           },
           restTimerActive: false,
+          restBetweenExercisesActive: false,
         }),
 
       discardSession: () =>
-        set({ session: null, restTimerActive: false }),
+        set({ session: null, restTimerActive: false, restBetweenExercisesActive: false }),
 
       setCurrentItem: (index) =>
         set((state) => ({
@@ -70,6 +77,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
             ? { ...state.session, currentItemIndex: index }
             : null,
           restTimerActive: false,
+          restBetweenExercisesActive: false,
         })),
 
       completeSet: (itemIndex, setIndex, updates) =>
@@ -117,6 +125,11 @@ export const useWorkoutStore = create<WorkoutStore>()(
         set({ restTimerActive: true, restTimerDefaultSeconds: seconds }),
 
       stopRestTimer: () => set({ restTimerActive: false }),
+
+      startRestBetweenExercises: (seconds) =>
+        set({ restBetweenExercisesActive: true, restBetweenExercisesSeconds: seconds }),
+
+      stopRestBetweenExercises: () => set({ restBetweenExercisesActive: false }),
 
       setSoundEnabled: (v) =>
         set((state) => ({

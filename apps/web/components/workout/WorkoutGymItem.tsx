@@ -1,17 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { Check, Plus } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Check, Plus, SkipForward } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { WorkoutRestTimer } from './WorkoutRestTimer';
-import { triggerSetComplete } from '@/lib/workout-alerts';
+import { triggerRestDone, triggerSetComplete } from '@/lib/workout-alerts';
 import type { WorkoutItem } from '@/lib/types/workout';
 
 interface WorkoutGymItemProps {
   item: WorkoutItem;
   itemIndex: number;
+}
+
+function pad(n: number) {
+  return n.toString().padStart(2, '0');
 }
 
 export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
@@ -20,15 +24,19 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
     session,
     restTimerActive,
     restTimerDefaultSeconds,
+    restBetweenExercisesActive,
+    restBetweenExercisesSeconds,
     completeSet,
     completeItem,
     startRestTimer,
     stopRestTimer,
+    startRestBetweenExercises,
+    stopRestBetweenExercises,
   } = useWorkoutStore();
 
-  // Local editable weight/reps (changes don't need to persist to server mid-workout)
-  const [editValues, setEditValues] = useState<Array<{ weight_kg: number; reps: number }>>(
-    () => item.sets.map((s) => ({ weight_kg: s.weight_kg, reps: s.reps })),
+  // Local editable weight/reps/rpe
+  const [editValues, setEditValues] = useState<Array<{ weight_kg: number; reps: number; rpe: number }>>(
+    () => item.sets.map((s) => ({ weight_kg: s.weight_kg, reps: s.reps, rpe: s.rpe ?? 7 })),
   );
 
   // Sync if sets array grows (when user adds a set)
@@ -39,22 +47,29 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
       ...item.sets.slice(prev.length).map(() => ({
         weight_kg: last?.weight_kg ?? 0,
         reps: last?.reps ?? 10,
+        rpe: last?.rpe ?? 7,
       })),
     ]);
   }
 
   function handleDone(setIndex: number) {
     if (!session) return;
-    const vals = editValues[setIndex] ?? { weight_kg: 0, reps: 10 };
+    const vals = editValues[setIndex] ?? { weight_kg: 0, reps: 10, rpe: 7 };
     completeSet(itemIndex, setIndex, vals);
     triggerSetComplete(session.soundEnabled, session.vibrationEnabled);
 
-    // Check if all sets in this item are now done
+    // Check if all sets in this item are now done (including the one just completed)
     const allDone = item.sets.every((s, i) => i === setIndex || s.completed);
     if (allDone) {
-      completeItem(itemIndex);
+      const restSecs = item.restBetweenExercisesSecs;
+      if (restSecs && restSecs > 0) {
+        startRestBetweenExercises(restSecs);
+        // completeItem called after rest-between timer ends
+      } else {
+        completeItem(itemIndex);
+      }
     } else if (session.autoAdvance) {
-      const restSeconds = item.gymPayload?.rest_time_seconds ?? 90;
+      const restSeconds = item.restTimeSecs ?? item.gymPayload?.rest_time_seconds ?? 90;
       startRestTimer(restSeconds);
     }
   }
@@ -65,14 +80,13 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
       setNumber: item.sets.length + 1,
       weight_kg: lastSet?.weight_kg ?? 0,
       reps: lastSet?.reps ?? 10,
+      rpe: lastSet?.rpe ?? 7,
       completed: false,
     };
-    // Update local edit values
     setEditValues((prev) => [
       ...prev,
-      { weight_kg: newSet.weight_kg, reps: newSet.reps },
+      { weight_kg: newSet.weight_kg, reps: newSet.reps, rpe: newSet.rpe },
     ]);
-    // Update store sets
     useWorkoutStore.setState((state) => {
       if (!state.session) return {};
       const items = state.session.items.map((it, i) => {
@@ -85,12 +99,37 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
 
   const allSetsCompleted = item.sets.length > 0 && item.sets.every((s) => s.completed);
 
+  // Between-exercises rest timer (local countdown)
+  const [betweenRemaining, setBetweenRemaining] = useState(restBetweenExercisesSeconds);
+  // Sync timer when it starts
+  useEffect(() => {
+    if (restBetweenExercisesActive) {
+      setBetweenRemaining(restBetweenExercisesSeconds);
+    }
+  }, [restBetweenExercisesActive, restBetweenExercisesSeconds]);
+
+  useEffect(() => {
+    if (!restBetweenExercisesActive || !allSetsCompleted || item.done) return;
+    if (betweenRemaining <= 0) {
+      triggerRestDone(session?.soundEnabled ?? false, session?.vibrationEnabled ?? true);
+      stopRestBetweenExercises();
+      completeItem(itemIndex);
+      return;
+    }
+    const id = setInterval(() => setBetweenRemaining((r) => r - 1), 1000);
+    return () => clearInterval(id);
+  }, [restBetweenExercisesActive, betweenRemaining, allSetsCompleted, item.done, itemIndex, session, completeItem, stopRestBetweenExercises]);
+
+  function handleSkipBetween() {
+    stopRestBetweenExercises();
+    completeItem(itemIndex);
+  }
+
   return (
     <div className="space-y-3">
       {/* Set cards */}
       {item.sets.map((set, setIndex) => {
-        const vals = editValues[setIndex] ?? { weight_kg: set.weight_kg, reps: set.reps };
-        // A set is "next" if all previous sets are completed
+        const vals = editValues[setIndex] ?? { weight_kg: set.weight_kg, reps: set.reps, rpe: set.rpe ?? 7 };
         const isNext = !set.completed && item.sets.slice(0, setIndex).every((s) => s.completed);
 
         return (
@@ -105,7 +144,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
                 : 'border-border/50 bg-surface-1 opacity-50',
             )}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {/* Set number badge */}
               <span
                 className={cn(
@@ -119,7 +158,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
               </span>
 
               {/* Weight input */}
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-[10px] text-text-tertiary mb-0.5">{t('weight')}</p>
                 <input
                   type="number"
@@ -140,10 +179,10 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
                 />
               </div>
 
-              <span className="shrink-0 text-text-tertiary font-medium">×</span>
+              <span className="shrink-0 text-text-tertiary font-medium text-xs">×</span>
 
               {/* Reps input */}
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-[10px] text-text-tertiary mb-0.5">{t('reps')}</p>
                 <input
                   type="number"
@@ -156,6 +195,29 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
                       prev.map((v, i) =>
                         i === setIndex
                           ? { ...v, reps: parseInt(e.target.value) || 1 }
+                          : v,
+                      ),
+                    )
+                  }
+                  className="w-full rounded-lg border border-border/60 bg-surface-3 px-2 py-1.5 font-mono text-sm text-text-primary text-right focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50"
+                />
+              </div>
+
+              {/* RPE input */}
+              <div className="w-12 shrink-0">
+                <p className="text-[10px] text-text-tertiary mb-0.5">{t('rpe')}</p>
+                <input
+                  type="number"
+                  min={1}
+                  max={10}
+                  step={0.5}
+                  value={vals.rpe}
+                  disabled={set.completed}
+                  onChange={(e) =>
+                    setEditValues((prev) =>
+                      prev.map((v, i) =>
+                        i === setIndex
+                          ? { ...v, rpe: parseFloat(e.target.value) || 7 }
                           : v,
                       ),
                     )
@@ -198,8 +260,8 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
         </button>
       )}
 
-      {/* Rest timer overlay */}
-      {restTimerActive && (
+      {/* Between-sets rest timer */}
+      {restTimerActive && !allSetsCompleted && (
         <WorkoutRestTimer
           defaultSeconds={restTimerDefaultSeconds}
           soundEnabled={session?.soundEnabled ?? false}
@@ -208,6 +270,30 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
           onDone={() => stopRestTimer()}
           onSkip={() => stopRestTimer()}
         />
+      )}
+
+      {/* Between-exercises rest timer */}
+      {allSetsCompleted && restBetweenExercisesActive && !item.done && (
+        <div className="flex flex-col items-center gap-3 py-4 px-4 rounded-2xl bg-surface-1 border border-border">
+          <p className="text-xs uppercase tracking-widest text-text-tertiary font-medium">
+            {t('restBetweenExercises')}
+          </p>
+          <span
+            className="font-mono text-4xl font-bold tabular-nums text-text-primary"
+            aria-live="polite"
+            aria-atomic
+          >
+            {pad(Math.floor(betweenRemaining / 60))}:{pad(betweenRemaining % 60)}
+          </span>
+          <button
+            type="button"
+            onClick={handleSkipBetween}
+            className="flex items-center gap-2 min-h-[44px] rounded-xl bg-surface-2 px-5 text-sm font-medium text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <SkipForward className="h-4 w-4" aria-hidden />
+            {t('skipRest')}
+          </button>
+        </div>
       )}
     </div>
   );

@@ -372,7 +372,25 @@
     "hrZoneLabel": "Zone {zone}",
     "paceLabel": "{min}–{max} /km",
     "noPhases": "Không có giai đoạn nào",
+    "rpe": "RPE",
+    "restBetweenExercises": "Nghỉ trước bài tiếp theo",
     "continuePhase": "Tiếp tục",
     "startWorkout": "Bắt đầu tập"
+  },
+  "privateExercise": {
+    "backToLibrary": "Quay lại thư viện",
+    "configTitle": "Mặc định buổi tập",
+    "defaultSets": "Số set",
+    "defaultReps": "Reps mỗi set",
+    "defaultWeight": "Tạ bắt đầu (kg)",
+    "defaultRpe": "RPE mục tiêu (1–10)",
+    "restTimeSecs": "Nghỉ giữa set (giây)",
+    "restBetweenExercisesSecs": "Nghỉ trước bài tiếp (giây)",
+    "saveConfig": "Lưu mặc định",
+    "savedConfig": "Đã lưu",
+    "saving": "Đang lưu...",
+    "saveFailed": "Lưu thất bại",
+    "sourceFrom": "Dựa trên: {name}",
+    "notes": "Ghi chú"
   }
 }

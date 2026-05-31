@@ -17,10 +17,16 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       });
       if (!existing) throw new NotFoundException('Exercise not found');
       if (existing.userId !== userId) throw new ForbiddenException('Access denied');
-      const { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl } = dto as any;
+      const { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl,
+        defaultSets, defaultReps, defaultWeightKg, defaultRpe,
+        restTimeSecs, restBetweenExercisesSecs,
+      } = dto as any;
       return this.prisma.privateExercise.update({
         where: { id },
-        data: { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl },
+        data: { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl,
+          defaultSets, defaultReps, defaultWeightKg, defaultRpe,
+          restTimeSecs, restBetweenExercisesSecs,
+        },
       });
     }
 
@@ -33,12 +39,20 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       const {
         name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
         youtubeEmbedUrl, gifUrl, garminExerciseEnum, instructions,
+        defaultBeginnerSets, defaultBeginnerReps, defaultBeginnerWeightKg,
+        defaultBeginnerRpe, defaultBeginnerRestTimeSecs, defaultBeginnerRestBetweenExercisesSecs,
+        defaultAdvancedSets, defaultAdvancedReps, defaultAdvancedWeightKg,
+        defaultAdvancedRpe, defaultAdvancedRestTimeSecs, defaultAdvancedRestBetweenExercisesSecs,
       } = dto as any;
       return this.prisma.gymExerciseMaster.update({
         where: { id },
         data: {
           name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
           youtubeEmbedUrl, gifUrl, garminExerciseEnum, instructions,
+          defaultBeginnerSets, defaultBeginnerReps, defaultBeginnerWeightKg,
+          defaultBeginnerRpe, defaultBeginnerRestTimeSecs, defaultBeginnerRestBetweenExercisesSecs,
+          defaultAdvancedSets, defaultAdvancedReps, defaultAdvancedWeightKg,
+          defaultAdvancedRpe, defaultAdvancedRestTimeSecs, defaultAdvancedRestBetweenExercisesSecs,
         },
       });
     }

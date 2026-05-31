@@ -20,8 +20,40 @@ export type GymExerciseMasterModel = runtime.Types.Result.DefaultSelection<Prism
 
 export type AggregateGymExerciseMaster = {
   _count: GymExerciseMasterCountAggregateOutputType | null
+  _avg: GymExerciseMasterAvgAggregateOutputType | null
+  _sum: GymExerciseMasterSumAggregateOutputType | null
   _min: GymExerciseMasterMinAggregateOutputType | null
   _max: GymExerciseMasterMaxAggregateOutputType | null
+}
+
+export type GymExerciseMasterAvgAggregateOutputType = {
+  defaultBeginnerSets: number | null
+  defaultBeginnerReps: number | null
+  defaultBeginnerWeightKg: number | null
+  defaultBeginnerRpe: number | null
+  defaultBeginnerRestTimeSecs: number | null
+  defaultBeginnerRestBetweenExercisesSecs: number | null
+  defaultAdvancedSets: number | null
+  defaultAdvancedReps: number | null
+  defaultAdvancedWeightKg: number | null
+  defaultAdvancedRpe: number | null
+  defaultAdvancedRestTimeSecs: number | null
+  defaultAdvancedRestBetweenExercisesSecs: number | null
+}
+
+export type GymExerciseMasterSumAggregateOutputType = {
+  defaultBeginnerSets: number | null
+  defaultBeginnerReps: number | null
+  defaultBeginnerWeightKg: number | null
+  defaultBeginnerRpe: number | null
+  defaultBeginnerRestTimeSecs: number | null
+  defaultBeginnerRestBetweenExercisesSecs: number | null
+  defaultAdvancedSets: number | null
+  defaultAdvancedReps: number | null
+  defaultAdvancedWeightKg: number | null
+  defaultAdvancedRpe: number | null
+  defaultAdvancedRestTimeSecs: number | null
+  defaultAdvancedRestBetweenExercisesSecs: number | null
 }
 
 export type GymExerciseMasterMinAggregateOutputType = {
@@ -33,6 +65,18 @@ export type GymExerciseMasterMinAggregateOutputType = {
   youtubeEmbedUrl: string | null
   gifUrl: string | null
   garminExerciseEnum: string | null
+  defaultBeginnerSets: number | null
+  defaultBeginnerReps: number | null
+  defaultBeginnerWeightKg: number | null
+  defaultBeginnerRpe: number | null
+  defaultBeginnerRestTimeSecs: number | null
+  defaultBeginnerRestBetweenExercisesSecs: number | null
+  defaultAdvancedSets: number | null
+  defaultAdvancedReps: number | null
+  defaultAdvancedWeightKg: number | null
+  defaultAdvancedRpe: number | null
+  defaultAdvancedRestTimeSecs: number | null
+  defaultAdvancedRestBetweenExercisesSecs: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +90,18 @@ export type GymExerciseMasterMaxAggregateOutputType = {
   youtubeEmbedUrl: string | null
   gifUrl: string | null
   garminExerciseEnum: string | null
+  defaultBeginnerSets: number | null
+  defaultBeginnerReps: number | null
+  defaultBeginnerWeightKg: number | null
+  defaultBeginnerRpe: number | null
+  defaultBeginnerRestTimeSecs: number | null
+  defaultBeginnerRestBetweenExercisesSecs: number | null
+  defaultAdvancedSets: number | null
+  defaultAdvancedReps: number | null
+  defaultAdvancedWeightKg: number | null
+  defaultAdvancedRpe: number | null
+  defaultAdvancedRestTimeSecs: number | null
+  defaultAdvancedRestBetweenExercisesSecs: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,11 +117,53 @@ export type GymExerciseMasterCountAggregateOutputType = {
   gifUrl: number
   garminExerciseEnum: number
   instructions: number
+  defaultBeginnerSets: number
+  defaultBeginnerReps: number
+  defaultBeginnerWeightKg: number
+  defaultBeginnerRpe: number
+  defaultBeginnerRestTimeSecs: number
+  defaultBeginnerRestBetweenExercisesSecs: number
+  defaultAdvancedSets: number
+  defaultAdvancedReps: number
+  defaultAdvancedWeightKg: number
+  defaultAdvancedRpe: number
+  defaultAdvancedRestTimeSecs: number
+  defaultAdvancedRestBetweenExercisesSecs: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type GymExerciseMasterAvgAggregateInputType = {
+  defaultBeginnerSets?: true
+  defaultBeginnerReps?: true
+  defaultBeginnerWeightKg?: true
+  defaultBeginnerRpe?: true
+  defaultBeginnerRestTimeSecs?: true
+  defaultBeginnerRestBetweenExercisesSecs?: true
+  defaultAdvancedSets?: true
+  defaultAdvancedReps?: true
+  defaultAdvancedWeightKg?: true
+  defaultAdvancedRpe?: true
+  defaultAdvancedRestTimeSecs?: true
+  defaultAdvancedRestBetweenExercisesSecs?: true
+}
+
+export type GymExerciseMasterSumAggregateInputType = {
+  defaultBeginnerSets?: true
+  defaultBeginnerReps?: true
+  defaultBeginnerWeightKg?: true
+  defaultBeginnerRpe?: true
+  defaultBeginnerRestTimeSecs?: true
+  defaultBeginnerRestBetweenExercisesSecs?: true
+  defaultAdvancedSets?: true
+  defaultAdvancedReps?: true
+  defaultAdvancedWeightKg?: true
+  defaultAdvancedRpe?: true
+  defaultAdvancedRestTimeSecs?: true
+  defaultAdvancedRestBetweenExercisesSecs?: true
+}
 
 export type GymExerciseMasterMinAggregateInputType = {
   id?: true
@@ -76,6 +174,18 @@ export type GymExerciseMasterMinAggregateInputType = {
   youtubeEmbedUrl?: true
   gifUrl?: true
   garminExerciseEnum?: true
+  defaultBeginnerSets?: true
+  defaultBeginnerReps?: true
+  defaultBeginnerWeightKg?: true
+  defaultBeginnerRpe?: true
+  defaultBeginnerRestTimeSecs?: true
+  defaultBeginnerRestBetweenExercisesSecs?: true
+  defaultAdvancedSets?: true
+  defaultAdvancedReps?: true
+  defaultAdvancedWeightKg?: true
+  defaultAdvancedRpe?: true
+  defaultAdvancedRestTimeSecs?: true
+  defaultAdvancedRestBetweenExercisesSecs?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -89,6 +199,18 @@ export type GymExerciseMasterMaxAggregateInputType = {
   youtubeEmbedUrl?: true
   gifUrl?: true
   garminExerciseEnum?: true
+  defaultBeginnerSets?: true
+  defaultBeginnerReps?: true
+  defaultBeginnerWeightKg?: true
+  defaultBeginnerRpe?: true
+  defaultBeginnerRestTimeSecs?: true
+  defaultBeginnerRestBetweenExercisesSecs?: true
+  defaultAdvancedSets?: true
+  defaultAdvancedReps?: true
+  defaultAdvancedWeightKg?: true
+  defaultAdvancedRpe?: true
+  defaultAdvancedRestTimeSecs?: true
+  defaultAdvancedRestBetweenExercisesSecs?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,6 +226,18 @@ export type GymExerciseMasterCountAggregateInputType = {
   gifUrl?: true
   garminExerciseEnum?: true
   instructions?: true
+  defaultBeginnerSets?: true
+  defaultBeginnerReps?: true
+  defaultBeginnerWeightKg?: true
+  defaultBeginnerRpe?: true
+  defaultBeginnerRestTimeSecs?: true
+  defaultBeginnerRestBetweenExercisesSecs?: true
+  defaultAdvancedSets?: true
+  defaultAdvancedReps?: true
+  defaultAdvancedWeightKg?: true
+  defaultAdvancedRpe?: true
+  defaultAdvancedRestTimeSecs?: true
+  defaultAdvancedRestBetweenExercisesSecs?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -147,6 +281,18 @@ export type GymExerciseMasterAggregateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: GymExerciseMasterAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: GymExerciseMasterSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: GymExerciseMasterMinAggregateInputType
@@ -177,6 +323,8 @@ export type GymExerciseMasterGroupByArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   _count?: GymExerciseMasterCountAggregateInputType | true
+  _avg?: GymExerciseMasterAvgAggregateInputType
+  _sum?: GymExerciseMasterSumAggregateInputType
   _min?: GymExerciseMasterMinAggregateInputType
   _max?: GymExerciseMasterMaxAggregateInputType
 }
@@ -192,9 +340,23 @@ export type GymExerciseMasterGroupByOutputType = {
   gifUrl: string | null
   garminExerciseEnum: string | null
   instructions: runtime.JsonValue
+  defaultBeginnerSets: number | null
+  defaultBeginnerReps: number | null
+  defaultBeginnerWeightKg: number | null
+  defaultBeginnerRpe: number | null
+  defaultBeginnerRestTimeSecs: number | null
+  defaultBeginnerRestBetweenExercisesSecs: number | null
+  defaultAdvancedSets: number | null
+  defaultAdvancedReps: number | null
+  defaultAdvancedWeightKg: number | null
+  defaultAdvancedRpe: number | null
+  defaultAdvancedRestTimeSecs: number | null
+  defaultAdvancedRestBetweenExercisesSecs: number | null
   createdAt: Date
   updatedAt: Date
   _count: GymExerciseMasterCountAggregateOutputType | null
+  _avg: GymExerciseMasterAvgAggregateOutputType | null
+  _sum: GymExerciseMasterSumAggregateOutputType | null
   _min: GymExerciseMasterMinAggregateOutputType | null
   _max: GymExerciseMasterMaxAggregateOutputType | null
 }
@@ -228,6 +390,18 @@ export type GymExerciseMasterWhereInput = {
   gifUrl?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   garminExerciseEnum?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   instructions?: Prisma.JsonFilter<"GymExerciseMaster">
+  defaultBeginnerSets?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerReps?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerWeightKg?: Prisma.FloatNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRpe?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedSets?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedReps?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedWeightKg?: Prisma.FloatNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRpe?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
   createdAt?: Prisma.DateTimeFilter<"GymExerciseMaster"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GymExerciseMaster"> | Date | string
   scheduleItems?: Prisma.ScheduleItemListRelationFilter
@@ -244,6 +418,18 @@ export type GymExerciseMasterOrderByWithRelationInput = {
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrderInput | Prisma.SortOrder
   instructions?: Prisma.SortOrder
+  defaultBeginnerSets?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   scheduleItems?: Prisma.ScheduleItemOrderByRelationAggregateInput
@@ -263,6 +449,18 @@ export type GymExerciseMasterWhereUniqueInput = Prisma.AtLeast<{
   gifUrl?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   garminExerciseEnum?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   instructions?: Prisma.JsonFilter<"GymExerciseMaster">
+  defaultBeginnerSets?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerReps?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerWeightKg?: Prisma.FloatNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRpe?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedSets?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedReps?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedWeightKg?: Prisma.FloatNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRpe?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
   createdAt?: Prisma.DateTimeFilter<"GymExerciseMaster"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GymExerciseMaster"> | Date | string
   scheduleItems?: Prisma.ScheduleItemListRelationFilter
@@ -279,11 +477,25 @@ export type GymExerciseMasterOrderByWithAggregationInput = {
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrderInput | Prisma.SortOrder
   instructions?: Prisma.SortOrder
+  defaultBeginnerSets?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GymExerciseMasterCountOrderByAggregateInput
+  _avg?: Prisma.GymExerciseMasterAvgOrderByAggregateInput
   _max?: Prisma.GymExerciseMasterMaxOrderByAggregateInput
   _min?: Prisma.GymExerciseMasterMinOrderByAggregateInput
+  _sum?: Prisma.GymExerciseMasterSumOrderByAggregateInput
 }
 
 export type GymExerciseMasterScalarWhereWithAggregatesInput = {
@@ -300,6 +512,18 @@ export type GymExerciseMasterScalarWhereWithAggregatesInput = {
   gifUrl?: Prisma.StringNullableWithAggregatesFilter<"GymExerciseMaster"> | string | null
   garminExerciseEnum?: Prisma.StringNullableWithAggregatesFilter<"GymExerciseMaster"> | string | null
   instructions?: Prisma.JsonWithAggregatesFilter<"GymExerciseMaster">
+  defaultBeginnerSets?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerReps?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerWeightKg?: Prisma.FloatNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRpe?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedSets?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedReps?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedWeightKg?: Prisma.FloatNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRpe?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GymExerciseMaster"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GymExerciseMaster"> | Date | string
 }
@@ -315,6 +539,18 @@ export type GymExerciseMasterCreateInput = {
   gifUrl?: string | null
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: number | null
+  defaultBeginnerReps?: number | null
+  defaultBeginnerWeightKg?: number | null
+  defaultBeginnerRpe?: number | null
+  defaultBeginnerRestTimeSecs?: number | null
+  defaultBeginnerRestBetweenExercisesSecs?: number | null
+  defaultAdvancedSets?: number | null
+  defaultAdvancedReps?: number | null
+  defaultAdvancedWeightKg?: number | null
+  defaultAdvancedRpe?: number | null
+  defaultAdvancedRestTimeSecs?: number | null
+  defaultAdvancedRestBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemCreateNestedManyWithoutGymMasterInput
@@ -331,6 +567,18 @@ export type GymExerciseMasterUncheckedCreateInput = {
   gifUrl?: string | null
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: number | null
+  defaultBeginnerReps?: number | null
+  defaultBeginnerWeightKg?: number | null
+  defaultBeginnerRpe?: number | null
+  defaultBeginnerRestTimeSecs?: number | null
+  defaultBeginnerRestBetweenExercisesSecs?: number | null
+  defaultAdvancedSets?: number | null
+  defaultAdvancedReps?: number | null
+  defaultAdvancedWeightKg?: number | null
+  defaultAdvancedRpe?: number | null
+  defaultAdvancedRestTimeSecs?: number | null
+  defaultAdvancedRestBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedCreateNestedManyWithoutGymMasterInput
@@ -347,6 +595,18 @@ export type GymExerciseMasterUpdateInput = {
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultBeginnerRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultAdvancedRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUpdateManyWithoutGymMasterNestedInput
@@ -363,6 +623,18 @@ export type GymExerciseMasterUncheckedUpdateInput = {
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultBeginnerRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultAdvancedRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedUpdateManyWithoutGymMasterNestedInput
@@ -379,6 +651,18 @@ export type GymExerciseMasterCreateManyInput = {
   gifUrl?: string | null
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: number | null
+  defaultBeginnerReps?: number | null
+  defaultBeginnerWeightKg?: number | null
+  defaultBeginnerRpe?: number | null
+  defaultBeginnerRestTimeSecs?: number | null
+  defaultBeginnerRestBetweenExercisesSecs?: number | null
+  defaultAdvancedSets?: number | null
+  defaultAdvancedReps?: number | null
+  defaultAdvancedWeightKg?: number | null
+  defaultAdvancedRpe?: number | null
+  defaultAdvancedRestTimeSecs?: number | null
+  defaultAdvancedRestBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -394,6 +678,18 @@ export type GymExerciseMasterUpdateManyMutationInput = {
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultBeginnerRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultAdvancedRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -409,6 +705,18 @@ export type GymExerciseMasterUncheckedUpdateManyInput = {
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultBeginnerRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultAdvancedRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -432,8 +740,35 @@ export type GymExerciseMasterCountOrderByAggregateInput = {
   gifUrl?: Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
+  defaultBeginnerSets?: Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type GymExerciseMasterAvgOrderByAggregateInput = {
+  defaultBeginnerSets?: Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrder
 }
 
 export type GymExerciseMasterMaxOrderByAggregateInput = {
@@ -445,6 +780,18 @@ export type GymExerciseMasterMaxOrderByAggregateInput = {
   youtubeEmbedUrl?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrder
+  defaultBeginnerSets?: Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -458,8 +805,35 @@ export type GymExerciseMasterMinOrderByAggregateInput = {
   youtubeEmbedUrl?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrder
+  defaultBeginnerSets?: Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type GymExerciseMasterSumOrderByAggregateInput = {
+  defaultBeginnerSets?: Prisma.SortOrder
+  defaultBeginnerReps?: Prisma.SortOrder
+  defaultBeginnerWeightKg?: Prisma.SortOrder
+  defaultBeginnerRpe?: Prisma.SortOrder
+  defaultBeginnerRestTimeSecs?: Prisma.SortOrder
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.SortOrder
+  defaultAdvancedSets?: Prisma.SortOrder
+  defaultAdvancedReps?: Prisma.SortOrder
+  defaultAdvancedWeightKg?: Prisma.SortOrder
+  defaultAdvancedRpe?: Prisma.SortOrder
+  defaultAdvancedRestTimeSecs?: Prisma.SortOrder
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.SortOrder
 }
 
 export type GymExerciseMasterNullableScalarRelationFilter = {
@@ -482,6 +856,22 @@ export type EnumMuscleGroupFieldUpdateOperationsInput = {
 export type GymExerciseMasterUpdatesecondaryMuscleGroupsInput = {
   set?: string[]
   push?: string | string[]
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type GymExerciseMasterCreateNestedOneWithoutScheduleItemsInput = {
@@ -511,6 +901,18 @@ export type GymExerciseMasterCreateWithoutScheduleItemsInput = {
   gifUrl?: string | null
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: number | null
+  defaultBeginnerReps?: number | null
+  defaultBeginnerWeightKg?: number | null
+  defaultBeginnerRpe?: number | null
+  defaultBeginnerRestTimeSecs?: number | null
+  defaultBeginnerRestBetweenExercisesSecs?: number | null
+  defaultAdvancedSets?: number | null
+  defaultAdvancedReps?: number | null
+  defaultAdvancedWeightKg?: number | null
+  defaultAdvancedRpe?: number | null
+  defaultAdvancedRestTimeSecs?: number | null
+  defaultAdvancedRestBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -526,6 +928,18 @@ export type GymExerciseMasterUncheckedCreateWithoutScheduleItemsInput = {
   gifUrl?: string | null
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: number | null
+  defaultBeginnerReps?: number | null
+  defaultBeginnerWeightKg?: number | null
+  defaultBeginnerRpe?: number | null
+  defaultBeginnerRestTimeSecs?: number | null
+  defaultBeginnerRestBetweenExercisesSecs?: number | null
+  defaultAdvancedSets?: number | null
+  defaultAdvancedReps?: number | null
+  defaultAdvancedWeightKg?: number | null
+  defaultAdvancedRpe?: number | null
+  defaultAdvancedRestTimeSecs?: number | null
+  defaultAdvancedRestBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -557,6 +971,18 @@ export type GymExerciseMasterUpdateWithoutScheduleItemsInput = {
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultBeginnerRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultAdvancedRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -572,6 +998,18 @@ export type GymExerciseMasterUncheckedUpdateWithoutScheduleItemsInput = {
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultBeginnerRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultBeginnerRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultAdvancedRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultAdvancedRestBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -618,6 +1056,18 @@ export type GymExerciseMasterSelect<ExtArgs extends runtime.Types.Extensions.Int
   gifUrl?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
+  defaultBeginnerSets?: boolean
+  defaultBeginnerReps?: boolean
+  defaultBeginnerWeightKg?: boolean
+  defaultBeginnerRpe?: boolean
+  defaultBeginnerRestTimeSecs?: boolean
+  defaultBeginnerRestBetweenExercisesSecs?: boolean
+  defaultAdvancedSets?: boolean
+  defaultAdvancedReps?: boolean
+  defaultAdvancedWeightKg?: boolean
+  defaultAdvancedRpe?: boolean
+  defaultAdvancedRestTimeSecs?: boolean
+  defaultAdvancedRestBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   scheduleItems?: boolean | Prisma.GymExerciseMaster$scheduleItemsArgs<ExtArgs>
@@ -635,6 +1085,18 @@ export type GymExerciseMasterSelectCreateManyAndReturn<ExtArgs extends runtime.T
   gifUrl?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
+  defaultBeginnerSets?: boolean
+  defaultBeginnerReps?: boolean
+  defaultBeginnerWeightKg?: boolean
+  defaultBeginnerRpe?: boolean
+  defaultBeginnerRestTimeSecs?: boolean
+  defaultBeginnerRestBetweenExercisesSecs?: boolean
+  defaultAdvancedSets?: boolean
+  defaultAdvancedReps?: boolean
+  defaultAdvancedWeightKg?: boolean
+  defaultAdvancedRpe?: boolean
+  defaultAdvancedRestTimeSecs?: boolean
+  defaultAdvancedRestBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["gymExerciseMaster"]>
@@ -650,6 +1112,18 @@ export type GymExerciseMasterSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   gifUrl?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
+  defaultBeginnerSets?: boolean
+  defaultBeginnerReps?: boolean
+  defaultBeginnerWeightKg?: boolean
+  defaultBeginnerRpe?: boolean
+  defaultBeginnerRestTimeSecs?: boolean
+  defaultBeginnerRestBetweenExercisesSecs?: boolean
+  defaultAdvancedSets?: boolean
+  defaultAdvancedReps?: boolean
+  defaultAdvancedWeightKg?: boolean
+  defaultAdvancedRpe?: boolean
+  defaultAdvancedRestTimeSecs?: boolean
+  defaultAdvancedRestBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["gymExerciseMaster"]>
@@ -665,11 +1139,23 @@ export type GymExerciseMasterSelectScalar = {
   gifUrl?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
+  defaultBeginnerSets?: boolean
+  defaultBeginnerReps?: boolean
+  defaultBeginnerWeightKg?: boolean
+  defaultBeginnerRpe?: boolean
+  defaultBeginnerRestTimeSecs?: boolean
+  defaultBeginnerRestBetweenExercisesSecs?: boolean
+  defaultAdvancedSets?: boolean
+  defaultAdvancedReps?: boolean
+  defaultAdvancedWeightKg?: boolean
+  defaultAdvancedRpe?: boolean
+  defaultAdvancedRestTimeSecs?: boolean
+  defaultAdvancedRestBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GymExerciseMasterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isActive" | "name" | "vietnameseName" | "targetMuscleGroup" | "secondaryMuscleGroups" | "youtubeEmbedUrl" | "gifUrl" | "garminExerciseEnum" | "instructions" | "createdAt" | "updatedAt", ExtArgs["result"]["gymExerciseMaster"]>
+export type GymExerciseMasterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isActive" | "name" | "vietnameseName" | "targetMuscleGroup" | "secondaryMuscleGroups" | "youtubeEmbedUrl" | "gifUrl" | "garminExerciseEnum" | "instructions" | "defaultBeginnerSets" | "defaultBeginnerReps" | "defaultBeginnerWeightKg" | "defaultBeginnerRpe" | "defaultBeginnerRestTimeSecs" | "defaultBeginnerRestBetweenExercisesSecs" | "defaultAdvancedSets" | "defaultAdvancedReps" | "defaultAdvancedWeightKg" | "defaultAdvancedRpe" | "defaultAdvancedRestTimeSecs" | "defaultAdvancedRestBetweenExercisesSecs" | "createdAt" | "updatedAt", ExtArgs["result"]["gymExerciseMaster"]>
 export type GymExerciseMasterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   scheduleItems?: boolean | Prisma.GymExerciseMaster$scheduleItemsArgs<ExtArgs>
   _count?: boolean | Prisma.GymExerciseMasterCountOutputTypeDefaultArgs<ExtArgs>
@@ -693,6 +1179,18 @@ export type $GymExerciseMasterPayload<ExtArgs extends runtime.Types.Extensions.I
     gifUrl: string | null
     garminExerciseEnum: string | null
     instructions: runtime.JsonValue
+    defaultBeginnerSets: number | null
+    defaultBeginnerReps: number | null
+    defaultBeginnerWeightKg: number | null
+    defaultBeginnerRpe: number | null
+    defaultBeginnerRestTimeSecs: number | null
+    defaultBeginnerRestBetweenExercisesSecs: number | null
+    defaultAdvancedSets: number | null
+    defaultAdvancedReps: number | null
+    defaultAdvancedWeightKg: number | null
+    defaultAdvancedRpe: number | null
+    defaultAdvancedRestTimeSecs: number | null
+    defaultAdvancedRestBetweenExercisesSecs: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["gymExerciseMaster"]>
@@ -1129,6 +1627,18 @@ export interface GymExerciseMasterFieldRefs {
   readonly gifUrl: Prisma.FieldRef<"GymExerciseMaster", 'String'>
   readonly garminExerciseEnum: Prisma.FieldRef<"GymExerciseMaster", 'String'>
   readonly instructions: Prisma.FieldRef<"GymExerciseMaster", 'Json'>
+  readonly defaultBeginnerSets: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultBeginnerReps: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultBeginnerWeightKg: Prisma.FieldRef<"GymExerciseMaster", 'Float'>
+  readonly defaultBeginnerRpe: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultBeginnerRestTimeSecs: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultBeginnerRestBetweenExercisesSecs: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultAdvancedSets: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultAdvancedReps: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultAdvancedWeightKg: Prisma.FieldRef<"GymExerciseMaster", 'Float'>
+  readonly defaultAdvancedRpe: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultAdvancedRestTimeSecs: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
+  readonly defaultAdvancedRestBetweenExercisesSecs: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
   readonly createdAt: Prisma.FieldRef<"GymExerciseMaster", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GymExerciseMaster", 'DateTime'>
 }

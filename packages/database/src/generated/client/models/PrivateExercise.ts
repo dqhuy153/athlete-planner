@@ -20,8 +20,28 @@ export type PrivateExerciseModel = runtime.Types.Result.DefaultSelection<Prisma.
 
 export type AggregatePrivateExercise = {
   _count: PrivateExerciseCountAggregateOutputType | null
+  _avg: PrivateExerciseAvgAggregateOutputType | null
+  _sum: PrivateExerciseSumAggregateOutputType | null
   _min: PrivateExerciseMinAggregateOutputType | null
   _max: PrivateExerciseMaxAggregateOutputType | null
+}
+
+export type PrivateExerciseAvgAggregateOutputType = {
+  defaultSets: number | null
+  defaultReps: number | null
+  defaultWeightKg: number | null
+  defaultRpe: number | null
+  restTimeSecs: number | null
+  restBetweenExercisesSecs: number | null
+}
+
+export type PrivateExerciseSumAggregateOutputType = {
+  defaultSets: number | null
+  defaultReps: number | null
+  defaultWeightKg: number | null
+  defaultRpe: number | null
+  restTimeSecs: number | null
+  restBetweenExercisesSecs: number | null
 }
 
 export type PrivateExerciseMinAggregateOutputType = {
@@ -34,6 +54,13 @@ export type PrivateExerciseMinAggregateOutputType = {
   runningType: $Enums.RunningType | null
   customNotes: string | null
   gifUrl: string | null
+  sourceGymMasterId: string | null
+  defaultSets: number | null
+  defaultReps: number | null
+  defaultWeightKg: number | null
+  defaultRpe: number | null
+  restTimeSecs: number | null
+  restBetweenExercisesSecs: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +75,13 @@ export type PrivateExerciseMaxAggregateOutputType = {
   runningType: $Enums.RunningType | null
   customNotes: string | null
   gifUrl: string | null
+  sourceGymMasterId: string | null
+  defaultSets: number | null
+  defaultReps: number | null
+  defaultWeightKg: number | null
+  defaultRpe: number | null
+  restTimeSecs: number | null
+  restBetweenExercisesSecs: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,11 +96,36 @@ export type PrivateExerciseCountAggregateOutputType = {
   runningType: number
   customNotes: number
   gifUrl: number
+  sourceGymMasterId: number
+  defaultSets: number
+  defaultReps: number
+  defaultWeightKg: number
+  defaultRpe: number
+  restTimeSecs: number
+  restBetweenExercisesSecs: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type PrivateExerciseAvgAggregateInputType = {
+  defaultSets?: true
+  defaultReps?: true
+  defaultWeightKg?: true
+  defaultRpe?: true
+  restTimeSecs?: true
+  restBetweenExercisesSecs?: true
+}
+
+export type PrivateExerciseSumAggregateInputType = {
+  defaultSets?: true
+  defaultReps?: true
+  defaultWeightKg?: true
+  defaultRpe?: true
+  restTimeSecs?: true
+  restBetweenExercisesSecs?: true
+}
 
 export type PrivateExerciseMinAggregateInputType = {
   id?: true
@@ -78,6 +137,13 @@ export type PrivateExerciseMinAggregateInputType = {
   runningType?: true
   customNotes?: true
   gifUrl?: true
+  sourceGymMasterId?: true
+  defaultSets?: true
+  defaultReps?: true
+  defaultWeightKg?: true
+  defaultRpe?: true
+  restTimeSecs?: true
+  restBetweenExercisesSecs?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +158,13 @@ export type PrivateExerciseMaxAggregateInputType = {
   runningType?: true
   customNotes?: true
   gifUrl?: true
+  sourceGymMasterId?: true
+  defaultSets?: true
+  defaultReps?: true
+  defaultWeightKg?: true
+  defaultRpe?: true
+  restTimeSecs?: true
+  restBetweenExercisesSecs?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +179,13 @@ export type PrivateExerciseCountAggregateInputType = {
   runningType?: true
   customNotes?: true
   gifUrl?: true
+  sourceGymMasterId?: true
+  defaultSets?: true
+  defaultReps?: true
+  defaultWeightKg?: true
+  defaultRpe?: true
+  restTimeSecs?: true
+  restBetweenExercisesSecs?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -149,6 +229,18 @@ export type PrivateExerciseAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PrivateExerciseAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PrivateExerciseSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PrivateExerciseMinAggregateInputType
@@ -179,6 +271,8 @@ export type PrivateExerciseGroupByArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   _count?: PrivateExerciseCountAggregateInputType | true
+  _avg?: PrivateExerciseAvgAggregateInputType
+  _sum?: PrivateExerciseSumAggregateInputType
   _min?: PrivateExerciseMinAggregateInputType
   _max?: PrivateExerciseMaxAggregateInputType
 }
@@ -193,9 +287,18 @@ export type PrivateExerciseGroupByOutputType = {
   runningType: $Enums.RunningType | null
   customNotes: string | null
   gifUrl: string | null
+  sourceGymMasterId: string | null
+  defaultSets: number | null
+  defaultReps: number | null
+  defaultWeightKg: number | null
+  defaultRpe: number | null
+  restTimeSecs: number | null
+  restBetweenExercisesSecs: number | null
   createdAt: Date
   updatedAt: Date
   _count: PrivateExerciseCountAggregateOutputType | null
+  _avg: PrivateExerciseAvgAggregateOutputType | null
+  _sum: PrivateExerciseSumAggregateOutputType | null
   _min: PrivateExerciseMinAggregateOutputType | null
   _max: PrivateExerciseMaxAggregateOutputType | null
 }
@@ -228,6 +331,13 @@ export type PrivateExerciseWhereInput = {
   runningType?: Prisma.EnumRunningTypeNullableFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  sourceGymMasterId?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  defaultSets?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultReps?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultWeightKg?: Prisma.FloatNullableFilter<"PrivateExercise"> | number | null
+  defaultRpe?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  restTimeSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  restBetweenExercisesSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -244,6 +354,13 @@ export type PrivateExerciseOrderByWithRelationInput = {
   runningType?: Prisma.SortOrderInput | Prisma.SortOrder
   customNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceGymMasterId?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultSets?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultReps?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrderInput | Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -263,6 +380,13 @@ export type PrivateExerciseWhereUniqueInput = Prisma.AtLeast<{
   runningType?: Prisma.EnumRunningTypeNullableFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  sourceGymMasterId?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  defaultSets?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultReps?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultWeightKg?: Prisma.FloatNullableFilter<"PrivateExercise"> | number | null
+  defaultRpe?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  restTimeSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  restBetweenExercisesSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -279,11 +403,20 @@ export type PrivateExerciseOrderByWithAggregationInput = {
   runningType?: Prisma.SortOrderInput | Prisma.SortOrder
   customNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceGymMasterId?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultSets?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultReps?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrderInput | Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PrivateExerciseCountOrderByAggregateInput
+  _avg?: Prisma.PrivateExerciseAvgOrderByAggregateInput
   _max?: Prisma.PrivateExerciseMaxOrderByAggregateInput
   _min?: Prisma.PrivateExerciseMinOrderByAggregateInput
+  _sum?: Prisma.PrivateExerciseSumOrderByAggregateInput
 }
 
 export type PrivateExerciseScalarWhereWithAggregatesInput = {
@@ -299,6 +432,13 @@ export type PrivateExerciseScalarWhereWithAggregatesInput = {
   runningType?: Prisma.EnumRunningTypeNullableWithAggregatesFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
+  sourceGymMasterId?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
+  defaultSets?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultReps?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultWeightKg?: Prisma.FloatNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultRpe?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  restTimeSecs?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  restBetweenExercisesSecs?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PrivateExercise"> | Date | string
 }
@@ -312,6 +452,13 @@ export type PrivateExerciseCreateInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPrivateExercisesInput
@@ -328,6 +475,13 @@ export type PrivateExerciseUncheckedCreateInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedCreateNestedManyWithoutPrivateExerciseInput
@@ -342,6 +496,13 @@ export type PrivateExerciseUpdateInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPrivateExercisesNestedInput
@@ -358,6 +519,13 @@ export type PrivateExerciseUncheckedUpdateInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedUpdateManyWithoutPrivateExerciseNestedInput
@@ -373,6 +541,13 @@ export type PrivateExerciseCreateManyInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -386,6 +561,13 @@ export type PrivateExerciseUpdateManyMutationInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,6 +582,13 @@ export type PrivateExerciseUncheckedUpdateManyInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -424,8 +613,24 @@ export type PrivateExerciseCountOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   customNotes?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  sourceGymMasterId?: Prisma.SortOrder
+  defaultSets?: Prisma.SortOrder
+  defaultReps?: Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PrivateExerciseAvgOrderByAggregateInput = {
+  defaultSets?: Prisma.SortOrder
+  defaultReps?: Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrder
 }
 
 export type PrivateExerciseMaxOrderByAggregateInput = {
@@ -438,6 +643,13 @@ export type PrivateExerciseMaxOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   customNotes?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  sourceGymMasterId?: Prisma.SortOrder
+  defaultSets?: Prisma.SortOrder
+  defaultReps?: Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -452,8 +664,24 @@ export type PrivateExerciseMinOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   customNotes?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  sourceGymMasterId?: Prisma.SortOrder
+  defaultSets?: Prisma.SortOrder
+  defaultReps?: Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PrivateExerciseSumOrderByAggregateInput = {
+  defaultSets?: Prisma.SortOrder
+  defaultReps?: Prisma.SortOrder
+  defaultWeightKg?: Prisma.SortOrder
+  defaultRpe?: Prisma.SortOrder
+  restTimeSecs?: Prisma.SortOrder
+  restBetweenExercisesSecs?: Prisma.SortOrder
 }
 
 export type PrivateExerciseNullableScalarRelationFilter = {
@@ -536,6 +764,13 @@ export type PrivateExerciseCreateWithoutUserInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemCreateNestedManyWithoutPrivateExerciseInput
@@ -550,6 +785,13 @@ export type PrivateExerciseUncheckedCreateWithoutUserInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedCreateNestedManyWithoutPrivateExerciseInput
@@ -594,6 +836,13 @@ export type PrivateExerciseScalarWhereInput = {
   runningType?: Prisma.EnumRunningTypeNullableFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  sourceGymMasterId?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  defaultSets?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultReps?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultWeightKg?: Prisma.FloatNullableFilter<"PrivateExercise"> | number | null
+  defaultRpe?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  restTimeSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  restBetweenExercisesSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
 }
@@ -607,6 +856,13 @@ export type PrivateExerciseCreateWithoutScheduleItemsInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPrivateExercisesInput
@@ -622,6 +878,13 @@ export type PrivateExerciseUncheckedCreateWithoutScheduleItemsInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -651,6 +914,13 @@ export type PrivateExerciseUpdateWithoutScheduleItemsInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPrivateExercisesNestedInput
@@ -666,6 +936,13 @@ export type PrivateExerciseUncheckedUpdateWithoutScheduleItemsInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -679,6 +956,13 @@ export type PrivateExerciseCreateManyUserInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  sourceGymMasterId?: string | null
+  defaultSets?: number | null
+  defaultReps?: number | null
+  defaultWeightKg?: number | null
+  defaultRpe?: number | null
+  restTimeSecs?: number | null
+  restBetweenExercisesSecs?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -692,6 +976,13 @@ export type PrivateExerciseUpdateWithoutUserInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUpdateManyWithoutPrivateExerciseNestedInput
@@ -706,6 +997,13 @@ export type PrivateExerciseUncheckedUpdateWithoutUserInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedUpdateManyWithoutPrivateExerciseNestedInput
@@ -720,6 +1018,13 @@ export type PrivateExerciseUncheckedUpdateManyWithoutUserInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultReps?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -765,6 +1070,13 @@ export type PrivateExerciseSelect<ExtArgs extends runtime.Types.Extensions.Inter
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  sourceGymMasterId?: boolean
+  defaultSets?: boolean
+  defaultReps?: boolean
+  defaultWeightKg?: boolean
+  defaultRpe?: boolean
+  restTimeSecs?: boolean
+  restBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -782,6 +1094,13 @@ export type PrivateExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  sourceGymMasterId?: boolean
+  defaultSets?: boolean
+  defaultReps?: boolean
+  defaultWeightKg?: boolean
+  defaultRpe?: boolean
+  restTimeSecs?: boolean
+  restBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -797,6 +1116,13 @@ export type PrivateExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  sourceGymMasterId?: boolean
+  defaultSets?: boolean
+  defaultReps?: boolean
+  defaultWeightKg?: boolean
+  defaultRpe?: boolean
+  restTimeSecs?: boolean
+  restBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -812,11 +1138,18 @@ export type PrivateExerciseSelectScalar = {
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  sourceGymMasterId?: boolean
+  defaultSets?: boolean
+  defaultReps?: boolean
+  defaultWeightKg?: boolean
+  defaultRpe?: boolean
+  restTimeSecs?: boolean
+  restBetweenExercisesSecs?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PrivateExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "isActive" | "sportType" | "name" | "targetMuscleGroup" | "runningType" | "customNotes" | "gifUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["privateExercise"]>
+export type PrivateExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "isActive" | "sportType" | "name" | "targetMuscleGroup" | "runningType" | "customNotes" | "gifUrl" | "sourceGymMasterId" | "defaultSets" | "defaultReps" | "defaultWeightKg" | "defaultRpe" | "restTimeSecs" | "restBetweenExercisesSecs" | "createdAt" | "updatedAt", ExtArgs["result"]["privateExercise"]>
 export type PrivateExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   scheduleItems?: boolean | Prisma.PrivateExercise$scheduleItemsArgs<ExtArgs>
@@ -845,6 +1178,13 @@ export type $PrivateExercisePayload<ExtArgs extends runtime.Types.Extensions.Int
     runningType: $Enums.RunningType | null
     customNotes: string | null
     gifUrl: string | null
+    sourceGymMasterId: string | null
+    defaultSets: number | null
+    defaultReps: number | null
+    defaultWeightKg: number | null
+    defaultRpe: number | null
+    restTimeSecs: number | null
+    restBetweenExercisesSecs: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["privateExercise"]>
@@ -1281,6 +1621,13 @@ export interface PrivateExerciseFieldRefs {
   readonly runningType: Prisma.FieldRef<"PrivateExercise", 'RunningType'>
   readonly customNotes: Prisma.FieldRef<"PrivateExercise", 'String'>
   readonly gifUrl: Prisma.FieldRef<"PrivateExercise", 'String'>
+  readonly sourceGymMasterId: Prisma.FieldRef<"PrivateExercise", 'String'>
+  readonly defaultSets: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultReps: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultWeightKg: Prisma.FieldRef<"PrivateExercise", 'Float'>
+  readonly defaultRpe: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly restTimeSecs: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly restBetweenExercisesSecs: Prisma.FieldRef<"PrivateExercise", 'Int'>
   readonly createdAt: Prisma.FieldRef<"PrivateExercise", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PrivateExercise", 'DateTime'>
 }

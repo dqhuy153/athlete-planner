@@ -23,6 +23,13 @@ export class CreatePrivateExerciseHandler implements ICommandHandler<CreatePriva
         runningType: dto.runningType,
         customNotes: dto.customNotes,
         gifUrl: dto.gifUrl,
+        sourceGymMasterId: dto.sourceGymMasterId,
+        defaultSets: dto.defaultSets,
+        defaultReps: dto.defaultReps,
+        defaultWeightKg: dto.defaultWeightKg,
+        defaultRpe: dto.defaultRpe,
+        restTimeSecs: dto.restTimeSecs,
+        restBetweenExercisesSecs: dto.restBetweenExercisesSecs,
       },
     });
   }

@@ -105,9 +105,10 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
             sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
             targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
             runningType={isRunning(exercise) ? exercise.runningType : undefined}
+            locale={locale}
           />
-        </div>
-      )}
+         </div>
+       )}
 
       {/* Gym metadata */}
       {isGym(exercise) && (

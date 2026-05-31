@@ -68,44 +68,24 @@ export function WorkoutRestTimer({
     setRunning(true);
   }, []);
 
-  const pct = total > 0 ? ((total - remaining) / total) * 100 : 0;
   const min = Math.floor(remaining / 60);
   const sec = remaining % 60;
 
   return (
-    <div className="flex flex-col items-center gap-4 py-6 px-4 rounded-2xl bg-surface-1 border border-border">
+    <div className="flex flex-col items-center gap-3 py-4 px-4 rounded-2xl bg-surface-1 border border-border">
       <p className="text-xs uppercase tracking-widest text-text-tertiary font-medium">
         {t('restTimer')}
       </p>
 
-      {/* Ring */}
-      <div
-        className="relative flex h-28 w-28 items-center justify-center"
+      {/* Time display */}
+      <span
+        className="font-mono text-4xl font-bold tabular-nums text-text-primary"
         aria-live="polite"
         aria-atomic
+        aria-label={`${min} minutes ${sec} seconds`}
       >
-        <svg
-          className="absolute inset-0 h-full w-full -rotate-90"
-          viewBox="0 0 100 100"
-          aria-hidden
-        >
-          <circle cx="50" cy="50" r="44" fill="none" strokeWidth="6" className="stroke-border" />
-          <circle
-            cx="50" cy="50" r="44"
-            fill="none" strokeWidth="6"
-            stroke="var(--accent)"
-            strokeLinecap="round"
-            strokeDasharray={`${pct * 2.764} ${276.4 - pct * 2.764}`}
-            strokeDashoffset="0"
-          />
-        </svg>
-        <span
-          className="font-mono text-2xl font-bold text-text-primary"
-          aria-label={`${min} minutes ${sec} seconds`}
-        >
-          {pad(min)}:{pad(sec)}
-        </span>
-      </div>
+        {pad(min)}:{pad(sec)}
+      </span>
 
       {/* Quick presets */}
       <div className="flex gap-2">

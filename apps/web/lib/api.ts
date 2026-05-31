@@ -129,6 +129,7 @@ class ApiClient {
       runningType?: string;
       customNotes?: string;
       gifUrl?: string;
+      sourceGymMasterId?: string;
     },
   ) {
     return this.request<PrivateExercise>('/exercises/private', {
@@ -154,6 +155,31 @@ class ApiClient {
     return this.request<PrivateExercise>(`/exercises/private/${id}/toggle`, {
       method: 'PATCH',
       headers: this.authHeaders(token),
+    });
+  }
+
+  getPrivateExercise(token: string, id: string) {
+    return this.request<PrivateExercise>(`/exercises/private/${id}`, {
+      headers: this.authHeaders(token),
+    });
+  }
+
+  updatePrivateExerciseConfig(
+    token: string,
+    id: string,
+    data: {
+      defaultSets?: number | null;
+      defaultReps?: number | null;
+      defaultWeightKg?: number | null;
+      defaultRpe?: number | null;
+      restTimeSecs?: number | null;
+      restBetweenExercisesSecs?: number | null;
+    },
+  ) {
+    return this.request<PrivateExercise>(`/exercises/private/${id}/config`, {
+      method: 'PATCH',
+      headers: this.authHeaders(token),
+      body: JSON.stringify(data),
     });
   }
 

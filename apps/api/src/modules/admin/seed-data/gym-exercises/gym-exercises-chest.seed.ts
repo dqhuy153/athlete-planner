@@ -15,6 +15,18 @@ export interface GymExerciseSeed {
     steps: { vi: string[]; en: string[] };
     form_cues: { vi: string[]; en: string[] };
   }>;
+  defaultBeginnerSets?: number;
+  defaultBeginnerReps?: number;
+  defaultBeginnerWeightKg?: number;
+  defaultBeginnerRpe?: number;
+  defaultBeginnerRestTimeSecs?: number;
+  defaultBeginnerRestBetweenExercisesSecs?: number;
+  defaultAdvancedSets?: number;
+  defaultAdvancedReps?: number;
+  defaultAdvancedWeightKg?: number;
+  defaultAdvancedRpe?: number;
+  defaultAdvancedRestTimeSecs?: number;
+  defaultAdvancedRestBetweenExercisesSecs?: number;
 }
 
 export const CHEST_EXERCISES: GymExerciseSeed[] = [
@@ -81,14 +93,26 @@ export const CHEST_EXERCISES: GymExerciseSeed[] = [
           en: [
             'Maintain full-body tension from unracking to racking',
             'Move the bar in a straight vertical line with no bouncing',
-            'Keep elbows tucked closer to your body, wrists neutral',
-          ],
-        },
-      },
-    ],
-  },
-  {
-    name: 'Dumbbell Bench Press',
+             'Keep elbows tucked closer to your body, wrists neutral',
+           ],
+         },
+       },
+     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 8,
+    defaultBeginnerWeightKg: 60,
+    defaultBeginnerRpe: 7,
+    defaultBeginnerRestTimeSecs: 90,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 5,
+    defaultAdvancedReps: 5,
+    defaultAdvancedWeightKg: 100,
+    defaultAdvancedRpe: 9,
+    defaultAdvancedRestTimeSecs: 120,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
+   },
+   {
+     name: 'Dumbbell Bench Press',
     vietnameseName: 'Đẩy Tạ Đơn Nằm',
     targetMuscleGroup: 'Chest',
     secondaryMuscleGroups: ['Triceps', 'Shoulders'],
@@ -155,6 +179,18 @@ export const CHEST_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 10,
+    defaultBeginnerWeightKg: 20,
+    defaultBeginnerRpe: 6,
+    defaultBeginnerRestTimeSecs: 75,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 8,
+    defaultAdvancedWeightKg: 35,
+    defaultAdvancedRpe: 8,
+    defaultAdvancedRestTimeSecs: 90,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
   {
     name: 'Cable Fly',
@@ -226,5 +262,17 @@ export const CHEST_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 12,
+    defaultBeginnerWeightKg: 15,
+    defaultBeginnerRpe: 6,
+    defaultBeginnerRestTimeSecs: 60,
+    defaultBeginnerRestBetweenExercisesSecs: 90,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 10,
+    defaultAdvancedWeightKg: 25,
+    defaultAdvancedRpe: 8,
+    defaultAdvancedRestTimeSecs: 75,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
 ];

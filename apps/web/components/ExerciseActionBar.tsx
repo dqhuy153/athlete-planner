@@ -85,19 +85,29 @@ export function ExerciseActionBar({
 
   function buildSingleItem(): WorkoutItem {
     if (isGymExercise(exercise)) {
+      const sets = exercise.defaultBeginnerSets ?? 3;
+      const reps = exercise.defaultBeginnerReps ?? 10;
+      const weight = exercise.defaultBeginnerWeightKg ?? 0;
+      const rpe = exercise.defaultBeginnerRpe ?? undefined;
+      const restTimeSecs = exercise.defaultBeginnerRestTimeSecs ?? 90;
+      const restBetweenExercisesSecs = exercise.defaultBeginnerRestBetweenExercisesSecs ?? undefined;
       return {
         id: crypto.randomUUID(),
         sportType: SportType.GYM,
         label: displayName,
         gymMasterId: exercise.id,
-        gymPayload: { rest_time_seconds: 90, sets: [] },
-        sets: [
-          { setNumber: 1, weight_kg: 0, reps: 10, completed: false },
-          { setNumber: 2, weight_kg: 0, reps: 10, completed: false },
-          { setNumber: 3, weight_kg: 0, reps: 10, completed: false },
-        ],
+        gymPayload: { rest_time_seconds: restTimeSecs, sets: [] },
+        sets: Array.from({ length: sets }, (_, i) => ({
+          setNumber: i + 1,
+          weight_kg: weight,
+          reps,
+          rpe,
+          completed: false,
+        })),
         currentPhaseIndex: 0,
         done: false,
+        restTimeSecs,
+        restBetweenExercisesSecs: restBetweenExercisesSecs ?? undefined,
       }
     }
     if (isRunningExercise(exercise)) {
@@ -115,23 +125,33 @@ export function ExerciseActionBar({
     // Private exercise
     const priv = exercise as PrivateExercise
     const isGymPrivate = priv.sportType === SportType.GYM
+    const privSets = priv.defaultSets ?? 3
+    const privReps = priv.defaultReps ?? 10
+    const privWeight = priv.defaultWeightKg ?? 0
+    const privRpe = priv.defaultRpe ?? undefined
+    const privRestTime = priv.restTimeSecs ?? 90
+    const privRestBetween = priv.restBetweenExercisesSecs ?? undefined
     return {
       id: crypto.randomUUID(),
       sportType: priv.sportType,
       label: priv.name,
       privateExerciseId: priv.id,
       gymPayload: isGymPrivate
-        ? { rest_time_seconds: 90, sets: [] }
+        ? { rest_time_seconds: privRestTime, sets: [] }
         : undefined,
       sets: isGymPrivate
-        ? [
-            { setNumber: 1, weight_kg: 0, reps: 10, completed: false },
-            { setNumber: 2, weight_kg: 0, reps: 10, completed: false },
-            { setNumber: 3, weight_kg: 0, reps: 10, completed: false },
-          ]
+        ? Array.from({ length: privSets }, (_, i) => ({
+            setNumber: i + 1,
+            weight_kg: privWeight,
+            reps: privReps,
+            rpe: privRpe,
+            completed: false,
+          }))
         : [],
       currentPhaseIndex: 0,
       done: false,
+      restTimeSecs: isGymPrivate ? privRestTime : undefined,
+      restBetweenExercisesSecs: isGymPrivate ? privRestBetween : undefined,
     }
   }
 

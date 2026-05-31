@@ -15,6 +15,18 @@ export interface GymExerciseSeed {
     steps: { vi: string[]; en: string[] };
     form_cues: { vi: string[]; en: string[] };
   }>;
+  defaultBeginnerSets?: number;
+  defaultBeginnerReps?: number;
+  defaultBeginnerWeightKg?: number;
+  defaultBeginnerRpe?: number;
+  defaultBeginnerRestTimeSecs?: number;
+  defaultBeginnerRestBetweenExercisesSecs?: number;
+  defaultAdvancedSets?: number;
+  defaultAdvancedReps?: number;
+  defaultAdvancedWeightKg?: number;
+  defaultAdvancedRpe?: number;
+  defaultAdvancedRestTimeSecs?: number;
+  defaultAdvancedRestBetweenExercisesSecs?: number;
 }
 
 export const SHOULDERS_EXERCISES: GymExerciseSeed[] = [
@@ -88,6 +100,18 @@ export const SHOULDERS_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 8,
+    defaultBeginnerWeightKg: 40,
+    defaultBeginnerRpe: 7,
+    defaultBeginnerRestTimeSecs: 90,
+    defaultBeginnerRestBetweenExercisesSecs: 120,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 5,
+    defaultAdvancedWeightKg: 65,
+    defaultAdvancedRpe: 9,
+    defaultAdvancedRestTimeSecs: 120,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
   {
     name: 'Dumbbell Lateral Raise',
@@ -159,5 +183,17 @@ export const SHOULDERS_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 15,
+    defaultBeginnerWeightKg: 8,
+    defaultBeginnerRpe: 6,
+    defaultBeginnerRestTimeSecs: 45,
+    defaultBeginnerRestBetweenExercisesSecs: 90,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 12,
+    defaultAdvancedWeightKg: 14,
+    defaultAdvancedRpe: 7,
+    defaultAdvancedRestTimeSecs: 60,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
 ];

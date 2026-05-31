@@ -34,6 +34,8 @@ import { CreatePrivateExerciseDto } from './dto/create-private-exercise.dto';
 import { ImportGymExercisesDto, ImportRunningExercisesDto } from './dto/import-exercises.dto';
 import { ImportGymExercisesCommand } from './commands/import-gym-exercises.command';
 import { ImportRunningExercisesCommand } from './commands/import-running-exercises.command';
+import { ConfigPrivateExerciseCommand } from './commands/config-private-exercise.command';
+import { ConfigPrivateExerciseDto } from './dto/config-private-exercise.dto';
 
 @Controller('exercises')
 export class ExercisesController {
@@ -167,6 +169,16 @@ export class ExercisesController {
     @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(new CreatePrivateExerciseCommand(body, req.user.sub));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('private/:id/config')
+  async configPrivateExercise(
+    @Param('id') id: string,
+    @Body() body: ConfigPrivateExerciseDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.commandBus.execute(new ConfigPrivateExerciseCommand(id, body, req.user.sub));
   }
 
   @UseGuards(JwtAuthGuard)

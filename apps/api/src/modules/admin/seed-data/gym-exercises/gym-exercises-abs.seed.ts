@@ -15,6 +15,18 @@ export interface GymExerciseSeed {
     steps: { vi: string[]; en: string[] };
     form_cues: { vi: string[]; en: string[] };
   }>;
+  defaultBeginnerSets?: number;
+  defaultBeginnerReps?: number;
+  defaultBeginnerWeightKg?: number;
+  defaultBeginnerRpe?: number;
+  defaultBeginnerRestTimeSecs?: number;
+  defaultBeginnerRestBetweenExercisesSecs?: number;
+  defaultAdvancedSets?: number;
+  defaultAdvancedReps?: number;
+  defaultAdvancedWeightKg?: number;
+  defaultAdvancedRpe?: number;
+  defaultAdvancedRestTimeSecs?: number;
+  defaultAdvancedRestBetweenExercisesSecs?: number;
 }
 
 export const ABS_EXERCISES: GymExerciseSeed[] = [
@@ -86,5 +98,17 @@ export const ABS_EXERCISES: GymExerciseSeed[] = [
         },
       },
     ],
+    defaultBeginnerSets: 3,
+    defaultBeginnerReps: 8,
+    defaultBeginnerWeightKg: 0,
+    defaultBeginnerRpe: 7,
+    defaultBeginnerRestTimeSecs: 60,
+    defaultBeginnerRestBetweenExercisesSecs: 90,
+    defaultAdvancedSets: 4,
+    defaultAdvancedReps: 15,
+    defaultAdvancedWeightKg: 0,
+    defaultAdvancedRpe: 8,
+    defaultAdvancedRestTimeSecs: 45,
+    defaultAdvancedRestBetweenExercisesSecs: 90,
   },
 ];

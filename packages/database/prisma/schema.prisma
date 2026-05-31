@@ -73,6 +73,23 @@ model GymExerciseMaster {
   gifUrl                String?
   garminExerciseEnum    String?
   instructions          Json        // Array of { level, steps, form_cues }
+
+  // Default workout config — beginner level
+  defaultBeginnerSets                     Int?
+  defaultBeginnerReps                     Int?
+  defaultBeginnerWeightKg                 Float?
+  defaultBeginnerRpe                      Int?
+  defaultBeginnerRestTimeSecs             Int?
+  defaultBeginnerRestBetweenExercisesSecs Int?
+
+  // Default workout config — advanced level
+  defaultAdvancedSets                     Int?
+  defaultAdvancedReps                     Int?
+  defaultAdvancedWeightKg                 Float?
+  defaultAdvancedRpe                      Int?
+  defaultAdvancedRestTimeSecs             Int?
+  defaultAdvancedRestBetweenExercisesSecs Int?
+
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 
@@ -112,6 +129,18 @@ model PrivateExercise {
   runningType       RunningType?
   customNotes       String?
   gifUrl            String?
+
+  // Source system exercise (for media inheritance)
+  sourceGymMasterId            String?
+
+  // User-configured workout defaults
+  defaultSets                  Int?
+  defaultReps                  Int?
+  defaultWeightKg              Float?
+  defaultRpe                   Int?
+  restTimeSecs                 Int?
+  restBetweenExercisesSecs     Int?
+
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
