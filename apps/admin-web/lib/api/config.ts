@@ -2,7 +2,7 @@ import { apiFetch } from './_client';
 
 export interface AppConfigEntry {
   key: string;
-  value: any;
+  value: unknown;
   label?: string | null;
 }
 
@@ -13,7 +13,7 @@ export function getAppConfigs(accessToken: string): Promise<AppConfigEntry[]> {
 export function updateAppConfigKey(
   accessToken: string,
   key: string,
-  value: any,
+  value: unknown,
   label?: string,
 ): Promise<AppConfigEntry> {
   return apiFetch(`/admin/config/${key}`, accessToken, {

@@ -5,7 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { ArrowLeft, ArrowRight, Check, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { generateExerciseContent } from '@/lib/api'
-import { SportType } from '@athlete-planner/contracts'
+import { SportType, type WorkoutPhaseType } from '@athlete-planner/contracts'
 import { WizardStepper } from './WizardStepper'
 import { WorkoutStructureEditor } from './WorkoutStructureEditor'
 import { RunningStep0BasicInfo } from './RunningStep0BasicInfo'
@@ -41,7 +41,7 @@ export function runningFormToPayload(data: RunningExerciseFormValues) {
     },
     workoutStructure: data.workoutStructure.map(phase => ({
       phase: phase.phase,
-      type: phase.type,
+      type: phase.type as WorkoutPhaseType,
       duration_minutes: phase.duration_minutes || undefined,
       distance_meters: phase.distance_meters || undefined,
       hr_zone: phase.hr_zone || undefined,

@@ -17,23 +17,24 @@ interface LevelFieldsPanelProps {
 function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
   const { control, register, formState } = useFormContext();
   const { errors } = formState;
-  const instructionErrors = (errors.instructions as any)?.[levelIndex];
+  // @ts-expect-error RHF nested array error type inference is limited
+  const instructionErrors = errors.instructions?.[levelIndex];
 
   const { fields: stepEnFields, append: appendStepEn, remove: removeStepEn } = useFieldArray({
     control,
-    name: `instructions.${levelIndex}.steps_en` as any,
+    name: `instructions.${levelIndex}.steps_en`,
   });
   const { fields: stepViFields, append: appendStepVi, remove: removeStepVi } = useFieldArray({
     control,
-    name: `instructions.${levelIndex}.steps_vi` as any,
+    name: `instructions.${levelIndex}.steps_vi`,
   });
   const { fields: cueEnFields, append: appendCueEn, remove: removeCueEn } = useFieldArray({
     control,
-    name: `instructions.${levelIndex}.form_cues_en` as any,
+    name: `instructions.${levelIndex}.form_cues_en`,
   });
   const { fields: cueViFields, append: appendCueVi, remove: removeCueVi } = useFieldArray({
     control,
-    name: `instructions.${levelIndex}.form_cues_vi` as any,
+    name: `instructions.${levelIndex}.form_cues_vi`,
   });
 
   return (
@@ -42,7 +43,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
       <div>
         <div className="flex items-center justify-between mb-3">
           <FormLabel>Steps (EN)</FormLabel>
-          <button type="button" onClick={() => appendStepEn({ value: '' } as any)}
+          <button type="button" onClick={() => appendStepEn({ value: '' })}
             className="text-xs text-primary hover:text-primary/80 flex items-center gap-1">
             <Plus className="h-3 w-3" />Add step
           </button>
@@ -53,7 +54,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
               <span className="mt-2.5 text-xs text-on-surface-variant/60 w-5 shrink-0">{idx + 1}</span>
               <div className="flex-1">
                 <input
-                  {...register(`instructions.${levelIndex}.steps_en.${idx}.value` as any)}
+                  {...register(`instructions.${levelIndex}.steps_en.${idx}.value`)}
                   placeholder="Describe this step..."
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
@@ -72,7 +73,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
       <div>
         <div className="flex items-center justify-between mb-3">
           <FormLabel>Steps (VI)</FormLabel>
-          <button type="button" onClick={() => appendStepVi({ value: '' } as any)}
+          <button type="button" onClick={() => appendStepVi({ value: '' })}
             className="text-xs text-primary hover:text-primary/80 flex items-center gap-1">
             <Plus className="h-3 w-3" />Thêm bước
           </button>
@@ -83,7 +84,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
               <span className="mt-2.5 text-xs text-on-surface-variant/60 w-5 shrink-0">{idx + 1}</span>
               <div className="flex-1">
                 <input
-                  {...register(`instructions.${levelIndex}.steps_vi.${idx}.value` as any)}
+                  {...register(`instructions.${levelIndex}.steps_vi.${idx}.value`)}
                   placeholder="Mô tả bước này..."
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
@@ -102,7 +103,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
       <div>
         <div className="flex items-center justify-between mb-3">
           <FormLabel>Form Cues (EN)</FormLabel>
-          <button type="button" onClick={() => appendCueEn({ value: '' } as any)}
+          <button type="button" onClick={() => appendCueEn({ value: '' })}
             className="text-xs text-primary hover:text-primary/80 flex items-center gap-1">
             <Plus className="h-3 w-3" />Add cue
           </button>
@@ -112,7 +113,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
             <div key={field.id} className="flex gap-2 items-start">
               <div className="flex-1">
                 <input
-                  {...register(`instructions.${levelIndex}.form_cues_en.${idx}.value` as any)}
+                  {...register(`instructions.${levelIndex}.form_cues_en.${idx}.value`)}
                   placeholder="e.g. Keep chest up"
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />
@@ -131,7 +132,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
       <div>
         <div className="flex items-center justify-between mb-3">
           <FormLabel>Form Cues (VI)</FormLabel>
-          <button type="button" onClick={() => appendCueVi({ value: '' } as any)}
+          <button type="button" onClick={() => appendCueVi({ value: '' })}
             className="text-xs text-primary hover:text-primary/80 flex items-center gap-1">
             <Plus className="h-3 w-3" />Thêm kỹ thuật
           </button>
@@ -141,7 +142,7 @@ function LevelFieldsPanel({ levelIndex }: LevelFieldsPanelProps) {
             <div key={field.id} className="flex gap-2 items-start">
               <div className="flex-1">
                 <input
-                  {...register(`instructions.${levelIndex}.form_cues_vi.${idx}.value` as any)}
+                  {...register(`instructions.${levelIndex}.form_cues_vi.${idx}.value`)}
                   placeholder="ví dụ: Giữ ngực thẳng"
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                 />

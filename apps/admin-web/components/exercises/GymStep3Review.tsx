@@ -6,8 +6,8 @@ import { CheckCircle2 } from 'lucide-react';
 export function Step3Review() {
   const values = useWatch();
 
-  const beginnerSteps = values.instructions?.[0]?.steps_en?.filter((s: any) => s.value?.trim()).length ?? 0;
-  const advancedSteps = values.instructions?.[1]?.steps_en?.filter((s: any) => s.value?.trim()).length ?? 0;
+  const beginnerSteps = values.instructions?.[0]?.steps_en?.filter((s: { value?: string }) => s.value?.trim()).length ?? 0;
+  const advancedSteps = values.instructions?.[1]?.steps_en?.filter((s: { value?: string }) => s.value?.trim()).length ?? 0;
   const secondaryMuscles = Array.isArray(values.secondaryMuscleGroups)
     ? values.secondaryMuscleGroups.filter(Boolean)
     : [];

@@ -1,4 +1,4 @@
-import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster, ExerciseInstruction, WorkoutPhase } from '@athlete-planner/contracts';
 import { SportType, ExperienceLevel } from '@athlete-planner/contracts';
 import { apiFetch } from './_client';
 
@@ -36,7 +36,7 @@ export function createGymExercise(
     youtubeEmbedUrl?: string;
     gifUrl?: string;
     garminExerciseEnum?: string;
-    instructions?: any[];
+    instructions?: ExerciseInstruction[];
   },
 ): Promise<GymExerciseMaster> {
   return apiFetch('/exercises/gym', accessToken, {
@@ -54,7 +54,7 @@ export function createRunningExercise(
     youtubeEmbedUrl?: string;
     gifUrl?: string;
     instructions?: { vi: string[]; en: string[] };
-    workoutStructure?: any[];
+    workoutStructure?: WorkoutPhase[];
   },
 ): Promise<RunningExerciseMaster> {
   return apiFetch('/exercises/running', accessToken, {
@@ -82,7 +82,7 @@ export function updateGymExercise(
     youtubeEmbedUrl: string;
     gifUrl: string;
     garminExerciseEnum: string;
-    instructions: any[];
+    instructions: ExerciseInstruction[];
   }>,
 ): Promise<GymExerciseMaster> {
   return apiFetch(`/exercises/${id}?type=gym`, accessToken, {
@@ -101,7 +101,7 @@ export function updateRunningExercise(
     youtubeEmbedUrl: string;
     gifUrl: string;
     instructions: { vi: string[]; en: string[] };
-    workoutStructure: any[];
+    workoutStructure: WorkoutPhase[];
   }>,
 ): Promise<RunningExerciseMaster> {
   return apiFetch(`/exercises/${id}?type=running`, accessToken, {
@@ -142,6 +142,25 @@ export function deleteExercise(
   return apiFetch(`/exercises/${id}?type=${type}&force=${force}`, accessToken, { method: 'DELETE' });
 }
 
+export interface GenerateExerciseContentResponse {
+  vietnameseName?: string;
+  beginner?: {
+    steps_en?: string[];
+    steps_vi?: string[];
+    form_cues_en?: string[];
+    form_cues_vi?: string[];
+  };
+  advanced?: {
+    steps_en?: string[];
+    steps_vi?: string[];
+    form_cues_en?: string[];
+    form_cues_vi?: string[];
+  };
+  instructions_en?: string[];
+  instructions_vi?: string[];
+  raw?: string;
+}
+
 export function generateExerciseContent(
   accessToken: string,
   data: {
@@ -150,7 +169,7 @@ export function generateExerciseContent(
     muscleGroup?: string;
     runningType?: string;
   },
-): Promise<{ content: any }> {
+): Promise<{ content: GenerateExerciseContentResponse }> {
   return apiFetch('/admin/exercises/generate-content', accessToken, {
     method: 'POST',
     body: JSON.stringify(data),
