@@ -53,6 +53,7 @@ interface WorkoutStore {
   setRestBetweenSetsSeconds: (s: number) => void;
   setRestBetweenExercisesSeconds: (s: number) => void;
   setItemRestAfterSecs: (itemIndex: number, secs: number) => void;
+  setItemSets: (itemIndex: number, setCount: number, reps: number, weight: number) => void;
   setSettingsOpen: (v: boolean) => void;
   checkAndDiscardExpired: () => void;
 }
@@ -287,6 +288,23 @@ export const useWorkoutStore = create<WorkoutStore>()(
           const items = state.session.items.map((item, i) =>
             i === itemIndex ? { ...item, restBetweenExercisesSecs: secs } : item,
           );
+          return { session: { ...state.session, items } };
+        }),
+
+      setItemSets: (itemIndex, setCount, reps, weight) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) => {
+            if (i !== itemIndex) return item;
+            const sets = Array.from({ length: setCount }, (_, j) => ({
+              setNumber: j + 1,
+              weight_kg: weight,
+              reps,
+              rpe: item.sets[0]?.rpe,
+              completed: false as const,
+            }));
+            return { ...item, sets };
+          });
           return { session: { ...state.session, items } };
         }),
 

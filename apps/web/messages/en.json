@@ -397,7 +397,9 @@
     "restartFromSet": "Restart from Set {n}",
     "completeSet": "Complete Set",
     "restAfterExercise": "Rest after",
-    "skipExercise": "Skip exercise"
+    "skipExercise": "Skip exercise",
+    "setsLabel": "sets",
+    "repsLabel": "reps"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",

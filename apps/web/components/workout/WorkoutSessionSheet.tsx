@@ -40,6 +40,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     undoExercise,
     restartFromSet,
     setItemRestAfterSecs,
+    setItemSets,
     skipItem,
   } = useWorkoutStore();
 
@@ -172,6 +173,74 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                     </button>
                   </div>
                 </div>
+
+                {/* Gym exercise config: sets × reps × weight */}
+                {item.sportType === SportType.GYM && item.sets.length > 0 && (
+                  <div className="flex items-center gap-2 pt-1 border-t border-border/20">
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newCount = Math.max(1, item.sets.length - 1);
+                          setItemSets(i, newCount, item.sets[0]?.reps ?? 10, item.sets[0]?.weight_kg ?? 0);
+                        }}
+                        className="h-6 w-6 rounded bg-surface-3 text-text-secondary flex items-center justify-center text-xs font-bold hover:bg-surface-2 transition-colors"
+                      >−</button>
+                      <span className="font-mono text-xs text-text-primary w-6 text-center">{item.sets.length}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newCount = Math.min(10, item.sets.length + 1);
+                          setItemSets(i, newCount, item.sets[0]?.reps ?? 10, item.sets[0]?.weight_kg ?? 0);
+                        }}
+                        className="h-6 w-6 rounded bg-surface-3 text-text-secondary flex items-center justify-center text-xs font-bold hover:bg-surface-2 transition-colors"
+                      >+</button>
+                      <span className="text-xs text-text-tertiary ml-0.5">{t('setsLabel')}</span>
+                    </div>
+                    <span className="text-text-tertiary">×</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newReps = Math.max(1, (item.sets[0]?.reps ?? 10) - 1);
+                          setItemSets(i, item.sets.length, newReps, item.sets[0]?.weight_kg ?? 0);
+                        }}
+                        className="h-6 w-6 rounded bg-surface-3 text-text-secondary flex items-center justify-center text-xs font-bold hover:bg-surface-2 transition-colors"
+                      >−</button>
+                      <span className="font-mono text-xs text-text-primary w-6 text-center">{item.sets[0]?.reps ?? 10}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newReps = Math.min(100, (item.sets[0]?.reps ?? 10) + 1);
+                          setItemSets(i, item.sets.length, newReps, item.sets[0]?.weight_kg ?? 0);
+                        }}
+                        className="h-6 w-6 rounded bg-surface-3 text-text-secondary flex items-center justify-center text-xs font-bold hover:bg-surface-2 transition-colors"
+                      >+</button>
+                      <span className="text-xs text-text-tertiary ml-0.5">{t('repsLabel')}</span>
+                    </div>
+                    <span className="text-text-tertiary">×</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newWeight = Math.max(0, (item.sets[0]?.weight_kg ?? 0) - 2.5);
+                          setItemSets(i, item.sets.length, item.sets[0]?.reps ?? 10, newWeight);
+                        }}
+                        className="h-6 w-6 rounded bg-surface-3 text-text-secondary flex items-center justify-center text-xs font-bold hover:bg-surface-2 transition-colors"
+                      >−</button>
+                      <span className="font-mono text-xs text-text-primary w-10 text-center">{item.sets[0]?.weight_kg ?? 0}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newWeight = (item.sets[0]?.weight_kg ?? 0) + 2.5;
+                          setItemSets(i, item.sets.length, item.sets[0]?.reps ?? 10, newWeight);
+                        }}
+                        className="h-6 w-6 rounded bg-surface-3 text-text-secondary flex items-center justify-center text-xs font-bold hover:bg-surface-2 transition-colors"
+                      >+</button>
+                      <span className="text-xs text-text-tertiary ml-0.5">kg</span>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
