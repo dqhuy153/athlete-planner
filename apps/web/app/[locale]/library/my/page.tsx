@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
-import { Plus } from 'lucide-react';
+import { Plus, FileJson, Sparkles, Lock } from 'lucide-react';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { UserTier } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
+import { ImportJSONModal } from '@/components/exercises/ImportJSONModal';
+import { AICreateExerciseModal } from '@/components/exercises/AICreateExerciseModal';
 import { Button, cn } from '@athlete-planner/ui';
 import { ExerciseCard } from '@/components/ExerciseCard';
 import { TierLimitBanner } from '@/components/TierLimitBanner';
@@ -24,6 +26,8 @@ export default function MyExercisesPage({ params }: PageProps) {
   const [locale, setLocale] = useState('vi');
   const [exercises, setExercises] = useState<PrivateExercise[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [showAICreateModal, setShowAICreateModal] = useState(false);
 
   useEffect(() => {
     params.then(({ locale: l }) => setLocale(l));
@@ -42,15 +46,23 @@ export default function MyExercisesPage({ params }: PageProps) {
   // @ts-ignore – tier is on the session user
   const isPro = session?.user?.tier === UserTier.PRO;
 
+  const refetch = () => {
+    if (!session?.accessToken) return;
+    api.getPrivateExercises(session.accessToken as string)
+      .then(setExercises)
+      .catch(() => {});
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="px-4 py-4 overflow-x-hidden">
         {/* Header row */}
-        <div className="mb-4 flex items-center justify-between gap-2">
-          <p className="text-micro text-text-tertiary font-data">
+        <div className="mb-4 flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-3">
+            <p className="text-micro text-text-tertiary font-data">
               {exercises.length}/10
             </p>
-            <div className="w-24 h-1 bg-surface-3 rounded-full mt-1 overflow-hidden">
+            <div className="w-24 h-1 bg-surface-3 rounded-full overflow-hidden">
               <div
                 className={cn(
                   'h-full rounded-full transition-all duration-300 ease-out',
@@ -63,17 +75,64 @@ export default function MyExercisesPage({ params }: PageProps) {
                 style={{ width: `${Math.min((exercises.length / 10) * 100, 100)}%` }}
               />
             </div>
-          {(!isAtLimit || isPro) && (
-            <Button variant="accent" size="sm" asChild>
-              <Link
-                href={`/${locale}/library/my/new`}
-                aria-label={t('addNew')}
-              >
-                <Plus className="h-4 w-4" aria-hidden />
-                {t('addNew')}
-              </Link>
-            </Button>
-          )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* PRO import/AI buttons */}
+            {isPro ? (
+              <>
+                <button
+                  onClick={() => setShowImportModal(true)}
+                  className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors"
+                >
+                  <FileJson size={13} aria-hidden />
+                  Nhập JSON
+                </button>
+                <button
+                  onClick={() => setShowAICreateModal(true)}
+                  className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors"
+                >
+                  <Sparkles size={13} aria-hidden />
+                  AI Tạo Bài
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="relative">
+                  <button
+                    className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-tertiary opacity-50 cursor-not-allowed"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    <FileJson size={13} aria-hidden />
+                    Nhập JSON
+                  </button>
+                  <Lock size={11} className="absolute -top-1.5 -right-1.5 text-accent" aria-hidden />
+                </div>
+                <div className="relative">
+                  <button
+                    className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-tertiary opacity-50 cursor-not-allowed"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    <Sparkles size={13} aria-hidden />
+                    AI Tạo Bài
+                  </button>
+                  <Lock size={11} className="absolute -top-1.5 -right-1.5 text-accent" aria-hidden />
+                </div>
+              </>
+            )}
+
+            {/* Add new button */}
+            {(!isAtLimit || isPro) && (
+              <Button variant="accent" size="sm" asChild>
+                <Link href={`/${locale}/library/my/new`} aria-label={t('addNew')}>
+                  <Plus className="h-4 w-4" aria-hidden />
+                  {t('addNew')}
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Tier limit banner */}
@@ -127,6 +186,18 @@ export default function MyExercisesPage({ params }: PageProps) {
           </ul>
         )}
       </div>
+      {showImportModal && (
+        <ImportJSONModal
+          onClose={() => setShowImportModal(false)}
+          onSuccess={() => { setShowImportModal(false); refetch(); }}
+        />
+      )}
+      {showAICreateModal && (
+        <AICreateExerciseModal
+          onClose={() => setShowAICreateModal(false)}
+          onSuccess={() => { setShowAICreateModal(false); refetch(); }}
+        />
+      )}
     </div>
   );
 }
