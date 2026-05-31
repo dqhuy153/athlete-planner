@@ -165,6 +165,7 @@ class ApiClient {
       gifUrl: string;
       targetMuscleGroup: string;
       runningType: string;
+      mediaUrls: string[];
     }>,
   ) {
     return this.request<PrivateExercise>(`/exercises/private/${id}`, {
