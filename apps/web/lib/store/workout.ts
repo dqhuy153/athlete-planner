@@ -12,6 +12,7 @@ interface WorkoutStore {
   restTimerActive: boolean;
   restBetweenExercisesActive: boolean;
   activeGuideItem: WorkoutItem | null; // guide overlay — NOT persisted
+  activeMediaItem: WorkoutItem | null; // media attachments overlay — NOT persisted
 
   // Persisted global settings (survive across sessions)
   restBetweenSetsSeconds: number;      // default 90
@@ -59,6 +60,8 @@ interface WorkoutStore {
   setSettingsOpen: (v: boolean) => void;
   openGuide: (item: WorkoutItem) => void;
   closeGuide: () => void;
+  openMedia: (item: WorkoutItem) => void;
+  closeMedia: () => void;
   checkAndDiscardExpired: () => void;
 }
 
@@ -70,6 +73,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
       restTimerActive: false,
       restBetweenExercisesActive: false,
       activeGuideItem: null,
+      activeMediaItem: null,
       restBetweenSetsSeconds: 90,
       restBetweenExercisesSeconds: 120,
       currentBetweenExercisesSeconds: 120,
@@ -318,6 +322,10 @@ export const useWorkoutStore = create<WorkoutStore>()(
       openGuide: (item) => set({ activeGuideItem: item }),
 
       closeGuide: () => set({ activeGuideItem: null }),
+
+      openMedia: (item) => set({ activeMediaItem: item }),
+
+      closeMedia: () => set({ activeMediaItem: null }),
 
       checkAndDiscardExpired: () => {
         const { session } = get();
