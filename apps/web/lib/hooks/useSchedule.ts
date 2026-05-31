@@ -95,21 +95,26 @@ export function useSchedule({ token }: UseScheduleOptions) {
   }, [token, selectDate]);
 
   const addItem = useCallback(async (scheduleId: string, dateString: string, picked: PickedExercise) => {
+    console.log('[useSchedule] addItem called', { scheduleId, dateString, picked });
     try {
       const item = await api.addScheduleItem(token, scheduleId, {
         exerciseType: picked.sourceType as ExerciseSourceType,
         exerciseId: picked.gymMasterId ?? picked.runningMasterId ?? picked.privateExerciseId ?? '',
         sportType: picked.sportType as SportType,
       });
+      console.log('[useSchedule] addItem API success', item);
       setSchedules(prev => {
         const map = new Map(prev);
         const sched = map.get(dateString);
         if (sched) map.set(dateString, { ...sched, items: [...sched.items, item] });
         return map;
       });
-      setActive(prev => prev ? { ...prev, items: [...prev.items, item] } : prev);
+      setActive(prev => {
+        console.log('[useSchedule] setActive called', { prevItems: prev?.items?.length, newItem: item?.id });
+        return prev ? { ...prev, items: [...prev.items, item] } : prev;
+      });
     } catch (err) {
-      console.error('Failed to add exercise to schedule:', err);
+      console.error('[useSchedule] addItem FAILED', err);
       throw err;
     }
   }, [token]);

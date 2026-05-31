@@ -22,12 +22,16 @@ class ApiClient {
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const res = await fetch(`${this.baseUrl}/api${path}`, {
+    const url = `${this.baseUrl}/api${path}`;
+    console.log(`[api] ${options?.method ?? 'GET'} ${url}`);
+    const res = await fetch(url, {
       ...options,
       headers: { 'Content-Type': 'application/json', ...options?.headers },
     });
+    console.log(`[api] response ${res.status} ${res.statusText}`);
     if (!res.ok) {
       const text = await res.text();
+      console.error(`[api] error body:`, text);
       try {
         const err = JSON.parse(text);
         throw new Error(err.message || text);
@@ -36,7 +40,9 @@ class ApiClient {
         throw new Error(text || `HTTP ${res.status}`);
       }
     }
-    return res.json() as Promise<T>;
+    const data = await res.json() as Promise<T>;
+    console.log(`[api] success data:`, data);
+    return data;
   }
 
   private authHeaders(accessToken: string) {

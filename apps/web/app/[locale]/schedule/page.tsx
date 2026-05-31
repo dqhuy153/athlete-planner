@@ -186,6 +186,7 @@ export default function SchedulePage() {
 
   const handlePick = useCallback(
     async (picked: PickedExercise) => {
+      console.log('[schedule] handlePick called', picked);
       setPickerOpen(false)
       // Guard against stale activeSchedule when switching dates quickly:
       // prefer activeSchedule if it matches selectedDate, else fall back to
@@ -197,14 +198,18 @@ export default function SchedulePage() {
 
       if (!schedule) {
         // selectDate was not yet resolved — wait for it now (uses cache or creates)
+        console.log('[schedule] handlePick: no schedule found, calling selectDate');
         schedule = await selectDate(selectedDate)
       }
+      console.log('[schedule] handlePick: schedule', schedule?.id, schedule?.dateString);
       if (!schedule) return
 
       try {
         _pendingLabel.current = picked.label
         await addItem(schedule.id, selectedDate, picked)
+        console.log('[schedule] handlePick: addItem succeeded');
       } catch {
+        console.log('[schedule] handlePick: addItem failed, showing toast');
         pushToast({ title: t('addExerciseFailed'), tone: 'error' })
       }
     },
