@@ -6,6 +6,8 @@ import {
   format,
   addWeeks,
   startOfISOWeek,
+  startOfMonth,
+  addMonths,
   getISOWeek,
   getISOWeekYear,
 } from 'date-fns'
@@ -17,7 +19,7 @@ import type {
   PrivateExercise,
 } from '@athlete-planner/contracts'
 import { UserTier, DayStatus, SportType } from '@athlete-planner/contracts'
-import { useToast } from '@athlete-planner/ui'
+import { useToast, cn } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { useSchedule } from '@/lib/hooks/useSchedule'
 import { WeekCalendar } from '@/components/WeekCalendar'
@@ -30,6 +32,7 @@ import { WorkoutMode } from '@/lib/types/workout'
 import type { WorkoutItem } from '@/lib/types/workout'
 import { WorkoutSessionSheet } from '@/components/workout/WorkoutSessionSheet'
 import { WorkoutResumePrompt } from '@/components/workout/WorkoutResumePrompt'
+import { MonthCalendar } from '@/components/MonthCalendar'
 import { ScheduleSidebar } from './components/ScheduleSidebar'
 import { DayHeader } from './components/DayHeader'
 import { MobileActionBar } from './components/MobileActionBar'
@@ -168,6 +171,8 @@ export default function SchedulePage() {
   const [exportingWeek, setExportingWeek] = useState(false)
   const [workoutOpen, setWorkoutOpen] = useState(false)
   const [showReplaceWorkout, setShowReplaceWorkout] = useState(false)
+  const [viewMode, setViewMode] = useState<'week' | 'month'>('week')
+  const [displayMonth, setDisplayMonth] = useState<Date>(() => startOfMonth(new Date()))
 
   const {
     session: workoutSession,
@@ -376,8 +381,13 @@ export default function SchedulePage() {
     })
   }
 
-  function handleStartWorkout() {
-    if (workoutSession) {
+  function handleMonthDaySelect(dateStr: string, offset: number) {
+    setViewMode('week')
+    setWeekOffset(offset)
+    handleSelectDate(dateStr)
+  }
+
+  function handleStartWorkout() {    if (workoutSession) {
       setShowReplaceWorkout(true)
       return
     }
@@ -466,16 +476,60 @@ export default function SchedulePage() {
 
           {/* Right panel: day detail */}
           <div className='flex-1 min-w-0 flex flex-col'>
-            {/* Mobile: week strip at top */}
+            {/* Mobile: week/month strip at top */}
             <div className='lg:hidden border-b border-border bg-surface-1 py-3'>
-              <WeekCalendar
-                weekOffset={weekOffset}
-                selectedDate={selectedDate}
-                scheduleMap={scheduleMap}
-                userTier={userTier}
-                onSelectDate={handleSelectDate}
-                onChangeWeek={handleWeekChange}
-              />
+              {/* View mode toggle */}
+              <div className="flex items-center gap-1 px-3 pb-2">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('week')}
+                  className={cn(
+                    'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                    viewMode === 'week'
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-text-tertiary hover:text-text-secondary',
+                  )}
+                >
+                  {t('week')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setViewMode('month')
+                    setDisplayMonth(startOfMonth(new Date()))
+                  }}
+                  className={cn(
+                    'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                    viewMode === 'month'
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-text-tertiary hover:text-text-secondary',
+                  )}
+                >
+                  {t('monthView')}
+                </button>
+              </div>
+
+              {viewMode === 'week' ? (
+                <WeekCalendar
+                  weekOffset={weekOffset}
+                  selectedDate={selectedDate}
+                  scheduleMap={scheduleMap}
+                  userTier={userTier}
+                  onSelectDate={handleSelectDate}
+                  onChangeWeek={handleWeekChange}
+                />
+              ) : (
+                <div className="px-3 pb-2">
+                  <MonthCalendar
+                    displayMonth={displayMonth}
+                    schedules={schedules}
+                    selectedDate={selectedDate}
+                    userTier={userTier}
+                    onSelectDate={handleMonthDaySelect}
+                    onChangeMonth={setDisplayMonth}
+                  />
+                </div>
+              )}
             </div>
 
             <DayHeader
