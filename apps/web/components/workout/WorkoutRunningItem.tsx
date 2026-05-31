@@ -44,7 +44,7 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
   const [remaining, setRemaining] = useState(totalSeconds);
   const [running, setRunning] = useState(totalSeconds > 0);
 
-  // Reset timer when phase index changes
+  // Effect 1: Reset timer when phase index changes
   useEffect(() => {
     const secs = currentPhase?.duration_minutes
       ? Math.round(currentPhase.duration_minutes * 60)
@@ -54,27 +54,24 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.currentPhaseIndex]);
 
-  // Countdown tick
+  // Effect 2: Countdown tick — uses functional updater so only depends on [running]
   useEffect(() => {
-    if (!running || remaining <= 0) return;
-    const id = setInterval(() => setRemaining((r) => r - 1), 1000);
+    if (!running) return;
+    const id = setInterval(() => setRemaining((r) => Math.max(0, r - 1)), 1000);
     return () => clearInterval(id);
-  }, [running, remaining]);
+  }, [running]);
 
-  // Auto-advance when countdown hits 0
+  // Effect 3: When timer reaches 0 while still running — stop timer and auto-advance
+  // Checks running === true to fire in the same render cycle where remaining hits 0,
+  // avoiding the race condition of waiting for a separate "stop timer" effect.
   useEffect(() => {
-    if (remaining === 0 && totalSeconds > 0 && session?.autoAdvance && running === false) {
+    if (remaining !== 0 || totalSeconds === 0 || !running) return;
+    setRunning(false);
+    if (automationMode === 'auto') {
       handleAdvance();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [remaining]);
-
-  // Stop timer when countdown ends
-  useEffect(() => {
-    if (remaining <= 0 && running) {
-      setRunning(false);
-    }
-  }, [remaining, running]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remaining, running, totalSeconds]);
 
   // Between-exercises rest timer (local countdown)
   const [betweenRemaining, setBetweenRemaining] = useState(currentBetweenExercisesSeconds);

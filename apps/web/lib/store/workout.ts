@@ -11,6 +11,7 @@ interface WorkoutStore {
   settingsOpen: boolean;
   restTimerActive: boolean;
   restBetweenExercisesActive: boolean;
+  activeGuideItem: WorkoutItem | null; // guide overlay — NOT persisted
 
   // Persisted global settings (survive across sessions)
   restBetweenSetsSeconds: number;      // default 90
@@ -25,6 +26,7 @@ interface WorkoutStore {
     mode: WorkoutMode,
     scheduleId?: string,
     dateString?: string,
+    startImmediately?: boolean,
   ) => void;
   discardSession: () => void;
   startWorkout: () => void;
@@ -55,6 +57,8 @@ interface WorkoutStore {
   setItemRestAfterSecs: (itemIndex: number, secs: number) => void;
   setItemSets: (itemIndex: number, setCount: number, reps: number, weight: number) => void;
   setSettingsOpen: (v: boolean) => void;
+  openGuide: (item: WorkoutItem) => void;
+  closeGuide: () => void;
   checkAndDiscardExpired: () => void;
 }
 
@@ -65,13 +69,14 @@ export const useWorkoutStore = create<WorkoutStore>()(
       settingsOpen: false,
       restTimerActive: false,
       restBetweenExercisesActive: false,
+      activeGuideItem: null,
       restBetweenSetsSeconds: 90,
       restBetweenExercisesSeconds: 120,
       currentBetweenExercisesSeconds: 120,
       currentRestTimerSeconds: 90,
       automationMode: 'auto',
 
-      startSession: (items, mode, scheduleId, dateString) =>
+      startSession: (items, mode, scheduleId, dateString, startImmediately) =>
         set({
           session: {
             id: crypto.randomUUID(),
@@ -81,7 +86,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
             startedAt: Date.now(),
             items,
             currentItemIndex: 0,
-            workoutPhase: 'preview',
+            workoutPhase: startImmediately ? 'active' : 'preview',
             soundEnabled: false,
             vibrationEnabled: true,
             autoAdvance: get().automationMode === 'auto',
@@ -310,6 +315,10 @@ export const useWorkoutStore = create<WorkoutStore>()(
 
       setSettingsOpen: (v) => set({ settingsOpen: v }),
 
+      openGuide: (item) => set({ activeGuideItem: item }),
+
+      closeGuide: () => set({ activeGuideItem: null }),
+
       checkAndDiscardExpired: () => {
         const { session } = get();
         if (session && Date.now() - session.startedAt > SESSION_TTL_MS) {
@@ -324,6 +333,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
         automationMode: state.automationMode,
         restBetweenSetsSeconds: state.restBetweenSetsSeconds,
         restBetweenExercisesSeconds: state.restBetweenExercisesSeconds,
+        // activeGuideItem intentionally excluded — transient, not persisted
       }),
     },
   ),

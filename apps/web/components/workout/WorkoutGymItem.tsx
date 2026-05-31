@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Check, Plus, SkipForward } from 'lucide-react';
+import { Check, Plus, SkipForward, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
@@ -35,6 +35,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
     stopRestTimer,
     startRestBetweenExercises,
     stopRestBetweenExercises,
+    openGuide,
   } = useWorkoutStore();
 
   // Local editable weight/reps/rpe
@@ -265,6 +266,18 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
         >
           <Plus size={13} aria-hidden />
           {t('addSet')}
+        </button>
+      )}
+
+      {/* View Guide button — only if media or instructions available */}
+      {(item.gifUrl || item.youtubeEmbedUrl || (item.instructions && item.instructions.length > 0)) && (
+        <button
+          type="button"
+          onClick={() => openGuide(item)}
+          className="flex w-full items-center justify-center gap-2 min-h-[44px] rounded-xl border border-border/40 py-2.5 text-xs font-medium text-text-tertiary hover:text-text-secondary hover:border-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <BookOpen size={13} aria-hidden />
+          {t('viewGuide')}
         </button>
       )}
 

@@ -6,7 +6,7 @@ import {
   Play, Pause, Square, ChevronDown, ChevronRight, RotateCcw, SkipForward,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { cn } from '@athlete-planner/ui';
+import { cn, BottomSheet } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { SportType } from '@athlete-planner/contracts';
 import { WorkoutGymItem } from './WorkoutGymItem';
@@ -14,6 +14,8 @@ import { WorkoutRunningItem } from './WorkoutRunningItem';
 import { WorkoutSettings } from './WorkoutSettings';
 import { WorkoutComplete } from './WorkoutComplete';
 import { triggerWorkoutComplete } from '@/lib/workout-alerts';
+import { VideoPlayer } from '@/components/VideoPlayer';
+import { InstructionsPanel } from '@/components/InstructionsPanel';
 
 interface WorkoutSessionSheetProps {
   onClose: () => void;
@@ -42,6 +44,8 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     setItemRestAfterSecs,
     setItemSets,
     skipItem,
+    activeGuideItem,
+    closeGuide,
   } = useWorkoutStore();
 
   const [showAbandonConfirm, setShowAbandonConfirm] = useState(false);
@@ -664,6 +668,25 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
           </div>
         </div>
       )}
+
+      {/* Guide overlay — slides up over the active workout without unmounting it */}
+      <BottomSheet open={!!activeGuideItem} onClose={closeGuide} maxHeight="88vh">
+        <div className="px-4 pb-4 space-y-4">
+          <p className="text-sm font-semibold text-text-primary pt-1">
+            {activeGuideItem?.label}
+          </p>
+          {(activeGuideItem?.youtubeEmbedUrl || activeGuideItem?.gifUrl) && (
+            <VideoPlayer
+              youtubeEmbedUrl={activeGuideItem.youtubeEmbedUrl ?? null}
+              gifUrl={activeGuideItem.gifUrl ?? null}
+              title={activeGuideItem.label}
+            />
+          )}
+          {activeGuideItem?.instructions && activeGuideItem.instructions.length > 0 && (
+            <InstructionsPanel instructions={activeGuideItem.instructions} />
+          )}
+        </div>
+      </BottomSheet>
     </div>
   );
 }

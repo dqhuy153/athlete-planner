@@ -407,7 +407,8 @@
     "exportFailed": "Xuất FIT thất bại",
     "statusUpdateFailed": "Không cập nhật được trạng thái ngày",
     "setsLabel": "set",
-    "repsLabel": "rep"
+    "repsLabel": "rep",
+    "viewGuide": "Xem hướng dẫn"
   },
   "privateExercise": {
     "backToLibrary": "Quay lại thư viện",

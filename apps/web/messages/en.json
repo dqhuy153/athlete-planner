@@ -407,7 +407,8 @@
     "exportFailed": "FIT export failed",
     "statusUpdateFailed": "Failed to update day status",
     "setsLabel": "sets",
-    "repsLabel": "reps"
+    "repsLabel": "reps",
+    "viewGuide": "View guide"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",

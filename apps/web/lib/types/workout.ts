@@ -1,5 +1,5 @@
 // apps/web/lib/types/workout.ts
-import type { SportType, GymPayload, RunningPayload, WorkoutPhase } from '@athlete-planner/contracts';
+import type { SportType, GymPayload, RunningPayload, WorkoutPhase, ExerciseInstruction } from '@athlete-planner/contracts';
 
 export enum WorkoutMode {
   MULTI = 'MULTI',   // from schedule page — all items
@@ -35,6 +35,10 @@ export interface WorkoutItem {
   isExpanded?: boolean;              // done exercise: show undo panel
   restTimeSecs?: number;             // default rest between sets (seconds)
   restBetweenExercisesSecs?: number; // default rest between exercises (seconds)
+  // Guide overlay media/instructions (gym exercises only)
+  gifUrl?: string | null;
+  youtubeEmbedUrl?: string | null;
+  instructions?: ExerciseInstruction[];
 }
 
 export interface WorkoutSession {
