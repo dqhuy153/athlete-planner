@@ -12,6 +12,47 @@ import type {
 } from '@athlete-planner/contracts';
 import { SportType, ExerciseSourceType, ExperienceLevel } from '@athlete-planner/contracts';
 
+export interface DraftExercise {
+  name: string;
+  sportType: 'GYM' | 'RUNNING';
+  targetMuscleGroup?: string;
+  runningType?: string;
+  customNotes?: string;
+  instructions?: string[];
+  gymPayload?: {
+    rest_time_seconds: number;
+    sets: Array<{ weight_kg: number; reps: number; rpe?: number }>;
+  };
+  runningPayload?: {
+    target_distance_km?: number;
+    duration_minutes?: number;
+    intensity_type?: 'PACE' | 'HEART_RATE' | 'NONE';
+    pace_min_sec_per_km?: number;
+    pace_max_sec_per_km?: number;
+  };
+}
+
+export type WorkoutDraftDay = DraftExercise[];
+
+export interface WorkoutDraftWeek {
+  monday: DraftExercise[] | null;
+  tuesday: DraftExercise[] | null;
+  wednesday: DraftExercise[] | null;
+  thursday: DraftExercise[] | null;
+  friday: DraftExercise[] | null;
+  saturday: DraftExercise[] | null;
+  sunday: DraftExercise[] | null;
+}
+
+export interface FlatExerciseImportItem {
+  name: string;
+  sportType: 'GYM' | 'RUNNING';
+  targetMuscleGroup?: string;
+  runningType?: string;
+  customNotes?: string;
+  instructions?: string[];
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 class ApiClient {
@@ -419,6 +460,51 @@ class ApiClient {
     const filename = match?.[1] ?? `week_${year}_W${weekNumber}.zip`;
     const blob = await res.blob();
     return { blob, filename };
+  }
+
+  // ─── AI ─────────────────────────────────────────────────────────────────────
+
+  generateWorkout(
+    token: string,
+    prompt: string,
+    mode: 'day' | 'week',
+  ): Promise<WorkoutDraftDay | WorkoutDraftWeek> {
+    return this.request<WorkoutDraftDay | WorkoutDraftWeek>('/ai/generate-workout', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ prompt, mode }),
+    });
+  }
+
+  createExerciseAI(token: string, prompt: string): Promise<DraftExercise> {
+    return this.request<DraftExercise>('/ai/create-exercise', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ prompt }),
+    });
+  }
+
+  suggestAlternative(
+    token: string,
+    currentExerciseName: string,
+    reason: string,
+  ): Promise<DraftExercise> {
+    return this.request<DraftExercise>('/ai/exercise-alternative', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ currentExerciseName, reason }),
+    });
+  }
+
+  bulkCreatePrivateExercises(
+    token: string,
+    exercises: FlatExerciseImportItem[],
+  ): Promise<{ created: number; errors: string[] }> {
+    return this.request<{ created: number; errors: string[] }>('/exercises/private/bulk', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ exercises }),
+    });
   }
 }
 

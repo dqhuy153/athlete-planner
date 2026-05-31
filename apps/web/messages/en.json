@@ -224,7 +224,12 @@
     "intervalType": "Interval",
     "easyType": "Easy",
     "tempoType": "Tempo",
-    "longRunType": "Long Run"
+    "longRunType": "Long Run",
+    "my": {
+      "importJSON": "Import JSON",
+      "aiCreateExercise": "AI Create Exercise",
+      "proRequired": "PRO required"
+    }
   },
   "blog": {
     "title": "Articles",
@@ -474,7 +479,16 @@
     "nameLabel": "Exercise name",
     "muscleGroupLabel": "Muscle group",
     "runningTypeLabel": "Running type",
-    "notesPlaceholder": "Personal notes, cues, modifications…"
+    "notesPlaceholder": "Personal notes, cues, modifications…",
+    "instructionsLabel": "Instructions",
+    "stepPlaceholder": "Describe this step...",
+    "addStep": "Add step",
+    "removeStep": "Remove step",
+    "youtubeLabel": "YouTube guide link",
+    "gifLabel": "GIF image link",
+    "mediaLinksLabel": "Reference links",
+    "addMediaLink": "Add link",
+    "removeLink": "Remove"
   },
   "starterTemplate": {
     "title": "Start with a template",
@@ -518,5 +532,21 @@
     "removeUrl": "Remove link",
     "invalidUrl": "Invalid URL",
     "duplicateUrl": "This URL is already in the list"
+  },
+  "ai": {
+    "generateWorkout": "AI Workout",
+    "todayWorkout": "Today's session",
+    "weekPlan": "Weekly plan",
+    "promptPlaceholder_day": "Chest and shoulders, high intensity, dumbbells available...",
+    "promptPlaceholder_week": "4 gym sessions hypertrophy, 2 easy runs pace 5:30...",
+    "generating": "Generating...",
+    "applyToSchedule": "Apply to schedule",
+    "applyWeek": "Apply full week",
+    "reviewTitle": "AI Plan — Review",
+    "addExercise": "Add exercise",
+    "alternativeReason": "Why replace? (no equipment, injury...)",
+    "findAlternative": "Find alternative",
+    "keepOriginal": "Keep original",
+    "swapExercise": "Swap"
   }
 }

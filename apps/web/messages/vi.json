@@ -224,7 +224,12 @@
     "intervalType": "Interval",
     "easyType": "Easy",
     "tempoType": "Tempo",
-    "longRunType": "Long Run"
+    "longRunType": "Long Run",
+    "my": {
+      "importJSON": "Nhập JSON",
+      "aiCreateExercise": "AI Tạo Bài",
+      "proRequired": "Cần PRO"
+    }
   },
   "blog": {
     "title": "Bài viết",
@@ -474,7 +479,16 @@
     "nameLabel": "Tên bài tập",
     "muscleGroupLabel": "Nhóm cơ",
     "runningTypeLabel": "Loại bài chạy",
-    "notesPlaceholder": "Ghi chú cá nhân, kỹ thuật, điều chỉnh…"
+    "notesPlaceholder": "Ghi chú cá nhân, kỹ thuật, điều chỉnh…",
+    "instructionsLabel": "Các bước thực hiện",
+    "stepPlaceholder": "Mô tả bước này...",
+    "addStep": "Thêm bước",
+    "removeStep": "Xóa bước",
+    "youtubeLabel": "Link YouTube hướng dẫn",
+    "gifLabel": "Link ảnh GIF",
+    "mediaLinksLabel": "Link tham khảo",
+    "addMediaLink": "Gắn link",
+    "removeLink": "Xóa"
   },
   "starterTemplate": {
     "title": "Bắt đầu với mẫu lịch",
@@ -518,5 +532,21 @@
     "removeUrl": "Xoá link",
     "invalidUrl": "Link không hợp lệ",
     "duplicateUrl": "Link này đã có trong danh sách"
+  },
+  "ai": {
+    "generateWorkout": "AI Giáo Án",
+    "todayWorkout": "Workout hôm nay",
+    "weekPlan": "Kế hoạch tuần",
+    "promptPlaceholder_day": "Ngực và vai, cường độ cao, có tạ đôi...",
+    "promptPlaceholder_week": "4 buổi gym tăng cơ, 2 chạy nhẹ pace 5:30...",
+    "generating": "Đang sinh giáo án...",
+    "applyToSchedule": "Áp dụng lên lịch",
+    "applyWeek": "Áp dụng cả tuần",
+    "reviewTitle": "AI Giáo Án — Xem lại",
+    "addExercise": "Thêm bài",
+    "alternativeReason": "Tại sao cần đổi? phòng hết máy, chấn thương...",
+    "findAlternative": "Tìm bài thay thế",
+    "keepOriginal": "Giữ bài cũ",
+    "swapExercise": "Đổi bài"
   }
 }
