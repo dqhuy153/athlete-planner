@@ -239,6 +239,7 @@ export interface ScheduleItem {
   runningPayload: RunningPayload | null;
   createdAt: string;
   updatedAt: string;
+  isLockedFree?: boolean;
 }
 
 export interface DailySchedule {

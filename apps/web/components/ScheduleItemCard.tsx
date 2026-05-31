@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS }         from '@dnd-kit/utilities';
-import { GripVertical, Trash2, ChevronDown, ChevronUp, Dumbbell, PersonStanding, BookOpen } from 'lucide-react';
+import { GripVertical, Trash2, ChevronDown, ChevronUp, Dumbbell, PersonStanding, BookOpen, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import type { ScheduleItem, GymPayload, RunningPayload, GymExerciseMaster, RunningExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
 import { SportType, RunningIntensityType } from '@athlete-planner/contracts';
-import { BottomSheet } from '@athlete-planner/ui';
+import { BottomSheet, useToast } from '@athlete-planner/ui';
 import { GymPayloadEditor }     from './GymPayloadEditor';
 import { RunningPayloadEditor } from './RunningPayloadEditor';
 import { RestTimer }            from './RestTimer';
@@ -21,6 +21,7 @@ interface ScheduleItemCardProps {
   onRemove: (itemId: string) => void;
   onSaveGym:     (itemId: string, payload: GymPayload) => Promise<void>;
   onSaveRunning: (itemId: string, payload: RunningPayload) => Promise<void>;
+  isLockedFree?: boolean;
 }
 
 export function ScheduleItemCard({
@@ -29,10 +30,12 @@ export function ScheduleItemCard({
   onRemove,
   onSaveGym,
   onSaveRunning,
+  isLockedFree,
 }: ScheduleItemCardProps) {
   const t = useTranslations('schedule');
   const params = useParams();
   const locale = (params.locale as string) ?? 'vi';
+  const { push: pushToast } = useToast();
 
   const {
     attributes,
@@ -198,7 +201,13 @@ export function ScheduleItemCard({
         {/* Expand toggle */}
         <button
           type="button"
-          onClick={() => setExpanded(v => !v)}
+          onClick={() => {
+            if (isLockedFree) {
+              pushToast({ title: t('historyLockedToast'), tone: 'info' });
+              return;
+            }
+            setExpanded(v => !v);
+          }}
           aria-expanded={expanded}
           aria-label={expanded ? t('collapse') : t('expand')}
           className="flex h-8 w-8 items-center justify-center rounded text-text-tertiary hover:bg-surface-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
@@ -220,8 +229,18 @@ export function ScheduleItemCard({
         </button>
       </div>
 
+      {isLockedFree && (
+        <div className="relative mx-3 mb-3 h-12 rounded-lg overflow-hidden border border-accent/20">
+          <div className="absolute inset-0 bg-surface-3/80 backdrop-blur-sm" />
+          <div className="absolute inset-0 flex items-center justify-center gap-2 text-accent">
+            <Lock className="h-4 w-4" aria-hidden />
+            <span className="text-caption font-medium">{t('historyLockedCard')}</span>
+          </div>
+        </div>
+      )}
+
       {/* Expanded actions */}
-      {expanded && (
+      {expanded && !isLockedFree && (
         <div className="flex gap-2 border-t border-border px-3 py-2.5">
           <button
             type="button"

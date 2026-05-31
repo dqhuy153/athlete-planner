@@ -101,6 +101,8 @@
     "lockedDayHint": "Free plan: up to 14 days ahead",
     "historyLocked": "Workout details hidden",
     "historyLockedHint": "Free plan: 30-day history",
+    "historyLockedCard": "Unlock full history",
+    "historyLockedToast": "Historical data older than 30 days is locked. Upgrade to PRO to unlock your full fitness journey.",
     "workouts": "workouts",
     "noGuide": "No instructions available.",
     "exerciseGuide": "Guide",

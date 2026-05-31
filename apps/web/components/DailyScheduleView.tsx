@@ -98,6 +98,7 @@ export function DailyScheduleView({
                     onRemove={onRemove}
                     onSaveGym={onSaveGym}
                     onSaveRunning={onSaveRunning}
+                    isLockedFree={item.isLockedFree}
                   />
                 ))}
               </div>

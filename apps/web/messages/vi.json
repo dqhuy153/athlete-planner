@@ -101,6 +101,8 @@
     "lockedDayHint": "Gói miễn phí: tối đa 14 ngày",
     "historyLocked": "Chi tiết bị ẩn",
     "historyLockedHint": "Gói miễn phí: lịch sử 30 ngày",
+    "historyLockedCard": "Mở khóa lịch sử đầy đủ",
+    "historyLockedToast": "Dữ liệu cũ hơn 30 ngày đã bị khóa. Nâng cấp PRO để mở toàn bộ hành trình tập luyện.",
     "workouts": "bài tập",
     "noGuide": "Không có hướng dẫn.",
     "exerciseGuide": "Hướng dẫn",
