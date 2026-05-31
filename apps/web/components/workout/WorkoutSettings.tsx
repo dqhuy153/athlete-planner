@@ -12,7 +12,12 @@ export function WorkoutSettings() {
     setSettingsOpen,
     setSoundEnabled,
     setVibrationEnabled,
-    setAutoAdvance,
+    automationMode,
+    setAutomationMode,
+    restBetweenSetsSeconds,
+    setRestBetweenSetsSeconds,
+    restBetweenExercisesSeconds,
+    setRestBetweenExercisesSeconds,
   } = useWorkoutStore();
 
   if (!settingsOpen || !session) return null;
@@ -46,6 +51,62 @@ export function WorkoutSettings() {
         </div>
 
         <div className="space-y-1">
+          {/* Rest between sets */}
+          <NumberRow
+            label={t('restBetweenSets')}
+            hint={t('restBetweenSetsHint')}
+            value={restBetweenSetsSeconds}
+            onChange={setRestBetweenSetsSeconds}
+            min={10}
+            max={600}
+            step={10}
+          />
+
+          {/* Rest between exercises */}
+          <NumberRow
+            label={t('restBetweenExercisesLabel')}
+            hint={t('restBetweenExercisesHint')}
+            value={restBetweenExercisesSeconds}
+            onChange={setRestBetweenExercisesSeconds}
+            min={0}
+            max={600}
+            step={10}
+          />
+
+          {/* Automation mode */}
+          <div className="flex items-center justify-between rounded-xl px-3 py-3 hover:bg-surface-2 transition-colors">
+            <div className="min-w-0 flex-1 pr-3">
+              <p className="text-sm font-medium text-text-primary">{t('automationMode')}</p>
+              <p className="text-xs text-text-tertiary mt-0.5">{t('automationHint')}</p>
+            </div>
+            <div className="flex gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => setAutomationMode('auto')}
+                className={[
+                  'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                  automationMode === 'auto'
+                    ? 'bg-accent text-black'
+                    : 'bg-surface-3 text-text-secondary hover:bg-surface-2',
+                ].join(' ')}
+              >
+                {t('automationAuto')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setAutomationMode('manual')}
+                className={[
+                  'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                  automationMode === 'manual'
+                    ? 'bg-accent text-black'
+                    : 'bg-surface-3 text-text-secondary hover:bg-surface-2',
+                ].join(' ')}
+              >
+                {t('automationManual')}
+              </button>
+            </div>
+          </div>
+
           <ToggleRow
             label={t('sound')}
             hint={t('soundHint')}
@@ -58,17 +119,53 @@ export function WorkoutSettings() {
             value={session.vibrationEnabled}
             onChange={setVibrationEnabled}
           />
-          <ToggleRow
-            label={t('autoAdvance')}
-            hint={t('autoAdvanceHint')}
-            value={session.autoAdvance}
-            onChange={setAutoAdvance}
-          />
         </div>
 
         <p className="mt-4 text-xs text-text-tertiary text-center">{t('iosCaveat')}</p>
       </div>
     </>
+  );
+}
+
+interface NumberRowProps {
+  label: string;
+  hint: string;
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  step: number;
+}
+
+function NumberRow({ label, hint, value, onChange, min, max, step }: NumberRowProps) {
+  return (
+    <div className="flex items-center justify-between rounded-xl px-3 py-3 hover:bg-surface-2 transition-colors">
+      <div className="min-w-0 flex-1 pr-3">
+        <p className="text-sm font-medium text-text-primary">{label}</p>
+        <p className="text-xs text-text-tertiary mt-0.5">{hint}</p>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(min, value - step))}
+          className="h-7 w-7 rounded-lg bg-surface-3 text-text-secondary flex items-center justify-center text-sm font-bold hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={`Decrease ${label}`}
+        >
+          −
+        </button>
+        <span className="font-mono text-sm text-text-primary w-10 text-center tabular-nums">
+          {value}s
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(max, value + step))}
+          className="h-7 w-7 rounded-lg bg-surface-3 text-text-secondary flex items-center justify-center text-sm font-bold hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={`Increase ${label}`}
+        >
+          +
+        </button>
+      </div>
+    </div>
   );
 }
 

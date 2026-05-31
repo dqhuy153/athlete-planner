@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, Plus, SkipForward } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
@@ -22,8 +22,9 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
   const t = useTranslations('workout');
   const {
     session,
+    automationMode,
     restTimerActive,
-    restTimerDefaultSeconds,
+    restBetweenSetsSeconds,
     restBetweenExercisesActive,
     restBetweenExercisesSeconds,
     completeSet,
@@ -58,20 +59,23 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
     completeSet(itemIndex, setIndex, vals);
     triggerSetComplete(session.soundEnabled, session.vibrationEnabled);
 
-    // Check if all sets in this item are now done (including the one just completed)
+    // Check if all sets are now done (including the one just completed)
     const allDone = item.sets.every((s, i) => i === setIndex || s.completed);
+
     if (allDone) {
-      const restSecs = item.restBetweenExercisesSecs;
-      if (restSecs && restSecs > 0) {
+      const restSecs = item.restBetweenExercisesSecs ?? restBetweenExercisesSeconds;
+      if (restSecs > 0 && automationMode === 'auto') {
         startRestBetweenExercises(restSecs);
-        // completeItem called after rest-between timer ends
+        // completeItem is called when between-exercises timer ends
       } else {
         completeItem(itemIndex);
       }
-    } else if (session.autoAdvance) {
-      const restSeconds = item.restTimeSecs ?? item.gymPayload?.rest_time_seconds ?? 90;
-      startRestTimer(restSeconds);
+    } else if (automationMode === 'auto') {
+      // Auto mode: start rest between sets
+      const restSecs = item.restTimeSecs ?? restBetweenSetsSeconds;
+      startRestTimer(restSecs);
     }
+    // Manual mode + not all done: no auto-transition, user continues when ready
   }
 
   function handleAddSet() {
@@ -101,7 +105,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
 
   // Between-exercises rest timer (local countdown)
   const [betweenRemaining, setBetweenRemaining] = useState(restBetweenExercisesSeconds);
-  // Sync timer when it starts
+
   useEffect(() => {
     if (restBetweenExercisesActive) {
       setBetweenRemaining(restBetweenExercisesSeconds);
@@ -260,13 +264,13 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
         </button>
       )}
 
-      {/* Between-sets rest timer */}
-      {restTimerActive && !allSetsCompleted && (
+      {/* Between-sets rest timer (auto mode only) */}
+      {restTimerActive && !allSetsCompleted && automationMode === 'auto' && (
         <WorkoutRestTimer
-          defaultSeconds={restTimerDefaultSeconds}
+          defaultSeconds={restBetweenSetsSeconds}
           soundEnabled={session?.soundEnabled ?? false}
           vibrationEnabled={session?.vibrationEnabled ?? true}
-          autoAdvance={session?.autoAdvance ?? true}
+          autoAdvance={automationMode === 'auto'}
           onDone={() => stopRestTimer()}
           onSkip={() => stopRestTimer()}
         />

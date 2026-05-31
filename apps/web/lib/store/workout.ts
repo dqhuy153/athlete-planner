@@ -1,7 +1,7 @@
 'use client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { WorkoutSession, WorkoutItem } from '../types/workout';
+import type { WorkoutSession, WorkoutItem, AutomationMode } from '../types/workout';
 import { WorkoutMode } from '../types/workout';
 
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -10,9 +10,13 @@ interface WorkoutStore {
   session: WorkoutSession | null;
   settingsOpen: boolean;
   restTimerActive: boolean;
-  restTimerDefaultSeconds: number;
   restBetweenExercisesActive: boolean;
-  restBetweenExercisesSeconds: number;
+
+  // Persisted global settings (survive across sessions)
+  restBetweenSetsSeconds: number;      // default 90
+  restBetweenExercisesSeconds: number; // default 120
+  automationMode: AutomationMode;      // default 'auto'
+
   // actions
   startSession: (
     items: WorkoutItem[],
@@ -21,6 +25,9 @@ interface WorkoutStore {
     dateString?: string,
   ) => void;
   discardSession: () => void;
+  startWorkout: () => void;
+  pauseWorkout: () => void;
+  resumeWorkout: () => void;
   setCurrentItem: (index: number) => void;
   completeSet: (
     itemIndex: number,
@@ -29,6 +36,9 @@ interface WorkoutStore {
   ) => void;
   advancePhase: (itemIndex: number) => void;
   completeItem: (itemIndex: number) => void;
+  undoExercise: (itemIndex: number) => void;
+  restartFromSet: (itemIndex: number, setIndex: number) => void;
+  toggleItemExpanded: (itemIndex: number) => void;
   startRestTimer: (seconds: number) => void;
   stopRestTimer: () => void;
   startRestBetweenExercises: (seconds: number) => void;
@@ -36,6 +46,9 @@ interface WorkoutStore {
   setSoundEnabled: (v: boolean) => void;
   setVibrationEnabled: (v: boolean) => void;
   setAutoAdvance: (v: boolean) => void;
+  setAutomationMode: (mode: AutomationMode) => void;
+  setRestBetweenSetsSeconds: (s: number) => void;
+  setRestBetweenExercisesSeconds: (s: number) => void;
   setSettingsOpen: (v: boolean) => void;
   checkAndDiscardExpired: () => void;
 }
@@ -46,9 +59,10 @@ export const useWorkoutStore = create<WorkoutStore>()(
       session: null,
       settingsOpen: false,
       restTimerActive: false,
-      restTimerDefaultSeconds: 90,
       restBetweenExercisesActive: false,
-      restBetweenExercisesSeconds: 60,
+      restBetweenSetsSeconds: 90,
+      restBetweenExercisesSeconds: 120,
+      automationMode: 'auto',
 
       startSession: (items, mode, scheduleId, dateString) =>
         set({
@@ -60,9 +74,10 @@ export const useWorkoutStore = create<WorkoutStore>()(
             startedAt: Date.now(),
             items,
             currentItemIndex: 0,
+            workoutPhase: 'preview',
             soundEnabled: false,
             vibrationEnabled: true,
-            autoAdvance: true,
+            autoAdvance: get().automationMode === 'auto',
           },
           restTimerActive: false,
           restBetweenExercisesActive: false,
@@ -70,6 +85,29 @@ export const useWorkoutStore = create<WorkoutStore>()(
 
       discardSession: () =>
         set({ session: null, restTimerActive: false, restBetweenExercisesActive: false }),
+
+      startWorkout: () =>
+        set((state) => ({
+          session: state.session
+            ? { ...state.session, workoutPhase: 'active' }
+            : null,
+        })),
+
+      pauseWorkout: () =>
+        set((state) => ({
+          session: state.session
+            ? { ...state.session, workoutPhase: 'paused' }
+            : null,
+          restTimerActive: false,
+          restBetweenExercisesActive: false,
+        })),
+
+      resumeWorkout: () =>
+        set((state) => ({
+          session: state.session
+            ? { ...state.session, workoutPhase: 'active' }
+            : null,
+        })),
 
       setCurrentItem: (index) =>
         set((state) => ({
@@ -112,17 +150,76 @@ export const useWorkoutStore = create<WorkoutStore>()(
         set((state) => {
           if (!state.session) return {};
           const items = state.session.items.map((item, i) =>
-            i === itemIndex ? { ...item, done: true } : item,
+            i === itemIndex ? { ...item, done: true, isExpanded: false } : item,
           );
-          // Auto-advance to next undone item
+          // Auto-advance to next undone item (skip already-done ones)
           const nextIndex = items.findIndex((item, i) => i > itemIndex && !item.done);
           const currentItemIndex =
             nextIndex !== -1 ? nextIndex : state.session.currentItemIndex;
-          return { session: { ...state.session, items, currentItemIndex } };
+          // Transition to complete if all done
+          const allDone = items.every((it) => it.done);
+          const workoutPhase = allDone ? ('complete' as const) : state.session.workoutPhase;
+          return { session: { ...state.session, items, currentItemIndex, workoutPhase } };
+        }),
+
+      undoExercise: (itemIndex) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) => {
+            if (i !== itemIndex) return item;
+            return {
+              ...item,
+              done: false,
+              isExpanded: false,
+              sets: item.sets.map((s) => ({ ...s, completed: false })),
+              currentPhaseIndex: 0,
+            };
+          });
+          return {
+            session: {
+              ...state.session,
+              items,
+              currentItemIndex: itemIndex,
+              workoutPhase: 'active' as const,
+            },
+            restTimerActive: false,
+            restBetweenExercisesActive: false,
+          };
+        }),
+
+      restartFromSet: (itemIndex, setIndex) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) => {
+            if (i !== itemIndex) return item;
+            const sets = item.sets.map((s, j) =>
+              j >= setIndex ? { ...s, completed: false } : s,
+            );
+            return { ...item, done: false, isExpanded: false, sets };
+          });
+          return {
+            session: {
+              ...state.session,
+              items,
+              currentItemIndex: itemIndex,
+              workoutPhase: 'active' as const,
+            },
+            restTimerActive: false,
+            restBetweenExercisesActive: false,
+          };
+        }),
+
+      toggleItemExpanded: (itemIndex) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) =>
+            i === itemIndex ? { ...item, isExpanded: !item.isExpanded } : item,
+          );
+          return { session: { ...state.session, items } };
         }),
 
       startRestTimer: (seconds) =>
-        set({ restTimerActive: true, restTimerDefaultSeconds: seconds }),
+        set({ restTimerActive: true, restBetweenSetsSeconds: seconds }),
 
       stopRestTimer: () => set({ restTimerActive: false }),
 
@@ -148,6 +245,18 @@ export const useWorkoutStore = create<WorkoutStore>()(
           session: state.session ? { ...state.session, autoAdvance: v } : null,
         })),
 
+      setAutomationMode: (mode) =>
+        set((state) => ({
+          automationMode: mode,
+          session: state.session
+            ? { ...state.session, autoAdvance: mode === 'auto' }
+            : null,
+        })),
+
+      setRestBetweenSetsSeconds: (s) => set({ restBetweenSetsSeconds: s }),
+
+      setRestBetweenExercisesSeconds: (s) => set({ restBetweenExercisesSeconds: s }),
+
       setSettingsOpen: (v) => set({ settingsOpen: v }),
 
       checkAndDiscardExpired: () => {
@@ -159,7 +268,12 @@ export const useWorkoutStore = create<WorkoutStore>()(
     }),
     {
       name: 'workout-session',
-      partialize: (state) => ({ session: state.session }),
+      partialize: (state) => ({
+        session: state.session,
+        automationMode: state.automationMode,
+        restBetweenSetsSeconds: state.restBetweenSetsSeconds,
+        restBetweenExercisesSeconds: state.restBetweenExercisesSeconds,
+      }),
     },
   ),
 );

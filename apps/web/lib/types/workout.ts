@@ -6,6 +6,10 @@ export enum WorkoutMode {
   SINGLE = 'SINGLE', // from exercise detail — one exercise
 }
 
+export type WorkoutPhaseState = 'preview' | 'active' | 'paused' | 'complete';
+
+export type AutomationMode = 'auto' | 'manual';
+
 export interface WorkoutSetRecord {
   setNumber: number;
   weight_kg: number;
@@ -27,6 +31,7 @@ export interface WorkoutItem {
   sets: WorkoutSetRecord[];          // gym: live tracking
   currentPhaseIndex: number;         // running: phase cursor
   done: boolean;
+  isExpanded?: boolean;              // done exercise: show undo panel
   restTimeSecs?: number;             // default rest between sets (seconds)
   restBetweenExercisesSecs?: number; // default rest between exercises (seconds)
 }
@@ -36,10 +41,11 @@ export interface WorkoutSession {
   mode: WorkoutMode;
   scheduleId?: string;
   dateString?: string;
-  startedAt: number;        // Date.now()
+  startedAt: number;         // Date.now()
   items: WorkoutItem[];
   currentItemIndex: number;
-  soundEnabled: boolean;    // default false
+  workoutPhase: WorkoutPhaseState; // state machine
+  soundEnabled: boolean;     // default false
   vibrationEnabled: boolean; // default true
-  autoAdvance: boolean;     // default true
+  autoAdvance: boolean;      // legacy — kept for backward compat, mirrors automationMode
 }
