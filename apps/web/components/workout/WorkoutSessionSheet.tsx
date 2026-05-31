@@ -39,6 +39,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     toggleItemExpanded,
     undoExercise,
     restartFromSet,
+    setItemRestAfterSecs,
   } = useWorkoutStore();
 
   const [showAbandonConfirm, setShowAbandonConfirm] = useState(false);
@@ -108,27 +109,71 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
           <p className="flex-1 text-sm font-semibold text-text-primary">{t('preview')}</p>
         </div>
 
-        {/* Exercise list */}
+        {/* Exercise list with type-specific cards */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          {session.items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center gap-3 rounded-xl border border-border/30 bg-surface-1 px-3 py-2.5"
-            >
-              <div className="h-1.5 w-1.5 rounded-full bg-border shrink-0" />
-              {item.sportType === SportType.GYM ? (
-                <Dumbbell size={13} className="text-text-tertiary shrink-0" aria-hidden />
-              ) : (
-                <PersonStanding size={13} className="text-text-tertiary shrink-0" aria-hidden />
-              )}
-              <span className="flex-1 text-sm text-text-primary truncate">{item.label}</span>
-              {item.sportType === SportType.GYM && item.sets.length > 0 && (
-                <span className="text-xs font-mono text-text-tertiary shrink-0">
-                  {item.sets.length} sets
-                </span>
-              )}
-            </div>
-          ))}
+          {session.items.map((item, i) => {
+            const effectiveRest = item.restBetweenExercisesSecs ?? restBetweenExercisesSeconds;
+            return (
+              <div
+                key={item.id}
+                className="rounded-xl border border-border/30 bg-surface-1 px-3 py-3 space-y-2"
+              >
+                {/* Header row */}
+                <div className="flex items-center gap-3">
+                  <div className="h-1.5 w-1.5 rounded-full bg-border shrink-0" />
+                  {item.sportType === SportType.GYM ? (
+                    <Dumbbell size={13} className="text-text-tertiary shrink-0" aria-hidden />
+                  ) : (
+                    <PersonStanding size={13} className="text-text-tertiary shrink-0" aria-hidden />
+                  )}
+                  <span className="flex-1 text-sm text-text-primary truncate">{item.label}</span>
+                  {/* Type-specific summary chip */}
+                  {item.sportType === SportType.GYM && item.sets.length > 0 && (
+                    <span className="text-xs font-mono text-text-tertiary shrink-0">
+                      {item.sets.length}×{item.gymPayload?.sets[0]?.reps ?? '?'} reps
+                    </span>
+                  )}
+                  {item.sportType === SportType.RUNNING && item.runningPayload && (
+                    <span className="text-xs font-mono text-text-tertiary shrink-0">
+                      {item.runningPayload.target_distance_km
+                        ? `${item.runningPayload.target_distance_km} km`
+                        : item.runningPayload.duration_minutes
+                        ? `${item.runningPayload.duration_minutes} min`
+                        : null}
+                    </span>
+                  )}
+                </div>
+
+                {/* Per-item rest-after stepper */}
+                <div className="flex items-center justify-between pt-1">
+                  <p className="text-xs text-text-tertiary">{t('restAfterExercise')}</p>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setItemRestAfterSecs(i, Math.max(0, effectiveRest - 10))
+                      }
+                      className="h-7 w-7 rounded-md bg-surface-3 text-text-secondary flex items-center justify-center text-sm font-bold hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      −
+                    </button>
+                    <span className="font-mono text-xs text-text-primary w-10 text-center tabular-nums">
+                      {effectiveRest}s
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setItemRestAfterSecs(i, Math.min(600, effectiveRest + 10))
+                      }
+                      className="h-7 w-7 rounded-md bg-surface-3 text-text-secondary flex items-center justify-center text-sm font-bold hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Config panel */}
