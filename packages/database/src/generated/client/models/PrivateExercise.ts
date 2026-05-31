@@ -33,6 +33,13 @@ export type PrivateExerciseAvgAggregateOutputType = {
   defaultRpe: number | null
   restTimeSecs: number | null
   restBetweenExercisesSecs: number | null
+  defaultTargetDistanceKm: number | null
+  defaultDurationMinutes: number | null
+  defaultPaceMinSecPerKm: number | null
+  defaultPaceMaxSecPerKm: number | null
+  defaultHrZone: number | null
+  defaultHrMin: number | null
+  defaultHrMax: number | null
 }
 
 export type PrivateExerciseSumAggregateOutputType = {
@@ -42,6 +49,13 @@ export type PrivateExerciseSumAggregateOutputType = {
   defaultRpe: number | null
   restTimeSecs: number | null
   restBetweenExercisesSecs: number | null
+  defaultTargetDistanceKm: number | null
+  defaultDurationMinutes: number | null
+  defaultPaceMinSecPerKm: number | null
+  defaultPaceMaxSecPerKm: number | null
+  defaultHrZone: number | null
+  defaultHrMin: number | null
+  defaultHrMax: number | null
 }
 
 export type PrivateExerciseMinAggregateOutputType = {
@@ -61,6 +75,14 @@ export type PrivateExerciseMinAggregateOutputType = {
   defaultRpe: number | null
   restTimeSecs: number | null
   restBetweenExercisesSecs: number | null
+  defaultTargetDistanceKm: number | null
+  defaultDurationMinutes: number | null
+  defaultIntensityType: string | null
+  defaultPaceMinSecPerKm: number | null
+  defaultPaceMaxSecPerKm: number | null
+  defaultHrZone: number | null
+  defaultHrMin: number | null
+  defaultHrMax: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -82,6 +104,14 @@ export type PrivateExerciseMaxAggregateOutputType = {
   defaultRpe: number | null
   restTimeSecs: number | null
   restBetweenExercisesSecs: number | null
+  defaultTargetDistanceKm: number | null
+  defaultDurationMinutes: number | null
+  defaultIntensityType: string | null
+  defaultPaceMinSecPerKm: number | null
+  defaultPaceMaxSecPerKm: number | null
+  defaultHrZone: number | null
+  defaultHrMin: number | null
+  defaultHrMax: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -103,6 +133,14 @@ export type PrivateExerciseCountAggregateOutputType = {
   defaultRpe: number
   restTimeSecs: number
   restBetweenExercisesSecs: number
+  defaultTargetDistanceKm: number
+  defaultDurationMinutes: number
+  defaultIntensityType: number
+  defaultPaceMinSecPerKm: number
+  defaultPaceMaxSecPerKm: number
+  defaultHrZone: number
+  defaultHrMin: number
+  defaultHrMax: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -116,6 +154,13 @@ export type PrivateExerciseAvgAggregateInputType = {
   defaultRpe?: true
   restTimeSecs?: true
   restBetweenExercisesSecs?: true
+  defaultTargetDistanceKm?: true
+  defaultDurationMinutes?: true
+  defaultPaceMinSecPerKm?: true
+  defaultPaceMaxSecPerKm?: true
+  defaultHrZone?: true
+  defaultHrMin?: true
+  defaultHrMax?: true
 }
 
 export type PrivateExerciseSumAggregateInputType = {
@@ -125,6 +170,13 @@ export type PrivateExerciseSumAggregateInputType = {
   defaultRpe?: true
   restTimeSecs?: true
   restBetweenExercisesSecs?: true
+  defaultTargetDistanceKm?: true
+  defaultDurationMinutes?: true
+  defaultPaceMinSecPerKm?: true
+  defaultPaceMaxSecPerKm?: true
+  defaultHrZone?: true
+  defaultHrMin?: true
+  defaultHrMax?: true
 }
 
 export type PrivateExerciseMinAggregateInputType = {
@@ -144,6 +196,14 @@ export type PrivateExerciseMinAggregateInputType = {
   defaultRpe?: true
   restTimeSecs?: true
   restBetweenExercisesSecs?: true
+  defaultTargetDistanceKm?: true
+  defaultDurationMinutes?: true
+  defaultIntensityType?: true
+  defaultPaceMinSecPerKm?: true
+  defaultPaceMaxSecPerKm?: true
+  defaultHrZone?: true
+  defaultHrMin?: true
+  defaultHrMax?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -165,6 +225,14 @@ export type PrivateExerciseMaxAggregateInputType = {
   defaultRpe?: true
   restTimeSecs?: true
   restBetweenExercisesSecs?: true
+  defaultTargetDistanceKm?: true
+  defaultDurationMinutes?: true
+  defaultIntensityType?: true
+  defaultPaceMinSecPerKm?: true
+  defaultPaceMaxSecPerKm?: true
+  defaultHrZone?: true
+  defaultHrMin?: true
+  defaultHrMax?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -186,6 +254,14 @@ export type PrivateExerciseCountAggregateInputType = {
   defaultRpe?: true
   restTimeSecs?: true
   restBetweenExercisesSecs?: true
+  defaultTargetDistanceKm?: true
+  defaultDurationMinutes?: true
+  defaultIntensityType?: true
+  defaultPaceMinSecPerKm?: true
+  defaultPaceMaxSecPerKm?: true
+  defaultHrZone?: true
+  defaultHrMin?: true
+  defaultHrMax?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -294,6 +370,14 @@ export type PrivateExerciseGroupByOutputType = {
   defaultRpe: number | null
   restTimeSecs: number | null
   restBetweenExercisesSecs: number | null
+  defaultTargetDistanceKm: number | null
+  defaultDurationMinutes: number | null
+  defaultIntensityType: string | null
+  defaultPaceMinSecPerKm: number | null
+  defaultPaceMaxSecPerKm: number | null
+  defaultHrZone: number | null
+  defaultHrMin: number | null
+  defaultHrMax: number | null
   createdAt: Date
   updatedAt: Date
   _count: PrivateExerciseCountAggregateOutputType | null
@@ -338,6 +422,14 @@ export type PrivateExerciseWhereInput = {
   defaultRpe?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   restTimeSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   restBetweenExercisesSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultTargetDistanceKm?: Prisma.FloatNullableFilter<"PrivateExercise"> | number | null
+  defaultDurationMinutes?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultIntensityType?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  defaultPaceMinSecPerKm?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultPaceMaxSecPerKm?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrZone?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrMin?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrMax?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -361,6 +453,14 @@ export type PrivateExerciseOrderByWithRelationInput = {
   defaultRpe?: Prisma.SortOrderInput | Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultIntensityType?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -387,6 +487,14 @@ export type PrivateExerciseWhereUniqueInput = Prisma.AtLeast<{
   defaultRpe?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   restTimeSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   restBetweenExercisesSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultTargetDistanceKm?: Prisma.FloatNullableFilter<"PrivateExercise"> | number | null
+  defaultDurationMinutes?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultIntensityType?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  defaultPaceMinSecPerKm?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultPaceMaxSecPerKm?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrZone?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrMin?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrMax?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -410,6 +518,14 @@ export type PrivateExerciseOrderByWithAggregationInput = {
   defaultRpe?: Prisma.SortOrderInput | Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrderInput | Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultIntensityType?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PrivateExerciseCountOrderByAggregateInput
@@ -439,6 +555,14 @@ export type PrivateExerciseScalarWhereWithAggregatesInput = {
   defaultRpe?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
   restTimeSecs?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
   restBetweenExercisesSecs?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultTargetDistanceKm?: Prisma.FloatNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultDurationMinutes?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultIntensityType?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
+  defaultPaceMinSecPerKm?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultPaceMaxSecPerKm?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultHrZone?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultHrMin?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
+  defaultHrMax?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PrivateExercise"> | Date | string
 }
@@ -459,6 +583,14 @@ export type PrivateExerciseCreateInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPrivateExercisesInput
@@ -482,6 +614,14 @@ export type PrivateExerciseUncheckedCreateInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedCreateNestedManyWithoutPrivateExerciseInput
@@ -503,6 +643,14 @@ export type PrivateExerciseUpdateInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPrivateExercisesNestedInput
@@ -526,6 +674,14 @@ export type PrivateExerciseUncheckedUpdateInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedUpdateManyWithoutPrivateExerciseNestedInput
@@ -548,6 +704,14 @@ export type PrivateExerciseCreateManyInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -568,6 +732,14 @@ export type PrivateExerciseUpdateManyMutationInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -589,6 +761,14 @@ export type PrivateExerciseUncheckedUpdateManyInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -620,6 +800,14 @@ export type PrivateExerciseCountOrderByAggregateInput = {
   defaultRpe?: Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrder
+  defaultIntensityType?: Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -631,6 +819,13 @@ export type PrivateExerciseAvgOrderByAggregateInput = {
   defaultRpe?: Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrder
 }
 
 export type PrivateExerciseMaxOrderByAggregateInput = {
@@ -650,6 +845,14 @@ export type PrivateExerciseMaxOrderByAggregateInput = {
   defaultRpe?: Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrder
+  defaultIntensityType?: Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -671,6 +874,14 @@ export type PrivateExerciseMinOrderByAggregateInput = {
   defaultRpe?: Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrder
+  defaultIntensityType?: Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -682,6 +893,13 @@ export type PrivateExerciseSumOrderByAggregateInput = {
   defaultRpe?: Prisma.SortOrder
   restTimeSecs?: Prisma.SortOrder
   restBetweenExercisesSecs?: Prisma.SortOrder
+  defaultTargetDistanceKm?: Prisma.SortOrder
+  defaultDurationMinutes?: Prisma.SortOrder
+  defaultPaceMinSecPerKm?: Prisma.SortOrder
+  defaultPaceMaxSecPerKm?: Prisma.SortOrder
+  defaultHrZone?: Prisma.SortOrder
+  defaultHrMin?: Prisma.SortOrder
+  defaultHrMax?: Prisma.SortOrder
 }
 
 export type PrivateExerciseNullableScalarRelationFilter = {
@@ -771,6 +989,14 @@ export type PrivateExerciseCreateWithoutUserInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemCreateNestedManyWithoutPrivateExerciseInput
@@ -792,6 +1018,14 @@ export type PrivateExerciseUncheckedCreateWithoutUserInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedCreateNestedManyWithoutPrivateExerciseInput
@@ -843,6 +1077,14 @@ export type PrivateExerciseScalarWhereInput = {
   defaultRpe?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   restTimeSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   restBetweenExercisesSecs?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultTargetDistanceKm?: Prisma.FloatNullableFilter<"PrivateExercise"> | number | null
+  defaultDurationMinutes?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultIntensityType?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  defaultPaceMinSecPerKm?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultPaceMaxSecPerKm?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrZone?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrMin?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
+  defaultHrMax?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
   createdAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PrivateExercise"> | Date | string
 }
@@ -863,6 +1105,14 @@ export type PrivateExerciseCreateWithoutScheduleItemsInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPrivateExercisesInput
@@ -885,6 +1135,14 @@ export type PrivateExerciseUncheckedCreateWithoutScheduleItemsInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -921,6 +1179,14 @@ export type PrivateExerciseUpdateWithoutScheduleItemsInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPrivateExercisesNestedInput
@@ -943,6 +1209,14 @@ export type PrivateExerciseUncheckedUpdateWithoutScheduleItemsInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -963,6 +1237,14 @@ export type PrivateExerciseCreateManyUserInput = {
   defaultRpe?: number | null
   restTimeSecs?: number | null
   restBetweenExercisesSecs?: number | null
+  defaultTargetDistanceKm?: number | null
+  defaultDurationMinutes?: number | null
+  defaultIntensityType?: string | null
+  defaultPaceMinSecPerKm?: number | null
+  defaultPaceMaxSecPerKm?: number | null
+  defaultHrZone?: number | null
+  defaultHrMin?: number | null
+  defaultHrMax?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -983,6 +1265,14 @@ export type PrivateExerciseUpdateWithoutUserInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUpdateManyWithoutPrivateExerciseNestedInput
@@ -1004,6 +1294,14 @@ export type PrivateExerciseUncheckedUpdateWithoutUserInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleItems?: Prisma.ScheduleItemUncheckedUpdateManyWithoutPrivateExerciseNestedInput
@@ -1025,6 +1323,14 @@ export type PrivateExerciseUncheckedUpdateManyWithoutUserInput = {
   defaultRpe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restTimeSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   restBetweenExercisesSecs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultTargetDistanceKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  defaultDurationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultIntensityType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultPaceMinSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultPaceMaxSecPerKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrZone?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  defaultHrMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1077,6 +1383,14 @@ export type PrivateExerciseSelect<ExtArgs extends runtime.Types.Extensions.Inter
   defaultRpe?: boolean
   restTimeSecs?: boolean
   restBetweenExercisesSecs?: boolean
+  defaultTargetDistanceKm?: boolean
+  defaultDurationMinutes?: boolean
+  defaultIntensityType?: boolean
+  defaultPaceMinSecPerKm?: boolean
+  defaultPaceMaxSecPerKm?: boolean
+  defaultHrZone?: boolean
+  defaultHrMin?: boolean
+  defaultHrMax?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1101,6 +1415,14 @@ export type PrivateExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   defaultRpe?: boolean
   restTimeSecs?: boolean
   restBetweenExercisesSecs?: boolean
+  defaultTargetDistanceKm?: boolean
+  defaultDurationMinutes?: boolean
+  defaultIntensityType?: boolean
+  defaultPaceMinSecPerKm?: boolean
+  defaultPaceMaxSecPerKm?: boolean
+  defaultHrZone?: boolean
+  defaultHrMin?: boolean
+  defaultHrMax?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1123,6 +1445,14 @@ export type PrivateExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   defaultRpe?: boolean
   restTimeSecs?: boolean
   restBetweenExercisesSecs?: boolean
+  defaultTargetDistanceKm?: boolean
+  defaultDurationMinutes?: boolean
+  defaultIntensityType?: boolean
+  defaultPaceMinSecPerKm?: boolean
+  defaultPaceMaxSecPerKm?: boolean
+  defaultHrZone?: boolean
+  defaultHrMin?: boolean
+  defaultHrMax?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1145,11 +1475,19 @@ export type PrivateExerciseSelectScalar = {
   defaultRpe?: boolean
   restTimeSecs?: boolean
   restBetweenExercisesSecs?: boolean
+  defaultTargetDistanceKm?: boolean
+  defaultDurationMinutes?: boolean
+  defaultIntensityType?: boolean
+  defaultPaceMinSecPerKm?: boolean
+  defaultPaceMaxSecPerKm?: boolean
+  defaultHrZone?: boolean
+  defaultHrMin?: boolean
+  defaultHrMax?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PrivateExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "isActive" | "sportType" | "name" | "targetMuscleGroup" | "runningType" | "customNotes" | "gifUrl" | "sourceGymMasterId" | "defaultSets" | "defaultReps" | "defaultWeightKg" | "defaultRpe" | "restTimeSecs" | "restBetweenExercisesSecs" | "createdAt" | "updatedAt", ExtArgs["result"]["privateExercise"]>
+export type PrivateExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "isActive" | "sportType" | "name" | "targetMuscleGroup" | "runningType" | "customNotes" | "gifUrl" | "sourceGymMasterId" | "defaultSets" | "defaultReps" | "defaultWeightKg" | "defaultRpe" | "restTimeSecs" | "restBetweenExercisesSecs" | "defaultTargetDistanceKm" | "defaultDurationMinutes" | "defaultIntensityType" | "defaultPaceMinSecPerKm" | "defaultPaceMaxSecPerKm" | "defaultHrZone" | "defaultHrMin" | "defaultHrMax" | "createdAt" | "updatedAt", ExtArgs["result"]["privateExercise"]>
 export type PrivateExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   scheduleItems?: boolean | Prisma.PrivateExercise$scheduleItemsArgs<ExtArgs>
@@ -1185,6 +1523,14 @@ export type $PrivateExercisePayload<ExtArgs extends runtime.Types.Extensions.Int
     defaultRpe: number | null
     restTimeSecs: number | null
     restBetweenExercisesSecs: number | null
+    defaultTargetDistanceKm: number | null
+    defaultDurationMinutes: number | null
+    defaultIntensityType: string | null
+    defaultPaceMinSecPerKm: number | null
+    defaultPaceMaxSecPerKm: number | null
+    defaultHrZone: number | null
+    defaultHrMin: number | null
+    defaultHrMax: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["privateExercise"]>
@@ -1628,6 +1974,14 @@ export interface PrivateExerciseFieldRefs {
   readonly defaultRpe: Prisma.FieldRef<"PrivateExercise", 'Int'>
   readonly restTimeSecs: Prisma.FieldRef<"PrivateExercise", 'Int'>
   readonly restBetweenExercisesSecs: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultTargetDistanceKm: Prisma.FieldRef<"PrivateExercise", 'Float'>
+  readonly defaultDurationMinutes: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultIntensityType: Prisma.FieldRef<"PrivateExercise", 'String'>
+  readonly defaultPaceMinSecPerKm: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultPaceMaxSecPerKm: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultHrZone: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultHrMin: Prisma.FieldRef<"PrivateExercise", 'Int'>
+  readonly defaultHrMax: Prisma.FieldRef<"PrivateExercise", 'Int'>
   readonly createdAt: Prisma.FieldRef<"PrivateExercise", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PrivateExercise", 'DateTime'>
 }

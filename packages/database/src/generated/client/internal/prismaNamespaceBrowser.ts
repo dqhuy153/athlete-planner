@@ -160,6 +160,14 @@ export const PrivateExerciseScalarFieldEnum = {
   defaultRpe: 'defaultRpe',
   restTimeSecs: 'restTimeSecs',
   restBetweenExercisesSecs: 'restBetweenExercisesSecs',
+  defaultTargetDistanceKm: 'defaultTargetDistanceKm',
+  defaultDurationMinutes: 'defaultDurationMinutes',
+  defaultIntensityType: 'defaultIntensityType',
+  defaultPaceMinSecPerKm: 'defaultPaceMinSecPerKm',
+  defaultPaceMaxSecPerKm: 'defaultPaceMaxSecPerKm',
+  defaultHrZone: 'defaultHrZone',
+  defaultHrMin: 'defaultHrMin',
+  defaultHrMax: 'defaultHrMax',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
