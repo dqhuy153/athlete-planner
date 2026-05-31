@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useTranslations } from 'next-intl';
+ import { useSession } from 'next-auth/react';
+ import { useTranslations, useLocale } from 'next-intl';
 import type { GymExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
 import { ExperienceLevel } from '@athlete-planner/contracts';
 
@@ -11,8 +11,9 @@ interface InstructionsPanelProps {
   locale?: string;
 }
 
-export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsPanelProps) {
+export function InstructionsPanel({ instructions, locale }: InstructionsPanelProps) {
   const t = useTranslations('library');
+  const localeFromHook = useLocale();
   const { data: session } = useSession();
   const userLevel = session?.user?.preferredLevel;
 
@@ -22,9 +23,10 @@ export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsP
 
   const inst = instructions.find((i) => i.level === activeLevel) ?? instructions[0];  if (!inst) return null;
 
-  const localeKey = locale as keyof LocalizedStringArray;
-  const steps: string[] = inst.steps[localeKey] ?? inst.steps.vi ?? inst.steps.en ?? [];
-  const cues: string[] = inst.form_cues[localeKey] ?? inst.form_cues.vi ?? inst.form_cues.en ?? [];
+  // Prefer explicit prop, then route/user locale via hook, finally fall back to 'en'.
+  const lang = ((locale ?? localeFromHook ?? 'en') as string).split('-')[0] as keyof LocalizedStringArray;
+  const steps: string[] = inst.steps[lang] ?? inst.steps.vi ?? inst.steps.en ?? [];
+  const cues: string[] = inst.form_cues[lang] ?? inst.form_cues.vi ?? inst.form_cues.en ?? [];
 
   const hasAdvanced = instructions.some((i) => i.level === ExperienceLevel.ADVANCED);
 
