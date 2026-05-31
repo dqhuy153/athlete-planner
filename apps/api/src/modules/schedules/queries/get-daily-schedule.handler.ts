@@ -1,4 +1,5 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@athlete-planner/database';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { GetDailyScheduleQuery } from './get-daily-schedule.query';
@@ -15,7 +16,7 @@ export class GetDailyScheduleHandler implements IQueryHandler<GetDailyScheduleQu
 
     await this.tierGuard.checkHistoryAccess(userId, dateString);
 
-    return this.prisma.dailySchedule.findUnique({
+    const schedule = await this.prisma.dailySchedule.findUnique({
       where: { userId_dateString: { userId, dateString } },
       include: {
         items: {
@@ -24,5 +25,9 @@ export class GetDailyScheduleHandler implements IQueryHandler<GetDailyScheduleQu
         },
       },
     });
+
+    if (!schedule) throw new NotFoundException('Schedule not found');
+
+    return schedule;
   }
 }

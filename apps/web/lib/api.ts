@@ -223,10 +223,15 @@ class ApiClient {
     );
   }
 
-  getDailySchedule(token: string, dateString: string) {
-    return this.request<DailySchedule | null>(`/schedules/day/${dateString}`, {
-      headers: this.authHeaders(token),
-    });
+  async getDailySchedule(token: string, dateString: string) {
+    try {
+      return await this.request<DailySchedule>(`/schedules/day/${dateString}`, {
+        headers: this.authHeaders(token),
+      });
+    } catch (err) {
+      if (err instanceof Error && err.message.includes('404')) return null;
+      throw err;
+    }
   }
 
   createDailySchedule(token: string, dateString: string) {
