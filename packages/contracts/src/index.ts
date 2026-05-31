@@ -159,6 +159,9 @@ export interface PrivateExercise {
   runningType?: RunningType;
   customNotes: string | null;
   gifUrl: string | null;
+  instructions: string[] | null;
+  workoutStructure: WorkoutPhase[] | null;
+  youtubeEmbedUrl: string | null;
   mediaUrls: string[];
   // Source system exercise (for media inheritance)
   sourceGymMasterId: string | null;

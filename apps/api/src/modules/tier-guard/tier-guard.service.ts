@@ -65,4 +65,15 @@ export class TierGuardService {
       }
     }
   }
+
+  async requireProTier(userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { tier: true },
+    });
+    if (!user) throw new ForbiddenException('User not found');
+    if (user.tier !== UserTier.PRO) {
+      throw new ForbiddenException('PRO tier required');
+    }
+  }
 }

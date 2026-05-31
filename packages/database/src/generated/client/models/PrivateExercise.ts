@@ -68,6 +68,7 @@ export type PrivateExerciseMinAggregateOutputType = {
   runningType: $Enums.RunningType | null
   customNotes: string | null
   gifUrl: string | null
+  youtubeEmbedUrl: string | null
   sourceGymMasterId: string | null
   defaultSets: number | null
   defaultReps: number | null
@@ -97,6 +98,7 @@ export type PrivateExerciseMaxAggregateOutputType = {
   runningType: $Enums.RunningType | null
   customNotes: string | null
   gifUrl: string | null
+  youtubeEmbedUrl: string | null
   sourceGymMasterId: string | null
   defaultSets: number | null
   defaultReps: number | null
@@ -126,6 +128,9 @@ export type PrivateExerciseCountAggregateOutputType = {
   runningType: number
   customNotes: number
   gifUrl: number
+  instructions: number
+  workoutStructure: number
+  youtubeEmbedUrl: number
   mediaUrls: number
   sourceGymMasterId: number
   defaultSets: number
@@ -190,6 +195,7 @@ export type PrivateExerciseMinAggregateInputType = {
   runningType?: true
   customNotes?: true
   gifUrl?: true
+  youtubeEmbedUrl?: true
   sourceGymMasterId?: true
   defaultSets?: true
   defaultReps?: true
@@ -219,6 +225,7 @@ export type PrivateExerciseMaxAggregateInputType = {
   runningType?: true
   customNotes?: true
   gifUrl?: true
+  youtubeEmbedUrl?: true
   sourceGymMasterId?: true
   defaultSets?: true
   defaultReps?: true
@@ -248,6 +255,9 @@ export type PrivateExerciseCountAggregateInputType = {
   runningType?: true
   customNotes?: true
   gifUrl?: true
+  instructions?: true
+  workoutStructure?: true
+  youtubeEmbedUrl?: true
   mediaUrls?: true
   sourceGymMasterId?: true
   defaultSets?: true
@@ -365,6 +375,9 @@ export type PrivateExerciseGroupByOutputType = {
   runningType: $Enums.RunningType | null
   customNotes: string | null
   gifUrl: string | null
+  instructions: runtime.JsonValue | null
+  workoutStructure: runtime.JsonValue | null
+  youtubeEmbedUrl: string | null
   mediaUrls: string[]
   sourceGymMasterId: string | null
   defaultSets: number | null
@@ -418,6 +431,9 @@ export type PrivateExerciseWhereInput = {
   runningType?: Prisma.EnumRunningTypeNullableFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  instructions?: Prisma.JsonNullableFilter<"PrivateExercise">
+  workoutStructure?: Prisma.JsonNullableFilter<"PrivateExercise">
+  youtubeEmbedUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   mediaUrls?: Prisma.StringNullableListFilter<"PrivateExercise">
   sourceGymMasterId?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   defaultSets?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
@@ -450,6 +466,9 @@ export type PrivateExerciseOrderByWithRelationInput = {
   runningType?: Prisma.SortOrderInput | Prisma.SortOrder
   customNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  instructions?: Prisma.SortOrderInput | Prisma.SortOrder
+  workoutStructure?: Prisma.SortOrderInput | Prisma.SortOrder
+  youtubeEmbedUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mediaUrls?: Prisma.SortOrder
   sourceGymMasterId?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultSets?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -485,6 +504,9 @@ export type PrivateExerciseWhereUniqueInput = Prisma.AtLeast<{
   runningType?: Prisma.EnumRunningTypeNullableFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  instructions?: Prisma.JsonNullableFilter<"PrivateExercise">
+  workoutStructure?: Prisma.JsonNullableFilter<"PrivateExercise">
+  youtubeEmbedUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   mediaUrls?: Prisma.StringNullableListFilter<"PrivateExercise">
   sourceGymMasterId?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   defaultSets?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
@@ -517,6 +539,9 @@ export type PrivateExerciseOrderByWithAggregationInput = {
   runningType?: Prisma.SortOrderInput | Prisma.SortOrder
   customNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  instructions?: Prisma.SortOrderInput | Prisma.SortOrder
+  workoutStructure?: Prisma.SortOrderInput | Prisma.SortOrder
+  youtubeEmbedUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mediaUrls?: Prisma.SortOrder
   sourceGymMasterId?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultSets?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -555,6 +580,9 @@ export type PrivateExerciseScalarWhereWithAggregatesInput = {
   runningType?: Prisma.EnumRunningTypeNullableWithAggregatesFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
+  instructions?: Prisma.JsonNullableWithAggregatesFilter<"PrivateExercise">
+  workoutStructure?: Prisma.JsonNullableWithAggregatesFilter<"PrivateExercise">
+  youtubeEmbedUrl?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
   mediaUrls?: Prisma.StringNullableListFilter<"PrivateExercise">
   sourceGymMasterId?: Prisma.StringNullableWithAggregatesFilter<"PrivateExercise"> | string | null
   defaultSets?: Prisma.IntNullableWithAggregatesFilter<"PrivateExercise"> | number | null
@@ -584,6 +612,9 @@ export type PrivateExerciseCreateInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -616,6 +647,9 @@ export type PrivateExerciseUncheckedCreateInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -646,6 +680,9 @@ export type PrivateExerciseUpdateInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -678,6 +715,9 @@ export type PrivateExerciseUncheckedUpdateInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -709,6 +749,9 @@ export type PrivateExerciseCreateManyInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -738,6 +781,9 @@ export type PrivateExerciseUpdateManyMutationInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -768,6 +814,9 @@ export type PrivateExerciseUncheckedUpdateManyInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -808,6 +857,9 @@ export type PrivateExerciseCountOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   customNotes?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  instructions?: Prisma.SortOrder
+  workoutStructure?: Prisma.SortOrder
+  youtubeEmbedUrl?: Prisma.SortOrder
   mediaUrls?: Prisma.SortOrder
   sourceGymMasterId?: Prisma.SortOrder
   defaultSets?: Prisma.SortOrder
@@ -854,6 +906,7 @@ export type PrivateExerciseMaxOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   customNotes?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  youtubeEmbedUrl?: Prisma.SortOrder
   sourceGymMasterId?: Prisma.SortOrder
   defaultSets?: Prisma.SortOrder
   defaultReps?: Prisma.SortOrder
@@ -883,6 +936,7 @@ export type PrivateExerciseMinOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   customNotes?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  youtubeEmbedUrl?: Prisma.SortOrder
   sourceGymMasterId?: Prisma.SortOrder
   defaultSets?: Prisma.SortOrder
   defaultReps?: Prisma.SortOrder
@@ -1007,6 +1061,9 @@ export type PrivateExerciseCreateWithoutUserInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -1037,6 +1094,9 @@ export type PrivateExerciseUncheckedCreateWithoutUserInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -1097,6 +1157,9 @@ export type PrivateExerciseScalarWhereInput = {
   runningType?: Prisma.EnumRunningTypeNullableFilter<"PrivateExercise"> | $Enums.RunningType | null
   customNotes?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
+  instructions?: Prisma.JsonNullableFilter<"PrivateExercise">
+  workoutStructure?: Prisma.JsonNullableFilter<"PrivateExercise">
+  youtubeEmbedUrl?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   mediaUrls?: Prisma.StringNullableListFilter<"PrivateExercise">
   sourceGymMasterId?: Prisma.StringNullableFilter<"PrivateExercise"> | string | null
   defaultSets?: Prisma.IntNullableFilter<"PrivateExercise"> | number | null
@@ -1126,6 +1189,9 @@ export type PrivateExerciseCreateWithoutScheduleItemsInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -1157,6 +1223,9 @@ export type PrivateExerciseUncheckedCreateWithoutScheduleItemsInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -1202,6 +1271,9 @@ export type PrivateExerciseUpdateWithoutScheduleItemsInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1233,6 +1305,9 @@ export type PrivateExerciseUncheckedUpdateWithoutScheduleItemsInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1262,6 +1337,9 @@ export type PrivateExerciseCreateManyUserInput = {
   runningType?: $Enums.RunningType | null
   customNotes?: string | null
   gifUrl?: string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: string | null
   mediaUrls?: Prisma.PrivateExerciseCreatemediaUrlsInput | string[]
   sourceGymMasterId?: string | null
   defaultSets?: number | null
@@ -1291,6 +1369,9 @@ export type PrivateExerciseUpdateWithoutUserInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1321,6 +1402,9 @@ export type PrivateExerciseUncheckedUpdateWithoutUserInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1351,6 +1435,9 @@ export type PrivateExerciseUncheckedUpdateManyWithoutUserInput = {
   runningType?: Prisma.NullableEnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType | null
   customNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  workoutStructure?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrls?: Prisma.PrivateExerciseUpdatemediaUrlsInput | string[]
   sourceGymMasterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1412,6 +1499,9 @@ export type PrivateExerciseSelect<ExtArgs extends runtime.Types.Extensions.Inter
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  instructions?: boolean
+  workoutStructure?: boolean
+  youtubeEmbedUrl?: boolean
   mediaUrls?: boolean
   sourceGymMasterId?: boolean
   defaultSets?: boolean
@@ -1445,6 +1535,9 @@ export type PrivateExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  instructions?: boolean
+  workoutStructure?: boolean
+  youtubeEmbedUrl?: boolean
   mediaUrls?: boolean
   sourceGymMasterId?: boolean
   defaultSets?: boolean
@@ -1476,6 +1569,9 @@ export type PrivateExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  instructions?: boolean
+  workoutStructure?: boolean
+  youtubeEmbedUrl?: boolean
   mediaUrls?: boolean
   sourceGymMasterId?: boolean
   defaultSets?: boolean
@@ -1507,6 +1603,9 @@ export type PrivateExerciseSelectScalar = {
   runningType?: boolean
   customNotes?: boolean
   gifUrl?: boolean
+  instructions?: boolean
+  workoutStructure?: boolean
+  youtubeEmbedUrl?: boolean
   mediaUrls?: boolean
   sourceGymMasterId?: boolean
   defaultSets?: boolean
@@ -1527,7 +1626,7 @@ export type PrivateExerciseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PrivateExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "isActive" | "sportType" | "name" | "targetMuscleGroup" | "runningType" | "customNotes" | "gifUrl" | "mediaUrls" | "sourceGymMasterId" | "defaultSets" | "defaultReps" | "defaultWeightKg" | "defaultRpe" | "restTimeSecs" | "restBetweenExercisesSecs" | "defaultTargetDistanceKm" | "defaultDurationMinutes" | "defaultIntensityType" | "defaultPaceMinSecPerKm" | "defaultPaceMaxSecPerKm" | "defaultHrZone" | "defaultHrMin" | "defaultHrMax" | "createdAt" | "updatedAt", ExtArgs["result"]["privateExercise"]>
+export type PrivateExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "isActive" | "sportType" | "name" | "targetMuscleGroup" | "runningType" | "customNotes" | "gifUrl" | "instructions" | "workoutStructure" | "youtubeEmbedUrl" | "mediaUrls" | "sourceGymMasterId" | "defaultSets" | "defaultReps" | "defaultWeightKg" | "defaultRpe" | "restTimeSecs" | "restBetweenExercisesSecs" | "defaultTargetDistanceKm" | "defaultDurationMinutes" | "defaultIntensityType" | "defaultPaceMinSecPerKm" | "defaultPaceMaxSecPerKm" | "defaultHrZone" | "defaultHrMin" | "defaultHrMax" | "createdAt" | "updatedAt", ExtArgs["result"]["privateExercise"]>
 export type PrivateExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   scheduleItems?: boolean | Prisma.PrivateExercise$scheduleItemsArgs<ExtArgs>
@@ -1556,6 +1655,9 @@ export type $PrivateExercisePayload<ExtArgs extends runtime.Types.Extensions.Int
     runningType: $Enums.RunningType | null
     customNotes: string | null
     gifUrl: string | null
+    instructions: runtime.JsonValue | null
+    workoutStructure: runtime.JsonValue | null
+    youtubeEmbedUrl: string | null
     mediaUrls: string[]
     sourceGymMasterId: string | null
     defaultSets: number | null
@@ -2008,6 +2110,9 @@ export interface PrivateExerciseFieldRefs {
   readonly runningType: Prisma.FieldRef<"PrivateExercise", 'RunningType'>
   readonly customNotes: Prisma.FieldRef<"PrivateExercise", 'String'>
   readonly gifUrl: Prisma.FieldRef<"PrivateExercise", 'String'>
+  readonly instructions: Prisma.FieldRef<"PrivateExercise", 'Json'>
+  readonly workoutStructure: Prisma.FieldRef<"PrivateExercise", 'Json'>
+  readonly youtubeEmbedUrl: Prisma.FieldRef<"PrivateExercise", 'String'>
   readonly mediaUrls: Prisma.FieldRef<"PrivateExercise", 'String[]'>
   readonly sourceGymMasterId: Prisma.FieldRef<"PrivateExercise", 'String'>
   readonly defaultSets: Prisma.FieldRef<"PrivateExercise", 'Int'>
