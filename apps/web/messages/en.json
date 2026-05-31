@@ -425,6 +425,8 @@
     "setsLabel": "sets",
     "repsLabel": "reps",
     "viewGuide": "View guide",
+    "viewMedia": "View References",
+    "mediaSheetTitle": "Media References",
     "saveShare": "Save & Share",
     "savingImage": "Saving...",
     "saveImageError": "Could not save image",
@@ -508,5 +510,13 @@
     "paceHint": "Decimal format: 7.5 = 7 min 30 sec per km",
     "startTraining": "Start Training",
     "skipForNow": "Skip for now"
+  },
+  "mediaUrls": {
+    "sectionTitle": "Media References",
+    "urlPlaceholder": "Paste YouTube, Facebook, Instagram, TikTok link…",
+    "addUrl": "Add",
+    "removeUrl": "Remove link",
+    "invalidUrl": "Invalid URL",
+    "duplicateUrl": "This URL is already in the list"
   }
 }

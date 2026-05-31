@@ -425,6 +425,8 @@
     "setsLabel": "set",
     "repsLabel": "rep",
     "viewGuide": "Xem hướng dẫn",
+    "viewMedia": "Xem tư liệu",
+    "mediaSheetTitle": "Tư liệu tham khảo",
     "saveShare": "Lưu & Chia sẻ",
     "savingImage": "Đang lưu...",
     "saveImageError": "Không lưu được ảnh",
@@ -508,5 +510,13 @@
     "paceHint": "Định dạng số thập phân: 7.5 = 7 phút 30 giây mỗi km",
     "startTraining": "Bắt đầu tập",
     "skipForNow": "Bỏ qua"
+  },
+  "mediaUrls": {
+    "sectionTitle": "Tư liệu tham khảo",
+    "urlPlaceholder": "Dán link YouTube, Facebook, Instagram, TikTok…",
+    "addUrl": "Thêm",
+    "removeUrl": "Xoá link",
+    "invalidUrl": "Link không hợp lệ",
+    "duplicateUrl": "Link này đã có trong danh sách"
   }
 }
