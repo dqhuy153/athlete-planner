@@ -31,8 +31,9 @@ export default function UsersPage() {
       const res = await getUsers(session!.accessToken, { page, limit: LIMIT, search });
       setUsers(res.users);
       setTotal(res.total);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -43,8 +44,9 @@ export default function UsersPage() {
     try {
       await updateUserRole(session.accessToken, userId, role);
       loadUsers();
-    } catch (e: any) {
-      push({ title: e.message || 'Failed to update role', tone: 'error' });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to update role';
+      push({ title: message, tone: 'error' });
     }
   }
 

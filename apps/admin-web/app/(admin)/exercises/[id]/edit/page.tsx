@@ -14,7 +14,7 @@ import {
 import { GymExerciseWizard, gymFormToPayload } from '@/components/exercises/GymExerciseWizard';
 import { RunningExerciseWizard, runningFormToPayload } from '@/components/exercises/RunningExerciseWizard';
 import type { GymExerciseFormValues, RunningExerciseFormValues } from '@/components/exercises/schemas';
-import type { GymExerciseMaster, RunningExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster, LocalizedStringArray, WorkoutPhase, WorkoutPhaseType } from '@athlete-planner/contracts';
 import { ExperienceLevel, MuscleGroup, RunningType } from '@athlete-planner/contracts';
 
 type ExerciseType = 'gym' | 'running';
@@ -102,7 +102,10 @@ export default function EditExercisePage({ params }: PageProps) {
            const instructionsData = ex.instructions as LocalizedStringArray | undefined;
            const enArr: string[] = instructionsData?.en ?? [];
            const viArr: string[] = instructionsData?.vi ?? [];
-           const structure: any[] = Array.isArray(ex.workoutStructure) ? ex.workoutStructure : [];
+            const structure: WorkoutPhase[] = (Array.isArray(ex.workoutStructure) ? ex.workoutStructure : []).map(p => ({
+              ...p,
+              type: p.type as WorkoutPhaseType,
+            }));
 
           // Helper function to generate a default phase name from phase type
           const getPhaseName = (type: string): string => {
@@ -146,8 +149,9 @@ export default function EditExercisePage({ params }: PageProps) {
              })),
            });
         }
-      } catch (err: any) {
-        setError(err.message || 'Failed to load exercise');
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Failed to load exercise';
+        setError(message);
       } finally {
         setLoading(false);
       }

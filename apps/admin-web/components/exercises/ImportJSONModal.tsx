@@ -50,7 +50,7 @@ export function ImportJSONModal({
     setError('');
     try {
       const text = await file.text();
-      let parsed: any;
+      let parsed: unknown;
       try {
         parsed = JSON.parse(text);
       } catch {
@@ -80,8 +80,9 @@ export function ImportJSONModal({
         .map(({ i }) => i);
       setSelected(new Set(selectableIndices));
       setStep('preview');
-    } catch (err: any) {
-      setError(err.message || 'Validation failed');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Validation failed';
+      setError(message);
     } finally {
       setValidating(false);
     }
@@ -105,8 +106,9 @@ export function ImportJSONModal({
       setResult(res);
       setStep('done');
       onImported();
-    } catch (err: any) {
-      setError(err.message || 'Import failed');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Import failed';
+      setError(message);
     } finally {
       setImporting(false);
     }

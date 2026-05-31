@@ -23,8 +23,9 @@ export function AdminLoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-    } catch (error: any) {
-      push({ title: 'Login failed', description: error?.message || 'Invalid credentials.', tone: 'error' });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Invalid credentials.';
+      push({ title: 'Login failed', description: message, tone: 'error' });
     } finally {
       setLoading(false);
     }

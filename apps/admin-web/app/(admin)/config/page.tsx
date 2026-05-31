@@ -170,8 +170,9 @@ export default function ConfigPage() {
       for (const e of entries) map[e.key] = e.value;
       setConfigMap(map);
       setPendingMap(map);
-    } catch (e: any) {
-      setError(e.message || 'Failed to load config.');
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to load config.';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -196,8 +197,9 @@ export default function ConfigPage() {
       setConfigMap((m) => ({ ...m, [def.key]: value }));
       setSavedKeys((s) => new Set([...s, def.key]));
       setTimeout(() => setSavedKeys((s) => { const n = new Set(s); n.delete(def.key); return n; }), 2000);
-    } catch (e: any) {
-      setError(e.message || `Failed to save ${def.key}.`);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : `Failed to save ${def.key}.`;
+      setError(message);
     } finally {
       setSaving(null);
     }

@@ -85,8 +85,9 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
         .filter(({ item }) => item.preview.status !== 'error')
         .map(({ i }) => i);
       setSelected(new Set(selectableIndices));
-    } catch (err: any) {
-      setError(err.message || 'Generation failed');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Generation failed';
+      setError(message);
     } finally {
       setGenerating(false);
     }
@@ -107,8 +108,9 @@ function AIGenerateModal({ tab, accessToken, onClose, onInserted }: AIGenerateMo
           ));
       onInserted();
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'Insert failed');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Insert failed';
+      setError(message);
     } finally {
       setInserting(false);
     }

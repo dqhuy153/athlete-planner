@@ -48,7 +48,7 @@ export default function AssetsPage() {
     try {
       const res = await getAssets(session!.accessToken);
       setAssets(res);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.warn(e);
     } finally {
       setLoading(false);
@@ -116,8 +116,9 @@ export default function AssetsPage() {
       }
       setUploadState((s) => ({ ...s, progress: '' }));
       loadAssets();
-    } catch (e: any) {
-      push({ title: e.message || 'Upload failed', tone: 'error' });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Upload failed';
+      push({ title: message, tone: 'error' });
     } finally {
       setUploadState((s) => ({ ...s, uploading: false, dragging: false, progress: '' }));
     }
@@ -155,8 +156,9 @@ export default function AssetsPage() {
       await deleteAsset(session.accessToken, id);
       setPreview(null);
       loadAssets();
-    } catch (e: any) {
-      push({ title: e.message || 'Failed to delete asset', tone: 'error' });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to delete asset';
+      push({ title: message, tone: 'error' });
     } finally {
       setDeleting(false);
       setConfirmDeleteId(null);

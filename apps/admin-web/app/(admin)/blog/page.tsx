@@ -65,7 +65,7 @@ export default function BlogPage() {
       ]);
       setPosts(postsRes?.posts ?? []);
       setCategories(catsRes ?? []);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.warn(e);
     } finally {
       setLoading(false);
@@ -145,8 +145,9 @@ export default function BlogPage() {
       }
       closeEditor();
       loadData();
-    } catch (e: any) {
-      setError(e.message || 'Failed to save post.');
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to save post.';
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -162,8 +163,9 @@ export default function BlogPage() {
     try {
       await deleteBlogPost(session.accessToken, id);
       loadData();
-    } catch (e: any) {
-      push({ title: e.message || 'Failed to delete post', tone: 'error' });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to delete post';
+      push({ title: message, tone: 'error' });
     } finally {
       setDeleting(false);
       setConfirmDelete(null);
@@ -208,8 +210,9 @@ export default function BlogPage() {
       setShowCatForm(false);
       setEditingCat(null);
       loadData();
-    } catch (e: any) {
-      push({ title: e.message || 'Failed to save category', tone: 'error' });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to save category';
+      push({ title: message, tone: 'error' });
     }
   }
 
@@ -223,8 +226,9 @@ export default function BlogPage() {
     try {
       await deleteBlogCategory(session.accessToken, id);
       loadData();
-    } catch (e: any) {
-      push({ title: e.message || 'Failed to delete category', tone: 'error' });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to delete category';
+      push({ title: message, tone: 'error' });
     } finally {
       setDeleting(false);
       setConfirmDelete(null);

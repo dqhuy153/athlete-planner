@@ -87,8 +87,9 @@ export default function ExercisesPage() {
           : `Added ${result.created} exercise${result.created !== 1 ? 's' : ''} (${result.skipped} already existed).`,
       );
       await loadExercises();
-    } catch (err: any) {
-      setSeedMsg(err.message || 'Seed failed');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Seed failed';
+      setSeedMsg(message);
     } finally {
       setSeeding(false);
       setTimeout(() => setSeedMsg(''), 5000);
@@ -102,9 +103,10 @@ export default function ExercisesPage() {
     try {
       const usage = await getExerciseUsage(session.accessToken, id, type);
       setDeleteModal((prev) => (prev ? { ...prev, usage, loading: false } : null));
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to load usage';
       setDeleteModal((prev) =>
-        prev ? { ...prev, loading: false, error: err.message || 'Failed to load usage' } : null,
+        prev ? { ...prev, loading: false, error: message } : null,
       );
     }
   }
@@ -116,9 +118,10 @@ export default function ExercisesPage() {
       await deleteExercise(session.accessToken, deleteModal.id, deleteModal.type, force);
       setDeleteModal(null);
       await loadExercises();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Delete failed';
       setDeleteModal((prev) =>
-        prev ? { ...prev, deleting: false, error: err.message || 'Delete failed' } : null,
+        prev ? { ...prev, deleting: false, error: message } : null,
       );
     }
   }
