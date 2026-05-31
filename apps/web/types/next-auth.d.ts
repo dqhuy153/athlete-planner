@@ -16,6 +16,7 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT {
     accessToken: string;
+    // JWT stores userId; mapped to session.user.id in the session callback
     userId: string;
     role: string;
     tier: UserTier;

@@ -24,6 +24,7 @@ const providers = [
  */
 if (isDev) {
   providers.push(
+    // @ts-expect-error — next-auth v5 beta: providers array type mismatch with CredentialsProvider
     CredentialsProvider({
       id: 'dev-credentials',
       name: 'Dev Login',
@@ -56,7 +57,7 @@ if (isDev) {
           return null;
         }
       },
-    }) as any,
+    }),
   );
 }
 
@@ -79,7 +80,9 @@ const authConfig = NextAuth({
           const data = await res.json();
           if (!res.ok) return false;
 
-          const customUser = user as typeof user & { accessToken: string; nestUser: Record<string, unknown> };
+          // next-auth v5 beta: custom user fields from authorize() and signIn() callback
+        // next-auth v5 beta: custom user fields from authorize() and signIn() callback
+        const customUser = user as typeof user & { accessToken: string; nestUser: Record<string, unknown> };
           customUser.accessToken = data.accessToken;
           customUser.nestUser = data.user;
           return true;
@@ -114,6 +117,7 @@ const authConfig = NextAuth({
       return token;
     },
     async session({ session, token }) {
+      // next-auth v5 beta: token parameter type doesn't reflect JWT augmentation directly
       const t = token as typeof token & {
         accessToken: string;
         userId: string;
