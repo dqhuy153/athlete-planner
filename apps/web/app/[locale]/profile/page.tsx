@@ -22,6 +22,7 @@ import { cn, useToast } from '@athlete-planner/ui'
 import { Button } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { AuthGate } from '@/components/AuthGate'
+import { LogoBrand } from '@/components/brand/LogoBrand'
 
 export default function ProfilePage() {
   const t = useTranslations('profile')
@@ -93,6 +94,9 @@ export default function ProfilePage() {
 
   return (
     <AuthGate message={t('authRequired')}>
+      <div className='flex items-center justify-center mb-8 mt-4'>
+        <LogoBrand variant='full' size='md' interactive />
+      </div>
       <div className='mx-auto max-w-lg px-4 py-6 md:py-10'>
         <div className='mb-6 flex items-center gap-4'>
           {user?.image ? (
@@ -116,14 +120,16 @@ export default function ProfilePage() {
               {user?.email}
             </p>
             {isPro ? (
-              <div className="p-[1.5px] rounded-full bg-gradient-to-r from-cyan-400 to-[#00D4AA] mt-1 inline-block">
-                <div className="flex items-center gap-1 rounded-full bg-surface-1 px-2 py-0.5">
-                  <Zap size={10} aria-hidden className="text-accent" />
-                  <span className="text-xs font-mono font-bold text-accent">PRO</span>
+              <div className='p-[1.5px] rounded-full bg-gradient-to-r from-cyan-400 to-[#00D4AA] mt-1 inline-block'>
+                <div className='flex items-center gap-1 rounded-full bg-surface-1 px-2 py-0.5'>
+                  <Zap size={10} aria-hidden className='text-accent' />
+                  <span className='text-xs font-mono font-bold text-accent'>
+                    PRO
+                  </span>
                 </div>
               </div>
             ) : (
-              <span className="mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold bg-surface-2 text-text-tertiary">
+              <span className='mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold bg-surface-2 text-text-tertiary'>
                 FREE
               </span>
             )}
@@ -141,7 +147,12 @@ export default function ProfilePage() {
                   {t('upgradeBenefits')}
                 </p>
               </div>
-              <Button variant="accent" size="sm" asChild className="shrink-0 gap-1.5">
+              <Button
+                variant='accent'
+                size='sm'
+                asChild
+                className='shrink-0 gap-1.5'
+              >
                 <Link href={`/${locale}/upgrade`}>
                   <Zap size={14} aria-hidden />
                   {t('upgrade')}

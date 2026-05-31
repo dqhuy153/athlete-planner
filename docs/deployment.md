@@ -1,6 +1,6 @@
 # Production Deployment Guide
 
-> Step-by-step setup for deploying The Sport Notebook Planner to production.
+> Step-by-step setup for deploying The Athlete Planner to production.
 > **Stack:** NestJS API on Railway · Next.js web + admin on Vercel · PostgreSQL + Redis on Railway · Cloudflare R2 for storage.
 
 ---

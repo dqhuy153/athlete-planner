@@ -1,10 +1,10 @@
-# Project Memory - The Sport Notebook Planner
+# Project Memory - The Athlete Planner
 
 > AI context file. Read this FIRST at the start of every session.
 
 ## Identity
 
-**Product:** The Sport Notebook Planner - A digital training notebook for hybrid athletes (Gym + Running) who use Garmin devices.
+**Product:** The Athlete Planner - A digital training notebook for hybrid athletes (Gym + Running) who use Garmin devices.
 
 **Stack:** Turborepo | Next.js 16.2.6 (App Router) | NestJS 11 (CQRS) | PostgreSQL (Prisma v7.8.0) | In-memory cache (no Redis)
 
@@ -453,7 +453,7 @@ modules/
 - `library/my/new/page.tsx`: Locale detection `window.location.pathname.split...` → `useParams()` (hydration-safe); step 2 hint + skip button + step 3 heading/hint/submit/skip all use `tPrivate()` keys; config field labels use `tPrivate()` keys
 - `ImportJSONModal.tsx`: Full `useTranslations('importJSON')` rewrite — all Vietnamese hardcodes replaced
 - `AICreateExerciseModal.tsx`: Full `useTranslations('aiCreate')` rewrite — all Vietnamese hardcodes replaced
-- `WorkoutComplete.tsx`: `'Sport Notebook'` → `tc('appName')` via `useTranslations('common')`
+- `WorkoutComplete.tsx`: `'Athlete Planner'` → `tc('appName')` via `useTranslations('common')`
 - `LibrarySearch.tsx`: `'Searching...'` → `t('searching')` from library namespace
 - `privacy/page.tsx` + `terms/page.tsx`: `getTranslations({ locale, namespace: 'common' })` from `next-intl/server`; breadcrumb `'Home'/'Trang chủ'` → `tc('home')`
 

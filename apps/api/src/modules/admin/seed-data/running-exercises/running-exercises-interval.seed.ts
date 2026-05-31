@@ -1,5 +1,5 @@
 /**
- * Interval Running Exercise seed data for the Sport Notebook Planner.
+ * Interval Running Exercise seed data for the Athlete Planner.
  *
  * Includes high-intensity interval training workouts with detailed phase information.
  * Mapped to RunningExerciseMaster domain model.

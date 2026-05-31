@@ -74,7 +74,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     description: 'General application metadata.',
     icon: <Info size={18} className="text-on-surface-variant" />,
     items: [
-      { key: 'APP_NAME', label: 'Application Name', description: 'Display name used in the app UI and emails.', type: 'string', defaultValue: 'The Sport Notebook' },
+      { key: 'APP_NAME', label: 'Application Name', description: 'Display name used in the app UI and emails.', type: 'string', defaultValue: 'The Athlete Planner' },
     ],
   },
 ];
@@ -219,7 +219,7 @@ export default function ConfigPage() {
     <div className="p-6 lg:p-8 max-w-3xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-foreground">App Config</h1>
-        <p className="text-sm text-on-surface-variant mt-1">Runtime configuration for The Sport Notebook.</p>
+        <p className="text-sm text-on-surface-variant mt-1">Runtime configuration for The Athlete Planner.</p>
       </div>
 
       {error && (

@@ -4,11 +4,11 @@ _Last updated: May 2026_
 
 ## 1. Acceptance of Terms
 
-By using Sport Notebook ("Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.
+By using Athlete Planner ("Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.
 
 ## 2. Description of Service
 
-Sport Notebook is a training schedule planner for hybrid athletes (Gym + Running). The Service allows users to:
+Athlete Planner is a training schedule planner for hybrid athletes (Gym + Running). The Service allows users to:
 
 - Plan and log weekly training schedules
 - Manage personal exercises
@@ -41,11 +41,11 @@ Payment gateway: PayOS (Vietnam bank accounts only).
 
 ## 6. Intellectual Property
 
-Exercise library content, videos, and technique guides are owned by or licensed to Sport Notebook. Training schedule data entered by users is owned by the user.
+Exercise library content, videos, and technique guides are owned by or licensed to Athlete Planner. Training schedule data entered by users is owned by the user.
 
 ## 7. Limitation of Liability
 
-Sport Notebook is provided "as is." We are not responsible for injuries or damages arising from the use of training plans created through the Service.
+Athlete Planner is provided "as is." We are not responsible for injuries or damages arising from the use of training plans created through the Service.
 
 ## 8. Changes to Terms
 

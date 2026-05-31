@@ -24,7 +24,7 @@ const DEFAULT_CONFIGS = [
   { key: 'PRO_PRICE_VND', value: 199000, label: 'PRO tier price in VND' },
   { key: 'CURRENCY', value: 'VND', label: 'Payment currency code' },
   // App Info
-  { key: 'APP_NAME', value: 'The Sport Notebook', label: 'Application display name' },
+  { key: 'APP_NAME', value: 'The Athlete Planner', label: 'Application display name' },
 ];
 
 @Controller('admin/config')

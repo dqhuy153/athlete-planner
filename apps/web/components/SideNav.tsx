@@ -109,7 +109,7 @@ export function SideNav({ locale }: SideNavProps) {
           <Activity size={16} className="text-accent" aria-hidden />
         </div>
         <span className="hidden lg:block text-sm font-bold tracking-tight text-text-primary truncate">
-          Sport Notebook
+          Athlete Planner
         </span>
       </div>
 

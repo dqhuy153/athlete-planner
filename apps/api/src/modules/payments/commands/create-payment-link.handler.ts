@@ -30,7 +30,7 @@ export class CreatePaymentLinkHandler
       orderCode,
       amount: PRO_PRICE_VND,
       description: 'PRO Upgrade',
-      items: [{ name: 'Sport Notebook PRO', quantity: 1, price: PRO_PRICE_VND }],
+      items: [{ name: 'Athlete Planner PRO', quantity: 1, price: PRO_PRICE_VND }],
       returnUrl: cmd.returnUrl,
       cancelUrl: cmd.cancelUrl,
     });

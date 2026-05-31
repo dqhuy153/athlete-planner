@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Sport Notebook",
+    "appName": "Athlete Planner",
     "loading": "Đang tải...",
     "error": "Có lỗi xảy ra",
     "retry": "Thử lại",
@@ -253,6 +253,8 @@
     "free": "Miễn phí",
     "pro": "Pro",
     "upgrade": "Nâng cấp PRO",
+    "upgradeTitle": "Nâng cấp lên PRO",
+    "upgradeBenefits": "Bài tập không giới hạn, lịch sử đầy đủ & xuất Garmin",
     "alreadyPro": "Bạn đã có PRO",
     "loading": "Đang chuẩn bị thanh toán...",
     "successTitle": "Chào mừng đến PRO",
@@ -267,7 +269,18 @@
     "internationalComingSoon": "Thanh toán quốc tế sắp ra mắt. Hiện chỉ hỗ trợ tài khoản ngân hàng Việt Nam.",
     "oneTimeDetail": "Thanh toán một lần — không đăng ký, không phí định kỳ",
     "internationalGatewaySoon": "Cổng thanh toán quốc tế sắp ra mắt",
-    "paymentError": "Khởi tạo thanh toán thất bại. Vui lòng thử lại."
+    "paymentError": "Khởi tạo thanh toán thất bại. Vui lòng thử lại.",
+    "authRequired": "Đăng nhập để quản lý hồ sơ của bạn",
+    "saveFailed": "Lưu thất bại",
+    "instructionLevel": "Trình độ hướng dẫn",
+    "instructionLevelHint": "Ảnh hưởng đến cách giải thích bài tập trong hướng dẫn",
+    "instructionLevelBeginner": "Cơ bản",
+    "instructionLevelAdvanced": "Nâng cao",
+    "instructionLevelSaved": "Đã lưu",
+    "language": "Ngôn ngữ",
+    "langEn": "English",
+    "langVi": "Tiếng Việt",
+    "signOut": "Đăng xuất"
   },
   "tier": {
     "upgradeTitle": "Nâng cấp Pro",
@@ -296,7 +309,12 @@
     "cancelSubtitle": "Tài khoản của bạn vẫn ở gói miễn phí.",
     "cancelCta": "Quay lại nâng cấp",
     "promoHint": "Nâng cấp một lần, sử dụng mãi mãi.",
-    "socialProof": "Được tin dùng bởi các vận động viên kết hợp gym + chạy bộ"
+    "socialProof": "Được tin dùng bởi các vận động viên kết hợp gym + chạy bộ",
+    "vietnamOnly": "Chỉ Việt Nam",
+    "internationalComingSoon": "Thanh toán quốc tế sắp ra mắt. Hiện chỉ hỗ trợ tài khoản ngân hàng Việt Nam.",
+    "oneTimeDetail": "Thanh toán một lần — không đăng ký, không phí định kỳ",
+    "internationalGatewaySoon": "Cổng thanh toán quốc tế sắp ra mắt",
+    "paymentError": "Khởi tạo thanh toán thất bại. Vui lòng thử lại."
   },
   "export": {
     "fitDay": "Xuất FIT",

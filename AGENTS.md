@@ -1,6 +1,6 @@
 # AI Agent Guide
 
-**Project:** The Sport Notebook Planner — Training planner for hybrid athletes (Gym + Running) with Garmin export.
+**Project:** The Athlete Planner — Training planner for hybrid athletes (Gym + Running) with Garmin export.
 
 **IMPORTANT:** Read `docs/MEMORY.md` first for full architectural context and design decisions.
 

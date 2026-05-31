@@ -4,11 +4,11 @@ _Cập nhật lần cuối: Tháng 5, 2026_
 
 ## 1. Chấp Thuận Điều Khoản
 
-Bằng cách sử dụng Sport Notebook ("Dịch vụ"), bạn đồng ý bị ràng buộc bởi các Điều Khoản Dịch Vụ này. Nếu bạn không đồng ý, vui lòng không sử dụng Dịch vụ.
+Bằng cách sử dụng Athlete Planner ("Dịch vụ"), bạn đồng ý bị ràng buộc bởi các Điều Khoản Dịch Vụ này. Nếu bạn không đồng ý, vui lòng không sử dụng Dịch vụ.
 
 ## 2. Mô Tả Dịch Vụ
 
-Sport Notebook là ứng dụng lập lịch tập luyện dành cho vận động viên hybrid (Gym + Chạy bộ). Dịch vụ cho phép người dùng:
+Athlete Planner là ứng dụng lập lịch tập luyện dành cho vận động viên hybrid (Gym + Chạy bộ). Dịch vụ cho phép người dùng:
 
 - Lập kế hoạch và ghi chép lịch tập luyện tuần
 - Quản lý bài tập cá nhân
@@ -41,11 +41,11 @@ Cổng thanh toán: PayOS (dành cho tài khoản ngân hàng Việt Nam).
 
 ## 6. Quyền Sở Hữu Trí Tuệ
 
-Nội dung thư viện bài tập, video, hướng dẫn kỹ thuật do Sport Notebook sở hữu hoặc được cấp phép. Dữ liệu lịch tập luyện do người dùng nhập là tài sản của người dùng.
+Nội dung thư viện bài tập, video, hướng dẫn kỹ thuật do Athlete Planner sở hữu hoặc được cấp phép. Dữ liệu lịch tập luyện do người dùng nhập là tài sản của người dùng.
 
 ## 7. Giới Hạn Trách Nhiệm
 
-Sport Notebook được cung cấp "nguyên trạng". Chúng tôi không chịu trách nhiệm cho các chấn thương hoặc thiệt hại phát sinh từ việc sử dụng kế hoạch tập luyện được tạo qua Dịch vụ.
+Athlete Planner được cung cấp "nguyên trạng". Chúng tôi không chịu trách nhiệm cho các chấn thương hoặc thiệt hại phát sinh từ việc sử dụng kế hoạch tập luyện được tạo qua Dịch vụ.
 
 ## 8. Thay Đổi Điều Khoản
 

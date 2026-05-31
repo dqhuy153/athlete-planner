@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Sport Notebook",
+    "appName": "Athlete Planner",
     "loading": "Loading...",
     "error": "Something went wrong",
     "retry": "Retry",
@@ -58,8 +58,8 @@
     "copying": "Copying...",
     "copySuccess": "Copied successfully",
     "copyError": "Copy failed — please try again",
-    "reps": "Reps",
     "sets": "Sets",
+    "reps": "Reps",
     "weight": "Weight (kg)",
     "rpe": "RPE",
     "restTime": "Rest between sets",
@@ -253,6 +253,8 @@
     "free": "Free",
     "pro": "Pro",
     "upgrade": "Upgrade to PRO",
+    "upgradeTitle": "Upgrade to PRO",
+    "upgradeBenefits": "Unlimited exercises, full history & Garmin export",
     "alreadyPro": "You already have PRO",
     "loading": "Preparing payment...",
     "successTitle": "Welcome to PRO",
@@ -267,7 +269,18 @@
     "internationalComingSoon": "International payments are coming soon. Currently available for Vietnam bank accounts only.",
     "oneTimeDetail": "One-time payment — no subscriptions, no recurring fees",
     "internationalGatewaySoon": "International gateway coming soon",
-    "paymentError": "Payment init failed. Please try again."
+    "paymentError": "Payment init failed. Please try again.",
+    "authRequired": "Sign in to manage your profile",
+    "saveFailed": "Failed to save",
+    "instructionLevel": "Instruction Level",
+    "instructionLevelHint": "Affects how exercises are explained in guides",
+    "instructionLevelBeginner": "Beginner",
+    "instructionLevelAdvanced": "Advanced",
+    "instructionLevelSaved": "Saved",
+    "language": "Language",
+    "langEn": "English",
+    "langVi": "Vietnamese",
+    "signOut": "Sign out"
   },
   "tier": {
     "upgradeTitle": "Upgrade to Pro",
@@ -296,7 +309,12 @@
     "cancelSubtitle": "Your account remains on the free plan.",
     "cancelCta": "Back to Upgrade",
     "promoHint": "Upgrade once, use forever.",
-    "socialProof": "Trusted by athletes tracking gym + running"
+    "socialProof": "Trusted by athletes tracking gym + running",
+    "vietnamOnly": "Vietnam only",
+    "internationalComingSoon": "International payments are coming soon. Currently available for Vietnam bank accounts only.",
+    "oneTimeDetail": "One-time payment — no subscriptions, no recurring fees",
+    "internationalGatewaySoon": "International gateway coming soon",
+    "paymentError": "Payment init failed. Please try again."
   },
   "export": {
     "fitDay": "Export FIT",

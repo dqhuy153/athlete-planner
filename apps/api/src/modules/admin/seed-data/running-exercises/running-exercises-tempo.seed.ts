@@ -1,5 +1,5 @@
 /**
- * Tempo Running Exercise seed data for the Sport Notebook Planner.
+ * Tempo Running Exercise seed data for the Athlete Planner.
  *
  * Includes threshold and tempo runs designed to build lactate threshold
  * and improve running economy at race pace.

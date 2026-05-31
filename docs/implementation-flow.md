@@ -1,4 +1,4 @@
-# Implementation Flow - The Sport Notebook Planner
+# Implementation Flow - The Athlete Planner
 
 > This document defines the phased implementation plan. Each phase is designed to be independently executable by an AI agent in a fresh session.
 

@@ -1,7 +1,7 @@
 # Running Exercise JSON Import Skill
 
 Use this prompt with ChatGPT, Claude, or Gemini to generate running workout data
-in the correct format for importing into the Sport Notebook Planner admin.
+in the correct format for importing into the Athlete Planner admin.
 
 ---
 

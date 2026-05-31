@@ -25,7 +25,7 @@ export function MobileHeader({ locale }: MobileHeaderProps) {
               <Activity size={16} aria-hidden />
             </div>
             <span className='text-sm font-black tracking-tight uppercase text-text-primary'>
-              Sport Notebook
+              Athlete Planner
             </span>
           </Link>
 

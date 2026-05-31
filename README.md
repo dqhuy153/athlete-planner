@@ -1,4 +1,4 @@
-# The Sport Notebook Planner
+# The Athlete Planner
 
 Training planner for hybrid athletes (Gym + Running) with Garmin .FIT export.
 

@@ -1,6 +1,6 @@
 {
-  "name": "Sport Notebook",
-  "short_name": "Sport Notebook",
+  "name": "Athlete Planner",
+  "short_name": "Athlete Planner",
   "description": "Training planner for hybrid athletes",
   "start_url": "/",
   "display": "standalone",

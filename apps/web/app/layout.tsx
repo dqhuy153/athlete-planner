@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: { default: 'Sport Notebook', template: '%s | Sport Notebook' },
+  title: { default: 'Athlete Planner', template: '%s | Athlete Planner' },
   description: 'Training planner for hybrid athletes',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Sport Notebook',
+    title: 'Athlete Planner',
   },
   formatDetection: { telephone: false },
 };

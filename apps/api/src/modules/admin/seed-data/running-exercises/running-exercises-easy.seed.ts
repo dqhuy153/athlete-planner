@@ -1,5 +1,5 @@
 /**
- * Easy Running Exercise seed data for the Sport Notebook Planner.
+ * Easy Running Exercise seed data for the Athlete Planner.
  *
  * Includes easy recovery runs and base-building runs with detailed phase information.
  * Mapped to RunningExerciseMaster domain model.

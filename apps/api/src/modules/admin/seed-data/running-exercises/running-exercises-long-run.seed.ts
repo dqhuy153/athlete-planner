@@ -1,5 +1,5 @@
 /**
- * Long Running Exercise seed data for the Sport Notebook Planner.
+ * Long Running Exercise seed data for the Athlete Planner.
  *
  * Includes endurance-focused long runs for aerobic capacity and mental toughness building.
  * Mapped to RunningExerciseMaster domain model.

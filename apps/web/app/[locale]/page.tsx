@@ -21,6 +21,7 @@ import {
 import Link from 'next/link'
 import { cn } from '@athlete-planner/ui'
 import { Button } from '@athlete-planner/ui'
+import { LogoBrand } from '@/components/brand/LogoBrand'
 import { MobileMenu } from '@/components/MobileMenu'
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -127,13 +128,11 @@ export default function LandingPage() {
           <div className='flex items-center gap-6'>
             <Link
               href={`/${locale}`}
-              className='flex items-center gap-2.5 group'
+              className='flex items-center gap-2.5'
             >
-              <div className='flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300'>
-                <Activity size={18} aria-hidden />
-              </div>
-              <span className='text-base font-black tracking-tight uppercase text-text-primary'>
-                Sport Notebook
+              <LogoBrand variant='mark' size='sm' interactive />
+              <span className='text-base font-black tracking-tight uppercase text-text-primary hidden sm:inline'>
+                Athlete Planner
               </span>
             </Link>
 
@@ -500,7 +499,7 @@ export default function LandingPage() {
       <footer className='border-t border-border bg-surface-1/20 relative z-10'>
         <div className='mx-auto flex max-w-5xl flex-col sm:flex-row items-center justify-between gap-4 px-4 py-6 sm:px-6'>
           <p className='text-xs text-text-tertiary'>
-            &copy; {new Date().getFullYear()} Sport Notebook.{' '}
+            &copy; {new Date().getFullYear()} Athlete Planner.{' '}
             {tl('allRightsReserved')}
           </p>
           <div className='flex gap-6'>

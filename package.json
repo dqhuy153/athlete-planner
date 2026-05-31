@@ -2,7 +2,7 @@
   "name": "athlete-planner",
   "version": "0.1.0",
   "private": true,
-  "description": "The Sport Notebook Planner — Training planner for hybrid athletes with Garmin export",
+  "description": "The Athlete Planner — Training planner for hybrid athletes with Garmin export",
   "scripts": {
     "infra:up": "docker compose up -d",
     "dev": "turbo dev",

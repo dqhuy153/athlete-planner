@@ -1,4 +1,4 @@
-# Project Status — The Sport Notebook Planner
+# Project Status — The Athlete Planner
 
 > Last Updated: May 31, 2026  
 > Latest Commit: `running exercise config complete + workout session running support`
