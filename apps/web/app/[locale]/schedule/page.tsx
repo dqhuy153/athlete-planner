@@ -17,6 +17,7 @@ import type {
   PrivateExercise,
 } from '@athlete-planner/contracts'
 import { UserTier, DayStatus, SportType } from '@athlete-planner/contracts'
+import { useToast } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { useSchedule } from '@/lib/hooks/useSchedule'
 import { WeekCalendar } from '@/components/WeekCalendar'
@@ -62,6 +63,7 @@ export default function SchedulePage() {
   const t = useTranslations('schedule')
   const tExport = useTranslations('export')
   const { data: session, status } = useSession()
+  const { push: pushToast } = useToast()
 
   const token = (session?.accessToken as string) ?? ''
   const userTier = (session?.user as { tier?: UserTier })?.tier ?? UserTier.FREE
@@ -92,7 +94,9 @@ export default function SchedulePage() {
     api
       .getPrivateExercises(token)
       .then(setPrivateExercises)
-      .catch(() => {})
+      .catch(() => {
+        pushToast({ title: t('fetchError'), tone: 'error' })
+      })
   }, [token])
 
   const todayStr = format(new Date(), 'yyyy-MM-dd')
@@ -405,7 +409,7 @@ export default function SchedulePage() {
       const { blob, filename } = await api.exportDayFit(selectedDate, token)
       triggerDownload(blob, filename)
     } catch {
-      /* ignore */
+      pushToast({ title: tExport('exportFailed'), tone: 'error' })
     } finally {
       setExportingDay(false)
     }
@@ -426,7 +430,7 @@ export default function SchedulePage() {
       )
       triggerDownload(blob, filename)
     } catch {
-      /* ignore */
+      pushToast({ title: tExport('exportFailed'), tone: 'error' })
     } finally {
       setExportingWeek(false)
     }

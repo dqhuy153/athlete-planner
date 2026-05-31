@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { UserTier, ExperienceLevel } from '@athlete-planner/contracts'
-import { cn } from '@athlete-planner/ui'
+import { cn, useToast } from '@athlete-planner/ui'
 import { Button } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { AuthGate } from '@/components/AuthGate'
@@ -27,6 +27,7 @@ export default function ProfilePage() {
   const t = useTranslations('profile')
   const tRoot = useTranslations()
   const { data: session, status, update } = useSession()
+  const { push: pushToast } = useToast()
   const params = useParams()
   const router = useRouter()
   const locale = params.locale as string
@@ -60,7 +61,7 @@ export default function ProfilePage() {
       setLevelSaved(true)
       setTimeout(() => setLevelSaved(false), 2000)
     } catch {
-      // silently fail — non-critical preference
+      pushToast({ title: t('saveFailed'), tone: 'error' })
     } finally {
       setLevelSaving(false)
     }

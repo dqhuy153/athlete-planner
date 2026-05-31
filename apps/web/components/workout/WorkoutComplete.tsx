@@ -5,7 +5,7 @@ import { CheckCircle2, Download, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { cn } from '@athlete-planner/ui';
-import { Button } from '@athlete-planner/ui';
+import { Button, useToast } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { WorkoutMode } from '@/lib/types/workout';
 import { UpgradePrompt } from '@/components/UpgradePrompt';
@@ -28,6 +28,7 @@ function formatDuration(ms: number) {
 export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
   const t = useTranslations('workout');
   const { data: authSession } = useSession();
+  const { push: pushToast } = useToast();
   const { session, discardSession } = useWorkoutStore();
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -69,7 +70,7 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
       a.remove();
       URL.revokeObjectURL(url);
     } catch {
-      // non-critical
+      pushToast({ title: t('exportFailed'), tone: 'error' });
     } finally {
       setExporting(false);
     }
@@ -82,7 +83,7 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
         await api.updateDayStatus(token, s.scheduleId, DayStatus.COMPLETED);
       }
     } catch {
-      // non-critical — don't block the user from finishing
+      pushToast({ title: t('statusUpdateFailed'), tone: 'warning' });
     } finally {
       discardSession();
       onClose();

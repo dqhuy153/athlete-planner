@@ -130,7 +130,8 @@
     "dayCompleted": "Day completed",
     "daySkipped": "Day skipped",
     "dayRestDay": "Rest day",
-    "authRequired": "Sign in to view and plan your training schedule"
+    "authRequired": "Sign in to view and plan your training schedule",
+    "fetchError": "Failed to load data"
   },
   "library": {
     "title": "Exercise Library",
@@ -244,7 +245,8 @@
     "instructionLevelSaved": "Instruction level saved",
     "upgradeTitle": "Upgrade to PRO",
     "upgradeBenefits": "Garmin export, unlimited exercises, lifetime history",
-    "authRequired": "Sign in to manage your profile"
+    "authRequired": "Sign in to manage your profile",
+    "saveFailed": "Failed to save settings"
   },
   "tier": {
     "upgradeTitle": "Upgrade to Pro",
@@ -280,6 +282,7 @@
     "proOnly": "PRO feature",
     "downloading": "Downloading...",
     "error": "Export failed. Try again.",
+    "exportFailed": "Export failed",
     "upgradeToExport": "Upgrade to PRO to export Garmin FIT files",
     "exportDay": "Export Day",
     "exportWeek": "Export Week",
@@ -400,6 +403,8 @@
     "completeSet": "Complete Set",
     "restAfterExercise": "Rest after",
     "skipExercise": "Skip exercise",
+    "exportFailed": "FIT export failed",
+    "statusUpdateFailed": "Failed to update day status",
     "setsLabel": "sets",
     "repsLabel": "reps"
   },

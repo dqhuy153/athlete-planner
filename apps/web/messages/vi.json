@@ -130,7 +130,8 @@
     "dayCompleted": "Ngày đã hoàn thành",
     "daySkipped": "Ngày đã bỏ qua",
     "dayRestDay": "Ngày nghỉ",
-    "authRequired": "Đăng nhập để xem và lên kế hoạch tập luyện"
+    "authRequired": "Đăng nhập để xem và lên kế hoạch tập luyện",
+    "fetchError": "Không tải được dữ liệu"
   },
   "library": {
     "title": "Thư viện bài tập",
@@ -244,7 +245,8 @@
     "instructionLevelSaved": "Đã lưu cấp độ hướng dẫn",
     "upgradeTitle": "Nâng cấp lên PRO",
     "upgradeBenefits": "Xuất Garmin, bài tập không giới hạn, lịch sử trọn đời",
-    "authRequired": "Đăng nhập để quản lý hồ sơ"
+    "authRequired": "Đăng nhập để quản lý hồ sơ",
+    "saveFailed": "Không lưu được cài đặt"
   },
   "tier": {
     "upgradeTitle": "Nâng cấp Pro",
@@ -280,6 +282,7 @@
     "proOnly": "Tính năng PRO",
     "downloading": "Đang tải...",
     "error": "Xuất thất bại. Thử lại.",
+    "exportFailed": "Xuất thất bại",
     "upgradeToExport": "Nâng cấp lên PRO để xuất file Garmin FIT",
     "exportDay": "Xuất ngày",
     "exportWeek": "Xuất tuần",
@@ -400,6 +403,8 @@
     "completeSet": "Xong hiệp",
     "restAfterExercise": "Nghỉ sau bài",
     "skipExercise": "Bỏ qua bài tập",
+    "exportFailed": "Xuất FIT thất bại",
+    "statusUpdateFailed": "Không cập nhật được trạng thái ngày",
     "setsLabel": "set",
     "repsLabel": "rep"
   },
