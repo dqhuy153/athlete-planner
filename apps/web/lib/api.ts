@@ -159,7 +159,13 @@ class ApiClient {
   updatePrivateExercise(
     token: string,
     id: string,
-    data: Partial<{ name: string; customNotes: string; gifUrl: string }>,
+    data: Partial<{
+      name: string;
+      customNotes: string;
+      gifUrl: string;
+      targetMuscleGroup: string;
+      runningType: string;
+    }>,
   ) {
     return this.request<PrivateExercise>(`/exercises/private/${id}`, {
       method: 'PUT',

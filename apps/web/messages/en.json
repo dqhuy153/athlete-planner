@@ -467,7 +467,8 @@
     "cancel": "Cancel",
     "confirmDelete": "Delete",
     "deleting": "Deleting...",
-    "createFailed": "Failed to create exercise"
+    "createFailed": "Failed to create exercise",
+    "saveInfo": "Save changes"
   },
   "starterTemplate": {
     "title": "Start with a template",

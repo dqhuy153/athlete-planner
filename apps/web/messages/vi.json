@@ -467,7 +467,8 @@
     "cancel": "Huỷ",
     "confirmDelete": "Xoá",
     "deleting": "Đang xoá...",
-    "createFailed": "Tạo bài tập thất bại"
+    "createFailed": "Tạo bài tập thất bại",
+    "saveInfo": "Lưu thay đổi"
   },
   "starterTemplate": {
     "title": "Bắt đầu với mẫu lịch",

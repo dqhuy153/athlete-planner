@@ -4,13 +4,17 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, Save } from 'lucide-react';
 import Link from 'next/link';
 import type { PrivateExercise } from '@athlete-planner/contracts';
-import { SportType } from '@athlete-planner/contracts';
+import { SportType, MuscleGroup, RunningType } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
+import { Button } from '@athlete-planner/ui';
 import { GymExerciseConfig } from './GymExerciseConfig';
 import { RunningExerciseConfig } from './RunningExerciseConfig';
+
+const MUSCLE_GROUPS = Object.values(MuscleGroup);
+const RUNNING_TYPES = Object.values(RunningType);
 
 interface PrivateExerciseDetailClientProps {
   exercise: PrivateExercise;
@@ -26,9 +30,42 @@ export function PrivateExerciseDetailClient({
   const t = useTranslations('privateExercise');
   const { data: session } = useSession();
   const router = useRouter();
+  const token = session?.accessToken;
+
+  // Editable field state — initialized from props
+  const [name, setName] = useState(exercise.name);
+  const [muscleGroup, setMuscleGroup] = useState(exercise.targetMuscleGroup ?? '');
+  const [runningType, setRunningType] = useState(exercise.runningType ?? '');
+  const [notes, setNotes] = useState(exercise.customNotes ?? '');
+
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveDone, setSaveDone] = useState(false);
+
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const token = session?.accessToken;
+
+  async function handleSaveInfo() {
+    if (!token) return;
+    setSaving(true);
+    setSaveError(null);
+    setSaveDone(false);
+    try {
+      await api.updatePrivateExercise(token, exercise.id, {
+        name: name.trim(),
+        customNotes: notes,
+        ...(exercise.sportType === SportType.GYM
+          ? { targetMuscleGroup: muscleGroup }
+          : { runningType }),
+      });
+      setSaveDone(true);
+      setTimeout(() => setSaveDone(false), 3000);
+    } catch (e: unknown) {
+      setSaveError(e instanceof Error ? e.message : t('saveFailed'));
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function handleDelete() {
     if (!token) return;
@@ -45,42 +82,101 @@ export function PrivateExerciseDetailClient({
     <div className="mx-auto max-w-2xl pb-24">
       {/* Back */}
       <Link
-        href={`/${locale}/library`}
+        href={`/${locale}/library/my`}
         className="mb-4 inline-flex items-center gap-1.5 text-xs text-text-secondary hover:text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md"
       >
         <ArrowLeft className="h-4 w-4" aria-hidden />
         {t('backToLibrary')}
       </Link>
 
-      {/* Title */}
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-text-primary">{exercise.name}</h1>
+      {/* Editable header */}
+      <div className="mb-6 space-y-3">
+        {/* Name */}
+        <div>
+          <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+            {t('nameLabel')}
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-lg font-bold text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+
+        {/* Source exercise */}
         {sourceGymName && (
-          <p className="mt-0.5 text-xs text-text-tertiary">
+          <p className="text-xs text-text-tertiary">
             {t('sourceFrom', { name: sourceGymName })}
           </p>
         )}
-        {exercise.sportType === SportType.GYM && exercise.targetMuscleGroup && (
-          <span className="mt-2 inline-block rounded-md bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent uppercase tracking-wide">
-            {exercise.targetMuscleGroup}
-          </span>
-        )}
-        {exercise.sportType === SportType.RUNNING && exercise.runningType && (
-          <span className="mt-2 inline-block rounded-md bg-surface-3 px-2.5 py-0.5 text-xs font-semibold text-text-secondary uppercase tracking-wide">
-            {exercise.runningType}
-          </span>
-        )}
-      </div>
 
-      {/* Custom notes */}
-      {exercise.customNotes && (
-        <div className="mb-6 rounded-[20px] border border-border/60 bg-surface-2 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-2">
+        {/* Muscle group (GYM) */}
+        {exercise.sportType === SportType.GYM && (
+          <div>
+            <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+              {t('muscleGroupLabel')}
+            </label>
+            <select
+              value={muscleGroup}
+              onChange={(e) => setMuscleGroup(e.target.value)}
+              className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+              <option value="">—</option>
+              {MUSCLE_GROUPS.map((mg) => (
+                <option key={mg} value={mg}>{mg}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Running type (RUNNING) */}
+        {exercise.sportType === SportType.RUNNING && (
+          <div>
+            <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+              {t('runningTypeLabel')}
+            </label>
+            <select
+              value={runningType}
+              onChange={(e) => setRunningType(e.target.value)}
+              className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+              <option value="">—</option>
+              {RUNNING_TYPES.map((rt) => (
+                <option key={rt} value={rt}>{rt}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Notes */}
+        <div>
+          <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
             {t('notes')}
-          </p>
-          <p className="text-sm text-text-primary whitespace-pre-wrap">{exercise.customNotes}</p>
+          </label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={3}
+            placeholder={t('notesPlaceholder')}
+            className="w-full resize-none rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
+          />
         </div>
-      )}
+
+        {saveError && <p className="text-xs text-error">{saveError}</p>}
+
+        <Button
+          type="button"
+          variant="accent"
+          size="lg"
+          onClick={handleSaveInfo}
+          disabled={saving || !token || !name.trim()}
+          className="w-full gap-2"
+        >
+          <Save size={15} aria-hidden />
+          {saving ? t('saving') : saveDone ? t('savedConfig') : t('saveInfo')}
+        </Button>
+      </div>
 
       {/* Config — sport-type specific */}
       {exercise.sportType === SportType.GYM && <GymExerciseConfig exercise={exercise} />}
