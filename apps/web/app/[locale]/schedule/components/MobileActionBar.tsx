@@ -37,7 +37,7 @@ export function MobileActionBar({
           <Button
             type='button'
             variant='accent'
-            className='flex-1 gap-1.5'
+            className='w-full gap-1.5 max-w-[340px]'
             onClick={onStartWorkout}
           >
             <Play size={13} aria-hidden />
@@ -61,7 +61,7 @@ export function MobileActionBar({
           disabled={exportingDay}
         >
           <Download size={13} aria-hidden />
-          {tExport('exportDay')}
+          {tExport('exportExercise')}
         </Button>
       </div>
     </div>

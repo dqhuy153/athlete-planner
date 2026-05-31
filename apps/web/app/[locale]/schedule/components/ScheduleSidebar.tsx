@@ -7,14 +7,26 @@ import { UserTier } from '@athlete-planner/contracts'
 import type { DailySchedule } from '@athlete-planner/contracts'
 import { WeekCalendar } from '@/components/WeekCalendar'
 import { DisciplineRateWidget } from '@/components/DisciplineRateWidget'
-import { Download, Archive, Copy, CalendarRange, Plus, Play, Sparkles } from 'lucide-react'
+import {
+  Download,
+  Archive,
+  Copy,
+  CalendarRange,
+  Plus,
+  Play,
+  Sparkles,
+} from 'lucide-react'
 
 interface ScheduleSidebarProps {
   weekOffset: number
   selectedDate: string
   scheduleMap: Map<string, DailySchedule>
   userTier: UserTier
-  disciplineRate: { rate: number; completedDays: number; totalDays: number } | null
+  disciplineRate: {
+    rate: number
+    completedDays: number
+    totalDays: number
+  } | null
   loading: boolean
   activeScheduleItemCount: number
   exportingDay: boolean
@@ -126,12 +138,15 @@ export function ScheduleSidebar({
           disabled={exportingDay}
         >
           <Download size={14} aria-hidden />
-          {exportingDay ? tExport('exporting') : tExport('exportDay')}
+          {exportingDay ? tExport('exporting') : tExport('exportExercise')}
         </Button>
         <Button
           type='button'
           variant='surface'
-          className={cn('w-full gap-2', userTier !== UserTier.PRO && 'opacity-50')}
+          className={cn(
+            'w-full gap-2',
+            userTier !== UserTier.PRO && 'opacity-50',
+          )}
           onClick={onExportWeek}
           disabled={exportingWeek}
         >
@@ -169,7 +184,7 @@ export function ScheduleSidebar({
           )}
         >
           <Download size={14} aria-hidden />
-          {exportingDay ? tExport('exporting') : tExport('exportDay')}
+          {exportingDay ? tExport('exporting') : tExport('exportExercise')}
         </button>
         <button
           type='button'
