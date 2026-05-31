@@ -12,6 +12,7 @@ import { routing } from '@/i18n/routing';
 import { BottomNav } from '@/components/BottomNav';
 import { SessionProvider } from '@/components/SessionProvider';
 import { SideNav } from '@/components/SideNav';
+import { MobileHeaderGate } from '@/components/MobileHeaderGate';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ToastProvider } from '@athlete-planner/ui';
 import '../globals.css';
@@ -91,6 +92,7 @@ export default async function LocaleLayout({
                 <div className="flex min-h-screen">
                   <SideNav locale={locale} />
                   <main className="min-w-0 flex-1 pb-[88px] md:pb-0">
+                    <MobileHeaderGate locale={locale} />
                     {children}
                   </main>
                 </div>

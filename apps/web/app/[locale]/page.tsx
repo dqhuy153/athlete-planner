@@ -17,11 +17,11 @@ import {
   Moon,
   BookOpen,
   Menu,
-  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@athlete-planner/ui'
 import { Button } from '@athlete-planner/ui'
+import { MobileMenu } from '@/components/MobileMenu'
 
 const isDev = process.env.NODE_ENV === 'development'
 type DevTier = 'FREE' | 'PRO'
@@ -50,7 +50,6 @@ function SessionRedirector({ locale }: { locale: string }) {
 export default function LandingPage() {
   const tl = useTranslations('landing')
   const ta = useTranslations('auth')
-  const tc = useTranslations('common')
   const router = useRouter()
   const params = useParams()
   const locale = (params?.locale as string) ?? 'vi'
@@ -65,15 +64,6 @@ export default function LandingPage() {
 
   useEffect(() => {
     setMounted(true)
-  }, [])
-
-  // Close mobile menu on resize to desktop
-  useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 640) setMobileMenuOpen(false)
-    }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
   }, [])
 
   async function handleSignIn() {
@@ -128,106 +118,8 @@ export default function LandingPage() {
       <div className='absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none' />
       <div className='absolute top-[40%] right-[-10%] w-[350px] h-[350px] bg-accent/5 blur-[100px] rounded-full pointer-events-none' />
 
-      {/* ── Mobile Menu Overlay ── */}
-      {mobileMenuOpen && (
-        <div
-          className='fixed inset-0 z-50 bg-black/60 backdrop-blur-sm sm:hidden'
-          onClick={() => setMobileMenuOpen(false)}
-          aria-hidden='true'
-        />
-      )}
-
-      {/* ── Mobile Drawer ── */}
-      <div
-        className={cn(
-          'fixed top-0 right-0 z-50 h-full w-72 bg-surface-1 border-l border-border shadow-2xl transition-transform duration-300 ease-out sm:hidden',
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
-        )}
-      >
-        <div className='flex items-center justify-between p-4 border-b border-border'>
-          <span className='text-sm font-bold text-text-primary'>Menu</span>
-          <button
-            type='button'
-            onClick={() => setMobileMenuOpen(false)}
-            className='p-2 rounded-lg hover:bg-surface-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center'
-            aria-label='Close menu'
-          >
-            <X size={18} />
-          </button>
-        </div>
-        <nav className='flex flex-col p-4 gap-1'>
-          <Link
-            href={`/${locale}/library`}
-            className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors min-h-[48px]'
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <BookOpen size={18} />
-            {tl('navLibrary')}
-          </Link>
-
-          <div className='my-2 h-px bg-border' />
-
-          <button
-            type='button'
-            onClick={toggleLanguage}
-            className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors min-h-[48px] text-left'
-          >
-            <Globe size={18} />
-            {isVi ? 'English' : 'Tiếng Việt'}
-          </button>
-
-          {mounted && (
-            <button
-              type='button'
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors min-h-[48px] text-left'
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-              {theme === 'dark' ? tc('lightMode') : tc('darkMode')}
-            </button>
-          )}
-
-          <div className='my-2 h-px bg-border' />
-
-          <button
-            type='button'
-            onClick={handleSignIn}
-            disabled={googleLoading}
-            className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-accent hover:text-accent/80 transition-colors disabled:opacity-50 min-h-[48px] text-left'
-          >
-            {googleLoading ? ta('signIn') + '…' : tl('ctaSignIn')}
-          </button>
-
-          {isDev && (
-            <>
-              <div className='my-2 h-px bg-border' />
-              <div className='px-3 py-2'>
-                <p className='text-[10px] font-bold text-text-tertiary uppercase tracking-wider mb-2'>
-                  Dev Sandbox
-                </p>
-                <div className='flex gap-2'>
-                  {(['FREE', 'PRO'] as DevTier[]).map(tier => (
-                    <button
-                      key={tier}
-                      type='button'
-                      onClick={() => handleDevLogin(tier)}
-                      disabled={devLoading !== null}
-                      className={cn(
-                        'flex-1 flex min-h-[40px] items-center justify-center gap-2 rounded-xl border px-3 text-xs font-bold transition-all duration-200 disabled:opacity-50 active:scale-95',
-                        tier === 'PRO'
-                          ? 'border-accent/30 bg-accent/5 text-accent hover:bg-accent/10'
-                          : 'border-border bg-surface-2 text-text-primary hover:bg-surface-3',
-                      )}
-                    >
-                      {devLoading === tier ? '…' : `${tier} Mode`}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-        </nav>
-      </div>
+      {/* Mobile hamburger menu (shared drawer) */}
+      <MobileMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} showDevSandbox />
 
       {/* ── Header ── */}
       <header className='sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md'>
