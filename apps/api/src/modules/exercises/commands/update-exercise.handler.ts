@@ -20,12 +20,14 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       const { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl,
         defaultSets, defaultReps, defaultWeightKg, defaultRpe,
         restTimeSecs, restBetweenExercisesSecs,
+        mediaUrls,
       } = dto as Record<string, unknown>;
       return this.prisma.privateExercise.update({
         where: { id },
         data: { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl,
           defaultSets, defaultReps, defaultWeightKg, defaultRpe,
           restTimeSecs, restBetweenExercisesSecs,
+          mediaUrls: (mediaUrls as string[] | undefined) ?? undefined,
         },
       });
     }
@@ -39,6 +41,7 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       const {
         name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
         youtubeEmbedUrl, gifUrl, garminExerciseEnum, instructions,
+        mediaUrls,
         defaultBeginnerSets, defaultBeginnerReps, defaultBeginnerWeightKg,
         defaultBeginnerRpe, defaultBeginnerRestTimeSecs, defaultBeginnerRestBetweenExercisesSecs,
         defaultAdvancedSets, defaultAdvancedReps, defaultAdvancedWeightKg,
@@ -50,6 +53,7 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
           name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
           youtubeEmbedUrl, gifUrl, garminExerciseEnum,
           instructions: instructions as unknown as Prisma.InputJsonValue,
+          mediaUrls: (mediaUrls as string[] | undefined) ?? undefined,
           defaultBeginnerSets, defaultBeginnerReps, defaultBeginnerWeightKg,
           defaultBeginnerRpe, defaultBeginnerRestTimeSecs, defaultBeginnerRestBetweenExercisesSecs,
           defaultAdvancedSets, defaultAdvancedReps, defaultAdvancedWeightKg,
@@ -67,6 +71,7 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       const {
         name, vietnameseName, runningType, youtubeEmbedUrl,
         gifUrl, instructions, workoutStructure,
+        mediaUrls,
       } = dto as Record<string, unknown>;
       return this.prisma.runningExerciseMaster.update({
         where: { id },
@@ -74,6 +79,7 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
           name, vietnameseName, runningType, youtubeEmbedUrl,
           gifUrl, instructions: instructions as unknown as Prisma.InputJsonValue,
           workoutStructure: workoutStructure as unknown as Prisma.InputJsonValue,
+          mediaUrls: (mediaUrls as string[] | undefined) ?? undefined,
         },
       });
     }
