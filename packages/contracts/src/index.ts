@@ -114,6 +114,7 @@ export interface GymExerciseMaster {
   youtubeEmbedUrl: string | null;
   gifUrl: string | null;
   garminExerciseEnum: string | null;
+  mediaUrls: string[];
   instructions: ExerciseInstruction[];
   // Default workout config — beginner
   defaultBeginnerSets: number | null;
@@ -141,6 +142,7 @@ export interface RunningExerciseMaster {
   runningType: RunningType;
   youtubeEmbedUrl: string | null;
   gifUrl: string | null;
+  mediaUrls: string[];
   instructions: LocalizedStringArray;
   workoutStructure: WorkoutPhase[];
   createdAt: string;
@@ -157,6 +159,7 @@ export interface PrivateExercise {
   runningType?: RunningType;
   customNotes: string | null;
   gifUrl: string | null;
+  mediaUrls: string[];
   // Source system exercise (for media inheritance)
   sourceGymMasterId: string | null;
   // User-configured workout defaults
