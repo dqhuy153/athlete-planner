@@ -78,6 +78,21 @@ export class ExercisesController {
     return this.queryBus.execute(new GetPrivateExercisesQuery(req.user.sub));
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('private/:id')
+  async getPrivateExerciseById(
+    @Param('id') id: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const exercise = await this.queryBus.execute(
+      new GetExerciseDetailQuery(id, 'private'),
+    );
+    if (exercise.userId !== req.user.sub) {
+      throw new ForbiddenException('Exercise not found');
+    }
+    return exercise;
+  }
+
   @Get(':id')
   async getExerciseDetail(@Param('id') id: string) {
     return this.queryBus.execute(new GetExerciseDetailQuery(id));
