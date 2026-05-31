@@ -31,6 +31,7 @@ export interface WorkoutItem {
   sets: WorkoutSetRecord[];          // gym: live tracking
   currentPhaseIndex: number;         // running: phase cursor
   done: boolean;
+  skipped?: boolean;
   isExpanded?: boolean;              // done exercise: show undo panel
   restTimeSecs?: number;             // default rest between sets (seconds)
   restBetweenExercisesSecs?: number; // default rest between exercises (seconds)

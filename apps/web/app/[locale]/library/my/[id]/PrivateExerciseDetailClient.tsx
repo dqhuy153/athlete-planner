@@ -1,10 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ArrowLeft } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { SportType } from '@athlete-planner/contracts';
+import { api } from '@/lib/api';
 import { GymExerciseConfig } from './GymExerciseConfig';
 import { RunningExerciseConfig } from './RunningExerciseConfig';
 
@@ -20,6 +24,22 @@ export function PrivateExerciseDetailClient({
   sourceGymName,
 }: PrivateExerciseDetailClientProps) {
   const t = useTranslations('privateExercise');
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const token = session?.accessToken;
+
+  async function handleDelete() {
+    if (!token) return;
+    setDeleting(true);
+    try {
+      await api.deletePrivateExercise(token, exercise.id);
+      router.push(`/${locale}/library/my`);
+    } catch {
+      setDeleting(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-2xl pb-24">
@@ -65,6 +85,41 @@ export function PrivateExerciseDetailClient({
       {/* Config — sport-type specific */}
       {exercise.sportType === SportType.GYM && <GymExerciseConfig exercise={exercise} />}
       {exercise.sportType === SportType.RUNNING && <RunningExerciseConfig exercise={exercise} />}
+
+      {/* Delete */}
+      <div className="mt-8 border-t border-border/40 pt-6">
+        {!confirmDelete ? (
+          <button
+            type="button"
+            onClick={() => setConfirmDelete(true)}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-error/30 py-3 text-sm font-medium text-error hover:bg-error/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error"
+          >
+            <Trash2 size={15} aria-hidden />
+            {t('deleteExercise')}
+          </button>
+        ) : (
+          <div className="space-y-2">
+            <p className="text-xs text-text-secondary text-center">{t('deleteConfirm')}</p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                className="flex-1 rounded-xl border border-border py-3 text-sm font-medium text-text-secondary hover:bg-surface-2 transition-colors"
+              >
+                {t('cancel')}
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex-1 rounded-xl bg-error py-3 text-sm font-bold text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {deleting ? t('deleting') : t('confirmDelete')}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

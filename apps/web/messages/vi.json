@@ -396,7 +396,8 @@
     "restartExercise": "Làm lại bài tập",
     "restartFromSet": "Làm lại từ hiệp {n}",
     "completeSet": "Xong hiệp",
-    "restAfterExercise": "Nghỉ sau bài"
+    "restAfterExercise": "Nghỉ sau bài",
+    "skipExercise": "Bỏ qua bài tập"
   },
   "privateExercise": {
     "backToLibrary": "Quay lại thư viện",
@@ -426,6 +427,11 @@
     "hrSection": "Nhịp tim",
     "hrZone": "Vùng nhịp tim",
     "hrMin": "Nhịp tim tối thiểu",
-    "hrMax": "Nhịp tim tối đa"
+    "hrMax": "Nhịp tim tối đa",
+    "deleteExercise": "Xoá bài tập",
+    "deleteConfirm": "Bạn có chắc muốn xoá bài tập này?",
+    "cancel": "Huỷ",
+    "confirmDelete": "Xoá",
+    "deleting": "Đang xoá..."
   }
 }

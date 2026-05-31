@@ -396,7 +396,8 @@
     "restartExercise": "Restart Exercise",
     "restartFromSet": "Restart from Set {n}",
     "completeSet": "Complete Set",
-    "restAfterExercise": "Rest after"
+    "restAfterExercise": "Rest after",
+    "skipExercise": "Skip exercise"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",
@@ -426,6 +427,11 @@
     "hrSection": "Heart Rate",
     "hrZone": "HR Zone",
     "hrMin": "Min BPM",
-    "hrMax": "Max BPM"
+    "hrMax": "Max BPM",
+    "deleteExercise": "Delete Exercise",
+    "deleteConfirm": "Are you sure you want to delete this exercise?",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete",
+    "deleting": "Deleting..."
   }
 }

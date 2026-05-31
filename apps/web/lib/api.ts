@@ -196,6 +196,13 @@ class ApiClient {
     });
   }
 
+  deletePrivateExercise(token: string, id: string) {
+    return this.request<void>(`/exercises/private/${id}`, {
+      method: 'DELETE',
+      headers: this.authHeaders(token),
+    });
+  }
+
   // ── Schedules ────────────────────────────────────────────────────────────
 
   getWeekSchedule(token: string, year: number, weekNumber: number) {

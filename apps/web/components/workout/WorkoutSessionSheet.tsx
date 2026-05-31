@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   X, Settings, Dumbbell, PersonStanding, CheckCircle2,
-  Play, Pause, Square, ChevronDown, ChevronRight, RotateCcw,
+  Play, Pause, Square, ChevronDown, ChevronRight, RotateCcw, SkipForward,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
@@ -40,6 +40,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     undoExercise,
     restartFromSet,
     setItemRestAfterSecs,
+    skipItem,
   } = useWorkoutStore();
 
   const [showAbandonConfirm, setShowAbandonConfirm] = useState(false);
@@ -515,6 +516,15 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                     ) : (
                       <WorkoutRunningItem item={item} itemIndex={i} />
                     )}
+                    {/* Skip exercise button */}
+                    <button
+                      type="button"
+                      onClick={() => skipItem(i)}
+                      className="mt-3 w-full flex items-center justify-center gap-2 rounded-xl border border-border/40 py-2.5 text-xs font-medium text-text-tertiary hover:text-text-secondary hover:border-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      <SkipForward size={13} aria-hidden />
+                      {t('skipExercise')}
+                    </button>
                   </div>
                 </div>
               );

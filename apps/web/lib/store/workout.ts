@@ -16,6 +16,7 @@ interface WorkoutStore {
   restBetweenSetsSeconds: number;      // default 90
   restBetweenExercisesSeconds: number; // default 120
   currentBetweenExercisesSeconds: number; // active timer value (may differ from global default)
+  currentRestTimerSeconds: number; // active between-sets timer value
   automationMode: AutomationMode;      // default 'auto'
 
   // actions
@@ -37,6 +38,7 @@ interface WorkoutStore {
   ) => void;
   advancePhase: (itemIndex: number) => void;
   completeItem: (itemIndex: number) => void;
+  skipItem: (itemIndex: number) => void;
   undoExercise: (itemIndex: number) => void;
   restartFromSet: (itemIndex: number, setIndex: number) => void;
   toggleItemExpanded: (itemIndex: number) => void;
@@ -65,6 +67,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
       restBetweenSetsSeconds: 90,
       restBetweenExercisesSeconds: 120,
       currentBetweenExercisesSeconds: 120,
+      currentRestTimerSeconds: 90,
       automationMode: 'auto',
 
       startSession: (items, mode, scheduleId, dateString) =>
@@ -165,6 +168,24 @@ export const useWorkoutStore = create<WorkoutStore>()(
           return { session: { ...state.session, items, currentItemIndex, workoutPhase } };
         }),
 
+      skipItem: (itemIndex) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) =>
+            i === itemIndex ? { ...item, done: true, skipped: true, isExpanded: false } : item,
+          );
+          const nextIndex = items.findIndex((item, i) => i > itemIndex && !item.done);
+          const currentItemIndex =
+            nextIndex !== -1 ? nextIndex : state.session.currentItemIndex;
+          const allDone = items.every((it) => it.done);
+          const workoutPhase = allDone ? ('complete' as const) : state.session.workoutPhase;
+          return {
+            session: { ...state.session, items, currentItemIndex, workoutPhase },
+            restTimerActive: false,
+            restBetweenExercisesActive: false,
+          };
+        }),
+
       undoExercise: (itemIndex) =>
         set((state) => {
           if (!state.session) return {};
@@ -222,7 +243,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
         }),
 
       startRestTimer: (seconds) =>
-        set({ restTimerActive: true, restBetweenSetsSeconds: seconds }),
+        set({ restTimerActive: true, currentRestTimerSeconds: seconds }),
 
       stopRestTimer: () => set({ restTimerActive: false }),
 

@@ -25,6 +25,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
     automationMode,
     restTimerActive,
     restBetweenSetsSeconds,
+    currentRestTimerSeconds,
     restBetweenExercisesActive,
     restBetweenExercisesSeconds,
     currentBetweenExercisesSeconds,
@@ -268,7 +269,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
       {/* Between-sets rest timer (auto mode only) */}
       {restTimerActive && !allSetsCompleted && automationMode === 'auto' && (
         <WorkoutRestTimer
-          defaultSeconds={restBetweenSetsSeconds}
+          defaultSeconds={currentRestTimerSeconds}
           soundEnabled={session?.soundEnabled ?? false}
           vibrationEnabled={session?.vibrationEnabled ?? true}
           autoAdvance={automationMode === 'auto'}
