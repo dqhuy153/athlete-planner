@@ -1,15 +1,19 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 interface LibraryTabsProps {
   locale: string
 }
 
+const TAB_STORAGE_KEY = 'library_active_tab'
+
 export function LibraryTabs({ locale }: LibraryTabsProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const t = useTranslations('library')
 
   const tabs = [
@@ -22,6 +26,27 @@ export function LibraryTabs({ locale }: LibraryTabsProps) {
     if (key === 'gym') return pathname === `/${locale}/library`
     return pathname.startsWith(href)
   }
+
+  // Persist active tab on navigation
+  useEffect(() => {
+    const activeTab = tabs.find(({ href, key }) => isActive(href, key))
+    if (activeTab) {
+      sessionStorage.setItem(TAB_STORAGE_KEY, activeTab.key)
+    }
+  }, [pathname])
+
+  // On mount: if we're on the base library path, check if we should redirect to last tab
+  useEffect(() => {
+    if (pathname === `/${locale}/library`) {
+      const saved = sessionStorage.getItem(TAB_STORAGE_KEY)
+      if (saved === 'running') {
+        router.replace(`/${locale}/library/running`)
+      } else if (saved === 'my') {
+        router.replace(`/${locale}/library/my`)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div
