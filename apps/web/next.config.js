@@ -1,4 +1,5 @@
 const createNextIntlPlugin = require('next-intl/plugin');
+const withPWA = require('@ducanh2912/next-pwa').default;
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
@@ -12,4 +13,36 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+const withPWAConfig = withPWA({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  // Cache media assets (GIFs, videos) for offline guide overlay
+  workboxOptions: {
+    runtimeCaching: [
+      {
+        // API routes — network first, fall back to cache
+        urlPattern: /^https?:\/\/.*\/api\/.*/i,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'api-cache',
+          expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 }, // 1 hour
+          networkTimeoutSeconds: 10,
+        },
+      },
+      {
+        // Media assets (GIFs, images) from any CDN — cache first
+        urlPattern: /\.(gif|png|jpg|jpeg|svg|webp)$/i,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'media-cache',
+          expiration: { maxEntries: 100, maxAgeSeconds: 30 * 24 * 60 * 60 }, // 30 days
+        },
+      },
+    ],
+  },
+});
+
+module.exports = withPWAConfig(withNextIntl(nextConfig));

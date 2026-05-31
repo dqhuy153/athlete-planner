@@ -5,6 +5,7 @@ import { MuscleGroup } from '@athlete-planner/contracts'
 import { ExerciseCard } from '@/components/ExerciseCard'
 import { MuscleGroupFilter } from '@/components/MuscleGroupFilter'
 import { LibrarySearch } from '@/components/LibrarySearch'
+import { ExperienceLevelFilter } from '@/components/ExperienceLevelFilter'
 
 export const revalidate = 300
 
@@ -31,14 +32,14 @@ async function fetchGymExercises(
 
 interface PageProps {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ muscleGroup?: string; search?: string }>
+  searchParams: Promise<{ muscleGroup?: string; search?: string; level?: string }>
 }
 
 export default async function GymLibraryPage({
   params,
   searchParams,
 }: PageProps) {
-  const [{ locale }, { muscleGroup, search }] = await Promise.all([
+  const [{ locale }, { muscleGroup, search, level }] = await Promise.all([
     params,
     searchParams,
   ])
@@ -46,6 +47,10 @@ export default async function GymLibraryPage({
     fetchGymExercises(muscleGroup, search),
     getTranslations('library'),
   ])
+
+  const filtered = level
+    ? exercises.filter(ex => ex.instructions.some(inst => inst.level === level))
+    : exercises;
 
   const muscleGroupLabels: Record<string, string> = {
     [MuscleGroup.CHEST]: t('chest'),
@@ -65,10 +70,13 @@ export default async function GymLibraryPage({
         <Suspense fallback={null}>
           <MuscleGroupFilter />
         </Suspense>
+        <Suspense fallback={null}>
+          <ExperienceLevelFilter />
+        </Suspense>
       </div>
 
       <div className='py-4 overflow-x-hidden'>
-        {exercises.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className='flex flex-col items-center gap-2 py-16 text-center'>
             <p className='text-sm text-text-tertiary'>{t('noExercises')}</p>
           </div>
@@ -78,7 +86,7 @@ export default async function GymLibraryPage({
             role='list'
             aria-label={t('gym')}
           >
-            {exercises.map(ex => (
+            {filtered.map(ex => (
               <li key={ex.id}>
                 <ExerciseCard
                   id={ex.id}

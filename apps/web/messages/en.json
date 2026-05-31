@@ -152,6 +152,7 @@
     "all": "All",
     "filterByMuscle": "Filter by muscle group",
     "filterByType": "Filter by running type",
+    "filterByLevel": "Filter by level",
     "addNew": "New exercise",
     "noExercises": "No exercises found",
     "noPrivateExercises": "You haven't created any exercises yet",
