@@ -293,7 +293,8 @@
     "upgradeToExport": "Upgrade to PRO to export Garmin FIT files",
     "exportDay": "Export Day",
     "exportWeek": "Export Week",
-    "exporting": "Exporting..."
+    "exporting": "Exporting...",
+    "freeExportHint": "1 Free Export Remaining"
   },
   "landing": {
     "heroTitle": "Train with a plan.",
@@ -414,7 +415,12 @@
     "statusUpdateFailed": "Failed to update day status",
     "setsLabel": "sets",
     "repsLabel": "reps",
-    "viewGuide": "View guide"
+    "viewGuide": "View guide",
+    "saveShare": "Save & Share",
+    "savingImage": "Saving...",
+    "saveImageError": "Could not save image",
+    "totalRunDistance": "Total Distance",
+    "totalRunTime": "Total Run Time"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",

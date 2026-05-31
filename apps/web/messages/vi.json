@@ -293,7 +293,8 @@
     "upgradeToExport": "Nâng cấp lên PRO để xuất file Garmin FIT",
     "exportDay": "Xuất ngày",
     "exportWeek": "Xuất tuần",
-    "exporting": "Đang xuất..."
+    "exporting": "Đang xuất...",
+    "freeExportHint": "Còn 1 lượt xuất miễn phí"
   },
   "landing": {
     "heroTitle": "Tập luyện có kế hoạch.",
@@ -414,7 +415,12 @@
     "statusUpdateFailed": "Không cập nhật được trạng thái ngày",
     "setsLabel": "set",
     "repsLabel": "rep",
-    "viewGuide": "Xem hướng dẫn"
+    "viewGuide": "Xem hướng dẫn",
+    "saveShare": "Lưu & Chia sẻ",
+    "savingImage": "Đang lưu...",
+    "saveImageError": "Không lưu được ảnh",
+    "totalRunDistance": "Tổng khoảng cách",
+    "totalRunTime": "Tổng thời gian chạy"
   },
   "privateExercise": {
     "backToLibrary": "Quay lại thư viện",
