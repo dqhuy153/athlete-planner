@@ -8,10 +8,13 @@
     "dev": "turbo dev",
     "dev:all": "pnpm infra:up && pnpm dev",
     "build": "turbo build",
+    "build:api": "turbo build --filter=api",
+    "build:web": "turbo build --filter=web",
+    "build:web-admin": "turbo build --filter=admin-web",
     "lint": "turbo lint",
     "dev:api": "turbo dev --filter=api",
     "dev:web": "turbo dev --filter=web",
-    "dev:admin": "turbo dev --filter=admin-web"
+    "dev:web-admin": "turbo dev --filter=admin-web"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
