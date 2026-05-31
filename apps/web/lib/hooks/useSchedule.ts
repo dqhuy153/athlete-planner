@@ -64,25 +64,19 @@ export function useSchedule({ token }: UseScheduleOptions) {
     // Use ref to always get fresh schedules without recreating on every change
     const cached = schedulesRef.current.get(dateString);
     if (cached) {
-      console.log('[useSchedule] selectDate: cache hit', cached.id);
       setActive(cached);
       return cached;
     }
     // Fetch or create
     try {
-      console.log('[useSchedule] selectDate: fetching...', dateString);
       let schedule = await api.getDailySchedule(token, dateString);
-      console.log('[useSchedule] selectDate: getDailySchedule returned', schedule?.id, schedule?.dateString, 'null?', schedule === null);
       if (!schedule) {
-        console.log('[useSchedule] selectDate: creating new schedule...');
         schedule = await api.createDailySchedule(token, dateString);
-        console.log('[useSchedule] selectDate: createDailySchedule returned', schedule?.id, schedule?.dateString);
       }
       setSchedules(prev => new Map(prev).set(dateString, schedule!));
       setActive(schedule);
       return schedule;
-    } catch (err) {
-      console.error('[useSchedule] selectDate: error', err);
+    } catch {
       setActive(null);
       return null;
     }
@@ -93,34 +87,27 @@ export function useSchedule({ token }: UseScheduleOptions) {
       const updated = await api.updateDayStatus(token, scheduleId, status);
       setSchedules(prev => new Map(prev).set(dateString, updated));
       setActive(updated);
-    } catch (err) {
-      console.error('Failed to update day status:', err);
-      // Re-fetch to restore correct state
+    } catch {
       await selectDate(dateString);
     }
   }, [token, selectDate]);
 
   const addItem = useCallback(async (scheduleId: string, dateString: string, picked: PickedExercise) => {
-    console.log('[useSchedule] addItem called', { scheduleId, dateString, picked });
     try {
       const item = await api.addScheduleItem(token, scheduleId, {
         exerciseType: picked.sourceType as ExerciseSourceType,
         exerciseId: picked.gymMasterId ?? picked.runningMasterId ?? picked.privateExerciseId ?? '',
         sportType: picked.sportType as SportType,
       });
-      console.log('[useSchedule] addItem API success', item);
       setSchedules(prev => {
         const map = new Map(prev);
         const sched = map.get(dateString);
         if (sched) map.set(dateString, { ...sched, items: [...sched.items, item] });
         return map;
       });
-      setActive(prev => {
-        console.log('[useSchedule] setActive called', { prevItems: prev?.items?.length, newItem: item?.id });
-        return prev ? { ...prev, items: [...prev.items, item] } : prev;
-      });
+      setActive(prev => prev ? { ...prev, items: [...prev.items, item] } : prev);
     } catch (err) {
-      console.error('[useSchedule] addItem FAILED', err);
+      console.error('Failed to add exercise to schedule:', err);
       throw err;
     }
   }, [token]);

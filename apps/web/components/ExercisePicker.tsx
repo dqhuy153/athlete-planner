@@ -129,15 +129,12 @@ export function ExercisePicker({
               key={ex.id}
               type="button"
               role="listitem"
-              onClick={() => {
-                console.log('[ExercisePicker] gym item clicked', ex.id, ex.name);
-                onPick({
-                  sportType: SportType.GYM,
-                  sourceType: ExerciseSourceType.GYM_MASTER,
-                  gymMasterId: ex.id,
-                  label: locale === 'vi' ? ex.vietnameseName : ex.name,
-                });
-              }}
+              onClick={() => onPick({
+                sportType: SportType.GYM,
+                sourceType: ExerciseSourceType.GYM_MASTER,
+                gymMasterId: ex.id,
+                label: locale === 'vi' ? ex.vietnameseName : ex.name,
+              })}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
             >
               <Dumbbell className="h-4 w-4 shrink-0 text-accent" aria-hidden />
@@ -155,15 +152,12 @@ export function ExercisePicker({
               key={ex.id}
               type="button"
               role="listitem"
-              onClick={() => {
-                console.log('[ExercisePicker] running item clicked', ex.id, ex.name);
-                onPick({
-                  sportType: SportType.RUNNING,
-                  sourceType: ExerciseSourceType.RUNNING_MASTER,
-                  runningMasterId: ex.id,
-                  label: locale === 'vi' ? ex.vietnameseName : ex.name,
-                });
-              }}
+              onClick={() => onPick({
+                sportType: SportType.RUNNING,
+                sourceType: ExerciseSourceType.RUNNING_MASTER,
+                runningMasterId: ex.id,
+                label: locale === 'vi' ? ex.vietnameseName : ex.name,
+              })}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
             >
               <PersonStanding className="h-4 w-4 shrink-0 text-success" aria-hidden />
@@ -181,15 +175,12 @@ export function ExercisePicker({
               key={ex.id}
               type="button"
               role="listitem"
-              onClick={() => {
-                console.log('[ExercisePicker] private item clicked', ex.id, ex.name);
-                onPick({
-                  sportType: ex.sportType,
-                  sourceType: ExerciseSourceType.PRIVATE,
-                  privateExerciseId: ex.id,
-                  label: ex.name,
-                });
-              }}
+              onClick={() => onPick({
+                sportType: ex.sportType,
+                sourceType: ExerciseSourceType.PRIVATE,
+                privateExerciseId: ex.id,
+                label: ex.name,
+              })}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
             >
               {ex.sportType === SportType.GYM

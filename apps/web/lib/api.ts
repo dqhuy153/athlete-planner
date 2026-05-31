@@ -23,31 +23,21 @@ class ApiClient {
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}/api${path}`;
-    console.log(`[api] ${options?.method ?? 'GET'} ${url}`);
-    try {
-      const res = await fetch(url, {
-        ...options,
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-      });
-      console.log(`[api] response ${res.status} ${res.statusText}`);
-      if (!res.ok) {
-        const text = await res.text();
-        console.error(`[api] error body:`, text);
-        try {
-          const err = JSON.parse(text);
-          throw new Error(err.message || text);
-        } catch (e) {
-          if (e instanceof Error && e.message !== text) throw e;
-          throw new Error(text || `HTTP ${res.status}`);
-        }
+    const res = await fetch(url, {
+      ...options,
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      try {
+        const err = JSON.parse(text);
+        throw new Error(err.message || text);
+      } catch (e) {
+        if (e instanceof Error && e.message !== text) throw e;
+        throw new Error(text || `HTTP ${res.status}`);
       }
-      const data = await res.json() as Promise<T>;
-      console.log(`[api] success data:`, JSON.stringify(data)?.slice(0, 200));
-      return data;
-    } catch (err) {
-      console.error(`[api] fetch error for ${url}:`, err);
-      throw err;
     }
+    return res.json() as Promise<T>;
   }
 
   private authHeaders(accessToken: string) {

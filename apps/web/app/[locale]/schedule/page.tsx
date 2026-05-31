@@ -186,36 +186,21 @@ export default function SchedulePage() {
 
   const handlePick = useCallback(
     async (picked: PickedExercise) => {
-      console.log('[schedule] 1. handlePick called', picked);
       setPickerOpen(false)
-      console.log('[schedule] 2. activeSchedule?', activeSchedule?.id, 'dateString?', activeSchedule?.dateString);
-      console.log('[schedule] 3. selectedDate', selectedDate);
-      console.log('[schedule] 4. schedules map size', schedules.size, 'keys', [...schedules.keys()]);
-
       let schedule =
         activeSchedule?.dateString === selectedDate
           ? activeSchedule
           : (schedules.get(selectedDate) ?? null)
 
-      console.log('[schedule] 5. schedule from cache?', schedule?.id);
-
       if (!schedule) {
-        console.log('[schedule] 6. calling selectDate...');
         schedule = await selectDate(selectedDate)
-        console.log('[schedule] 7. selectDate returned', schedule?.id, schedule?.dateString);
       }
-      if (!schedule) {
-        console.log('[schedule] 8. NO SCHEDULE — returning early');
-        return
-      }
+      if (!schedule) return
 
-      console.log('[schedule] 9. calling addItem...');
       try {
         _pendingLabel.current = picked.label
         await addItem(schedule.id, selectedDate, picked)
-        console.log('[schedule] 10. addItem succeeded');
-      } catch (err) {
-        console.log('[schedule] 10. addItem FAILED', err);
+      } catch {
         pushToast({ title: t('addExerciseFailed'), tone: 'error' })
       }
     },
