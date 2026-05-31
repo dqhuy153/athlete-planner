@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -30,14 +30,29 @@ const DEV_ACCOUNTS: Record<DevTier, { email: string }> = {
   PRO: { email: 'dev-pro@example.com' },
 }
 
+// Handles auth redirect — isolated here so useSearchParams is inside Suspense
+// and does not opt the entire route out of static pre-rendering.
+function SessionRedirector({ locale }: { locale: string }) {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    if (status === 'authenticated' && session) {
+      const cb = searchParams.get('callbackUrl')
+      router.replace(cb ?? `/${locale}/schedule`)
+    }
+  }, [status, session, locale, router, searchParams])
+
+  return null
+}
+
 export default function LandingPage() {
   const tl = useTranslations('landing')
   const ta = useTranslations('auth')
   const tc = useTranslations('common')
-  const { data: session, status } = useSession()
   const router = useRouter()
   const params = useParams()
-  const searchParams = useSearchParams()
   const locale = (params?.locale as string) ?? 'vi'
 
   const { theme, setTheme } = useTheme()
@@ -52,14 +67,6 @@ export default function LandingPage() {
     setMounted(true)
   }, [])
 
-  // Redirect authenticated users to schedule (or callbackUrl)
-  useEffect(() => {
-    if (status === 'authenticated' && session) {
-      const cb = searchParams.get('callbackUrl')
-      router.replace(cb ?? `/${locale}/schedule`)
-    }
-  }, [status, session, locale, router, searchParams])
-
   // Close mobile menu on resize to desktop
   useEffect(() => {
     const onResize = () => {
@@ -73,8 +80,7 @@ export default function LandingPage() {
     setError(null)
     setGoogleLoading(true)
     setMobileMenuOpen(false)
-    const cb = searchParams.get('callbackUrl') ?? `/${locale}/schedule`
-    await signIn('google', { callbackUrl: cb })
+    await signIn('google', { callbackUrl: `/${locale}/schedule` })
   }
 
   async function handleDevLogin(tier: DevTier) {
@@ -103,15 +109,6 @@ export default function LandingPage() {
     router.push(path + window.location.search)
   }
 
-  // Loading / redirect state
-  if (status === 'loading' || (status === 'authenticated' && session)) {
-    return (
-      <div className='flex min-h-screen items-center justify-center bg-background'>
-        <div className='h-8 w-8 animate-pulse-subtle rounded-full bg-accent/30' />
-      </div>
-    )
-  }
-
   const isVi = locale === 'vi'
 
   const stats = [
@@ -122,6 +119,11 @@ export default function LandingPage() {
 
   return (
     <div className='min-h-screen bg-background text-text-primary relative overflow-x-hidden selection:bg-accent selection:text-accent-foreground'>
+      {/* Auth redirect — isolated in Suspense to preserve static pre-rendering */}
+      <Suspense fallback={null}>
+        <SessionRedirector locale={locale} />
+      </Suspense>
+
       {/* Decorative ambient blurs */}
       <div className='absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none' />
       <div className='absolute top-[40%] right-[-10%] w-[350px] h-[350px] bg-accent/5 blur-[100px] rounded-full pointer-events-none' />

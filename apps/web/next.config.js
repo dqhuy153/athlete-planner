@@ -18,7 +18,7 @@ const withPWAConfig = withPWA({
   disable: process.env.NODE_ENV === 'development',
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
-  reloadOnOnline: true,
+  reloadOnOnline: false,
   // Cache media assets (GIFs, videos) for offline guide overlay
   workboxOptions: {
     runtimeCaching: [
