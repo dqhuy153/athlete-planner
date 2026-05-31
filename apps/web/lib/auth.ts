@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { type NextAuthResult } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { UserTier, ExperienceLevel } from '@athlete-planner/contracts';
@@ -79,8 +79,9 @@ const authConfig = NextAuth({
           const data = await res.json();
           if (!res.ok) return false;
 
-          (user as any).accessToken = data.accessToken;
-          (user as any).nestUser = data.user;
+          const customUser = user as typeof user & { accessToken: string; nestUser: Record<string, unknown> };
+          customUser.accessToken = data.accessToken;
+          customUser.nestUser = data.user;
           return true;
         } catch {
           return false;
@@ -89,7 +90,7 @@ const authConfig = NextAuth({
       // CredentialsProvider: authorize() already populated user.accessToken
       return true;
     },
-    async jwt({ token, user, account, trigger, session: sessionUpdate }: any) {
+    async jwt({ token, user, account, trigger, session: sessionUpdate }) {
       // Handle session update (e.g., preferredLevel change from profile page)
       if (trigger === 'update' && sessionUpdate?.preferredLevel !== undefined) {
         token.preferredLevel = sessionUpdate.preferredLevel;
@@ -97,31 +98,39 @@ const authConfig = NextAuth({
       }
       // On initial sign-in from either Google or dev credentials
       if (user && (account?.provider === 'google' || account?.provider === 'dev-credentials')) {
-        token.accessToken = (user as any).accessToken;
-        const nestUser = (user as any).nestUser;
+        const customUser = user as typeof user & { accessToken: string; nestUser: Record<string, unknown> };
+        token.accessToken = customUser.accessToken;
+        const nestUser = customUser.nestUser;
         if (nestUser) {
-          token.userId = nestUser.id;
-          token.role = nestUser.role;
-          token.email = nestUser.email;
-          token.name = nestUser.name;
-          token.picture = nestUser.avatarUrl;
-          token.tier = nestUser.tier;
-          token.preferredLevel = nestUser.preferredLevel ?? null;
+          token.userId = nestUser.id as string;
+          token.role = nestUser.role as string;
+          token.email = nestUser.email as string;
+          token.name = nestUser.name as string;
+          token.picture = nestUser.avatarUrl as string;
+          token.tier = nestUser.tier as UserTier;
+          token.preferredLevel = (nestUser.preferredLevel as ExperienceLevel | null) ?? null;
         }
       }
       return token;
     },
     async session({ session, token }) {
+      const t = token as typeof token & {
+        accessToken: string;
+        userId: string;
+        role: string;
+        tier: UserTier;
+        preferredLevel: ExperienceLevel | null;
+      };
       return {
         ...session,
         user: {
           ...session.user,
-          id: token.userId as string,
-          role: token.role as string,
-          tier: token.tier as string,
-          preferredLevel: (token.preferredLevel as ExperienceLevel | null) ?? null,
+          id: t.userId,
+          role: t.role,
+          tier: t.tier,
+          preferredLevel: t.preferredLevel ?? null,
         },
-        accessToken: token.accessToken as string,
+        accessToken: t.accessToken,
       };
     },
   },
@@ -134,7 +143,7 @@ const authConfig = NextAuth({
   secret: process.env.NEXTAUTH_SECRET || 'change-me-in-production',
 });
 
-export const handlers: any = authConfig.handlers;
-export const auth: any = authConfig.auth;
-export const signIn: any = authConfig.signIn;
-export const signOut: any = authConfig.signOut;
+export const handlers: NextAuthResult['handlers'] = authConfig.handlers;
+export const auth: NextAuthResult['auth'] = authConfig.auth;
+export const signIn: NextAuthResult['signIn'] = authConfig.signIn;
+export const signOut: NextAuthResult['signOut'] = authConfig.signOut;

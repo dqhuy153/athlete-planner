@@ -1,11 +1,11 @@
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { auth } from './lib/auth';
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextMiddleware } from 'next/server';
 
 const intlMiddleware = createMiddleware(routing);
 
-export default auth(function middleware(req: any) {
+export default auth(function middleware(req: any): ReturnType<NextMiddleware> {
   const { pathname } = req.nextUrl;
   const locale = pathname.split('/')[1] ?? 'vi';
 
