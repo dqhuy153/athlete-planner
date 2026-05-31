@@ -81,7 +81,6 @@ export function GymExerciseWizard({
     defaultValues: {
       name: '',
       vietnameseName: '',
-      targetMuscleGroup: 'Chest',
       secondaryMuscleGroups: [],
       garminExerciseEnum: '',
       instructions: [
@@ -115,10 +114,11 @@ export function GymExerciseWizard({
       defaultAdvancedRestTimeSecs: undefined,
       defaultAdvancedRestBetweenExercisesSecs: undefined,
       ...initialValues,
+      targetMuscleGroup: initialValues?.targetMuscleGroup ?? 'Chest',
     },
   });
 
-  const { register, handleSubmit, trigger, watch } = methods;
+  const { register, handleSubmit, trigger, watch, formState: { errors } } = methods;
   const watchedValues = watch();
 
   async function handleGenerate() {
@@ -196,6 +196,11 @@ export function GymExerciseWizard({
     setSubmitting(true);
     setError('');
     try {
+      const allValid = await trigger();
+      if (!allValid) {
+        setSubmitting(false);
+        return;
+      }
       await onSubmit(data);
       setSaved(true);
     } catch (err: unknown) {
@@ -265,7 +270,28 @@ export function GymExerciseWizard({
 
         {step === 3 && <GymStep3DefaultConfig />}
 
-        {step === 4 && <Step3Review />}
+        {step === 4 && (
+          <>
+            <Step3Review />
+            {Object.keys(errors).length > 0 && (
+              <div className="mb-4 rounded-xl border border-error/30 bg-error/10 p-3">
+                <p className="mb-1.5 text-xs font-bold text-error">
+                  Please fix the following fields before saving:
+                </p>
+                <ul className="list-disc pl-4 space-y-0.5">
+                  {Object.entries(errors).map(([key, err]) => (
+                    <li key={key} className="font-mono text-xs text-error">
+                      <span className="font-semibold">{key}:</span>{' '}
+                      {typeof (err as { message?: string })?.message === 'string'
+                        ? (err as { message: string }).message
+                        : 'Invalid value'}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
 
         {error && (
           <p role="alert" className="text-sm text-error">
