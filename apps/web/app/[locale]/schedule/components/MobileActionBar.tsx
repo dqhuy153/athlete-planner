@@ -37,7 +37,6 @@ export function MobileActionBar({
           <Button
             type='button'
             variant='accent'
-            size='sm'
             className='flex-1 gap-1.5'
             onClick={onStartWorkout}
           >
@@ -45,23 +44,25 @@ export function MobileActionBar({
             {tWorkout('startWorkout')}
           </Button>
         )}
-        <button
+        <Button
           type='button'
+          variant='surface'
+          className='flex-1 gap-1.5'
           onClick={onOpenCopyDay}
-          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]'
         >
           <Copy size={13} aria-hidden />
           {t('copyDay')}
-        </button>
-        <button
+        </Button>
+        <Button
           type='button'
+          variant='surface'
+          className='flex-1 gap-1.5'
           onClick={onExportDay}
           disabled={exportingDay}
-          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px] disabled:opacity-50'
         >
           <Download size={13} aria-hidden />
           {tExport('exportDay')}
-        </button>
+        </Button>
       </div>
     </div>
   )

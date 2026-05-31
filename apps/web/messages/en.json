@@ -69,6 +69,7 @@
     "weekLabel": "Week {week}",
     "emptyDay": "No workouts planned",
     "addWorkout": "Add workout",
+    "aiWorkout": "AI Workout",
     "startPlanning": "Start planning",
     "pickExercise": "Pick an exercise",
     "searchExercises": "Search exercises...",

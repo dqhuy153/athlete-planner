@@ -7,7 +7,7 @@ import { UserTier } from '@athlete-planner/contracts'
 import type { DailySchedule } from '@athlete-planner/contracts'
 import { WeekCalendar } from '@/components/WeekCalendar'
 import { DisciplineRateWidget } from '@/components/DisciplineRateWidget'
-import { Download, Archive, Copy, CalendarRange, Plus, Play } from 'lucide-react'
+import { Download, Archive, Copy, CalendarRange, Plus, Play, Sparkles } from 'lucide-react'
 
 interface ScheduleSidebarProps {
   weekOffset: number
@@ -27,6 +27,7 @@ interface ScheduleSidebarProps {
   onOpenCopyWeek: () => void
   onExportDay: () => void
   onExportWeek: () => void
+  onOpenAI?: () => void
 }
 
 export function ScheduleSidebar({
@@ -47,6 +48,7 @@ export function ScheduleSidebar({
   onOpenCopyWeek,
   onExportDay,
   onExportWeek,
+  onOpenAI,
 }: ScheduleSidebarProps) {
   const t = useTranslations('schedule')
   const tExport = useTranslations('export')
@@ -86,14 +88,56 @@ export function ScheduleSidebar({
             {tWorkout('startWorkout')}
           </Button>
         )}
-        <button
+        <Button
           type='button'
+          variant='surface'
+          className='w-full gap-2'
           onClick={onOpenPicker}
-          className='flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-3 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
         >
-          <Plus size={16} aria-hidden />
+          <Plus size={15} aria-hidden />
           {t('addWorkout')}
-        </button>
+        </Button>
+      </div>
+
+      <div className='flex flex-col gap-2 px-4 pb-4'>
+        <Button
+          type='button'
+          variant='surface'
+          className='w-full gap-2'
+          onClick={onOpenCopyDay}
+        >
+          <Copy size={14} aria-hidden />
+          {t('copyDay')}
+        </Button>
+        <Button
+          type='button'
+          variant='surface'
+          className='w-full gap-2'
+          onClick={onOpenCopyWeek}
+        >
+          <CalendarRange size={14} aria-hidden />
+          {t('copyWeek')}
+        </Button>
+        <Button
+          type='button'
+          variant='surface'
+          className='w-full gap-2'
+          onClick={onExportDay}
+          disabled={exportingDay}
+        >
+          <Download size={14} aria-hidden />
+          {exportingDay ? tExport('exporting') : tExport('exportDay')}
+        </Button>
+        <Button
+          type='button'
+          variant='surface'
+          className={cn('w-full gap-2', userTier !== UserTier.PRO && 'opacity-50')}
+          onClick={onExportWeek}
+          disabled={exportingWeek}
+        >
+          <Archive size={14} aria-hidden />
+          {exportingWeek ? tExport('exporting') : tExport('exportWeek')}
+        </Button>
       </div>
 
       <div className='flex flex-col gap-2 px-4 pb-4'>

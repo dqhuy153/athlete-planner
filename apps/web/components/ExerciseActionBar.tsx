@@ -86,12 +86,13 @@ export function ExerciseActionBar({
 
   function buildSingleItem(): WorkoutItem {
     if (isGymExercise(exercise)) {
-      const sets = exercise.defaultBeginnerSets ?? 3;
-      const reps = exercise.defaultBeginnerReps ?? 10;
-      const weight = exercise.defaultBeginnerWeightKg ?? 0;
-      const rpe = exercise.defaultBeginnerRpe ?? undefined;
-      const restTimeSecs = exercise.defaultBeginnerRestTimeSecs ?? 90;
-      const restBetweenExercisesSecs = exercise.defaultBeginnerRestBetweenExercisesSecs ?? undefined;
+      const sets = exercise.defaultBeginnerSets ?? 3
+      const reps = exercise.defaultBeginnerReps ?? 10
+      const weight = exercise.defaultBeginnerWeightKg ?? 0
+      const rpe = exercise.defaultBeginnerRpe ?? undefined
+      const restTimeSecs = exercise.defaultBeginnerRestTimeSecs ?? 90
+      const restBetweenExercisesSecs =
+        exercise.defaultBeginnerRestBetweenExercisesSecs ?? undefined
       return {
         id: crypto.randomUUID(),
         sportType: SportType.GYM,
@@ -263,7 +264,6 @@ export function ExerciseActionBar({
             <Button
               type='button'
               variant='accent'
-              size='lg'
               onClick={handleStartWorkout}
               className='flex-1 gap-2'
             >
@@ -279,7 +279,7 @@ export function ExerciseActionBar({
               title={t('addToToday')}
               aria-label={t('addToToday')}
               className={cn(
-                'flex min-h-[48px] items-center justify-center gap-1.5 rounded-xl border px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                'flex items-center justify-center gap-1.5 rounded-xl border px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
                 addedToday
                   ? 'border-accent/30 bg-accent/10 text-accent'
                   : 'border-border/60 bg-surface-2/60 text-text-secondary hover:bg-surface-2 hover:text-text-primary',
@@ -302,7 +302,7 @@ export function ExerciseActionBar({
               title={t('addToSchedule')}
               aria-label={t('addToSchedule')}
               className={cn(
-                'flex min-h-[48px] items-center justify-center gap-1.5 rounded-xl border px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                'flex items-center justify-center gap-1.5 rounded-xl border px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
                 addedSchedule
                   ? 'border-accent/30 bg-accent/10 text-accent'
                   : showDatePicker

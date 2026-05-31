@@ -40,6 +40,21 @@ import { MobileActionBar } from './components/MobileActionBar'
 import { ReplaceWorkoutModal } from './components/ReplaceWorkoutModal'
 import { StarterTemplateModal } from '@/components/StarterTemplateModal'
 
+const AIWorkoutGeneratorModal = dynamic(
+  () =>
+    import('@/components/workout/AIWorkoutGeneratorModal').then((m) => ({
+      default: m.AIWorkoutGeneratorModal,
+    })),
+  { ssr: false },
+)
+const AIWorkoutReviewSheet = dynamic(
+  () =>
+    import('@/components/workout/AIWorkoutReviewSheet').then((m) => ({
+      default: m.AIWorkoutReviewSheet,
+    })),
+  { ssr: false },
+)
+
 const ExercisePicker = dynamic(
   () =>
     import('@/components/ExercisePicker').then(m => ({
@@ -63,6 +78,7 @@ const CopyWeekModal = dynamic(
 )
 
 import type { PickedExercise } from '@/components/ExercisePicker'
+import type { WorkoutDraftDay, WorkoutDraftWeek } from '@/lib/api'
 
 export default function SchedulePage() {
   const t = useTranslations('schedule')
@@ -225,6 +241,13 @@ export default function SchedulePage() {
   )
   const [showStarterModal, setShowStarterModal] = useState(false)
   const starterCheckedRef = useRef(false)
+
+  // AI workout generator state
+  const [aiWorkoutOpen, setAiWorkoutOpen] = useState(false)
+  const [aiReview, setAiReview] = useState<{
+    draft: WorkoutDraftDay | WorkoutDraftWeek
+    mode: 'day' | 'week'
+  } | null>(null)
 
   const {
     session: workoutSession,
@@ -587,6 +610,7 @@ export default function SchedulePage() {
             onOpenCopyWeek={() => setCopyWeekOpen(true)}
             onExportDay={handleExportDay}
             onExportWeek={handleExportWeek}
+            onOpenAI={() => setAiWorkoutOpen(true)}
           />
 
           {/* Right panel: day detail */}
@@ -651,7 +675,9 @@ export default function SchedulePage() {
               dayLabel={dayLabel}
               itemCount={activeSchedule?.items?.length ?? 0}
               disciplineRate={disciplineRate?.rate ?? 0}
+              userTier={userTier}
               onOpenPicker={() => setPickerOpen(true)}
+              onOpenAI={() => setAiWorkoutOpen(true)}
             />
 
             {/* Day status bar */}
@@ -776,7 +802,11 @@ export default function SchedulePage() {
 
         {/* Workout session sheet */}
         {workoutOpen && (
-          <WorkoutSessionSheet onClose={() => setWorkoutOpen(false)} />
+          <WorkoutSessionSheet
+            onClose={() => setWorkoutOpen(false)}
+            token={token}
+            userTier={userTier}
+          />
         )}
 
         {/* Resume prompt — shown when a session exists and the sheet is not open */}
@@ -828,6 +858,34 @@ export default function SchedulePage() {
             onApplied={() => {
               localStorage.setItem('hasSeenTemplates', '1')
               setShowStarterModal(false)
+              loadWeek(weekOffset)
+            }}
+          />
+        )}
+
+        {/* AI Workout Generator */}
+        {aiWorkoutOpen && (
+          <AIWorkoutGeneratorModal
+            token={token}
+            onClose={() => setAiWorkoutOpen(false)}
+            onGenerated={(draft, mode) => {
+              setAiWorkoutOpen(false)
+              setAiReview({ draft, mode })
+            }}
+          />
+        )}
+
+        {/* AI Workout Review */}
+        {aiReview && (
+          <AIWorkoutReviewSheet
+            draft={aiReview.draft}
+            mode={aiReview.mode}
+            token={token}
+            targetDate={selectedDate}
+            weekOffset={weekOffset}
+            onClose={() => setAiReview(null)}
+            onApplied={() => {
+              setAiReview(null)
               loadWeek(weekOffset)
             }}
           />

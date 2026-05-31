@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import {
   X, Settings, Dumbbell, PersonStanding, CheckCircle2,
   Play, Pause, Square, ChevronDown, ChevronRight, RotateCcw, SkipForward, ExternalLink,
+  RefreshCw, Loader2,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn, BottomSheet } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
-import { SportType } from '@athlete-planner/contracts';
+import { SportType, UserTier } from '@athlete-planner/contracts';
 import { WorkoutGymItem } from './WorkoutGymItem';
 import { WorkoutRunningItem } from './WorkoutRunningItem';
 import { WorkoutSettings } from './WorkoutSettings';
@@ -16,6 +17,7 @@ import { WorkoutComplete } from './WorkoutComplete';
 import { triggerWorkoutComplete } from '@/lib/workout-alerts';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { InstructionsPanel } from '@/components/InstructionsPanel';
+import { api } from '@/lib/api';
 
 function makeYoutubeEmbedUrl(url: string): string | null {
   try {
@@ -48,10 +50,13 @@ function isYoutubeUrl(url: string): boolean {
 
 interface WorkoutSessionSheetProps {
   onClose: () => void;
+  token?: string;
+  userTier?: UserTier;
 }
 
-export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
+export function WorkoutSessionSheet({ onClose, token, userTier }: WorkoutSessionSheetProps) {
   const t = useTranslations('workout');
+  const tAi = useTranslations('ai');
   const {
     session,
     automationMode,
@@ -77,6 +82,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     closeGuide,
     activeMediaItem,
     closeMedia,
+    replaceItem,
   } = useWorkoutStore();
 
   const [showAbandonConfirm, setShowAbandonConfirm] = useState(false);
@@ -84,6 +90,11 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
   const [flashActive, setFlashActive] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
   const [holdCompleted, setHoldCompleted] = useState(false);
+
+  // "Đổi bài" swap state (preview phase only)
+  const [swapIndex, setSwapIndex] = useState<number | null>(null);
+  const [swapReason, setSwapReason] = useState('');
+  const [swapLoading, setSwapLoading] = useState(false);
 
   const currentRef = useRef<HTMLDivElement | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
@@ -171,6 +182,23 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
 
   const doneCount = session.items.filter((i) => i.done).length;
 
+  async function handleFindSwap(itemIndex: number) {
+    if (!token || swapLoading) return;
+    const item = session!.items[itemIndex];
+    if (!item) return;
+    setSwapLoading(true);
+    try {
+      const alt = await api.suggestAlternative(token, item.label, swapReason);
+      replaceItem(itemIndex, { label: alt.name });
+      setSwapIndex(null);
+      setSwapReason('');
+    } catch {
+      // keep form open on error
+    } finally {
+      setSwapLoading(false);
+    }
+  }
+
   function handleCloseAttempt() {
     if (workoutPhase === 'complete') {
       onClose();
@@ -216,7 +244,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                 key={item.id}
                 className="rounded-xl border border-border/30 bg-surface-1 px-3 py-3 space-y-2"
               >
-                {/* Header row */}
+                 {/* Header row */}
                 <div className="flex items-center gap-3">
                   <div className="h-1.5 w-1.5 rounded-full bg-border shrink-0" />
                   {item.sportType === SportType.GYM ? (
@@ -240,7 +268,62 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                         : null}
                     </span>
                   )}
+                  {/* Đổi bài — PRO only, GYM items, no completed sets */}
+                  {userTier === UserTier.PRO &&
+                    token &&
+                    item.sportType === SportType.GYM &&
+                    !item.sets.some((s) => s.completed) &&
+                    swapIndex !== i && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSwapIndex(i);
+                          setSwapReason('');
+                        }}
+                        className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg bg-surface-3 hover:bg-accent/10 text-text-tertiary hover:text-accent text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        <RefreshCw size={11} aria-hidden />
+                        {tAi('swapExercise')}
+                      </button>
+                    )}
                 </div>
+
+                {/* Swap form — shown when this item is selected for swap */}
+                {swapIndex === i && (
+                  <div className="space-y-2 pt-1 border-t border-border/20">
+                    <textarea
+                      value={swapReason}
+                      onChange={(e) => setSwapReason(e.target.value)}
+                      placeholder={tAi('alternativeReason')}
+                      rows={2}
+                      className="w-full resize-none rounded-lg border border-border bg-surface-2 px-2.5 py-2 text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent hover:border-accent/40 transition-colors"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSwapIndex(null);
+                          setSwapReason('');
+                        }}
+                        className="flex-1 py-2 rounded-lg bg-surface-3 text-xs text-text-secondary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        {tAi('keepOriginal')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleFindSwap(i)}
+                        disabled={!swapReason.trim() || swapLoading}
+                        className="flex-1 py-2 rounded-lg bg-accent text-black text-xs font-semibold disabled:opacity-50 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        {swapLoading ? (
+                          <Loader2 size={12} className="animate-spin mx-auto" aria-hidden />
+                        ) : (
+                          tAi('findAlternative')
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Running workout phases — compact preview */}
                 {item.sportType === SportType.RUNNING &&

@@ -63,6 +63,7 @@ interface WorkoutStore {
   openMedia: (item: WorkoutItem) => void;
   closeMedia: () => void;
   checkAndDiscardExpired: () => void;
+  replaceItem: (itemIndex: number, updates: Partial<WorkoutItem>) => void;
 }
 
 export const useWorkoutStore = create<WorkoutStore>()(
@@ -333,6 +334,15 @@ export const useWorkoutStore = create<WorkoutStore>()(
           set({ session: null });
         }
       },
+
+      replaceItem: (itemIndex, updates) =>
+        set((state) => {
+          if (!state.session) return {};
+          const items = state.session.items.map((item, i) =>
+            i === itemIndex ? { ...item, ...updates } : item,
+          );
+          return { session: { ...state.session, items } };
+        }),
     }),
     {
       name: 'workout-session',

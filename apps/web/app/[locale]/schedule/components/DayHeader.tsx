@@ -2,20 +2,25 @@
 
 import { useTranslations } from 'next-intl'
 import { Button } from '@athlete-planner/ui'
-import { Plus } from 'lucide-react'
+import { Plus, Sparkles } from 'lucide-react'
+import { UserTier } from '@athlete-planner/contracts'
 
 interface DayHeaderProps {
   dayLabel: string
   itemCount: number
   disciplineRate: number
+  userTier?: UserTier
   onOpenPicker: () => void
+  onOpenAI?: () => void
 }
 
 export function DayHeader({
   dayLabel,
   itemCount,
   disciplineRate,
+  userTier,
   onOpenPicker,
+  onOpenAI,
 }: DayHeaderProps) {
   const t = useTranslations('schedule')
 
@@ -37,16 +42,28 @@ export function DayHeader({
           {t('disciplineRate')}
         </span>
       </div>
-      <Button
-        type='button'
-        variant='accent'
-        size='icon'
-        className='lg:hidden h-9 w-9'
-        onClick={onOpenPicker}
-        aria-label={t('addWorkout')}
-      >
-        <Plus size={16} aria-hidden />
-      </Button>
+      <div className='lg:hidden flex items-center gap-1.5'>
+        {userTier === UserTier.PRO && onOpenAI && (
+          <button
+            type='button'
+            onClick={onOpenAI}
+            className='h-9 w-9 flex items-center justify-center rounded-lg text-accent hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
+            aria-label={t('aiWorkout')}
+          >
+            <Sparkles size={15} aria-hidden />
+          </button>
+        )}
+        <Button
+          type='button'
+          variant='accent'
+          size='icon'
+          className='h-9 w-9'
+          onClick={onOpenPicker}
+          aria-label={t('addWorkout')}
+        >
+          <Plus size={16} aria-hidden />
+        </Button>
+      </div>
     </div>
   )
 }
