@@ -21,6 +21,13 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         gold:
           'bg-gradient-to-b from-primary to-primary-container text-on-primary font-semibold border-none shadow-sm hover:opacity-90',
+        // ── Minimalist Athletic variants ──────────────────────────────────
+        accent:
+          'bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:bg-accent/80 focus-visible:ring-accent/50',
+        'accent-outline':
+          'border border-accent text-accent bg-transparent hover:bg-accent/10 active:bg-accent/20 focus-visible:ring-accent/50',
+        surface:
+          'bg-surface-2 text-text-secondary border border-border hover:bg-surface-3 hover:text-text-primary focus-visible:ring-border',
       },
       size: {
         default: 'h-10 px-5 py-2',
