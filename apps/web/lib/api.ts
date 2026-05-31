@@ -229,7 +229,7 @@ class ApiClient {
         headers: this.authHeaders(token),
       });
     } catch (err) {
-      if (err instanceof Error && err.message.includes('404')) return null;
+      if (err instanceof Error && (err.message.includes('404') || err.message.includes('not found') || err.message.includes('Not found'))) return null;
       throw err;
     }
   }
