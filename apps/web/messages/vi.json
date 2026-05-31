@@ -468,7 +468,11 @@
     "confirmDelete": "Xoá",
     "deleting": "Đang xoá...",
     "createFailed": "Tạo bài tập thất bại",
-    "saveInfo": "Lưu thay đổi"
+    "saveInfo": "Lưu thay đổi",
+    "nameLabel": "Tên bài tập",
+    "muscleGroupLabel": "Nhóm cơ",
+    "runningTypeLabel": "Loại bài chạy",
+    "notesPlaceholder": "Ghi chú cá nhân, kỹ thuật, điều chỉnh…"
   },
   "starterTemplate": {
     "title": "Bắt đầu với mẫu lịch",

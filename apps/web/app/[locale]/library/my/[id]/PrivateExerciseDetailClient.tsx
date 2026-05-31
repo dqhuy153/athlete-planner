@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -34,16 +34,23 @@ export function PrivateExerciseDetailClient({
 
   // Editable field state — initialized from props
   const [name, setName] = useState(exercise.name);
-  const [muscleGroup, setMuscleGroup] = useState(exercise.targetMuscleGroup ?? '');
-  const [runningType, setRunningType] = useState(exercise.runningType ?? '');
+  const [muscleGroup, setMuscleGroup] = useState<MuscleGroup | ''>(exercise.targetMuscleGroup ?? '');
+  const [runningType, setRunningType] = useState<RunningType | ''>(exercise.runningType ?? '');
   const [notes, setNotes] = useState(exercise.customNotes ?? '');
 
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveDone, setSaveDone] = useState(false);
+  const saveDoneTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (saveDoneTimerRef.current) clearTimeout(saveDoneTimerRef.current);
+    };
+  }, []);
 
   async function handleSaveInfo() {
     if (!token) return;
@@ -54,12 +61,16 @@ export function PrivateExerciseDetailClient({
       await api.updatePrivateExercise(token, exercise.id, {
         name: name.trim(),
         customNotes: notes,
-        ...(exercise.sportType === SportType.GYM
+        ...(exercise.sportType === SportType.GYM && muscleGroup
           ? { targetMuscleGroup: muscleGroup }
-          : { runningType }),
+          : {}),
+        ...(exercise.sportType === SportType.RUNNING && runningType
+          ? { runningType }
+          : {}),
       });
       setSaveDone(true);
-      setTimeout(() => setSaveDone(false), 3000);
+      if (saveDoneTimerRef.current) clearTimeout(saveDoneTimerRef.current);
+      saveDoneTimerRef.current = setTimeout(() => setSaveDone(false), 3000);
     } catch (e: unknown) {
       setSaveError(e instanceof Error ? e.message : t('saveFailed'));
     } finally {
@@ -119,7 +130,7 @@ export function PrivateExerciseDetailClient({
             </label>
             <select
               value={muscleGroup}
-              onChange={(e) => setMuscleGroup(e.target.value)}
+              onChange={(e) => setMuscleGroup(e.target.value as MuscleGroup | '')}
               className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
             >
               <option value="">—</option>
@@ -138,7 +149,7 @@ export function PrivateExerciseDetailClient({
             </label>
             <select
               value={runningType}
-              onChange={(e) => setRunningType(e.target.value)}
+              onChange={(e) => setRunningType(e.target.value as RunningType | '')}
               className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
             >
               <option value="">—</option>

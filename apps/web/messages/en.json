@@ -468,7 +468,11 @@
     "confirmDelete": "Delete",
     "deleting": "Deleting...",
     "createFailed": "Failed to create exercise",
-    "saveInfo": "Save changes"
+    "saveInfo": "Save changes",
+    "nameLabel": "Exercise name",
+    "muscleGroupLabel": "Muscle group",
+    "runningTypeLabel": "Running type",
+    "notesPlaceholder": "Personal notes, cues, modifications…"
   },
   "starterTemplate": {
     "title": "Start with a template",
