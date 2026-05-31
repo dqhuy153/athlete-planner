@@ -1,7 +1,7 @@
 # Project Status — The Sport Notebook Planner
 
 > Last Updated: May 31, 2026  
-> Latest Commit: `f598735 feat: exercise defaults, workout pipeline redesign, private exercise config page`
+> Latest Commit: `running exercise config complete + workout session running support`
 
 ---
 
@@ -41,10 +41,13 @@
 - System exercise library (search + filters)
 - Private exercise management
 - Private exercise detail page `/library/my/[id]`
-- Private exercise config page (with defaults)
+- Private exercise config page (gym defaults)
+- **NEW: Running exercise config page** (8 defaults: distance, duration, pace, HR zone/min/max, intensity type)
 - Exercise action bar (add to today/schedule)
 - Add-to-schedule workflow
 - Multi-item batch add with defaults
+- **NEW: WorkoutSessionSheet** — type-specific preview cards (gym: sets×reps, running: km/min), per-item rest-after stepper
+- **NEW: WorkoutRunningItem** — between-exercises rest countdown timer + `completeItem` fix (item progression now advances correctly)
 
 #### ✅ Phase 5: Admin Dashboard
 - Admin-only routes + role guards
@@ -97,13 +100,12 @@
 - **Estimate:** 2–3 days
 
 #### ⏳ Running Exercise Config Page
-- **Current:** RunningExerciseMaster model exists
-- **Needed:**
-  - `/library/my/[id]` config page for running exercises
-  - User-configurable defaults (mirror gym structure)
-  - Inline editor for phases/distance/cadence/pace
-- **Blocker:** None — can copy/adapt gym config pattern
-- **Estimate:** 1–2 days
+- **Status: COMPLETE** ✅ (committed May 31, 2026)
+- 8 running default fields on `PrivateExercise` (DB + contracts + API + UI)
+- Discriminated-union PATCH endpoint (type: GYM | RUNNING)
+- `RunningExerciseConfig` component with pace/HR/distance/duration controls
+- `GymExerciseConfig` extracted as sibling component
+- `PrivateExerciseDetailClient` slimmed to sport-type routing shell
 
 #### ⏳ Advanced Filter/Search UI
 - **Current:** Search autocomplete exists
@@ -156,7 +158,7 @@ packages/
 - User (tier, OAuth, preferences)
 - GymExerciseMaster (12 default config fields per level)
 - RunningExerciseMaster (workout structure phases)
-- PrivateExercise (7 user-config fields)
+- PrivateExercise (15 user-config fields: 6 gym + 8 running + sport type)
 - DailySchedule (date_string, ISO week, status)
 - ScheduleItem (polymorphic: gym/running/manual)
 - WorkoutRecord + WorkoutSetRecord (history)
@@ -227,7 +229,7 @@ packages/
 1. **FREE Tier 14-day limit:** Not yet enforced in UI (enforcement ready, needs CRON wiring)
 2. **Export (Garmin FIT):** Binary encoder stub (ready for implementation)
 3. **Calendar:** Basic 7-day grid (month view pending brainstorm)
-4. **Running config:** No user-configurable defaults yet (gym exists, running model ready)
+4. **Running config:** ~~No user-configurable defaults yet~~ **COMPLETE** (8 fields: distance, duration, pace, HR)
 5. **Offline support:** No offline-first PWA cache (PWA structure ready, needs implementation)
 6. **Real-time:** No WebSocket (polling sufficient for current use case)
 7. **Testing:** Jest setup exists, coverage <30% (focus on critical workout + auth flows)
@@ -268,7 +270,7 @@ See `deployment.md` for complete list. Key:
 2. **Garmin Export** → FIT encoder + endpoint + client download
 
 ### Priority 2 (Medium Impact, 1 Day Each)
-3. **Running Exercise Config** → Mirror gym pattern
+3. ~~**Running Exercise Config**~~ DONE ✅
 4. **Advanced Filters** → Faceted search UI
 
 ### Priority 3 (Nice-to-Have, 1–2 Days)
