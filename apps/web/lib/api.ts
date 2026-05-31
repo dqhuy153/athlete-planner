@@ -168,12 +168,25 @@ class ApiClient {
     token: string,
     id: string,
     data: {
-      defaultSets?: number | null;
-      defaultReps?: number | null;
-      defaultWeightKg?: number | null;
-      defaultRpe?: number | null;
-      restTimeSecs?: number | null;
-      restBetweenExercisesSecs?: number | null;
+      type: 'GYM' | 'RUNNING';
+      gym?: {
+        defaultSets?: number | null;
+        defaultReps?: number | null;
+        defaultWeightKg?: number | null;
+        defaultRpe?: number | null;
+        restTimeSecs?: number | null;
+        restBetweenExercisesSecs?: number | null;
+      };
+      running?: {
+        defaultTargetDistanceKm?: number | null;
+        defaultDurationMinutes?: number | null;
+        defaultIntensityType?: string | null;
+        defaultPaceMinSecPerKm?: number | null;
+        defaultPaceMaxSecPerKm?: number | null;
+        defaultHrZone?: number | null;
+        defaultHrMin?: number | null;
+        defaultHrMax?: number | null;
+      };
     },
   ) {
     return this.request<PrivateExercise>(`/exercises/private/${id}/config`, {
