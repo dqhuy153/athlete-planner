@@ -10,13 +10,6 @@ export const envValidationSchema = Joi.object({
   // ─── Database ────────────────────────────────────────────────────────────
   DATABASE_URL: Joi.string().required().description('PostgreSQL connection string'),
 
-  // ─── Redis ───────────────────────────────────────────────────────────────
-  REDIS_HOST: Joi.string().default('localhost'),
-  REDIS_PORT: Joi.number().default(6379),
-  REDIS_PASSWORD: Joi.string().allow('').optional(),
-  REDIS_URL: Joi.string().allow('').optional()
-    .description('Full Redis URL (overrides REDIS_HOST/PORT if set)'),
-
   // ─── Auth ────────────────────────────────────────────────────────────────
   JWT_SECRET: Joi.string().min(16).required()
     .description('Secret for signing JWT access tokens'),
