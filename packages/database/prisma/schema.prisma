@@ -141,6 +141,16 @@ model PrivateExercise {
   restTimeSecs                 Int?
   restBetweenExercisesSecs     Int?
 
+  // Running workout defaults (only populated when sportType = 'RUNNING')
+  defaultTargetDistanceKm  Float?
+  defaultDurationMinutes   Int?
+  defaultIntensityType     String?  // 'PACE' | 'HEART_RATE' | 'NONE'
+  defaultPaceMinSecPerKm   Int?     // stored as seconds/km, displayed as mm:ss
+  defaultPaceMaxSecPerKm   Int?
+  defaultHrZone            Int?     // 1–5
+  defaultHrMin             Int?     // bpm
+  defaultHrMax             Int?     // bpm
+
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
