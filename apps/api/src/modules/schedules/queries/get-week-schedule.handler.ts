@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
 import { GetWeekScheduleQuery } from './get-week-schedule.query';
-import { UserTier, DayStatus } from '@athlete-planner/database';
+import { UserTier } from '@athlete-planner/database';
 import { subDays, format } from 'date-fns';
 
 @QueryHandler(GetWeekScheduleQuery)
@@ -31,8 +31,9 @@ export class GetWeekScheduleHandler implements IQueryHandler<GetWeekScheduleQuer
     const cutoffDateString = format(subDays(new Date(), 30), 'yyyy-MM-dd');
 
     return schedules.map(schedule => {
-      // Only blur COMPLETED days older than 30 days
-      if (schedule.dateString >= cutoffDateString || schedule.dayStatus !== DayStatus.COMPLETED) {
+      // Blur ALL days older than 30 days, regardless of completion status.
+      // Leaving workouts in PENDING/SKIPPED must not bypass the paywall.
+      if (schedule.dateString >= cutoffDateString) {
         return schedule;
       }
 

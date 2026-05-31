@@ -102,7 +102,7 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
                 step={0.5}
                 value={set.weight_kg || ''}
                 onChange={e => updateSet(idx, { weight_kg: parseFloat(e.target.value) || 0 })}
-                className="w-full rounded bg-surface-3 px-2 py-1 font-data text-body text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded border border-border/40 bg-surface-3 px-2 py-1 font-data text-body text-text-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
 
@@ -115,7 +115,7 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
                 min={1}
                 value={set.reps || ''}
                 onChange={e => updateSet(idx, { reps: parseInt(e.target.value) || 0 })}
-                className="w-full rounded bg-surface-3 px-2 py-1 font-data text-body text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded border border-border/40 bg-surface-3 px-2 py-1 font-data text-body text-text-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
 
@@ -129,8 +129,8 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
                 max={10}
                 step={0.5}
                 value={set.rpe || ''}
-                onChange={e => updateSet(idx, { rpe: parseFloat(e.target.value) || 0 })}
-                className="w-full rounded bg-surface-3 px-2 py-1 font-data text-body text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
+                onChange={e => updateSet(idx, { rpe: Math.min(10, Math.max(0, parseFloat(e.target.value) || 0)) })}
+                className="w-full rounded border border-border/40 bg-surface-3 px-2 py-1 font-data text-body text-text-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
 

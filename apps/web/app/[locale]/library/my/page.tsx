@@ -18,6 +18,7 @@ interface PageProps {
 
 export default function MyExercisesPage({ params }: PageProps) {
   const t = useTranslations('library');
+  const tc = useTranslations('common');
   const { data: session } = useSession();
 
   const [locale, setLocale] = useState('vi');
@@ -85,7 +86,7 @@ export default function MyExercisesPage({ params }: PageProps) {
         {/* Loading */}
         {loading && (
           <div className="py-12 text-center">
-            <p className="text-caption text-text-tertiary animate-pulse-subtle">{t('noExercises')}</p>
+            <p className="text-caption text-text-tertiary animate-pulse-subtle">{tc('loading')}</p>
           </div>
         )}
 
