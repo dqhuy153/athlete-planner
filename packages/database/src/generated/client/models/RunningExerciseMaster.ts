@@ -56,6 +56,7 @@ export type RunningExerciseMasterCountAggregateOutputType = {
   runningType: number
   youtubeEmbedUrl: number
   gifUrl: number
+  mediaUrls: number
   instructions: number
   workoutStructure: number
   createdAt: number
@@ -96,6 +97,7 @@ export type RunningExerciseMasterCountAggregateInputType = {
   runningType?: true
   youtubeEmbedUrl?: true
   gifUrl?: true
+  mediaUrls?: true
   instructions?: true
   workoutStructure?: true
   createdAt?: true
@@ -183,6 +185,7 @@ export type RunningExerciseMasterGroupByOutputType = {
   runningType: $Enums.RunningType
   youtubeEmbedUrl: string | null
   gifUrl: string | null
+  mediaUrls: string[]
   instructions: runtime.JsonValue
   workoutStructure: runtime.JsonValue
   createdAt: Date
@@ -218,6 +221,7 @@ export type RunningExerciseMasterWhereInput = {
   runningType?: Prisma.EnumRunningTypeFilter<"RunningExerciseMaster"> | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.StringNullableFilter<"RunningExerciseMaster"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"RunningExerciseMaster"> | string | null
+  mediaUrls?: Prisma.StringNullableListFilter<"RunningExerciseMaster">
   instructions?: Prisma.JsonFilter<"RunningExerciseMaster">
   workoutStructure?: Prisma.JsonFilter<"RunningExerciseMaster">
   createdAt?: Prisma.DateTimeFilter<"RunningExerciseMaster"> | Date | string
@@ -233,6 +237,7 @@ export type RunningExerciseMasterOrderByWithRelationInput = {
   runningType?: Prisma.SortOrder
   youtubeEmbedUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaUrls?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   workoutStructure?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -251,6 +256,7 @@ export type RunningExerciseMasterWhereUniqueInput = Prisma.AtLeast<{
   runningType?: Prisma.EnumRunningTypeFilter<"RunningExerciseMaster"> | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.StringNullableFilter<"RunningExerciseMaster"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"RunningExerciseMaster"> | string | null
+  mediaUrls?: Prisma.StringNullableListFilter<"RunningExerciseMaster">
   instructions?: Prisma.JsonFilter<"RunningExerciseMaster">
   workoutStructure?: Prisma.JsonFilter<"RunningExerciseMaster">
   createdAt?: Prisma.DateTimeFilter<"RunningExerciseMaster"> | Date | string
@@ -266,6 +272,7 @@ export type RunningExerciseMasterOrderByWithAggregationInput = {
   runningType?: Prisma.SortOrder
   youtubeEmbedUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaUrls?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   workoutStructure?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -286,6 +293,7 @@ export type RunningExerciseMasterScalarWhereWithAggregatesInput = {
   runningType?: Prisma.EnumRunningTypeWithAggregatesFilter<"RunningExerciseMaster"> | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.StringNullableWithAggregatesFilter<"RunningExerciseMaster"> | string | null
   gifUrl?: Prisma.StringNullableWithAggregatesFilter<"RunningExerciseMaster"> | string | null
+  mediaUrls?: Prisma.StringNullableListFilter<"RunningExerciseMaster">
   instructions?: Prisma.JsonWithAggregatesFilter<"RunningExerciseMaster">
   workoutStructure?: Prisma.JsonWithAggregatesFilter<"RunningExerciseMaster">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RunningExerciseMaster"> | Date | string
@@ -300,6 +308,7 @@ export type RunningExerciseMasterCreateInput = {
   runningType: $Enums.RunningType
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.RunningExerciseMasterCreatemediaUrlsInput | string[]
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -315,6 +324,7 @@ export type RunningExerciseMasterUncheckedCreateInput = {
   runningType: $Enums.RunningType
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.RunningExerciseMasterCreatemediaUrlsInput | string[]
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -330,6 +340,7 @@ export type RunningExerciseMasterUpdateInput = {
   runningType?: Prisma.EnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.RunningExerciseMasterUpdatemediaUrlsInput | string[]
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -345,6 +356,7 @@ export type RunningExerciseMasterUncheckedUpdateInput = {
   runningType?: Prisma.EnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.RunningExerciseMasterUpdatemediaUrlsInput | string[]
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -360,6 +372,7 @@ export type RunningExerciseMasterCreateManyInput = {
   runningType: $Enums.RunningType
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.RunningExerciseMasterCreatemediaUrlsInput | string[]
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -374,6 +387,7 @@ export type RunningExerciseMasterUpdateManyMutationInput = {
   runningType?: Prisma.EnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.RunningExerciseMasterUpdatemediaUrlsInput | string[]
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,6 +402,7 @@ export type RunningExerciseMasterUncheckedUpdateManyInput = {
   runningType?: Prisma.EnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.RunningExerciseMasterUpdatemediaUrlsInput | string[]
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,6 +417,7 @@ export type RunningExerciseMasterCountOrderByAggregateInput = {
   runningType?: Prisma.SortOrder
   youtubeEmbedUrl?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  mediaUrls?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   workoutStructure?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -437,8 +453,17 @@ export type RunningExerciseMasterNullableScalarRelationFilter = {
   isNot?: Prisma.RunningExerciseMasterWhereInput | null
 }
 
+export type RunningExerciseMasterCreatemediaUrlsInput = {
+  set: string[]
+}
+
 export type EnumRunningTypeFieldUpdateOperationsInput = {
   set?: $Enums.RunningType
+}
+
+export type RunningExerciseMasterUpdatemediaUrlsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type RunningExerciseMasterCreateNestedOneWithoutScheduleItemsInput = {
@@ -465,6 +490,7 @@ export type RunningExerciseMasterCreateWithoutScheduleItemsInput = {
   runningType: $Enums.RunningType
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.RunningExerciseMasterCreatemediaUrlsInput | string[]
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -479,6 +505,7 @@ export type RunningExerciseMasterUncheckedCreateWithoutScheduleItemsInput = {
   runningType: $Enums.RunningType
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.RunningExerciseMasterCreatemediaUrlsInput | string[]
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -509,6 +536,7 @@ export type RunningExerciseMasterUpdateWithoutScheduleItemsInput = {
   runningType?: Prisma.EnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.RunningExerciseMasterUpdatemediaUrlsInput | string[]
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -523,6 +551,7 @@ export type RunningExerciseMasterUncheckedUpdateWithoutScheduleItemsInput = {
   runningType?: Prisma.EnumRunningTypeFieldUpdateOperationsInput | $Enums.RunningType
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.RunningExerciseMasterUpdatemediaUrlsInput | string[]
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   workoutStructure?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -568,6 +597,7 @@ export type RunningExerciseMasterSelect<ExtArgs extends runtime.Types.Extensions
   runningType?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   instructions?: boolean
   workoutStructure?: boolean
   createdAt?: boolean
@@ -584,6 +614,7 @@ export type RunningExerciseMasterSelectCreateManyAndReturn<ExtArgs extends runti
   runningType?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   instructions?: boolean
   workoutStructure?: boolean
   createdAt?: boolean
@@ -598,6 +629,7 @@ export type RunningExerciseMasterSelectUpdateManyAndReturn<ExtArgs extends runti
   runningType?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   instructions?: boolean
   workoutStructure?: boolean
   createdAt?: boolean
@@ -612,13 +644,14 @@ export type RunningExerciseMasterSelectScalar = {
   runningType?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   instructions?: boolean
   workoutStructure?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RunningExerciseMasterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isActive" | "name" | "vietnameseName" | "runningType" | "youtubeEmbedUrl" | "gifUrl" | "instructions" | "workoutStructure" | "createdAt" | "updatedAt", ExtArgs["result"]["runningExerciseMaster"]>
+export type RunningExerciseMasterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isActive" | "name" | "vietnameseName" | "runningType" | "youtubeEmbedUrl" | "gifUrl" | "mediaUrls" | "instructions" | "workoutStructure" | "createdAt" | "updatedAt", ExtArgs["result"]["runningExerciseMaster"]>
 export type RunningExerciseMasterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   scheduleItems?: boolean | Prisma.RunningExerciseMaster$scheduleItemsArgs<ExtArgs>
   _count?: boolean | Prisma.RunningExerciseMasterCountOutputTypeDefaultArgs<ExtArgs>
@@ -639,6 +672,7 @@ export type $RunningExerciseMasterPayload<ExtArgs extends runtime.Types.Extensio
     runningType: $Enums.RunningType
     youtubeEmbedUrl: string | null
     gifUrl: string | null
+    mediaUrls: string[]
     instructions: runtime.JsonValue
     workoutStructure: runtime.JsonValue
     createdAt: Date
@@ -1074,6 +1108,7 @@ export interface RunningExerciseMasterFieldRefs {
   readonly runningType: Prisma.FieldRef<"RunningExerciseMaster", 'RunningType'>
   readonly youtubeEmbedUrl: Prisma.FieldRef<"RunningExerciseMaster", 'String'>
   readonly gifUrl: Prisma.FieldRef<"RunningExerciseMaster", 'String'>
+  readonly mediaUrls: Prisma.FieldRef<"RunningExerciseMaster", 'String[]'>
   readonly instructions: Prisma.FieldRef<"RunningExerciseMaster", 'Json'>
   readonly workoutStructure: Prisma.FieldRef<"RunningExerciseMaster", 'Json'>
   readonly createdAt: Prisma.FieldRef<"RunningExerciseMaster", 'DateTime'>

@@ -115,6 +115,7 @@ export type GymExerciseMasterCountAggregateOutputType = {
   secondaryMuscleGroups: number
   youtubeEmbedUrl: number
   gifUrl: number
+  mediaUrls: number
   garminExerciseEnum: number
   instructions: number
   defaultBeginnerSets: number
@@ -224,6 +225,7 @@ export type GymExerciseMasterCountAggregateInputType = {
   secondaryMuscleGroups?: true
   youtubeEmbedUrl?: true
   gifUrl?: true
+  mediaUrls?: true
   garminExerciseEnum?: true
   instructions?: true
   defaultBeginnerSets?: true
@@ -338,6 +340,7 @@ export type GymExerciseMasterGroupByOutputType = {
   secondaryMuscleGroups: string[]
   youtubeEmbedUrl: string | null
   gifUrl: string | null
+  mediaUrls: string[]
   garminExerciseEnum: string | null
   instructions: runtime.JsonValue
   defaultBeginnerSets: number | null
@@ -388,6 +391,7 @@ export type GymExerciseMasterWhereInput = {
   secondaryMuscleGroups?: Prisma.StringNullableListFilter<"GymExerciseMaster">
   youtubeEmbedUrl?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
+  mediaUrls?: Prisma.StringNullableListFilter<"GymExerciseMaster">
   garminExerciseEnum?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   instructions?: Prisma.JsonFilter<"GymExerciseMaster">
   defaultBeginnerSets?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
@@ -416,6 +420,7 @@ export type GymExerciseMasterOrderByWithRelationInput = {
   secondaryMuscleGroups?: Prisma.SortOrder
   youtubeEmbedUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaUrls?: Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrderInput | Prisma.SortOrder
   instructions?: Prisma.SortOrder
   defaultBeginnerSets?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -447,6 +452,7 @@ export type GymExerciseMasterWhereUniqueInput = Prisma.AtLeast<{
   secondaryMuscleGroups?: Prisma.StringNullableListFilter<"GymExerciseMaster">
   youtubeEmbedUrl?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   gifUrl?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
+  mediaUrls?: Prisma.StringNullableListFilter<"GymExerciseMaster">
   garminExerciseEnum?: Prisma.StringNullableFilter<"GymExerciseMaster"> | string | null
   instructions?: Prisma.JsonFilter<"GymExerciseMaster">
   defaultBeginnerSets?: Prisma.IntNullableFilter<"GymExerciseMaster"> | number | null
@@ -475,6 +481,7 @@ export type GymExerciseMasterOrderByWithAggregationInput = {
   secondaryMuscleGroups?: Prisma.SortOrder
   youtubeEmbedUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   gifUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaUrls?: Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrderInput | Prisma.SortOrder
   instructions?: Prisma.SortOrder
   defaultBeginnerSets?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -510,6 +517,7 @@ export type GymExerciseMasterScalarWhereWithAggregatesInput = {
   secondaryMuscleGroups?: Prisma.StringNullableListFilter<"GymExerciseMaster">
   youtubeEmbedUrl?: Prisma.StringNullableWithAggregatesFilter<"GymExerciseMaster"> | string | null
   gifUrl?: Prisma.StringNullableWithAggregatesFilter<"GymExerciseMaster"> | string | null
+  mediaUrls?: Prisma.StringNullableListFilter<"GymExerciseMaster">
   garminExerciseEnum?: Prisma.StringNullableWithAggregatesFilter<"GymExerciseMaster"> | string | null
   instructions?: Prisma.JsonWithAggregatesFilter<"GymExerciseMaster">
   defaultBeginnerSets?: Prisma.IntNullableWithAggregatesFilter<"GymExerciseMaster"> | number | null
@@ -537,6 +545,7 @@ export type GymExerciseMasterCreateInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterCreatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.GymExerciseMasterCreatemediaUrlsInput | string[]
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: number | null
@@ -565,6 +574,7 @@ export type GymExerciseMasterUncheckedCreateInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterCreatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.GymExerciseMasterCreatemediaUrlsInput | string[]
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: number | null
@@ -593,6 +603,7 @@ export type GymExerciseMasterUpdateInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterUpdatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.GymExerciseMasterUpdatemediaUrlsInput | string[]
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -621,6 +632,7 @@ export type GymExerciseMasterUncheckedUpdateInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterUpdatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.GymExerciseMasterUpdatemediaUrlsInput | string[]
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -649,6 +661,7 @@ export type GymExerciseMasterCreateManyInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterCreatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.GymExerciseMasterCreatemediaUrlsInput | string[]
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: number | null
@@ -676,6 +689,7 @@ export type GymExerciseMasterUpdateManyMutationInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterUpdatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.GymExerciseMasterUpdatemediaUrlsInput | string[]
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -703,6 +717,7 @@ export type GymExerciseMasterUncheckedUpdateManyInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterUpdatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.GymExerciseMasterUpdatemediaUrlsInput | string[]
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -738,6 +753,7 @@ export type GymExerciseMasterCountOrderByAggregateInput = {
   secondaryMuscleGroups?: Prisma.SortOrder
   youtubeEmbedUrl?: Prisma.SortOrder
   gifUrl?: Prisma.SortOrder
+  mediaUrls?: Prisma.SortOrder
   garminExerciseEnum?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   defaultBeginnerSets?: Prisma.SortOrder
@@ -845,11 +861,20 @@ export type GymExerciseMasterCreatesecondaryMuscleGroupsInput = {
   set: string[]
 }
 
+export type GymExerciseMasterCreatemediaUrlsInput = {
+  set: string[]
+}
+
 export type EnumMuscleGroupFieldUpdateOperationsInput = {
   set?: $Enums.MuscleGroup
 }
 
 export type GymExerciseMasterUpdatesecondaryMuscleGroupsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type GymExerciseMasterUpdatemediaUrlsInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -887,6 +912,7 @@ export type GymExerciseMasterCreateWithoutScheduleItemsInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterCreatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.GymExerciseMasterCreatemediaUrlsInput | string[]
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: number | null
@@ -914,6 +940,7 @@ export type GymExerciseMasterUncheckedCreateWithoutScheduleItemsInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterCreatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: string | null
   gifUrl?: string | null
+  mediaUrls?: Prisma.GymExerciseMasterCreatemediaUrlsInput | string[]
   garminExerciseEnum?: string | null
   instructions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: number | null
@@ -957,6 +984,7 @@ export type GymExerciseMasterUpdateWithoutScheduleItemsInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterUpdatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.GymExerciseMasterUpdatemediaUrlsInput | string[]
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -984,6 +1012,7 @@ export type GymExerciseMasterUncheckedUpdateWithoutScheduleItemsInput = {
   secondaryMuscleGroups?: Prisma.GymExerciseMasterUpdatesecondaryMuscleGroupsInput | string[]
   youtubeEmbedUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gifUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrls?: Prisma.GymExerciseMasterUpdatemediaUrlsInput | string[]
   garminExerciseEnum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instructions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   defaultBeginnerSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1042,6 +1071,7 @@ export type GymExerciseMasterSelect<ExtArgs extends runtime.Types.Extensions.Int
   secondaryMuscleGroups?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
   defaultBeginnerSets?: boolean
@@ -1071,6 +1101,7 @@ export type GymExerciseMasterSelectCreateManyAndReturn<ExtArgs extends runtime.T
   secondaryMuscleGroups?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
   defaultBeginnerSets?: boolean
@@ -1098,6 +1129,7 @@ export type GymExerciseMasterSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   secondaryMuscleGroups?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
   defaultBeginnerSets?: boolean
@@ -1125,6 +1157,7 @@ export type GymExerciseMasterSelectScalar = {
   secondaryMuscleGroups?: boolean
   youtubeEmbedUrl?: boolean
   gifUrl?: boolean
+  mediaUrls?: boolean
   garminExerciseEnum?: boolean
   instructions?: boolean
   defaultBeginnerSets?: boolean
@@ -1143,7 +1176,7 @@ export type GymExerciseMasterSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GymExerciseMasterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isActive" | "name" | "vietnameseName" | "targetMuscleGroup" | "secondaryMuscleGroups" | "youtubeEmbedUrl" | "gifUrl" | "garminExerciseEnum" | "instructions" | "defaultBeginnerSets" | "defaultBeginnerReps" | "defaultBeginnerWeightKg" | "defaultBeginnerRpe" | "defaultBeginnerRestTimeSecs" | "defaultBeginnerRestBetweenExercisesSecs" | "defaultAdvancedSets" | "defaultAdvancedReps" | "defaultAdvancedWeightKg" | "defaultAdvancedRpe" | "defaultAdvancedRestTimeSecs" | "defaultAdvancedRestBetweenExercisesSecs" | "createdAt" | "updatedAt", ExtArgs["result"]["gymExerciseMaster"]>
+export type GymExerciseMasterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isActive" | "name" | "vietnameseName" | "targetMuscleGroup" | "secondaryMuscleGroups" | "youtubeEmbedUrl" | "gifUrl" | "mediaUrls" | "garminExerciseEnum" | "instructions" | "defaultBeginnerSets" | "defaultBeginnerReps" | "defaultBeginnerWeightKg" | "defaultBeginnerRpe" | "defaultBeginnerRestTimeSecs" | "defaultBeginnerRestBetweenExercisesSecs" | "defaultAdvancedSets" | "defaultAdvancedReps" | "defaultAdvancedWeightKg" | "defaultAdvancedRpe" | "defaultAdvancedRestTimeSecs" | "defaultAdvancedRestBetweenExercisesSecs" | "createdAt" | "updatedAt", ExtArgs["result"]["gymExerciseMaster"]>
 export type GymExerciseMasterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   scheduleItems?: boolean | Prisma.GymExerciseMaster$scheduleItemsArgs<ExtArgs>
   _count?: boolean | Prisma.GymExerciseMasterCountOutputTypeDefaultArgs<ExtArgs>
@@ -1165,6 +1198,7 @@ export type $GymExerciseMasterPayload<ExtArgs extends runtime.Types.Extensions.I
     secondaryMuscleGroups: string[]
     youtubeEmbedUrl: string | null
     gifUrl: string | null
+    mediaUrls: string[]
     garminExerciseEnum: string | null
     instructions: runtime.JsonValue
     defaultBeginnerSets: number | null
@@ -1613,6 +1647,7 @@ export interface GymExerciseMasterFieldRefs {
   readonly secondaryMuscleGroups: Prisma.FieldRef<"GymExerciseMaster", 'String[]'>
   readonly youtubeEmbedUrl: Prisma.FieldRef<"GymExerciseMaster", 'String'>
   readonly gifUrl: Prisma.FieldRef<"GymExerciseMaster", 'String'>
+  readonly mediaUrls: Prisma.FieldRef<"GymExerciseMaster", 'String[]'>
   readonly garminExerciseEnum: Prisma.FieldRef<"GymExerciseMaster", 'String'>
   readonly instructions: Prisma.FieldRef<"GymExerciseMaster", 'Json'>
   readonly defaultBeginnerSets: Prisma.FieldRef<"GymExerciseMaster", 'Int'>
