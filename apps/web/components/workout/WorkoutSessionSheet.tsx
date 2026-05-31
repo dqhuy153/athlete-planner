@@ -83,6 +83,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
   const [completeFired, setCompleteFired] = useState(false);
   const [flashActive, setFlashActive] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
+  const [holdCompleted, setHoldCompleted] = useState(false);
 
   const currentRef = useRef<HTMLDivElement | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
@@ -105,6 +106,14 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
       currentRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [session?.currentItemIndex]);
+
+  // Hold-to-abandon completion — deferred outside setHoldProgress to avoid setState-during-render
+  useEffect(() => {
+    if (!holdCompleted) return;
+    setHoldCompleted(false);
+    discardSession();
+    onClose();
+  }, [holdCompleted, discardSession, onClose]);
 
   // Wake Lock — keep screen on during active workout
   useEffect(() => {
@@ -137,9 +146,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
           clearInterval(holdIntervalRef.current!);
           holdIntervalRef.current = null;
           navigator.vibrate?.(80);
-          setHoldProgress(0);
-          discardSession();
-          onClose();
+          setHoldCompleted(true);
           return 0;
         }
         return next;
