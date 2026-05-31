@@ -1,6 +1,6 @@
 import { Controller, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, UserTier } from '@athlete-planner/database';
 import { subDays } from 'date-fns';
 import { format } from 'date-fns';
 
@@ -27,7 +27,7 @@ export class CronController {
         const expiredSchedules = await tx.dailySchedule.findMany({
           where: {
             dateString: { lt: thresholdStr },
-            user: { tier: 'FREE' },
+            user: { tier: UserTier.FREE },
           },
           select: { id: true },
         });

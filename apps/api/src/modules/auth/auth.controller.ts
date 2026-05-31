@@ -1,11 +1,13 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Req, ForbiddenException } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { UserTier } from '@athlete-planner/database';
 import { GoogleAuthDto, DevLoginDto, AdminLoginDto } from './dto/auth.dto';
 import { GoogleAuthCommand } from './commands/google-auth.command';
 import { AdminLoginCommand } from './commands/admin-login.command';
 import { DevLoginCommand } from './commands/dev-login.command';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
@@ -32,7 +34,7 @@ export class AuthController {
       throw new ForbiddenException('Dev login is only available in development mode');
     }
     return this.commandBus.execute(
-      new DevLoginCommand(dto.email, dto.name, dto.tier ?? 'FREE'),
+      new DevLoginCommand(dto.email, dto.name, dto.tier ?? UserTier.FREE),
     );
   }
 
@@ -48,7 +50,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async getMe(@Req() req: any) {
+  async getMe(@Req() req: { user: JwtPayload }) {
     return { userId: req.user.userId, email: req.user.email, role: req.user.role };
   }
 }

@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
-import { PrismaService } from '@athlete-planner/database';
+import { PrismaService, UserTier } from '@athlete-planner/database';
 import { PayosService } from '../services/payos.service';
 import { HandlePaymentWebhookCommand } from './handle-payment-webhook.command';
 
@@ -47,7 +47,7 @@ export class HandlePaymentWebhookHandler
       }),
       this.prisma.user.update({
         where: { id: payment.userId },
-        data: { tier: 'PRO' },
+        data: { tier: UserTier.PRO },
       }),
     ]);
 

@@ -10,7 +10,9 @@ import {
   Request,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { UserTier } from '@athlete-planner/database';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 import { PrismaService } from '@athlete-planner/database';
 import { FitBuilderService } from './services/fit-builder.service';
 import { ZipExportService } from './services/zip-export.service';
@@ -28,16 +30,16 @@ export class ExportController {
   @Get('day/:dateString')
   async exportDay(
     @Param('dateString') dateString: string,
-    @Request() req: any,
+    @Request() req: { user: JwtPayload },
     @Res() res: Response,
   ): Promise<void> {
-    const user = await this.prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user || user.tier !== 'PRO') {
+    const user = await this.prisma.user.findUnique({ where: { id: req.user.userId } });
+    if (!user || user.tier !== UserTier.PRO) {
       throw new ForbiddenException('Garmin export is a PRO feature');
     }
 
     const schedule = await this.prisma.dailySchedule.findUnique({
-      where: { userId_dateString: { userId: req.user.id, dateString } },
+      where: { userId_dateString: { userId: req.user.userId, dateString } },
       include: { items: { orderBy: { sequenceOrder: 'asc' } } },
     });
 
@@ -74,16 +76,16 @@ export class ExportController {
   async exportWeek(
     @Param('year', ParseIntPipe) year: number,
     @Param('weekNumber', ParseIntPipe) weekNumber: number,
-    @Request() req: any,
+    @Request() req: { user: JwtPayload },
     @Res() res: Response,
   ): Promise<void> {
-    const user = await this.prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user || user.tier !== 'PRO') {
+    const user = await this.prisma.user.findUnique({ where: { id: req.user.userId } });
+    if (!user || user.tier !== UserTier.PRO) {
       throw new ForbiddenException('Garmin export is a PRO feature');
     }
 
     const schedules = await this.prisma.dailySchedule.findMany({
-      where: { userId: req.user.id, year, weekNumber },
+      where: { userId: req.user.userId, year, weekNumber },
       include: { items: { orderBy: { sequenceOrder: 'asc' } } },
       orderBy: { dateString: 'asc' },
     });
