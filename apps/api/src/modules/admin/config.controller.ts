@@ -1,6 +1,13 @@
 import { Controller, Get, Put, Body, Param, UseGuards } from '@nestjs/common';
+import { IsNotEmpty } from 'class-validator';
 import { PrismaService } from '@athlete-planner/database';
 import { AdminGuard } from './admin.guard';
+
+class UpdateConfigDto {
+  @IsNotEmpty()
+  value: string | number | boolean;
+  label?: string;
+}
 
 const DEFAULT_CONFIGS = [
   // Free Tier Limits
@@ -38,7 +45,7 @@ export class ConfigController {
   }
 
   @Put(':key')
-  async updateConfig(@Param('key') key: string, @Body() body: { value: any; label?: string }) {
+  async updateConfig(@Param('key') key: string, @Body() body: UpdateConfigDto) {
     return this.prisma.appConfig.upsert({
       where: { key },
       update: { value: body.value, label: body.label },

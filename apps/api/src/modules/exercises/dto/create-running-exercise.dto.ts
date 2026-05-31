@@ -1,5 +1,6 @@
 import { IsString, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
 import { RunningType } from '@athlete-planner/database';
+import type { LocalizedStringArray, WorkoutPhase } from '@athlete-planner/contracts';
 
 export class CreateRunningExerciseDto {
   @IsString()
@@ -22,8 +23,8 @@ export class CreateRunningExerciseDto {
   gifUrl?: string;
 
   @IsOptional()
-  instructions?: any;
+  instructions?: LocalizedStringArray;
 
   @IsOptional()
-  workoutStructure?: any;
+  workoutStructure?: WorkoutPhase[];
 }

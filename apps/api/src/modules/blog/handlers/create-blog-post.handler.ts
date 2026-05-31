@@ -17,7 +17,7 @@ export class CreateBlogPostHandler implements ICommandHandler<CreateBlogPostComm
         content: dto.content || '',
         coverImage: dto.coverImage,
         tags: dto.tags || [],
-        categoryKey: dto.category || dto.categoryKey,
+        categoryKey: dto.categoryKey,
         status: dto.status || BlogStatus.DRAFT,
         readingTime: dto.readingTime || 5,
         publishedAt: dto.status === BlogStatus.PUBLISHED ? new Date() : null,

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { Prisma, PrismaService } from '@athlete-planner/database';
 import { CreateGymMasterCommand } from './create-gym-master.command';
 import { normalizeYouTubeUrl } from '../validators/youtube-url.validator';
 
@@ -22,7 +22,7 @@ export class CreateGymMasterHandler implements ICommandHandler<CreateGymMasterCo
         youtubeEmbedUrl,
         gifUrl: dto.gifUrl,
         garminExerciseEnum: dto.garminExerciseEnum,
-        instructions: dto.instructions,
+        instructions: dto.instructions as unknown as Prisma.InputJsonValue,
       },
     });
   }

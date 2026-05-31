@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { Prisma, PrismaService } from '@athlete-planner/database';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { UpdateGymPayloadCommand } from './update-gym-payload.command';
 
@@ -8,7 +8,7 @@ export class UpdateGymPayloadHandler implements ICommandHandler<UpdateGymPayload
   constructor(private readonly prisma: PrismaService) {}
 
   async execute(command: UpdateGymPayloadCommand) {
-    const { itemId, dto, userId } = command;
+    const { itemId, payload, userId } = command;
 
     const item = await this.prisma.scheduleItem.findUnique({
       where: { id: itemId },
@@ -19,7 +19,7 @@ export class UpdateGymPayloadHandler implements ICommandHandler<UpdateGymPayload
 
     return this.prisma.scheduleItem.update({
       where: { id: itemId },
-      data: { gymPayload: dto },
+      data: { gymPayload: payload as unknown as Prisma.InputJsonValue },
     });
   }
 }

@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import type { GymPayload, RunningPayload } from '@athlete-planner/contracts';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthenticatedRequest } from '../../common/interfaces/authenticated-request.interface';
 import { CreateDailyScheduleCommand } from './commands/create-daily-schedule.command';
@@ -113,7 +114,7 @@ export class SchedulesController {
     @Body() dto: UpdatePayloadDto,
     @Req() req: AuthenticatedRequest,
   ) {
-    return this.commandBus.execute(new UpdateGymPayloadCommand(itemId, dto.payload, req.user.sub));
+    return this.commandBus.execute(new UpdateGymPayloadCommand(itemId, dto.payload as GymPayload, req.user.sub));
   }
 
   @Patch('items/:itemId/running-payload')
@@ -123,7 +124,7 @@ export class SchedulesController {
     @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(
-      new UpdateRunningPayloadCommand(itemId, dto.payload, req.user.sub),
+      new UpdateRunningPayloadCommand(itemId, dto.payload as RunningPayload, req.user.sub),
     );
   }
 

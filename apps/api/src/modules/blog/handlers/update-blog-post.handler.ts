@@ -22,7 +22,7 @@ export class UpdateBlogPostHandler implements ICommandHandler<UpdateBlogPostComm
         content: dto.content,
         coverImage: dto.coverImage,
         tags: dto.tags,
-        categoryKey: dto.category || dto.categoryKey,
+        categoryKey: dto.categoryKey,
         status: dto.status,
         readingTime: dto.readingTime,
         publishedAt: dto.status === BlogStatus.PUBLISHED && !post.publishedAt ? new Date() : post.publishedAt,

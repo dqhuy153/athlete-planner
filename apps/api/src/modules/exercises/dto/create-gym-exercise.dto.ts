@@ -1,5 +1,6 @@
 import { IsString, IsNotEmpty, IsEnum, IsArray, IsOptional } from 'class-validator';
 import { MuscleGroup } from '@athlete-planner/database';
+import type { ExerciseInstruction } from '@athlete-planner/contracts';
 
 export class CreateGymExerciseDto {
   @IsString()
@@ -30,5 +31,5 @@ export class CreateGymExerciseDto {
   garminExerciseEnum?: string;
 
   @IsOptional()
-  instructions?: any;
+  instructions?: ExerciseInstruction[];
 }

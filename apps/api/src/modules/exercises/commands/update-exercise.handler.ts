@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { Prisma, PrismaService } from '@athlete-planner/database';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
 import { UpdateExerciseCommand } from './update-exercise.command';
 
@@ -20,7 +20,7 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       const { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl,
         defaultSets, defaultReps, defaultWeightKg, defaultRpe,
         restTimeSecs, restBetweenExercisesSecs,
-      } = dto as any;
+      } = dto as Record<string, unknown>;
       return this.prisma.privateExercise.update({
         where: { id },
         data: { name, sportType, targetMuscleGroup, runningType, customNotes, gifUrl,
@@ -43,12 +43,13 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
         defaultBeginnerRpe, defaultBeginnerRestTimeSecs, defaultBeginnerRestBetweenExercisesSecs,
         defaultAdvancedSets, defaultAdvancedReps, defaultAdvancedWeightKg,
         defaultAdvancedRpe, defaultAdvancedRestTimeSecs, defaultAdvancedRestBetweenExercisesSecs,
-      } = dto as any;
+      } = dto as Record<string, unknown>;
       return this.prisma.gymExerciseMaster.update({
         where: { id },
         data: {
           name, vietnameseName, targetMuscleGroup, secondaryMuscleGroups,
-          youtubeEmbedUrl, gifUrl, garminExerciseEnum, instructions,
+          youtubeEmbedUrl, gifUrl, garminExerciseEnum,
+          instructions: instructions as unknown as Prisma.InputJsonValue,
           defaultBeginnerSets, defaultBeginnerReps, defaultBeginnerWeightKg,
           defaultBeginnerRpe, defaultBeginnerRestTimeSecs, defaultBeginnerRestBetweenExercisesSecs,
           defaultAdvancedSets, defaultAdvancedReps, defaultAdvancedWeightKg,
@@ -66,12 +67,13 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
       const {
         name, vietnameseName, runningType, youtubeEmbedUrl,
         gifUrl, instructions, workoutStructure,
-      } = dto as any;
+      } = dto as Record<string, unknown>;
       return this.prisma.runningExerciseMaster.update({
         where: { id },
         data: {
           name, vietnameseName, runningType, youtubeEmbedUrl,
-          gifUrl, instructions, workoutStructure,
+          gifUrl, instructions: instructions as unknown as Prisma.InputJsonValue,
+          workoutStructure: workoutStructure as unknown as Prisma.InputJsonValue,
         },
       });
     }

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { Prisma, PrismaService } from '@athlete-planner/database';
 import { CreateRunningMasterCommand } from './create-running-master.command';
 
 @CommandHandler(CreateRunningMasterCommand)
@@ -15,8 +15,8 @@ export class CreateRunningMasterHandler implements ICommandHandler<CreateRunning
         runningType: dto.runningType,
         youtubeEmbedUrl: dto.youtubeEmbedUrl,
         gifUrl: dto.gifUrl,
-        instructions: dto.instructions,
-        workoutStructure: dto.workoutStructure,
+        instructions: dto.instructions as unknown as Prisma.InputJsonValue,
+        workoutStructure: dto.workoutStructure as unknown as Prisma.InputJsonValue,
       },
     });
   }
