@@ -18,7 +18,7 @@ export function useGuestBridge() {
     if (status !== 'authenticated' || !session) return;
     if (calledRef.current) return;
 
-    const token = (session as any)?.accessToken as string | undefined;
+    const token = session?.accessToken;
     if (!token) return;
 
     // Only call once per browser session

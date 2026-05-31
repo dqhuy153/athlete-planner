@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster, WorkoutPhase } from '@athlete-planner/contracts';
 import { MuscleGroup, RunningType, SportType } from '@athlete-planner/contracts';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { InstructionsPanel } from '@/components/InstructionsPanel';
@@ -25,11 +25,11 @@ async function fetchExercise(id: string) {
   }
 }
 
-function isGym(ex: any): ex is GymExerciseMaster {
+function isGym(ex: GymExerciseMaster | RunningExerciseMaster): ex is GymExerciseMaster {
   return 'targetMuscleGroup' in ex;
 }
 
-function isRunning(ex: any): ex is RunningExerciseMaster {
+function isRunning(ex: GymExerciseMaster | RunningExerciseMaster): ex is RunningExerciseMaster {
   return 'runningType' in ex;
 }
 
@@ -101,7 +101,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
          <div className="mt-3">
            <CustomizeSaveButton
             exerciseId={exercise.id}
-            exerciseName={(exercise as any).vietnameseName || exercise.name || 'Exercise'}
+            exerciseName={exercise.vietnameseName || exercise.name || 'Exercise'}
             sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
             targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
             runningType={isRunning(exercise) ? exercise.runningType : undefined}
@@ -135,14 +135,14 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
 
       {/* Running instructions */}
       {isRunning(exercise) && exercise.instructions &&
-        ((exercise.instructions as any).vi?.length > 0 || (exercise.instructions as any).en?.length > 0) && (
+        (exercise.instructions.vi?.length > 0 || exercise.instructions.en?.length > 0) && (
         <section className="mt-6" aria-labelledby="run-instructions-heading">
           <h2 id="run-instructions-heading" className="mb-3 text-caption font-semibold uppercase tracking-wider text-text-tertiary">
             {t('instructions')}
           </h2>
           <div className="card-surface p-4">
             <ol className="space-y-1.5" role="list">
-              {((exercise.instructions as any)[locale] ?? (exercise.instructions as any).en ?? []).map((step: string, i: number) => (
+              {(exercise.instructions[locale as 'vi' | 'en'] ?? exercise.instructions.en ?? []).map((step: string, i: number) => (
                 <li key={i} className="flex gap-2 text-caption text-text-primary">
                   <span className="font-data shrink-0 text-accent">{i + 1}.</span>
                   <span>{step}</span>
@@ -172,7 +172,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
             {t('workoutStructure')}
           </h2>
           <div className="space-y-2">
-            {exercise.workoutStructure.map((phase: any, i: number) => (
+            {exercise.workoutStructure.map((phase: WorkoutPhase, i: number) => (
               <div key={i} className="card-surface flex items-center gap-3 px-4 py-3">
                 <span className="font-data text-subheading font-bold text-accent">{i + 1}</span>
                 <div>

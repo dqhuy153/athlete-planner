@@ -22,8 +22,8 @@ export function useAuthView(): UseAuthViewResult {
     return { authView: 'guest', isLoading: false, accessToken: undefined };
   }
 
-  const tier = (session as any)?.user?.tier as UserTier | undefined;
-  const accessToken = (session as any)?.accessToken as string | undefined;
+  const tier = session?.user?.tier;
+  const accessToken = session?.accessToken;
 
   if (tier === UserTier.PRO) {
     return { authView: 'pro', isLoading: false, accessToken };

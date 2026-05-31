@@ -36,7 +36,7 @@ export function CustomizeSaveButton({
   const [isFull, setIsFull] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const token = (session as any)?.accessToken as string | undefined;
+  const token = session?.accessToken;
 
   async function handleClick() {
     if (!session || !token) {

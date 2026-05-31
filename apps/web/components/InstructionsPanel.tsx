@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import type { GymExerciseMaster } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
 import { ExperienceLevel } from '@athlete-planner/contracts';
 
 interface InstructionsPanelProps {
@@ -14,7 +14,7 @@ interface InstructionsPanelProps {
 export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsPanelProps) {
   const t = useTranslations('library');
   const { data: session } = useSession();
-  const userLevel = (session?.user as any)?.preferredLevel as ExperienceLevel | null | undefined;
+  const userLevel = session?.user?.preferredLevel;
 
   const [activeLevel, setActiveLevel] = useState<ExperienceLevel>(
     userLevel === ExperienceLevel.ADVANCED ? ExperienceLevel.ADVANCED : ExperienceLevel.BEGINNER,
@@ -22,17 +22,9 @@ export function InstructionsPanel({ instructions, locale = 'en' }: InstructionsP
 
   const inst = instructions.find((i) => i.level === activeLevel) ?? instructions[0];  if (!inst) return null;
 
-  const steps: string[] =
-    (inst.steps as any)?.[locale] ??
-    (inst.steps as any)?.vi ??
-    (inst.steps as any)?.en ??
-    [];
-
-  const cues: string[] =
-    (inst.form_cues as any)?.[locale] ??
-    (inst.form_cues as any)?.vi ??
-    (inst.form_cues as any)?.en ??
-    [];
+  const localeKey = locale as keyof LocalizedStringArray;
+  const steps: string[] = inst.steps[localeKey] ?? inst.steps.vi ?? inst.steps.en ?? [];
+  const cues: string[] = inst.form_cues[localeKey] ?? inst.form_cues.vi ?? inst.form_cues.en ?? [];
 
   const hasAdvanced = instructions.some((i) => i.level === ExperienceLevel.ADVANCED);
 

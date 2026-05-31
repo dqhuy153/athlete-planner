@@ -85,7 +85,7 @@ export function SideNav({ locale }: SideNavProps) {
   const { resolvedTheme, setTheme } = useTheme();
 
   const user = session?.user;
-  const tier = (session as any)?.user?.tier as UserTier | undefined;
+  const tier = session?.user?.tier;
   const isPro = tier === UserTier.PRO;
 
   // Hide on landing / auth page

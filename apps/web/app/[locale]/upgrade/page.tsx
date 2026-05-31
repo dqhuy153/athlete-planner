@@ -18,7 +18,7 @@ export default function UpgradePage() {
   const [error, setError] = useState<string | null>(null);
 
   const isVi = locale === 'vi';
-  const isAlreadyPro = (session as any)?.user?.tier === UserTier.PRO;
+  const isAlreadyPro = session?.user?.tier === UserTier.PRO;
 
   const features = [
     { icon: LayoutGrid, key: 'featureUnlimited' },
@@ -33,7 +33,7 @@ export default function UpgradePage() {
       await signIn('google', { callbackUrl: pathname });
       return;
     }
-    const token = (session as any)?.accessToken as string | undefined;
+    const token = session?.accessToken;
     if (!token) return;
 
     setLoading(true);

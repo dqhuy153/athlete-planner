@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { X, ChevronLeft, ChevronRight, Dumbbell, Timer } from 'lucide-react';
 import { useSession, signIn } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise, WorkoutPhase } from '@athlete-planner/contracts';
 import { ExperienceLevel } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
 
@@ -30,7 +30,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
   const { data: session } = useSession();
   const pathname = usePathname();
   const [stepIndex, setStepIndex] = useState(0);
-  const activeLevel = (session?.user as any)?.preferredLevel === ExperienceLevel.ADVANCED
+  const activeLevel = session?.user?.preferredLevel === ExperienceLevel.ADVANCED
     ? ExperienceLevel.ADVANCED
     : ExperienceLevel.BEGINNER;
 
@@ -40,16 +40,16 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
           ?? exercise.instructions[0];
         if (!inst) return [];
         const localeKey = locale as 'vi' | 'en';
-        return (inst.steps as any)[localeKey] ?? (inst.steps as any).en ?? [];
+        return inst.steps[localeKey] ?? inst.steps.en ?? [];
       })()
     : [];
 
-  const runningPhases = isRunningExercise(exercise) ? exercise.workoutStructure : [];
+  const runningPhases: WorkoutPhase[] = isRunningExercise(exercise) ? exercise.workoutStructure : [];
   const isGym = isGymExercise(exercise);
   const total = isGym ? gymSteps.length : runningPhases.length;
 
   const displayName = locale === 'vi'
-    ? (('vietnameseName' in exercise ? (exercise as any).vietnameseName : null) || exercise.name)
+    ? ((isGymExercise(exercise) || isRunningExercise(exercise)) ? exercise.vietnameseName : null) || exercise.name
     : exercise.name;
 
   return (
@@ -110,16 +110,16 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
                     <div className="flex items-center gap-2 mb-2">
                       <Timer size={14} className="text-accent" />
                       <span className="text-xs font-semibold text-accent uppercase tracking-wide">
-                        {(runningPhases[stepIndex] as any)?.type ?? ''}
+                        {runningPhases[stepIndex]?.type ?? ''}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-text-primary">{(runningPhases[stepIndex] as any)?.phase ?? ''}</p>
-                    {(runningPhases[stepIndex] as any)?.duration_minutes && (
-                      <p className="text-xs text-text-tertiary mt-1">{(runningPhases[stepIndex] as any).duration_minutes} min</p>
+                    <p className="text-sm font-semibold text-text-primary">{runningPhases[stepIndex]?.phase ?? ''}</p>
+                    {runningPhases[stepIndex]?.duration_minutes && (
+                      <p className="text-xs text-text-tertiary mt-1">{runningPhases[stepIndex].duration_minutes} min</p>
                     )}
-                    {(runningPhases[stepIndex] as any)?.notes && (
+                    {runningPhases[stepIndex]?.notes && (
                       <p className="text-xs text-text-secondary mt-2">
-                        {(runningPhases[stepIndex] as any).notes?.[locale] ?? (runningPhases[stepIndex] as any).notes?.en ?? ''}
+                        {runningPhases[stepIndex].notes?.[locale as 'vi' | 'en'] ?? runningPhases[stepIndex].notes?.en ?? ''}
                       </p>
                     )}
                   </>
