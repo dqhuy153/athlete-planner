@@ -128,6 +128,7 @@ export function ExerciseActionBar({
         youtubeEmbedUrl: exercise.youtubeEmbedUrl,
         gifUrl: exercise.gifUrl,
         mediaUrls: (exercise as RunningExerciseMaster).mediaUrls ?? [],
+        instructions: [],
       }
     }
     // Private exercise
@@ -162,6 +163,8 @@ export function ExerciseActionBar({
       restBetweenExercisesSecs: isGymPrivate ? privRestBetween : undefined,
       gifUrl: priv.gifUrl ?? null,
       mediaUrls: priv.mediaUrls ?? [],
+      youtubeEmbedUrl: null,
+      instructions: [],
     }
   }
 
