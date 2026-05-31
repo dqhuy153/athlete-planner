@@ -19,7 +19,7 @@ import {
   FileText, Tag, Clock, Image, AlignLeft, Globe,
   BookOpen, Columns2, LayoutList,
 } from 'lucide-react';
-import { MarkdownRenderer, ConfirmModal } from '@athlete-planner/ui';
+import { MarkdownRenderer, ConfirmModal, Button } from '@athlete-planner/ui';
 import { Select } from '@athlete-planner/ui';
 import { useToast } from '@/components/ui/toast';
 
@@ -351,13 +351,14 @@ export default function BlogPage() {
               <option value={BlogStatus.ARCHIVED}>Archived</option>
             </Select>
 
-            <button
+            <Button
               onClick={handleSavePost}
               disabled={saving}
-              className="h-8 px-4 text-xs font-semibold rounded-lg bg-accent text-black hover:opacity-90 transition-opacity disabled:opacity-50"
+              variant="accent"
+              size="sm"
             >
               {saving ? 'Saving…' : editingPost ? 'Update' : 'Publish'}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -516,16 +517,16 @@ export default function BlogPage() {
     <div className="p-6 lg:p-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-foreground">Blog</h1>
-        <button
+        <Button
           onClick={() => {
             if (activeTab === 'posts') openNewPost();
             else openNewCategory();
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-accent text-black text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity"
+          variant="accent"
         >
           <Plus size={16} />
           {activeTab === 'posts' ? 'New Post' : 'New Category'}
-        </button>
+        </Button>
       </div>
 
       {/* Tabs */}
@@ -709,18 +710,18 @@ export default function BlogPage() {
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <button
+              <Button
+                variant="surface"
                 onClick={() => { setShowCatForm(false); setEditingCat(null); }}
-                className="px-4 py-2 text-sm border border-border rounded-lg text-on-surface-variant hover:text-foreground hover:border-border/60 transition-colors"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="accent"
                 onClick={handleSaveCat}
-                className="px-4 py-2 text-sm bg-accent text-black font-semibold rounded-lg hover:opacity-90 transition-opacity"
               >
                 {editingCat ? 'Update' : 'Create'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
