@@ -74,7 +74,7 @@ export default function ExercisesPage() {
       setGymExercises(gym)
       setRunningExercises(running)
     } catch (err) {
-      console.error(err)
+      console.warn(err)
     } finally {
       setLoading(false)
     }
@@ -98,7 +98,7 @@ export default function ExercisesPage() {
         )
       }
     } catch (err) {
-      console.error(err)
+      console.warn(err)
     }
   }
 

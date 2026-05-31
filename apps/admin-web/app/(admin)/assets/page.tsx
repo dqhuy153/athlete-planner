@@ -238,7 +238,7 @@ export default function AssetsPage() {
       const res = await getAssets(session!.accessToken);
       setAssets(res);
     } catch (e: any) {
-      console.error(e);
+      console.warn(e);
     } finally {
       setLoading(false);
     }

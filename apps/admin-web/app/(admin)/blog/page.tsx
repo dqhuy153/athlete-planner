@@ -133,7 +133,7 @@ export default function BlogPage() {
       setPosts(postsRes?.posts ?? []);
       setCategories(catsRes ?? []);
     } catch (e: any) {
-      console.error(e);
+      console.warn(e);
     } finally {
       setLoading(false);
     }

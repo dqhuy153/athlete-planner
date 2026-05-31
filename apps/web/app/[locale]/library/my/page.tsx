@@ -32,7 +32,7 @@ export default function MyExercisesPage({ params }: PageProps) {
     api
       .getPrivateExercises(session.accessToken as string)
       .then(setExercises)
-      .catch(console.error)
+      .catch(() => { /* non-critical prefetch */ })
       .finally(() => setLoading(false));
   }, [session?.accessToken]);
 

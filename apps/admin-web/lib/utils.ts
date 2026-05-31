@@ -1,9 +1,5 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+// Re-export cn from shared UI package — single source of truth
+export { cn } from '@athlete-planner/ui';
 
 export function generateSlug(text: string): string {
   return text

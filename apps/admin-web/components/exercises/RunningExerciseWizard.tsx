@@ -209,9 +209,7 @@ export function RunningExerciseWizard({
       <WizardStepper steps={STEPS} currentStep={step} />
 
       <form
-        onSubmit={handleSubmit(handleFinalSubmit, errors =>
-          console.log(errors),
-        )}
+        onSubmit={handleSubmit(handleFinalSubmit)}
         className='space-y-4'
       >
         {step === 0 && (
