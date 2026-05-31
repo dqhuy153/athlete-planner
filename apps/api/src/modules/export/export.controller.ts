@@ -118,8 +118,12 @@ export class ExportController {
   }
 
   private async resolveExerciseMetadata(
-    // any[] due to SportType/DayStatus enum mismatch between Prisma client and contracts
-    items: any[],
+    items: Array<{
+      id: string;
+      gymMasterId: string | null;
+      runningMasterId: string | null;
+      privateExerciseId: string | null;
+    }>,
   ): Promise<{
     exerciseNames: Map<string, string>;
     gymEnums: Map<string, string | null>;

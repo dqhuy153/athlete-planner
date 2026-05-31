@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { createAnthropic } from '@ai-sdk/anthropic'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { streamText, generateText } from 'ai'
+import type { StreamTextResult, ToolSet, Output } from 'ai'
 
 export type AIProvider = 'anthropic' | 'google'
 
@@ -49,7 +50,7 @@ export class AIService {
     }
   }
 
-  async streamTextResponse(options: AIRequestOptions): Promise<any> {
+  async streamTextResponse(options: AIRequestOptions): Promise<StreamTextResult<ToolSet, Output.Output<string, string, never>>> {
     const model = this.getModel(options.model)
 
     try {
