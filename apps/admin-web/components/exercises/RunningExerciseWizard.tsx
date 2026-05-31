@@ -126,8 +126,8 @@ export function RunningExerciseWizard({
       if (c.instructions_vi?.length && isEmpty(vi)) {
         methods.setValue('instructions_vi', toFields(c.instructions_vi))
       }
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to generate content')
     } finally {
       setGenerating(false)
     }
@@ -149,8 +149,8 @@ export function RunningExerciseWizard({
     try {
       await onSubmit(data)
       setSaved(true)
-    } catch (err: any) {
-      setError(err.message || 'Failed to save exercise')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to save exercise')
     } finally {
       setSubmitting(false)
     }

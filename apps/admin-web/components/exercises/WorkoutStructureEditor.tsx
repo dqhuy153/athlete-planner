@@ -19,7 +19,7 @@ import {
 import { Plus, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import { FormLabel, FormError } from '@athlete-planner/ui';
 import { SortablePhaseItem } from './SortablePhaseItem';
-import type { RunningExerciseFormValues } from './schemas';
+import type { RunningExerciseFormValues, WorkoutPhaseFormValues } from './schemas';
 
 const PHASE_TYPES = [
   { value: 'warm_up', label: 'Warm-up', color: '#22C55E' },
@@ -64,7 +64,7 @@ export function WorkoutStructureEditor() {
       id: crypto.randomUUID(),
       phase: '',
       type: 'custom',
-    } as any);
+    } satisfies Partial<WorkoutPhaseFormValues> as WorkoutPhaseFormValues);
     setExpandedIdx(fields.length);
   }
 

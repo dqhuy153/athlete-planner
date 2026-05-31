@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, type Path } from 'react-hook-form';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, Sparkles } from 'lucide-react';
 import { FormLabel } from '@athlete-planner/ui';
 import { useAuth } from '@/lib/auth-context';
@@ -153,29 +153,29 @@ export function GymExerciseWizard({
         const b = c.beginner;
         const base = `instructions.${beginnerIdx}` as const;
         if (b.steps_en?.length && isEmpty(instructions[beginnerIdx].steps_en))
-          methods.setValue(`${base}.steps_en` as any, toFields(b.steps_en));
+          methods.setValue(`${base}.steps_en` as Path<GymExerciseFormValues>, toFields(b.steps_en));
         if (b.steps_vi?.length && isEmpty(instructions[beginnerIdx].steps_vi))
-          methods.setValue(`${base}.steps_vi` as any, toFields(b.steps_vi));
+          methods.setValue(`${base}.steps_vi` as Path<GymExerciseFormValues>, toFields(b.steps_vi));
         if (b.form_cues_en?.length && isEmpty(instructions[beginnerIdx].form_cues_en))
-          methods.setValue(`${base}.form_cues_en` as any, toFields(b.form_cues_en));
+          methods.setValue(`${base}.form_cues_en` as Path<GymExerciseFormValues>, toFields(b.form_cues_en));
         if (b.form_cues_vi?.length && isEmpty(instructions[beginnerIdx].form_cues_vi))
-          methods.setValue(`${base}.form_cues_vi` as any, toFields(b.form_cues_vi));
+          methods.setValue(`${base}.form_cues_vi` as Path<GymExerciseFormValues>, toFields(b.form_cues_vi));
       }
 
       if (c.advanced && advancedIdx !== -1) {
         const a = c.advanced;
         const base = `instructions.${advancedIdx}` as const;
         if (a.steps_en?.length && isEmpty(instructions[advancedIdx].steps_en))
-          methods.setValue(`${base}.steps_en` as any, toFields(a.steps_en));
+          methods.setValue(`${base}.steps_en` as Path<GymExerciseFormValues>, toFields(a.steps_en));
         if (a.steps_vi?.length && isEmpty(instructions[advancedIdx].steps_vi))
-          methods.setValue(`${base}.steps_vi` as any, toFields(a.steps_vi));
+          methods.setValue(`${base}.steps_vi` as Path<GymExerciseFormValues>, toFields(a.steps_vi));
         if (a.form_cues_en?.length && isEmpty(instructions[advancedIdx].form_cues_en))
-          methods.setValue(`${base}.form_cues_en` as any, toFields(a.form_cues_en));
+          methods.setValue(`${base}.form_cues_en` as Path<GymExerciseFormValues>, toFields(a.form_cues_en));
         if (a.form_cues_vi?.length && isEmpty(instructions[advancedIdx].form_cues_vi))
-          methods.setValue(`${base}.form_cues_vi` as any, toFields(a.form_cues_vi));
+          methods.setValue(`${base}.form_cues_vi` as Path<GymExerciseFormValues>, toFields(a.form_cues_vi));
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to generate content');
     } finally {
       setGenerating(false);
     }
@@ -198,8 +198,8 @@ export function GymExerciseWizard({
     try {
       await onSubmit(data);
       setSaved(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to save exercise');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to save exercise');
     } finally {
       setSubmitting(false);
     }
