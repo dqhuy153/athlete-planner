@@ -164,6 +164,15 @@ export interface PrivateExercise {
   defaultRpe: number | null;
   restTimeSecs: number | null;
   restBetweenExercisesSecs: number | null;
+  // Running workout defaults (only set when sportType === SportType.RUNNING)
+  defaultTargetDistanceKm: number | null;
+  defaultDurationMinutes: number | null;
+  defaultIntensityType: RunningIntensityType | null;
+  defaultPaceMinSecPerKm: number | null;
+  defaultPaceMaxSecPerKm: number | null;
+  defaultHrZone: number | null;
+  defaultHrMin: number | null;
+  defaultHrMax: number | null;
   createdAt: string;
   updatedAt: string;
 }
