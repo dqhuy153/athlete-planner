@@ -204,7 +204,7 @@ export default function SchedulePage() {
   )
 
   useEffect(() => {
-    if (!activeSchedule || !_pendingLabel.current) return
+    if (!activeSchedule?.items || !_pendingLabel.current) return
     const items = activeSchedule.items
     if (items.length === 0) return
     const newest = items[items.length - 1]
@@ -215,7 +215,7 @@ export default function SchedulePage() {
   }, [activeSchedule?.items?.length])
 
   useEffect(() => {
-    if (!activeSchedule) return
+    if (!activeSchedule?.items) return
     const next = new Map(labelMap)
     for (const item of activeSchedule.items) {
       if (next.has(item.id)) continue
@@ -239,7 +239,7 @@ export default function SchedulePage() {
   const sourceWeekYear = getISOWeekYear(sourceWeekBase)
 
   function buildMultiItems(): WorkoutItem[] {
-    if (!activeSchedule) return []
+    if (!activeSchedule?.items) return []
     const isAdvanced = preferredLevel === 'ADVANCED'
     return activeSchedule.items.map(item => {
       const label =

@@ -23,6 +23,11 @@ export class CreateDailyScheduleHandler implements ICommandHandler<CreateDailySc
       where: { userId_dateString: { userId, dateString } },
       create: { userId, dateString, weekNumber, year, dayStatus: DayStatus.PENDING },
       update: {},
+      include: {
+        items: {
+          orderBy: { sequenceOrder: 'asc' },
+        },
+      },
     });
   }
 }
