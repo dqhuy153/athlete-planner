@@ -20,6 +20,7 @@ import { ImportJSONModal } from '@/components/exercises/ImportJSONModal';
 import { ExerciseTabBar } from './components/ExerciseTabBar';
 import { ExerciseTable } from './components/ExerciseTable';
 import { DeleteExerciseModal, type DeleteModalState } from './components/DeleteExerciseModal';
+import { ConfirmModal } from '@athlete-planner/ui';
 
 type Tab = 'gym' | 'running';
 
@@ -58,6 +59,7 @@ export default function ExercisesPage() {
   const [deleteModal, setDeleteModal] = useState<DeleteModalState | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
 
   const loadExercises = useCallback(async () => {
     if (!session?.accessToken) return;
@@ -177,7 +179,7 @@ export default function ExercisesPage() {
 
   async function handleBulkDelete() {
     if (!session?.accessToken || selectedIds.length === 0) return;
-    if (!window.confirm(`Delete ${selectedIds.length} exercise(s)? This cannot be undone.`)) return;
+    setShowBulkDeleteConfirm(false);
     setBulkLoading(true);
     try {
       await Promise.all(selectedIds.map(id => deleteExercise(session.accessToken, id, tab)));
@@ -330,7 +332,7 @@ export default function ExercisesPage() {
           <div className="mx-1 h-5 w-px bg-border" />
           <button
             type="button"
-            onClick={handleBulkDelete}
+            onClick={() => setShowBulkDeleteConfirm(true)}
             disabled={bulkLoading}
             className="inline-flex items-center gap-1.5 rounded-lg bg-error/10 px-3 py-1.5 text-xs font-medium text-error hover:bg-error/20 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error"
           >
@@ -348,6 +350,17 @@ export default function ExercisesPage() {
           </button>
         </div>
       )}
+      {/* Bulk Delete Confirm Modal */}
+      <ConfirmModal
+        open={showBulkDeleteConfirm}
+        title={`Delete ${selectedIds.length} exercise${selectedIds.length !== 1 ? 's' : ''}?`}
+        message="This will permanently delete the selected exercises. This cannot be undone."
+        confirmLabel="Delete"
+        destructive
+        loading={bulkLoading}
+        onConfirm={handleBulkDelete}
+        onCancel={() => setShowBulkDeleteConfirm(false)}
+      />
     </div>
   );
 }

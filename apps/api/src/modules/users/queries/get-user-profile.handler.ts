@@ -18,6 +18,8 @@ export class GetUserProfileHandler implements IQueryHandler<GetUserProfileQuery>
         tier: true,
         role: true,
         preferredLevel: true,
+        referenceWeightKg: true,
+        referencePaceMinPerKm: true,
         createdAt: true,
       },
     });

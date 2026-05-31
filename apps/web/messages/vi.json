@@ -142,7 +142,9 @@
     "shiftError": "Không chuyển được bài tập",
     "shiftConfirmTitle": "Xác nhận dời lịch",
     "shiftConfirmMessage": "Bạn đang dời {count} bài tập chưa hoàn thành sang ngày mai. Không thể hoàn tác.",
-    "shiftConfirm": "Dời sang ngày mai"
+    "shiftConfirm": "Dời sang ngày mai",
+    "missedLabel": "Bỏ lỡ",
+    "applyToAllSets": "Áp dụng Hiệp 1 cho tất cả"
   },
   "library": {
     "title": "Thư viện bài tập",
@@ -286,7 +288,8 @@
     "cancelTitle": "Thanh toán đã hủy",
     "cancelSubtitle": "Tài khoản của bạn vẫn ở gói miễn phí.",
     "cancelCta": "Quay lại nâng cấp",
-    "promoHint": "Nâng cấp một lần, sử dụng mãi mãi."
+    "promoHint": "Nâng cấp một lần, sử dụng mãi mãi.",
+    "socialProof": "Được tin dùng bởi các vận động viên kết hợp gym + chạy bộ"
   },
   "export": {
     "fitDay": "Xuất FIT",
@@ -427,7 +430,8 @@
     "saveImageError": "Không lưu được ảnh",
     "totalRunDistance": "Tổng khoảng cách",
     "totalRunTime": "Tổng thời gian chạy",
-    "completedBadge": "Hoàn thành"
+    "completedBadge": "Hoàn thành",
+    "holdToDiscard": "Nhấn giữ 2 giây để hủy buổi tập"
   },
   "privateExercise": {
     "backToLibrary": "Quay lại thư viện",
@@ -481,5 +485,23 @@
     "noExercisesFound": "Thư viện bài tập chưa có dữ liệu. Liên hệ admin để thêm.",
     "chooseTemplate": "Chọn mẫu lịch",
     "close": "Đóng"
+  },
+  "onboarding": {
+    "step1Title": "Bạn đang ở trình độ nào?",
+    "step1Subtitle": "Chúng tôi sẽ điều chỉnh tuần tập đầu tiên của bạn",
+    "beginner": "Người mới",
+    "beginnerDesc": "Bắt đầu tập luyện có hệ thống",
+    "advanced": "Nâng cao",
+    "advancedDesc": "Đã tập luyện đều đặn",
+    "step2Title": "Thiết lập mức cơ bản",
+    "step2Subtitle": "Không bắt buộc — giúp cá nhân hóa mẫu lịch đầu tiên",
+    "weightLabel": "Trọng lượng bench press hiện tại (kg)",
+    "weightPlaceholder": "Ví dụ: 60",
+    "weightHint": "Dùng để thiết lập tạ cho buổi tập đầu tiên",
+    "paceLabel": "Pace chạy easy (phút/km)",
+    "pacePlaceholder": "Ví dụ: 7.0",
+    "paceHint": "Định dạng số thập phân: 7.5 = 7 phút 30 giây mỗi km",
+    "startTraining": "Bắt đầu tập",
+    "skipForNow": "Bỏ qua"
   }
 }

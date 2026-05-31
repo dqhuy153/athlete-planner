@@ -10,6 +10,8 @@ declare module 'next-auth' {
       tier: string;
       preferredLevel?: ExperienceLevel | null;
       hasUsedFreeExport: boolean;
+      referenceWeightKg?: number | null;
+      referencePaceMinPerKm?: number | null;
     } & DefaultSession['user'];
   }
 }

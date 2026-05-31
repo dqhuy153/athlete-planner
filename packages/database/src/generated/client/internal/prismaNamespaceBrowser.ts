@@ -90,6 +90,8 @@ export const UserScalarFieldEnum = {
   role: 'role',
   preferredLevel: 'preferredLevel',
   hasUsedFreeExport: 'hasUsedFreeExport',
+  referenceWeightKg: 'referenceWeightKg',
+  referencePaceMinPerKm: 'referencePaceMinPerKm',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

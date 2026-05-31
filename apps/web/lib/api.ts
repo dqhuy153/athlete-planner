@@ -74,6 +74,22 @@ class ApiClient {
     });
   }
 
+  updateOnboardingProfile(
+    accessToken: string,
+    userId: string,
+    data: {
+      preferredLevel: string;
+      referenceWeightKg?: number;
+      referencePaceMinPerKm?: number;
+    },
+  ) {
+    return this.request<User>(`/users/${userId}/profile`, {
+      method: 'PUT',
+      headers: this.authHeaders(accessToken),
+      body: JSON.stringify(data),
+    });
+  }
+
   // ── Blog ─────────────────────────────────────────────────────────────────
   getBlogPosts(params?: { page?: number; limit?: number; categoryKey?: string }) {
     const query = new URLSearchParams();
@@ -257,6 +273,8 @@ class ApiClient {
       exerciseType: ExerciseSourceType;
       exerciseId: string;
       sportType: SportType;
+      gymPayload?: Partial<GymPayload>;
+      runningPayload?: Partial<RunningPayload>;
     },
   ) {
     return this.request<ScheduleItem>(`/schedules/day/${scheduleId}/items`, {

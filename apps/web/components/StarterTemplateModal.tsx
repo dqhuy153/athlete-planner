@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Dumbbell, PersonStanding, X, Loader2, ChevronRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useToast } from '@athlete-planner/ui';
-import { ExerciseSourceType, MuscleGroup, RunningType, SportType } from '@athlete-planner/contracts';
+import { ExerciseSourceType, MuscleGroup, RunningType, SportType, RunningIntensityType } from '@athlete-planner/contracts';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 import { startOfISOWeek, addDays, format } from 'date-fns';
@@ -15,6 +15,8 @@ interface StarterTemplateModalProps {
   runningExercises: RunningExerciseMaster[];
   onClose: () => void;
   onApplied: () => void;
+  userReferenceWeightKg?: number;
+  userReferencePaceMinPerKm?: number;
 }
 
 type Template = 'gym' | 'running';
@@ -34,6 +36,8 @@ export function StarterTemplateModal({
   runningExercises,
   onClose,
   onApplied,
+  userReferenceWeightKg,
+  userReferencePaceMinPerKm,
 }: StarterTemplateModalProps) {
   const t = useTranslations('starterTemplate');
   const { push: pushToast } = useToast();
@@ -64,6 +68,16 @@ export function StarterTemplateModal({
           exerciseType: ExerciseSourceType.GYM_MASTER,
           exerciseId,
           sportType: SportType.GYM,
+          gymPayload: {
+            rest_time_seconds: 90,
+            sets: Array.from({ length: 3 }, (_, i) => ({
+              set_number: i + 1,
+              weight_kg: userReferenceWeightKg ?? 20,
+              reps: 10,
+              rpe: 7,
+              is_completed: false,
+            })),
+          },
         });
       }
       pushToast({ title: t('successToast'), tone: 'success' });
@@ -99,6 +113,17 @@ export function StarterTemplateModal({
           exerciseType: ExerciseSourceType.RUNNING_MASTER,
           exerciseId,
           sportType: SportType.RUNNING,
+          runningPayload: {
+            intensity_type: RunningIntensityType.PACE,
+            ...(userReferencePaceMinPerKm
+              ? {
+                  pace_target_range: {
+                    fastest_pace_seconds: Math.round(userReferencePaceMinPerKm * 60 - 30),
+                    slowest_pace_seconds: Math.round(userReferencePaceMinPerKm * 60 + 30),
+                  },
+                }
+              : {}),
+          },
         });
       }
       pushToast({ title: t('successToast'), tone: 'success' });

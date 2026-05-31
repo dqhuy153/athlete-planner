@@ -113,6 +113,8 @@ const authConfig = NextAuth({
           token.tier = nestUser.tier as UserTier;
           token.preferredLevel = (nestUser.preferredLevel as ExperienceLevel | null) ?? null;
           token.hasUsedFreeExport = (nestUser.hasUsedFreeExport as boolean) ?? false;
+          token.referenceWeightKg = (nestUser.referenceWeightKg as number | null) ?? null;
+          token.referencePaceMinPerKm = (nestUser.referencePaceMinPerKm as number | null) ?? null;
         }
       }
       return token;
@@ -126,6 +128,8 @@ const authConfig = NextAuth({
         tier: UserTier;
         preferredLevel: ExperienceLevel | null;
         hasUsedFreeExport: boolean;
+        referenceWeightKg: number | null;
+        referencePaceMinPerKm: number | null;
       };
       return {
         ...session,
@@ -136,6 +140,8 @@ const authConfig = NextAuth({
           tier: t.tier,
           preferredLevel: t.preferredLevel ?? null,
           hasUsedFreeExport: t.hasUsedFreeExport ?? false,
+          referenceWeightKg: t.referenceWeightKg ?? null,
+          referencePaceMinPerKm: t.referencePaceMinPerKm ?? null,
         },
         accessToken: t.accessToken,
       };

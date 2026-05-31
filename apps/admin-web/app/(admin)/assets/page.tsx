@@ -9,6 +9,7 @@ import {
   confirmAssetUpload,
   getCloudinaryPresign,
   confirmCloudinaryUpload,
+  getStorageStats,
 } from '@/lib/api';
 import type { Asset } from '@athlete-planner/contracts';
 import { StorageProvider } from '@athlete-planner/contracts';
@@ -26,6 +27,7 @@ export default function AssetsPage() {
   const { push } = useToast();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
+  const [storageStats, setStorageStats] = useState<{ totalBytes: number; assetCount: number } | null>(null);
   const [providerFilter, setProviderFilter] = useState<ProviderFilter>('all');
   const [preview, setPreview] = useState<Asset | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -46,8 +48,12 @@ export default function AssetsPage() {
   async function loadAssets() {
     setLoading(true);
     try {
-      const res = await getAssets(session!.accessToken);
+      const [res, stats] = await Promise.all([
+        getAssets(session!.accessToken),
+        getStorageStats(session!.accessToken).catch(() => null),
+      ]);
       setAssets(res);
+      if (stats) setStorageStats(stats);
     } catch (e: unknown) {
       console.warn(e);
     } finally {
@@ -173,7 +179,20 @@ export default function AssetsPage() {
   return (
     <div className="p-6 lg:p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Assets</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Assets</h1>
+          {storageStats && (
+            <p className="mt-0.5 text-sm text-on-surface-variant tabular-nums">
+              {storageStats.assetCount} file{storageStats.assetCount !== 1 ? 's' : ''} &middot;{' '}
+              {storageStats.totalBytes >= 1_073_741_824
+                ? `${(storageStats.totalBytes / 1_073_741_824).toFixed(2)} GB`
+                : storageStats.totalBytes >= 1_048_576
+                  ? `${(storageStats.totalBytes / 1_048_576).toFixed(1)} MB`
+                  : `${(storageStats.totalBytes / 1024).toFixed(1)} KB`}
+              {' '}used
+            </p>
+          )}
+        </div>
         <button
           onClick={loadAssets}
           disabled={loading}

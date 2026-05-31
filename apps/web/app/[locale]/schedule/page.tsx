@@ -13,6 +13,7 @@ import {
 } from 'date-fns'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
+import { useParams, useRouter } from 'next/navigation'
 import type {
   GymExerciseMaster,
   RunningExerciseMaster,
@@ -68,10 +69,15 @@ export default function SchedulePage() {
   const tExport = useTranslations('export')
   const { data: session, status } = useSession()
   const { push: pushToast } = useToast()
+  const router = useRouter()
+  const params = useParams()
+  const locale = (params.locale as string) ?? 'vi'
 
   const token = (session?.accessToken as string) ?? ''
   const userTier = (session?.user as { tier?: UserTier })?.tier ?? UserTier.FREE
-  const preferredLevel = (session?.user as { preferredLevel?: string | null })?.preferredLevel ?? null
+  const preferredLevel =
+    (session?.user as { preferredLevel?: string | null })?.preferredLevel ??
+    null
 
   const [gymExercises, setGymExercises] = useState<GymExerciseMaster[]>([])
   const [runningExercises, setRunningExercises] = useState<
@@ -131,6 +137,13 @@ export default function SchedulePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status])
 
+  // Redirect to onboarding if user has never set their level
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.preferredLevel === null) {
+      router.replace(`/${locale}/onboarding`)
+    }
+  }, [status, session?.user?.preferredLevel, locale, router])
+
   useEffect(() => {
     if (status !== 'authenticated') return
     loadWeek(weekOffset)
@@ -166,25 +179,37 @@ export default function SchedulePage() {
   )
 
   const canShift = useMemo(() => {
-    if (!activeSchedule) return false;
-    const isPastOrToday = activeSchedule.dateString <= todayStr;
-    const hasPending = activeSchedule.items.length > 0;
-    return isPastOrToday && hasPending && activeSchedule.dayStatus === DayStatus.PENDING;
-  }, [activeSchedule, todayStr]);
+    if (!activeSchedule) return false
+    const isPastOrToday = activeSchedule.dateString <= todayStr
+    const hasPending = activeSchedule.items.length > 0
+    return (
+      isPastOrToday &&
+      hasPending &&
+      activeSchedule.dayStatus === DayStatus.PENDING
+    )
+  }, [activeSchedule, todayStr])
 
   const handleShift = useCallback(async () => {
-    if (!activeSchedule) return;
+    if (!activeSchedule) return
     try {
-      const result = await shiftToTomorrow(activeSchedule.dateString);
+      const result = await shiftToTomorrow(activeSchedule.dateString)
       if (result.shifted > 0) {
-        pushToast({ title: t('shiftSuccess'), tone: 'success' });
-        await loadWeek(weekOffset);
-        await selectDate(activeSchedule.dateString);
+        pushToast({ title: t('shiftSuccess'), tone: 'success' })
+        await loadWeek(weekOffset)
+        await selectDate(activeSchedule.dateString)
       }
     } catch {
-      pushToast({ title: t('shiftError'), tone: 'error' });
+      pushToast({ title: t('shiftError'), tone: 'error' })
     }
-  }, [activeSchedule, shiftToTomorrow, pushToast, t, loadWeek, weekOffset, selectDate]);
+  }, [
+    activeSchedule,
+    shiftToTomorrow,
+    pushToast,
+    t,
+    loadWeek,
+    weekOffset,
+    selectDate,
+  ])
 
   const [pickerOpen, setPickerOpen] = useState(false)
   const [copyDayOpen, setCopyDayOpen] = useState(false)
@@ -195,7 +220,9 @@ export default function SchedulePage() {
   const [workoutOpen, setWorkoutOpen] = useState(false)
   const [showReplaceWorkout, setShowReplaceWorkout] = useState(false)
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week')
-  const [displayMonth, setDisplayMonth] = useState<Date>(() => startOfMonth(new Date()))
+  const [displayMonth, setDisplayMonth] = useState<Date>(() =>
+    startOfMonth(new Date()),
+  )
   const [showStarterModal, setShowStarterModal] = useState(false)
   const starterCheckedRef = useRef(false)
 
@@ -215,21 +242,23 @@ export default function SchedulePage() {
   const _pendingLabel = useRef('')
 
   useEffect(() => {
-    if (starterCheckedRef.current) return;
-    if (status !== 'authenticated') return;
-    if (!token) return;
-    if (gymExercises.length === 0 && runningExercises.length === 0) return;
-    if (loading) return;
+    if (starterCheckedRef.current) return
+    if (status !== 'authenticated') return
+    if (!token) return
+    if (gymExercises.length === 0 && runningExercises.length === 0) return
+    if (loading) return
 
-    starterCheckedRef.current = true;
-    const hasSeen = localStorage.getItem('hasSeenTemplates');
-    if (hasSeen) return;
+    starterCheckedRef.current = true
+    const hasSeen = localStorage.getItem('hasSeenTemplates')
+    if (hasSeen) return
 
-    const hasItems = Array.from(schedules.values()).some(s => s.items.length > 0);
+    const hasItems = Array.from(schedules.values()).some(
+      s => s.items.length > 0,
+    )
     if (!hasItems) {
-      setShowStarterModal(true);
+      setShowStarterModal(true)
     }
-  }, [status, token, gymExercises, runningExercises, loading, schedules]);
+  }, [status, token, gymExercises, runningExercises, loading, schedules])
 
   const handlePick = useCallback(
     async (picked: PickedExercise) => {
@@ -251,7 +280,15 @@ export default function SchedulePage() {
         pushToast({ title: t('addExerciseFailed'), tone: 'error' })
       }
     },
-    [activeSchedule, schedules, selectedDate, selectDate, addItem, pushToast, t],
+    [
+      activeSchedule,
+      schedules,
+      selectedDate,
+      selectDate,
+      addItem,
+      pushToast,
+      t,
+    ],
   )
 
   useEffect(() => {
@@ -323,81 +360,111 @@ export default function SchedulePage() {
       if (item.sportType === SportType.GYM) {
         if (gymMaster) {
           const sets = isAdvanced
-            ? (gymMaster.defaultAdvancedSets ?? gymMaster.defaultBeginnerSets ?? 3)
+            ? (gymMaster.defaultAdvancedSets ??
+              gymMaster.defaultBeginnerSets ??
+              3)
             : (gymMaster.defaultBeginnerSets ?? 3)
           const reps = isAdvanced
-            ? (gymMaster.defaultAdvancedReps ?? gymMaster.defaultBeginnerReps ?? 10)
+            ? (gymMaster.defaultAdvancedReps ??
+              gymMaster.defaultBeginnerReps ??
+              10)
             : (gymMaster.defaultBeginnerReps ?? 10)
           const weight = isAdvanced
-            ? (gymMaster.defaultAdvancedWeightKg ?? gymMaster.defaultBeginnerWeightKg ?? 0)
+            ? (gymMaster.defaultAdvancedWeightKg ??
+              gymMaster.defaultBeginnerWeightKg ??
+              0)
             : (gymMaster.defaultBeginnerWeightKg ?? 0)
           const rpe = isAdvanced
-            ? (gymMaster.defaultAdvancedRpe ?? gymMaster.defaultBeginnerRpe ?? undefined)
+            ? (gymMaster.defaultAdvancedRpe ??
+              gymMaster.defaultBeginnerRpe ??
+              undefined)
             : (gymMaster.defaultBeginnerRpe ?? undefined)
           restTimeSecs = isAdvanced
-            ? (gymMaster.defaultAdvancedRestTimeSecs ?? gymMaster.defaultBeginnerRestTimeSecs ?? 90)
+            ? (gymMaster.defaultAdvancedRestTimeSecs ??
+              gymMaster.defaultBeginnerRestTimeSecs ??
+              90)
             : (gymMaster.defaultBeginnerRestTimeSecs ?? 90)
           const rawBetween = isAdvanced
-            ? (gymMaster.defaultAdvancedRestBetweenExercisesSecs ?? gymMaster.defaultBeginnerRestBetweenExercisesSecs)
+            ? (gymMaster.defaultAdvancedRestBetweenExercisesSecs ??
+              gymMaster.defaultBeginnerRestBetweenExercisesSecs)
             : gymMaster.defaultBeginnerRestBetweenExercisesSecs
           restBetweenExercisesSecs = rawBetween ?? undefined
 
           // Use saved payload sets if they have data, else use master defaults
           const savedSets = item.gymPayload?.sets ?? []
-          gymSets = savedSets.length > 0
-            ? savedSets.map(s => ({
-                setNumber: s.set_number,
-                weight_kg: s.weight_kg,
-                reps: s.reps,
-                rpe: rpe,
-                completed: false as const,
-              }))
-            : Array.from({ length: sets }, (_, i) => ({
-                setNumber: i + 1,
-                weight_kg: weight ?? 0,
-                reps: reps ?? 10,
-                rpe: rpe ?? undefined,
-                completed: false as const,
-              }))
+          gymSets =
+            savedSets.length > 0
+              ? savedSets.map(s => ({
+                  setNumber: s.set_number,
+                  weight_kg: s.weight_kg,
+                  reps: s.reps,
+                  rpe: rpe,
+                  completed: false as const,
+                }))
+              : Array.from({ length: sets }, (_, i) => ({
+                  setNumber: i + 1,
+                  weight_kg: weight ?? 0,
+                  reps: reps ?? 10,
+                  rpe: rpe ?? undefined,
+                  completed: false as const,
+                }))
         } else if (privateEx) {
           const privSets = privateEx.defaultSets ?? 3
           const privReps = privateEx.defaultReps ?? 10
           const privWeight = privateEx.defaultWeightKg ?? 0
           const privRpe = privateEx.defaultRpe ?? undefined
           restTimeSecs = privateEx.restTimeSecs ?? 90
-          restBetweenExercisesSecs = privateEx.restBetweenExercisesSecs ?? undefined
+          restBetweenExercisesSecs =
+            privateEx.restBetweenExercisesSecs ?? undefined
 
           const savedSets = item.gymPayload?.sets ?? []
-          gymSets = savedSets.length > 0
-            ? savedSets.map(s => ({
-                setNumber: s.set_number,
-                weight_kg: s.weight_kg,
-                reps: s.reps,
-                rpe: privRpe,
-                completed: false as const,
-              }))
-            : Array.from({ length: privSets }, (_, i) => ({
-                setNumber: i + 1,
-                weight_kg: privWeight,
-                reps: privReps,
-                rpe: privRpe,
-                completed: false as const,
-              }))
+          gymSets =
+            savedSets.length > 0
+              ? savedSets.map(s => ({
+                  setNumber: s.set_number,
+                  weight_kg: s.weight_kg,
+                  reps: s.reps,
+                  rpe: privRpe,
+                  completed: false as const,
+                }))
+              : Array.from({ length: privSets }, (_, i) => ({
+                  setNumber: i + 1,
+                  weight_kg: privWeight,
+                  reps: privReps,
+                  rpe: privRpe,
+                  completed: false as const,
+                }))
         } else {
           // Fallback: use saved payload or simple defaults
           const savedSets = item.gymPayload?.sets ?? []
-          gymSets = savedSets.length > 0
-            ? savedSets.map(s => ({
-                setNumber: s.set_number,
-                weight_kg: s.weight_kg,
-                reps: s.reps,
-                completed: false as const,
-              }))
-            : [
-                { setNumber: 1, weight_kg: 0, reps: 10, completed: false as const },
-                { setNumber: 2, weight_kg: 0, reps: 10, completed: false as const },
-                { setNumber: 3, weight_kg: 0, reps: 10, completed: false as const },
-              ]
+          gymSets =
+            savedSets.length > 0
+              ? savedSets.map(s => ({
+                  setNumber: s.set_number,
+                  weight_kg: s.weight_kg,
+                  reps: s.reps,
+                  completed: false as const,
+                }))
+              : [
+                  {
+                    setNumber: 1,
+                    weight_kg: 0,
+                    reps: 10,
+                    completed: false as const,
+                  },
+                  {
+                    setNumber: 2,
+                    weight_kg: 0,
+                    reps: 10,
+                    completed: false as const,
+                  },
+                  {
+                    setNumber: 3,
+                    weight_kg: 0,
+                    reps: 10,
+                    completed: false as const,
+                  },
+                ]
         }
       } else {
         gymSets = []
@@ -429,7 +496,8 @@ export default function SchedulePage() {
     handleSelectDate(dateStr)
   }
 
-  function handleStartWorkout() {    if (workoutSession) {
+  function handleStartWorkout() {
+    if (workoutSession) {
       setShowReplaceWorkout(true)
       return
     }
@@ -521,9 +589,9 @@ export default function SchedulePage() {
             {/* Mobile: week/month strip at top */}
             <div className='lg:hidden border-b border-border bg-surface-1 py-3'>
               {/* View mode toggle */}
-              <div className="flex items-center gap-1 px-3 pb-2">
+              <div className='flex items-center gap-1 px-3 pb-2'>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setViewMode('week')}
                   className={cn(
                     'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
@@ -535,7 +603,7 @@ export default function SchedulePage() {
                   {t('week')}
                 </button>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     setViewMode('month')
                     setDisplayMonth(startOfMonth(new Date()))
@@ -561,7 +629,7 @@ export default function SchedulePage() {
                   onChangeWeek={handleWeekChange}
                 />
               ) : (
-                <div className="px-3 pb-2">
+                <div className='px-3 pb-2'>
                   <MonthCalendar
                     displayMonth={displayMonth}
                     schedules={schedules}
@@ -591,37 +659,42 @@ export default function SchedulePage() {
 
             {/* Workout list */}
             <div className='flex-1 overflow-y-auto'>
-                <DailyScheduleView
-                  items={activeSchedule?.items ?? []}
-                  labelMap={labelMap}
-                  onAdd={() => setPickerOpen(true)}
-                  onRemove={id =>
-                    activeSchedule &&
-                    removeItem(id, activeSchedule.id, activeSchedule.dateString)
-                  }
-                  onReorder={ids =>
-                    activeSchedule &&
-                    reorderItems(
-                      activeSchedule.id,
-                      activeSchedule.dateString,
-                      ids,
-                    )
-                  }
-                  onSaveGym={(itemId, payload) =>
-                    saveGymPayload(itemId, payload, activeSchedule!.dateString)
-                  }
-                  onSaveRunning={(itemId, payload) =>
-                    saveRunningPayload(
-                      itemId,
-                      payload,
-                      activeSchedule!.dateString,
-                    )
-                  }
-                  isLocked={activeSchedule?.dayStatus !== DayStatus.PENDING}
-                  canShift={canShift}
-                  onShift={handleShift}
-                  onUnlockRequest={() => setUpgradePromptOpen(true)}
-                />
+              <DailyScheduleView
+                items={activeSchedule?.items ?? []}
+                labelMap={labelMap}
+                onAdd={() => setPickerOpen(true)}
+                onRemove={id =>
+                  activeSchedule &&
+                  removeItem(id, activeSchedule.id, activeSchedule.dateString)
+                }
+                onReorder={ids =>
+                  activeSchedule &&
+                  reorderItems(
+                    activeSchedule.id,
+                    activeSchedule.dateString,
+                    ids,
+                  )
+                }
+                onSaveGym={(itemId, payload) =>
+                  saveGymPayload(itemId, payload, activeSchedule!.dateString)
+                }
+                onSaveRunning={(itemId, payload) =>
+                  saveRunningPayload(
+                    itemId,
+                    payload,
+                    activeSchedule!.dateString,
+                  )
+                }
+                isLocked={activeSchedule?.dayStatus !== DayStatus.PENDING}
+                canShift={canShift}
+                onShift={handleShift}
+                onUnlockRequest={() => setUpgradePromptOpen(true)}
+                isMissed={
+                  !!activeSchedule &&
+                  activeSchedule.dayStatus === DayStatus.PENDING &&
+                  activeSchedule.dateString < todayStr
+                }
+              />
             </div>
 
             <MobileActionBar
@@ -735,14 +808,22 @@ export default function SchedulePage() {
             token={token}
             gymExercises={gymExercises}
             runningExercises={runningExercises}
+            userReferenceWeightKg={
+              (session?.user as { referenceWeightKg?: number | null })
+                ?.referenceWeightKg ?? undefined
+            }
+            userReferencePaceMinPerKm={
+              (session?.user as { referencePaceMinPerKm?: number | null })
+                ?.referencePaceMinPerKm ?? undefined
+            }
             onClose={() => {
-              localStorage.setItem('hasSeenTemplates', '1');
-              setShowStarterModal(false);
+              localStorage.setItem('hasSeenTemplates', '1')
+              setShowStarterModal(false)
             }}
             onApplied={() => {
-              localStorage.setItem('hasSeenTemplates', '1');
-              setShowStarterModal(false);
-              loadWeek(weekOffset);
+              localStorage.setItem('hasSeenTemplates', '1')
+              setShowStarterModal(false)
+              loadWeek(weekOffset)
             }}
           />
         )}

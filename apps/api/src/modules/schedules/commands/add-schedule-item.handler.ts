@@ -2,6 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PrismaService } from '@athlete-planner/database';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { ExerciseSourceType } from '@athlete-planner/contracts';
+import { Prisma } from '@athlete-planner/database';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { AddScheduleItemCommand } from './add-schedule-item.command';
 
@@ -14,7 +15,7 @@ export class AddScheduleItemHandler implements ICommandHandler<AddScheduleItemCo
 
   async execute(command: AddScheduleItemCommand) {
     const { scheduleId, dto, userId } = command;
-    const { exerciseType, exerciseId, sportType } = dto;
+    const { exerciseType, exerciseId, sportType, gymPayload, runningPayload } = dto;
 
     const schedule = await this.prisma.dailySchedule.findUnique({ where: { id: scheduleId } });
     if (!schedule) throw new NotFoundException('Schedule not found');
@@ -37,6 +38,8 @@ export class AddScheduleItemHandler implements ICommandHandler<AddScheduleItemCo
         gymMasterId: exerciseType === ExerciseSourceType.GYM_MASTER ? exerciseId : null,
         runningMasterId: exerciseType === ExerciseSourceType.RUNNING_MASTER ? exerciseId : null,
         privateExerciseId: exerciseType === ExerciseSourceType.PRIVATE ? exerciseId : null,
+        gymPayload: gymPayload != null ? (gymPayload as Prisma.InputJsonValue) : undefined,
+        runningPayload: runningPayload != null ? (runningPayload as Prisma.InputJsonValue) : undefined,
       },
     });
   }

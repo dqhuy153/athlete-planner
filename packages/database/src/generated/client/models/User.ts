@@ -20,8 +20,20 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  referenceWeightKg: number | null
+  referencePaceMinPerKm: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  referenceWeightKg: number | null
+  referencePaceMinPerKm: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -34,6 +46,8 @@ export type UserMinAggregateOutputType = {
   role: $Enums.UserRole | null
   preferredLevel: string | null
   hasUsedFreeExport: boolean | null
+  referenceWeightKg: number | null
+  referencePaceMinPerKm: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +62,8 @@ export type UserMaxAggregateOutputType = {
   role: $Enums.UserRole | null
   preferredLevel: string | null
   hasUsedFreeExport: boolean | null
+  referenceWeightKg: number | null
+  referencePaceMinPerKm: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,11 +78,23 @@ export type UserCountAggregateOutputType = {
   role: number
   preferredLevel: number
   hasUsedFreeExport: number
+  referenceWeightKg: number
+  referencePaceMinPerKm: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  referenceWeightKg?: true
+  referencePaceMinPerKm?: true
+}
+
+export type UserSumAggregateInputType = {
+  referenceWeightKg?: true
+  referencePaceMinPerKm?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -78,6 +106,8 @@ export type UserMinAggregateInputType = {
   role?: true
   preferredLevel?: true
   hasUsedFreeExport?: true
+  referenceWeightKg?: true
+  referencePaceMinPerKm?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +122,8 @@ export type UserMaxAggregateInputType = {
   role?: true
   preferredLevel?: true
   hasUsedFreeExport?: true
+  referenceWeightKg?: true
+  referencePaceMinPerKm?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +138,8 @@ export type UserCountAggregateInputType = {
   role?: true
   preferredLevel?: true
   hasUsedFreeExport?: true
+  referenceWeightKg?: true
+  referencePaceMinPerKm?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -149,6 +183,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -179,6 +225,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -193,9 +241,13 @@ export type UserGroupByOutputType = {
   role: $Enums.UserRole
   preferredLevel: string | null
   hasUsedFreeExport: boolean
+  referenceWeightKg: number | null
+  referencePaceMinPerKm: number | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -228,6 +280,8 @@ export type UserWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   preferredLevel?: Prisma.StringNullableFilter<"User"> | string | null
   hasUsedFreeExport?: Prisma.BoolFilter<"User"> | boolean
+  referenceWeightKg?: Prisma.FloatNullableFilter<"User"> | number | null
+  referencePaceMinPerKm?: Prisma.FloatNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   privateExercises?: Prisma.PrivateExerciseListRelationFilter
@@ -245,6 +299,8 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   hasUsedFreeExport?: Prisma.SortOrder
+  referenceWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   privateExercises?: Prisma.PrivateExerciseOrderByRelationAggregateInput
@@ -265,6 +321,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   preferredLevel?: Prisma.StringNullableFilter<"User"> | string | null
   hasUsedFreeExport?: Prisma.BoolFilter<"User"> | boolean
+  referenceWeightKg?: Prisma.FloatNullableFilter<"User"> | number | null
+  referencePaceMinPerKm?: Prisma.FloatNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   privateExercises?: Prisma.PrivateExerciseListRelationFilter
@@ -282,11 +340,15 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   hasUsedFreeExport?: Prisma.SortOrder
+  referenceWeightKg?: Prisma.SortOrderInput | Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -302,6 +364,8 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   preferredLevel?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   hasUsedFreeExport?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  referenceWeightKg?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
+  referencePaceMinPerKm?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -316,6 +380,8 @@ export type UserCreateInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -333,6 +399,8 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -350,6 +418,8 @@ export type UserUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -367,6 +437,8 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -384,6 +456,8 @@ export type UserCreateManyInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -398,6 +472,8 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -412,6 +488,8 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -426,8 +504,15 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrder
   hasUsedFreeExport?: Prisma.SortOrder
+  referenceWeightKg?: Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  referenceWeightKg?: Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -440,6 +525,8 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrder
   hasUsedFreeExport?: Prisma.SortOrder
+  referenceWeightKg?: Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -454,8 +541,15 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrder
   hasUsedFreeExport?: Prisma.SortOrder
+  referenceWeightKg?: Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  referenceWeightKg?: Prisma.SortOrder
+  referencePaceMinPerKm?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -481,6 +575,14 @@ export type EnumUserRoleFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -539,6 +641,8 @@ export type UserCreateWithoutPrivateExercisesInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   dailySchedules?: Prisma.DailyScheduleCreateNestedManyWithoutUserInput
@@ -555,6 +659,8 @@ export type UserUncheckedCreateWithoutPrivateExercisesInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   dailySchedules?: Prisma.DailyScheduleUncheckedCreateNestedManyWithoutUserInput
@@ -587,6 +693,8 @@ export type UserUpdateWithoutPrivateExercisesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dailySchedules?: Prisma.DailyScheduleUpdateManyWithoutUserNestedInput
@@ -603,6 +711,8 @@ export type UserUncheckedUpdateWithoutPrivateExercisesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dailySchedules?: Prisma.DailyScheduleUncheckedUpdateManyWithoutUserNestedInput
@@ -619,6 +729,8 @@ export type UserCreateWithoutDailySchedulesInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -635,6 +747,8 @@ export type UserUncheckedCreateWithoutDailySchedulesInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -667,6 +781,8 @@ export type UserUpdateWithoutDailySchedulesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -683,6 +799,8 @@ export type UserUncheckedUpdateWithoutDailySchedulesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -699,6 +817,8 @@ export type UserCreateWithoutPaymentsInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -715,6 +835,8 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   role?: $Enums.UserRole
   preferredLevel?: string | null
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: number | null
+  referencePaceMinPerKm?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -747,6 +869,8 @@ export type UserUpdateWithoutPaymentsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -763,6 +887,8 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referenceWeightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  referencePaceMinPerKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -828,6 +954,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   preferredLevel?: boolean
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: boolean
+  referencePaceMinPerKm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   privateExercises?: boolean | Prisma.User$privateExercisesArgs<ExtArgs>
@@ -846,6 +974,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   preferredLevel?: boolean
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: boolean
+  referencePaceMinPerKm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -860,6 +990,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   preferredLevel?: boolean
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: boolean
+  referencePaceMinPerKm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -874,11 +1006,13 @@ export type UserSelectScalar = {
   role?: boolean
   preferredLevel?: boolean
   hasUsedFreeExport?: boolean
+  referenceWeightKg?: boolean
+  referencePaceMinPerKm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "googleId" | "avatarUrl" | "tier" | "role" | "preferredLevel" | "hasUsedFreeExport" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "googleId" | "avatarUrl" | "tier" | "role" | "preferredLevel" | "hasUsedFreeExport" | "referenceWeightKg" | "referencePaceMinPerKm" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   privateExercises?: boolean | Prisma.User$privateExercisesArgs<ExtArgs>
   dailySchedules?: boolean | Prisma.User$dailySchedulesArgs<ExtArgs>
@@ -905,6 +1039,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: $Enums.UserRole
     preferredLevel: string | null
     hasUsedFreeExport: boolean
+    referenceWeightKg: number | null
+    referencePaceMinPerKm: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1342,6 +1478,8 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly preferredLevel: Prisma.FieldRef<"User", 'String'>
   readonly hasUsedFreeExport: Prisma.FieldRef<"User", 'Boolean'>
+  readonly referenceWeightKg: Prisma.FieldRef<"User", 'Float'>
+  readonly referencePaceMinPerKm: Prisma.FieldRef<"User", 'Float'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

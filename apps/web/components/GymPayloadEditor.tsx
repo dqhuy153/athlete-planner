@@ -83,11 +83,11 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
       {/* Sets table */}
       <div role="list" aria-label={t('sets')} className="flex flex-col gap-2">
         {sets.map((set, idx) => (
-          <div
-            key={set.set_number}
-            role="listitem"
-            className="flex items-center gap-2 rounded-lg bg-surface-2 px-3 py-2.5"
-          >
+          <div key={set.set_number}>
+            <div
+              role="listitem"
+              className="flex items-center gap-2 rounded-lg bg-surface-2 px-3 py-2.5"
+            >
             <span className="w-12 shrink-0 text-micro text-text-tertiary">
               {t('setNumber', { n: set.set_number })}
             </span>
@@ -143,6 +143,24 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
             >
               <Trash2 className="h-4 w-4" aria-hidden />
             </button>
+            </div>
+            {idx === 0 && sets.length > 1 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setSets(prev =>
+                    prev.map((s, i) =>
+                      i === 0
+                        ? s
+                        : { ...s, weight_kg: prev[0].weight_kg, reps: prev[0].reps, rpe: prev[0].rpe },
+                    ),
+                  )
+                }
+                className="text-[11px] text-accent/80 hover:text-accent font-mono font-medium transition-colors focus-visible:outline-none mt-1 ml-1 block"
+              >
+                {t('applyToAllSets')}
+              </button>
+            )}
           </div>
         ))}
       </div>

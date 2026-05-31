@@ -35,6 +35,8 @@ model User {
   role           UserRole @default(user)
   preferredLevel    String?  // 'BEGINNER' | 'ADVANCED'
   hasUsedFreeExport Boolean  @default(false)
+  referenceWeightKg      Float?
+  referencePaceMinPerKm  Float?
   createdAt         DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

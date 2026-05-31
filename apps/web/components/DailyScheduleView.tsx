@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from '@dnd-kit/sortable';
-import { Plus, ArrowRightCircle, Loader2 } from 'lucide-react';
+import { Plus, ArrowRightCircle, Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
@@ -33,6 +33,7 @@ interface DailyScheduleViewProps {
   canShift?: boolean;
   onShift?: () => Promise<void>;
   onUnlockRequest?: () => void;
+  isMissed?: boolean;
 }
 
 export function DailyScheduleView({
@@ -47,6 +48,7 @@ export function DailyScheduleView({
   canShift,
   onShift,
   onUnlockRequest,
+  isMissed,
 }: DailyScheduleViewProps) {
   const t = useTranslations('schedule');
 
@@ -67,6 +69,12 @@ export function DailyScheduleView({
 
   return (
     <div className="flex flex-col gap-3 px-4 pb-2 lg:pb-4">
+      {isMissed && (
+        <div className="flex items-center gap-1.5 rounded-lg border border-warning/40 bg-warning/10 px-3 py-2">
+          <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" aria-hidden />
+          <span className="text-caption font-medium text-warning">{t('missedLabel')}</span>
+        </div>
+      )}
       {items.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-10 text-center">
           <p className="text-body text-text-tertiary">{t('emptyDay')}</p>

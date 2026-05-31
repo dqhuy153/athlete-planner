@@ -27,6 +27,8 @@ export interface User {
   tier: UserTier;
   role: UserRole;
   preferredLevel: ExperienceLevel | null;
+  referenceWeightKg: number | null;
+  referencePaceMinPerKm: number | null;
   createdAt: string;
   updatedAt: string;
 }

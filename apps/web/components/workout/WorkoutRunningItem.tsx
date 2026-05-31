@@ -13,13 +13,14 @@ import { triggerRestDone } from '@/lib/workout-alerts';
 interface WorkoutRunningItemProps {
   item: WorkoutItem;
   itemIndex: number;
+  onTimerEnd?: () => void;
 }
 
 function pad(n: number) {
   return n.toString().padStart(2, '0');
 }
 
-export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps) {
+export function WorkoutRunningItem({ item, itemIndex, onTimerEnd }: WorkoutRunningItemProps) {
   const t = useTranslations('workout');
   const {
     session,
@@ -64,6 +65,7 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
   useEffect(() => {
     if (remaining === 0 && totalSeconds > 0 && running) {
       setRunning(false);
+      onTimerEnd?.();
       if (automationMode === 'auto') {
         triggerRestDone(session?.soundEnabled ?? false, session?.vibrationEnabled ?? true);
         handleAdvance();

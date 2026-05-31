@@ -63,3 +63,9 @@ export function getUploadUrl(
     body: JSON.stringify(data),
   });
 }
+
+export function getStorageStats(
+  accessToken: string,
+): Promise<{ totalBytes: number; assetCount: number }> {
+  return apiFetch('/admin/assets/storage-stats', accessToken);
+}

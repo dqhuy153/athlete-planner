@@ -1,5 +1,7 @@
 'use client'
 
+import { cn } from '@athlete-planner/ui'
+
 interface WizardStepperProps {
   steps: string[]
   currentStep: number // 0-indexed
@@ -19,7 +21,12 @@ export function WizardStepper({ steps, currentStep }: WizardStepperProps) {
           />
         ))}
       </div>
-      <div className='grid grid-cols-4'>
+      <div
+        className={cn(
+          'grid',
+          steps.length === 5 ? 'grid-cols-5' : `grid-cols-4`,
+        )}
+      >
         {steps.map((label, i) => (
           <span
             key={i}

@@ -50,8 +50,12 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
 
   const [showAbandonConfirm, setShowAbandonConfirm] = useState(false);
   const [completeFired, setCompleteFired] = useState(false);
+  const [flashActive, setFlashActive] = useState(false);
+  const [holdProgress, setHoldProgress] = useState(0);
 
   const currentRef = useRef<HTMLDivElement | null>(null);
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+  const holdIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const workoutPhase = session?.workoutPhase ?? 'preview';
   const allDone = session ? session.items.every((i) => i.done) : false;
@@ -70,6 +74,55 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
       currentRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [session?.currentItemIndex]);
+
+  // Wake Lock — keep screen on during active workout
+  useEffect(() => {
+    if (workoutPhase === 'active' && typeof navigator !== 'undefined' && 'wakeLock' in navigator) {
+      navigator.wakeLock
+        .request('screen')
+        .then(lock => { wakeLockRef.current = lock; })
+        .catch(() => {});
+    } else {
+      wakeLockRef.current?.release().catch(() => {});
+      wakeLockRef.current = null;
+    }
+    return () => {
+      wakeLockRef.current?.release().catch(() => {});
+      wakeLockRef.current = null;
+    };
+  }, [workoutPhase]);
+
+  function triggerFlash() {
+    setFlashActive(true);
+    setTimeout(() => setFlashActive(false), 500);
+  }
+
+  function handleHoldStart() {
+    navigator.vibrate?.(10);
+    holdIntervalRef.current = setInterval(() => {
+      setHoldProgress(p => {
+        const next = p + 1;
+        if (next >= 100) {
+          clearInterval(holdIntervalRef.current!);
+          holdIntervalRef.current = null;
+          navigator.vibrate?.(80);
+          setHoldProgress(0);
+          discardSession();
+          onClose();
+          return 0;
+        }
+        return next;
+      });
+    }, 20);
+  }
+
+  function handleHoldEnd() {
+    if (holdIntervalRef.current) {
+      clearInterval(holdIntervalRef.current);
+      holdIntervalRef.current = null;
+    }
+    setHoldProgress(0);
+  }
 
   if (!session) return null;
 
@@ -384,6 +437,10 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
       aria-modal="true"
       aria-label={t('title')}
     >
+      {/* Flash overlay — pointer-events-none so it doesn't block interaction */}
+      {flashActive && (
+        <div className="fixed inset-0 z-50 bg-accent/20 pointer-events-none animate-pulse" />
+      )}
       {/* Header */}
       <div className="shrink-0 flex items-center gap-1 border-b border-border bg-surface-1 px-3 py-2.5">
         <div className="flex-1 min-w-0 pl-1">
@@ -585,9 +642,9 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                   </div>
                   <div className="px-3 pb-3">
                     {item.sportType === SportType.GYM ? (
-                      <WorkoutGymItem item={item} itemIndex={i} />
+                      <WorkoutGymItem item={item} itemIndex={i} onTimerEnd={triggerFlash} />
                     ) : (
-                      <WorkoutRunningItem item={item} itemIndex={i} />
+                      <WorkoutRunningItem item={item} itemIndex={i} onTimerEnd={triggerFlash} />
                     )}
                     {/* Skip exercise button */}
                     <button
@@ -654,16 +711,34 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
               >
                 {t('abandonCancel')}
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  discardSession();
-                  onClose();
-                }}
-                className="min-h-[48px] rounded-xl border border-border bg-surface-1 text-sm text-text-secondary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                {t('abandonConfirm')}
-              </button>
+              {/* Hold-to-cancel button */}
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  type="button"
+                  onPointerDown={handleHoldStart}
+                  onPointerUp={handleHoldEnd}
+                  onPointerLeave={handleHoldEnd}
+                  className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-border bg-surface-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-label={t('holdToDiscard')}
+                >
+                  {/* Progress ring */}
+                  <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 64 64" aria-hidden>
+                    <circle cx="32" cy="32" r="28" fill="none" strokeWidth="3" className="stroke-border" />
+                    <circle
+                      cx="32" cy="32" r="28"
+                      fill="none" strokeWidth="3"
+                      stroke="var(--error)"
+                      strokeLinecap="round"
+                      strokeDasharray={`${(holdProgress / 100) * 175.9} 175.9`}
+                      strokeDashoffset="0"
+                    />
+                  </svg>
+                  <span className="text-micro text-text-tertiary font-mono tabular-nums z-10">
+                    {holdProgress > 0 ? `${Math.ceil((100 - holdProgress) / 50)}s` : '✕'}
+                  </span>
+                </button>
+                <p className="text-micro text-text-tertiary text-center">{t('holdToDiscard')}</p>
+              </div>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession, signIn } from 'next-auth/react';
 import { useParams, usePathname } from 'next/navigation';
-import { Zap, Check, Activity, History, Download, LayoutGrid, Globe } from 'lucide-react';
+import { Zap, Check, Activity, History, Download, LayoutGrid, Globe, Users } from 'lucide-react';
 import { api } from '@/lib/api';
 import { UserTier } from '@athlete-planner/contracts';
 import { Button } from '@athlete-planner/ui';
@@ -75,6 +75,12 @@ export default function UpgradePage() {
           </li>
         ))}
       </ul>
+
+      {/* Social proof */}
+      <div className="mb-6 flex items-center gap-2 text-sm text-text-secondary">
+        <Users size={15} className="shrink-0 text-accent" aria-hidden />
+        <span>{t('socialProof')}</span>
+      </div>
 
       {/* Price block */}
       <div className="mb-6 overflow-hidden rounded-[20px] border border-accent/30 bg-accent/5">

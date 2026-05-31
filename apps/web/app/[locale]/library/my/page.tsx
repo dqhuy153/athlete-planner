@@ -8,7 +8,7 @@ import { Plus } from 'lucide-react';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { UserTier } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
-import { Button } from '@athlete-planner/ui';
+import { Button, cn } from '@athlete-planner/ui';
 import { ExerciseCard } from '@/components/ExerciseCard';
 import { TierLimitBanner } from '@/components/TierLimitBanner';
 
@@ -47,8 +47,21 @@ export default function MyExercisesPage({ params }: PageProps) {
         {/* Header row */}
         <div className="mb-4 flex items-center justify-between gap-2">
           <p className="text-micro text-text-tertiary font-data">
-            {exercises.length}/10
-          </p>
+              {exercises.length}/10
+            </p>
+            <div className="w-24 h-1 bg-surface-3 rounded-full mt-1 overflow-hidden">
+              <div
+                className={cn(
+                  'h-full rounded-full transition-all duration-300 ease-out',
+                  exercises.length >= 10
+                    ? 'bg-error'
+                    : exercises.length >= 8
+                    ? 'bg-amber-400'
+                    : 'bg-accent',
+                )}
+                style={{ width: `${Math.min((exercises.length / 10) * 100, 100)}%` }}
+              />
+            </div>
           {(!isAtLimit || isPro) && (
             <Button variant="accent" size="sm" asChild>
               <Link

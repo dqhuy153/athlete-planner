@@ -12,13 +12,14 @@ import type { WorkoutItem } from '@/lib/types/workout';
 interface WorkoutGymItemProps {
   item: WorkoutItem;
   itemIndex: number;
+  onTimerEnd?: () => void;
 }
 
 function pad(n: number) {
   return n.toString().padStart(2, '0');
 }
 
-export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
+export function WorkoutGymItem({ item, itemIndex, onTimerEnd }: WorkoutGymItemProps) {
   const t = useTranslations('workout');
   const {
     session,
@@ -288,7 +289,7 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
           soundEnabled={session?.soundEnabled ?? false}
           vibrationEnabled={session?.vibrationEnabled ?? true}
           autoAdvance={automationMode === 'auto'}
-          onDone={() => stopRestTimer()}
+          onDone={() => { onTimerEnd?.(); stopRestTimer(); }}
           onSkip={() => stopRestTimer()}
         />
       )}

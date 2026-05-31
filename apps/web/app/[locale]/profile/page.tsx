@@ -115,17 +115,18 @@ export default function ProfilePage() {
             <p className='truncate text-sm text-text-secondary'>
               {user?.email}
             </p>
-            <span
-              className={cn(
-                'mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold',
-                isPro
-                  ? 'bg-accent/15 text-accent'
-                  : 'bg-surface-2 text-text-tertiary',
-              )}
-            >
-              {isPro && <Zap size={10} aria-hidden />}
-              {isPro ? 'PRO' : 'FREE'}
-            </span>
+            {isPro ? (
+              <div className="p-[1.5px] rounded-full bg-gradient-to-r from-cyan-400 to-[#00D4AA] mt-1 inline-block">
+                <div className="flex items-center gap-1 rounded-full bg-surface-1 px-2 py-0.5">
+                  <Zap size={10} aria-hidden className="text-accent" />
+                  <span className="text-xs font-mono font-bold text-accent">PRO</span>
+                </div>
+              </div>
+            ) : (
+              <span className="mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold bg-surface-2 text-text-tertiary">
+                FREE
+              </span>
+            )}
           </div>
         </div>
 

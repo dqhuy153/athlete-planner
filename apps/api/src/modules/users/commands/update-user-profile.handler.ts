@@ -22,6 +22,8 @@ export class UpdateUserProfileHandler implements ICommandHandler<UpdateUserProfi
         tier: true,
         role: true,
         preferredLevel: true,
+        referenceWeightKg: true,
+        referencePaceMinPerKm: true,
       },
     });
   }

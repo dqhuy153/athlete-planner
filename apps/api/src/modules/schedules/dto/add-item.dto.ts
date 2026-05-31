@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 import { ExerciseSourceType, SportType } from '@athlete-planner/contracts';
 
 export class AddItemDto {
@@ -11,4 +11,10 @@ export class AddItemDto {
 
   @IsEnum(SportType)
   sportType: SportType;
+
+  @IsOptional()
+  gymPayload?: Record<string, unknown>;
+
+  @IsOptional()
+  runningPayload?: Record<string, unknown>;
 }

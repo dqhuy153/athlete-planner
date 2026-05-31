@@ -142,7 +142,9 @@
     "shiftError": "Could not shift workouts",
     "shiftConfirmTitle": "Confirm shift",
     "shiftConfirmMessage": "You are shifting {count} pending workout(s) to tomorrow. This cannot be undone.",
-    "shiftConfirm": "Shift to tomorrow"
+    "shiftConfirm": "Shift to tomorrow",
+    "missedLabel": "Missed",
+    "applyToAllSets": "Apply Set 1 to all sets"
   },
   "library": {
     "title": "Exercise Library",
@@ -286,7 +288,8 @@
     "cancelTitle": "Payment Cancelled",
     "cancelSubtitle": "Your account remains on the free plan.",
     "cancelCta": "Back to Upgrade",
-    "promoHint": "Upgrade once, use forever."
+    "promoHint": "Upgrade once, use forever.",
+    "socialProof": "Trusted by athletes tracking gym + running"
   },
   "export": {
     "fitDay": "Export FIT",
@@ -427,7 +430,8 @@
     "saveImageError": "Could not save image",
     "totalRunDistance": "Total Distance",
     "totalRunTime": "Total Run Time",
-    "completedBadge": "Completed"
+    "completedBadge": "Completed",
+    "holdToDiscard": "Hold 2s to discard session"
   },
   "privateExercise": {
     "backToLibrary": "Back to Library",
@@ -481,5 +485,23 @@
     "noExercisesFound": "No exercises in the library yet. Ask your admin to add some.",
     "chooseTemplate": "Choose a template",
     "close": "Close"
+  },
+  "onboarding": {
+    "step1Title": "How experienced are you?",
+    "step1Subtitle": "We'll tailor your first week of training",
+    "beginner": "Beginner",
+    "beginnerDesc": "New to structured training",
+    "advanced": "Advanced",
+    "advancedDesc": "Already training consistently",
+    "step2Title": "Set your baseline",
+    "step2Subtitle": "Optional — helps personalize your first template",
+    "weightLabel": "Current bench press weight (kg)",
+    "weightPlaceholder": "e.g. 60",
+    "weightHint": "Used to set your first workout weight",
+    "paceLabel": "Easy run pace (min/km)",
+    "pacePlaceholder": "e.g. 7.0",
+    "paceHint": "Decimal format: 7.5 = 7 min 30 sec per km",
+    "startTraining": "Start Training",
+    "skipForNow": "Skip for now"
   }
 }

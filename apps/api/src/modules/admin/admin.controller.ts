@@ -214,6 +214,14 @@ Respond with JSON only (no markdown):
 
   // ── Asset Upload Management ──────────────────────────────────────────────────
 
+  @Get('assets/storage-stats')
+  async getAssetStorageStats() {
+    const stats = await this.prisma.asset.aggregate({
+      _sum: { size: true },
+    });
+    return { totalBytes: stats._sum.size ?? 0 };
+  }
+
   @Get('assets')
   async getAssets(@Query('provider') provider?: string, @Query('category') category?: string) {
     const where: Prisma.AssetWhereInput = {};
