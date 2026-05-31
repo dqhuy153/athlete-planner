@@ -25,6 +25,7 @@ import { SchedulesModule } from './modules/schedules/schedules.module';
 import { TierGuardModule } from './modules/tier-guard/tier-guard.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { ExportModule } from './modules/export/export.module';
+import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { ExportModule } from './modules/export/export.module';
     SchedulesModule,
     PaymentsModule,
     ExportModule,
+    AiModule,
   ],
 })
 export class AppModule {}
