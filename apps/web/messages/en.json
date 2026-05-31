@@ -126,7 +126,10 @@
     "dayTh": "Th",
     "dayFr": "Fr",
     "daySa": "Sa",
-    "daySu": "Su"
+    "daySu": "Su",
+    "dayCompleted": "Day completed",
+    "daySkipped": "Day skipped",
+    "dayRestDay": "Rest day"
   },
   "library": {
     "title": "Exercise Library",

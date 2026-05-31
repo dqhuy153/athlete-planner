@@ -17,6 +17,7 @@ export class UpdateDayStatusHandler implements ICommandHandler<UpdateDayStatusCo
     return this.prisma.dailySchedule.update({
       where: { id },
       data: { dayStatus: status },
+      include: { items: { orderBy: { sequenceOrder: 'asc' } } },
     });
   }
 }

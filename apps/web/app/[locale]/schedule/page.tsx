@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import {
   format,
@@ -178,7 +178,7 @@ export default function SchedulePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const _pendingLabel = { current: '' }
+  const _pendingLabel = useRef('')
 
   const handlePick = useCallback(
     async (picked: PickedExercise) => {
@@ -491,33 +491,45 @@ export default function SchedulePage() {
 
             {/* Workout list */}
             <div className='flex-1 overflow-y-auto'>
-              <DailyScheduleView
-                items={activeSchedule?.items ?? []}
-                labelMap={labelMap}
-                onAdd={() => setPickerOpen(true)}
-                onRemove={id =>
-                  activeSchedule &&
-                  removeItem(id, activeSchedule.id, activeSchedule.dateString)
-                }
-                onReorder={ids =>
-                  activeSchedule &&
-                  reorderItems(
-                    activeSchedule.id,
-                    activeSchedule.dateString,
-                    ids,
-                  )
-                }
-                onSaveGym={(itemId, payload) =>
-                  saveGymPayload(itemId, payload, activeSchedule!.dateString)
-                }
-                onSaveRunning={(itemId, payload) =>
-                  saveRunningPayload(
-                    itemId,
-                    payload,
-                    activeSchedule!.dateString,
-                  )
-                }
-              />
+              {activeSchedule && activeSchedule.dayStatus !== DayStatus.PENDING ? (
+                <div className='flex flex-col items-center justify-center py-16 px-4'>
+                  <p className='text-sm font-medium text-text-secondary'>
+                    {activeSchedule.dayStatus === DayStatus.COMPLETED
+                      ? t('dayCompleted')
+                      : activeSchedule.dayStatus === DayStatus.SKIPPED
+                      ? t('daySkipped')
+                      : t('dayRestDay')}
+                  </p>
+                </div>
+              ) : (
+                <DailyScheduleView
+                  items={activeSchedule?.items ?? []}
+                  labelMap={labelMap}
+                  onAdd={() => setPickerOpen(true)}
+                  onRemove={id =>
+                    activeSchedule &&
+                    removeItem(id, activeSchedule.id, activeSchedule.dateString)
+                  }
+                  onReorder={ids =>
+                    activeSchedule &&
+                    reorderItems(
+                      activeSchedule.id,
+                      activeSchedule.dateString,
+                      ids,
+                    )
+                  }
+                  onSaveGym={(itemId, payload) =>
+                    saveGymPayload(itemId, payload, activeSchedule!.dateString)
+                  }
+                  onSaveRunning={(itemId, payload) =>
+                    saveRunningPayload(
+                      itemId,
+                      payload,
+                      activeSchedule!.dateString,
+                    )
+                  }
+                />
+              )}
             </div>
 
             <MobileActionBar

@@ -126,7 +126,10 @@
     "dayTh": "T5",
     "dayFr": "T6",
     "daySa": "T7",
-    "daySu": "CN"
+    "daySu": "CN",
+    "dayCompleted": "Ngày đã hoàn thành",
+    "daySkipped": "Ngày đã bỏ qua",
+    "dayRestDay": "Ngày nghỉ"
   },
   "library": {
     "title": "Thư viện bài tập",
