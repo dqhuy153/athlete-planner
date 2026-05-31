@@ -461,6 +461,7 @@
     "applying": "Đang thiết lập tuần của bạn...",
     "successToast": "Đã áp dụng mẫu! Sẵn sàng tập chưa?",
     "errorToast": "Không áp dụng được mẫu. Hãy thêm thủ công.",
-    "chooseTemplate": "Chọn mẫu lịch"
+    "chooseTemplate": "Chọn mẫu lịch",
+    "close": "Đóng"
   }
 }

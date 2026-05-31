@@ -461,6 +461,7 @@
     "applying": "Setting up your week...",
     "successToast": "Template applied! Ready to sweat?",
     "errorToast": "Could not apply template. Try adding manually.",
-    "chooseTemplate": "Choose a template"
+    "chooseTemplate": "Choose a template",
+    "close": "Close"
   }
 }

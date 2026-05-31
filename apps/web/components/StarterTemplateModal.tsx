@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Dumbbell, PersonStanding, X, Loader2, ChevronRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useToast, cn } from '@athlete-planner/ui';
+import { useToast } from '@athlete-planner/ui';
 import { ExerciseSourceType, MuscleGroup, RunningType, SportType } from '@athlete-planner/contracts';
 import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
@@ -120,7 +120,7 @@ export function StarterTemplateModal({
           type="button"
           onClick={onClose}
           disabled={isApplying}
-          aria-label={t('skip')}
+          aria-label={t('close')}
           className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-text-tertiary hover:bg-surface-2 transition-colors disabled:opacity-40"
         >
           <X className="h-4 w-4" aria-hidden />
