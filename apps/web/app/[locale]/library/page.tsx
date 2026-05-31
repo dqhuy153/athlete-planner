@@ -95,6 +95,7 @@ export default async function GymLibraryPage({
                   gifUrl={ex.gifUrl}
                   badge={muscleGroupLabels[ex.targetMuscleGroup] ?? ex.targetMuscleGroup}
                   locale={locale}
+                  fromSection="gym"
                 />
               </li>
             ))}

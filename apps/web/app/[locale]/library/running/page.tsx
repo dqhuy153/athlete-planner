@@ -77,6 +77,7 @@ export default async function RunningLibraryPage({
                   gifUrl={ex.gifUrl}
                   badge={ex.runningType}
                   locale={locale}
+                  fromSection="running"
                 />
               </li>
             ))}

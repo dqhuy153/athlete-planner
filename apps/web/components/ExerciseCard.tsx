@@ -13,6 +13,7 @@ interface ExerciseCardProps {
   isPrivate?: boolean;
   isInactive?: boolean;
   privateBadgeLabel?: string;
+  fromSection?: 'gym' | 'running';
 }
 
 export function ExerciseCard({
@@ -25,13 +26,14 @@ export function ExerciseCard({
   isPrivate,
   isInactive,
   privateBadgeLabel = 'Mine',
+  fromSection,
 }: ExerciseCardProps) {
   return (
     <Link
       href={
         isPrivate
           ? `/${locale}/library/my/${id}`
-          : `/${locale}/library/${id}?fromType=${encodeURIComponent(badge)}`
+          : `/${locale}/library/${id}?from=${fromSection ?? 'gym'}`
       }
       className={cn(
         'group relative flex flex-col overflow-hidden rounded-xl',

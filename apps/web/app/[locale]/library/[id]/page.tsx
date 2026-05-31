@@ -35,22 +35,17 @@ function isRunning(ex: GymExerciseMaster | RunningExerciseMaster): ex is Running
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>;
-  searchParams: Promise<{ fromType?: string }>;
+  searchParams: Promise<{ from?: string }>;
 }
 
 export default async function ExerciseDetailPage({ params, searchParams }: PageProps) {
   const { locale, id } = await params;
-  const { fromType } = await searchParams;
+  const { from } = await searchParams;
   const [exercise, t] = await Promise.all([fetchExercise(id), getTranslations('library')]);
 
   if (!exercise) notFound();
 
-  const isFromRunning =
-    fromType === 'RUNNING' ||
-    fromType === 'Interval' ||
-    fromType === 'Easy' ||
-    fromType === 'Tempo' ||
-    fromType === 'Long_Run';
+  const isFromRunning = from === 'running';
 
   const backHref = isFromRunning ? `/${locale}/library/running` : `/${locale}/library`;
   const backLabel = isFromRunning ? t('running') : t('gym');
