@@ -201,10 +201,14 @@ export default function SchedulePage() {
       }
       if (!schedule) return
 
-      _pendingLabel.current = picked.label
-      await addItem(schedule.id, selectedDate, picked)
+      try {
+        _pendingLabel.current = picked.label
+        await addItem(schedule.id, selectedDate, picked)
+      } catch {
+        pushToast({ title: t('addExerciseFailed'), tone: 'error' })
+      }
     },
-    [activeSchedule, schedules, selectedDate, selectDate, addItem],
+    [activeSchedule, schedules, selectedDate, selectDate, addItem, pushToast, t],
   )
 
   useEffect(() => {

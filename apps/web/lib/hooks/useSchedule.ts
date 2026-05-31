@@ -87,8 +87,12 @@ export function useSchedule({ token }: UseScheduleOptions) {
       const updated = await api.updateDayStatus(token, scheduleId, status);
       setSchedules(prev => new Map(prev).set(dateString, updated));
       setActive(updated);
-    } catch { /* ignore */ }
-  }, [token]);
+    } catch (err) {
+      console.error('Failed to update day status:', err);
+      // Re-fetch to restore correct state
+      await selectDate(dateString);
+    }
+  }, [token, selectDate]);
 
   const addItem = useCallback(async (scheduleId: string, dateString: string, picked: PickedExercise) => {
     try {
@@ -104,21 +108,29 @@ export function useSchedule({ token }: UseScheduleOptions) {
         return map;
       });
       setActive(prev => prev ? { ...prev, items: [...prev.items, item] } : prev);
-    } catch { /* ignore */ }
+    } catch (err) {
+      console.error('Failed to add exercise to schedule:', err);
+      throw err;
+    }
   }, [token]);
 
   const removeItem = useCallback(async (itemId: string, scheduleId: string, dateString: string) => {
+    // Optimistic removal
+    setSchedules(prev => {
+      const map = new Map(prev);
+      const sched = map.get(dateString);
+      if (sched) map.set(dateString, { ...sched, items: sched.items.filter(i => i.id !== itemId) });
+      return map;
+    });
+    setActive(prev => prev ? { ...prev, items: prev.items.filter(i => i.id !== itemId) } : prev);
     try {
       await api.removeScheduleItem(token, itemId);
-      setSchedules(prev => {
-        const map = new Map(prev);
-        const sched = map.get(dateString);
-        if (sched) map.set(dateString, { ...sched, items: sched.items.filter(i => i.id !== itemId) });
-        return map;
-      });
-      setActive(prev => prev ? { ...prev, items: prev.items.filter(i => i.id !== itemId) } : prev);
-    } catch { /* ignore */ }
-  }, [token]);
+    } catch (err) {
+      console.error('Failed to remove exercise from schedule:', err);
+      // Re-fetch to restore correct state
+      await selectDate(dateString);
+    }
+  }, [token, selectDate]);
 
   const reorderItems = useCallback(async (scheduleId: string, dateString: string, orderedIds: string[]) => {
     // Optimistic

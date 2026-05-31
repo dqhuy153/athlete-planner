@@ -131,7 +131,8 @@
     "daySkipped": "Day skipped",
     "dayRestDay": "Rest day",
     "authRequired": "Sign in to view and plan your training schedule",
-    "fetchError": "Failed to load data"
+    "fetchError": "Failed to load data",
+    "addExerciseFailed": "Failed to add exercise"
   },
   "library": {
     "title": "Exercise Library",

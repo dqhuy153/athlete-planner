@@ -131,7 +131,8 @@
     "daySkipped": "Ngày đã bỏ qua",
     "dayRestDay": "Ngày nghỉ",
     "authRequired": "Đăng nhập để xem và lên kế hoạch tập luyện",
-    "fetchError": "Không tải được dữ liệu"
+    "fetchError": "Không tải được dữ liệu",
+    "addExerciseFailed": "Không thêm được bài tập"
   },
   "library": {
     "title": "Thư viện bài tập",
