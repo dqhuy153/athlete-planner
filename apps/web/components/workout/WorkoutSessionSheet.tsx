@@ -148,6 +148,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
 
   // ── PREVIEW SCREEN ──────────────────────────────────────────────────────────
   if (workoutPhase === 'preview') {
+    const hasGymItems = session.items.some((item) => item.sportType === SportType.GYM);
     return (
       <div
         className="fixed inset-0 z-50 flex flex-col bg-background"
@@ -189,7 +190,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                   {/* Type-specific summary chip */}
                   {item.sportType === SportType.GYM && item.sets.length > 0 && (
                     <span className="text-xs font-mono text-text-tertiary shrink-0">
-                      {item.sets.length}×{item.gymPayload?.sets[0]?.reps ?? '?'} {t('repsLabel')}
+                      {item.sets.length}×{item.sets[0]?.reps ?? item.gymPayload?.sets?.[0]?.reps ?? 10} {t('repsLabel')}
                     </span>
                   )}
                   {item.sportType === SportType.RUNNING && item.runningPayload && (
@@ -202,6 +203,25 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                     </span>
                   )}
                 </div>
+
+                {/* Running workout phases — compact preview */}
+                {item.sportType === SportType.RUNNING &&
+                  item.workoutStructure &&
+                  item.workoutStructure.length > 0 && (
+                    <div className="pl-5 border-l border-border/30 space-y-0.5">
+                      {item.workoutStructure.map((phase, pIdx) => (
+                        <p key={pIdx} className="text-[11px] text-text-tertiary font-mono leading-relaxed">
+                          <span className="text-accent/70">·</span>{' '}
+                          {phase.phase}
+                          {phase.duration_minutes
+                            ? ` — ${phase.duration_minutes} min`
+                            : phase.distance_meters
+                            ? ` — ${phase.distance_meters} m`
+                            : ''}
+                        </p>
+                      ))}
+                    </div>
+                  )}
 
                 {/* Per-item rest-after stepper */}
                 <div className="flex items-center justify-between pt-1">
@@ -233,7 +253,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
 
                 {/* Gym exercise config: sets × reps × weight */}
                 {item.sportType === SportType.GYM && item.sets.length > 0 && (
-                  <div className="flex items-center gap-2 pt-1 border-t border-border/20">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 pt-1 border-t border-border/20">
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
@@ -306,6 +326,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
         {/* Config panel */}
         <div className="shrink-0 border-t border-border bg-surface-1 px-4 pt-4 pb-2 space-y-3">
           {/* Rest between sets */}
+          {hasGymItems && (
           <div className="flex items-center justify-between">
             <p className="text-sm text-text-secondary">{t('restBetweenSets')}</p>
             <div className="flex items-center gap-2">
@@ -328,6 +349,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
               </button>
             </div>
           </div>
+          )}
 
           {/* Rest between exercises */}
           <div className="flex items-center justify-between">
