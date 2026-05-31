@@ -37,6 +37,7 @@ import { ImportGymExercisesCommand } from './commands/import-gym-exercises.comma
 import { ImportRunningExercisesCommand } from './commands/import-running-exercises.command';
 import { ConfigPrivateExerciseCommand } from './commands/config-private-exercise.command';
 import { ConfigPrivateExerciseDto } from './dto/config-private-exercise.dto';
+import { DeletePrivateExerciseCommand } from './commands/delete-private-exercise.command';
 
 @Controller('exercises')
 export class ExercisesController {
@@ -196,5 +197,11 @@ export class ExercisesController {
   @Patch('private/:id/toggle')
   async togglePrivateExercise(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(new ToggleExerciseActiveCommand(id, 'private', req.user.sub));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('private/:id')
+  async deletePrivateExercise(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+    return this.commandBus.execute(new DeletePrivateExerciseCommand(id, req.user.sub));
   }
 }

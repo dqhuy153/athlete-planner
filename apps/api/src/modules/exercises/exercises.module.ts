@@ -16,6 +16,7 @@ import { ToggleExerciseActiveHandler } from './commands/toggle-exercise-active.h
 import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handler';
 import { ImportRunningExercisesHandler } from './commands/import-running-exercises.handler';
 import { DeleteExerciseHandler } from './commands/delete-exercise.handler';
+import { DeletePrivateExerciseHandler } from './commands/delete-private-exercise.handler';
 
 // Queries
 import { GetExerciseLibraryHandler } from './queries/get-exercise-library.handler';
@@ -33,6 +34,7 @@ const CommandHandlers = [
   ImportGymExercisesHandler,
   ImportRunningExercisesHandler,
   DeleteExerciseHandler,
+  DeletePrivateExerciseHandler,
 ];
 
 const QueryHandlers = [
