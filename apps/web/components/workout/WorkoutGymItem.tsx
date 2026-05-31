@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Check, Plus, SkipForward, BookOpen } from 'lucide-react';
+import { Check, Plus, SkipForward, BookOpen, ExternalLink } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
@@ -37,6 +37,7 @@ export function WorkoutGymItem({ item, itemIndex, onTimerEnd }: WorkoutGymItemPr
     startRestBetweenExercises,
     stopRestBetweenExercises,
     openGuide,
+    openMedia,
   } = useWorkoutStore();
 
   // Local editable weight/reps/rpe
@@ -279,6 +280,18 @@ export function WorkoutGymItem({ item, itemIndex, onTimerEnd }: WorkoutGymItemPr
         >
           <BookOpen size={13} aria-hidden />
           {t('viewGuide')}
+        </button>
+      )}
+
+      {/* View Media button */}
+      {item.mediaUrls && item.mediaUrls.length > 0 && (
+        <button
+          type="button"
+          onClick={() => openMedia(item)}
+          className="flex w-full items-center justify-center gap-2 min-h-[48px] rounded-xl border border-border/40 py-2.5 text-xs font-medium text-text-tertiary hover:text-text-secondary hover:border-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <ExternalLink size={13} aria-hidden />
+          {t('viewMedia')}
         </button>
       )}
 
