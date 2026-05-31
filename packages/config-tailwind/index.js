@@ -46,6 +46,8 @@ module.exports = {
         'on-primary': 'var(--accent-foreground)',
 
         // Surface aliases (bg-surface = bg-surface-1)
+        // bg-surface-container-low → surface-1 (lowest elevation)
+        'surface-container-low': 'var(--surface-1)',
         // bg-surface-container-high → surface-3
         'surface-container-high': 'var(--surface-3)',
 

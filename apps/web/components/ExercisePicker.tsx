@@ -70,10 +70,10 @@ export function ExercisePicker({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70"
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="relative flex w-full max-w-lg flex-col rounded-t-[20px] sm:rounded-[20px] bg-surface-1 max-h-[90vh]">
+      <div className="relative flex w-full max-w-lg flex-col rounded-t-3xl sm:rounded-3xl bg-surface-1 max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-4 pt-4 pb-2">
           <h2 className="text-heading font-semibold text-text-primary">{t('pickExercise')}</h2>

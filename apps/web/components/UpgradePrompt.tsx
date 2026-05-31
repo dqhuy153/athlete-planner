@@ -3,8 +3,8 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { X, Zap, Repeat, History, Activity } from 'lucide-react';
-import { Button } from '@athlete-planner/ui';
+import { Zap, Repeat, History, Activity } from 'lucide-react';
+import { Button, BottomSheet } from '@athlete-planner/ui';
 
 interface UpgradePromptProps {
   isOpen: boolean;
@@ -17,60 +17,37 @@ export function UpgradePrompt({ isOpen, onClose, featureHint }: UpgradePromptPro
   const et = useTranslations('export');
   const { locale } = useParams<{ locale: string }>();
 
-  if (!isOpen) return null;
-
   const hint = featureHint === 'export.upgradeToExport' ? et('upgradeToExport') : null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end justify-center"
-      role="dialog"
-      aria-modal="true"
-      aria-label={t('title')}
-    >
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Sheet */}
-      <div className="relative w-full max-w-lg rounded-t-2xl bg-surface-1 p-6 pb-8 shadow-2xl animate-in slide-in-from-bottom duration-200">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 flex min-h-[48px] min-w-[48px] items-center justify-center rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          aria-label="Close"
-        >
-          <X size={20} />
-        </button>
-
-        <div className="flex items-center gap-3 mb-4">
+    <BottomSheet open={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-5 px-4 pb-6 pt-2">
+        {/* Title */}
+        <div className="flex items-center gap-3">
           <Zap size={22} className="text-accent" />
-          <h2 className="text-lg font-semibold">{t('title')}</h2>
+          <h2 className="text-heading font-semibold text-text-primary">{t('title')}</h2>
         </div>
 
         {hint && (
-          <p className="mb-4 text-sm text-muted-foreground">{hint}</p>
+          <p className="text-caption text-text-tertiary">{hint}</p>
         )}
 
-        <ul className="mb-6 space-y-3">
+        <ul className="flex flex-col gap-3">
           {[
             { icon: <Repeat size={16} className="text-accent" />, text: t('featureUnlimited') },
             { icon: <History size={16} className="text-accent" />, text: t('featureHistory') },
             { icon: <Activity size={16} className="text-accent" />, text: t('featureGarmin') },
           ].map(({ icon, text }) => (
-            <li key={text} className="flex items-center gap-3 text-sm">
+            <li key={text} className="flex items-center gap-3 text-body text-text-secondary">
               {icon}
               <span>{text}</span>
             </li>
           ))}
         </ul>
 
-        <div className="flex items-baseline gap-2 mb-6">
+        <div className="flex items-baseline gap-2">
           <span className="font-data text-2xl font-bold text-accent">{t('price')}</span>
-          <span className="text-xs text-muted-foreground">{t('oneTime')}</span>
+          <span className="text-caption text-text-tertiary">{t('oneTime')}</span>
         </div>
 
         <Button variant="accent" size="lg" asChild className="w-full">
@@ -79,6 +56,6 @@ export function UpgradePrompt({ isOpen, onClose, featureHint }: UpgradePromptPro
           </Link>
         </Button>
       </div>
-    </div>
+    </BottomSheet>
   );
 }
