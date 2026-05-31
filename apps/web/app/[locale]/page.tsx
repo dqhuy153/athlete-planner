@@ -105,24 +105,6 @@ export default function LandingPage() {
     { value: 'FIT', label: tl('stat3') },
   ]
 
-  const features = [
-    { icon: CalendarDays, title: tl('feat1Title'), desc: tl('feat1Desc') },
-    { icon: Dumbbell, title: tl('feat2Title'), desc: tl('feat2Desc') },
-    { icon: Download, title: tl('feat3Title'), desc: tl('feat3Desc') },
-  ]
-
-  const freeFeatures = [
-    tl('freeFeature1'),
-    tl('freeFeature2'),
-    tl('freeFeature3'),
-  ]
-  const proFeatures = [
-    tl('proFeature1'),
-    tl('proFeature2'),
-    tl('proFeature3'),
-    tl('proFeature4'),
-  ]
-
   return (
     <div className='min-h-screen bg-background text-text-primary relative overflow-x-hidden selection:bg-accent selection:text-accent-foreground'>
       {/* Decorative ambient blurs */}
@@ -145,51 +127,45 @@ export default function LandingPage() {
               </span>
             </Link>
 
+            {/* Desktop library nav */}
             <nav className='hidden sm:flex items-center gap-1'>
               <Link
                 href={`/${locale}/library`}
                 className='flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-all'
               >
                 <BookOpen size={15} />
-                {isVi ? 'Thư viện bài tập' : 'Exercise Library'}
+                {tl('navLibrary')}
               </Link>
             </nav>
           </div>
 
-          <div className='flex items-center gap-2.5'>
-            {/* Mobile library link */}
-            <Link
-              href={`/${locale}/library`}
-              className='sm:hidden p-2 rounded-lg hover:bg-surface-2 text-text-secondary'
-              title='Library'
-            >
-              <BookOpen size={18} />
-            </Link>
-
-            {/* Language switcher */}
+          <div className='flex items-center gap-2'>
+            {/* Language switcher — icon-only on mobile, full on desktop */}
             <button
               type='button'
               onClick={toggleLanguage}
-              className='flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-surface-1 text-xs font-semibold text-text-secondary hover:bg-surface-2 hover:text-text-primary transition-all'
+              className='flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg border border-border bg-surface-1 text-xs font-semibold text-text-secondary hover:bg-surface-2 hover:text-text-primary transition-all'
               title={isVi ? 'Switch to English' : 'Chuyển sang Tiếng Việt'}
             >
               <Globe size={14} />
-              <span className='uppercase'>{isVi ? 'EN' : 'VI'}</span>
+              <span className='hidden sm:inline uppercase'>
+                {isVi ? 'EN' : 'VI'}
+              </span>
             </button>
 
-            {/* Theme toggle */}
+            {/* Theme toggle — desktop only */}
             {mounted && (
               <button
                 type='button'
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className='p-2 rounded-lg border border-border bg-surface-1 text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-all'
+                className='hidden sm:flex p-2 rounded-lg border border-border bg-surface-1 text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-all'
                 title='Toggle Theme'
               >
                 {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
               </button>
             )}
 
-            <span className='h-4 w-px bg-border mx-1' />
+            <span className='hidden sm:block h-4 w-px bg-border mx-1' />
 
             <button
               type='button'
@@ -207,15 +183,13 @@ export default function LandingPage() {
       <section className='relative mx-auto max-w-4xl px-4 pb-20 pt-20 sm:px-6 sm:pt-32 text-center z-10'>
         <div className='mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-accent animate-fade-in'>
           <Zap size={12} className='fill-current' />
-          {isVi
-            ? 'Ứng dụng lên kế hoạch Hybrid Athlete tối ưu'
-            : 'The Ultimate Hybrid Athlete Planner'}
+          {tl('heroBadge')}
         </div>
 
-        <h1 className='mb-6 text-4xl font-extrabold leading-none tracking-tight sm:text-6xl text-text-primary'>
+        <h1 className='mb-6 text-4xl font-extrabold leading-snug tracking-tight sm:text-6xl text-text-primary '>
           {tl('heroTitle')}
           <br />
-          <span className='bg-gradient-to-r from-accent to-slate-400 bg-clip-text text-transparent'>
+          <span className='bg-gradient-to-r from-accent leading-snug to-slate-400 bg-clip-text text-transparent'>
             {tl('heroTitleAccent')}
           </span>
         </h1>
@@ -239,13 +213,13 @@ export default function LandingPage() {
               className='w-full sm:w-auto gap-3 px-8 shadow-lg shadow-accent/20 hover:shadow-accent/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200'
             >
               <BookOpen size={18} />
-              {isVi ? 'Khám phá bài tập' : 'Browse Exercises'}
+              {tl('browseExercises')}
             </Button>
           </Link>
 
           <Button
             type='button'
-            variant='outline'
+            variant='surface'
             size='lg'
             className='w-full gap-2 transition-all duration-200 hover:bg-surface-1 active:bg-surface-1 sm:w-auto'
             onClick={handleSignIn}
@@ -331,23 +305,45 @@ export default function LandingPage() {
       {/* ── Features ── */}
       <section className='border-t border-border bg-surface-1/40 relative z-10'>
         <div className='mx-auto max-w-5xl px-4 py-20 sm:px-6'>
-          <div className='grid gap-8 sm:grid-cols-3'>
-            {features.map(({ icon: Icon, title, desc }) => (
-              <div
-                key={title}
-                className='group rounded-3xl border border-border bg-surface-2 p-6 hover:border-accent/20 transition-all duration-300'
-              >
-                <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300'>
-                  <Icon size={22} aria-hidden />
-                </div>
-                <h3 className='mb-2 text-base font-bold text-text-primary group-hover:text-accent transition-colors'>
-                  {title}
-                </h3>
-                <p className='text-sm leading-relaxed text-text-secondary'>
-                  {desc}
-                </p>
+          <div className='grid gap-6 sm:grid-cols-3'>
+            {/* Card 1 — accent treatment */}
+            <div className='group rounded-3xl border border-accent/20 bg-accent/5 p-6 hover:border-accent/40 transition-all duration-300'>
+              <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300'>
+                <CalendarDays size={22} aria-hidden />
               </div>
-            ))}
+              <h3 className='mb-2 text-base font-bold text-accent'>
+                {tl('feat1Title')}
+              </h3>
+              <p className='text-sm leading-relaxed text-text-secondary'>
+                {tl('feat1Desc')}
+              </p>
+            </div>
+
+            {/* Card 2 — standard */}
+            <div className='group rounded-3xl border border-border bg-surface-2 p-6 hover:border-accent/20 transition-all duration-300'>
+              <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300'>
+                <Dumbbell size={22} aria-hidden />
+              </div>
+              <h3 className='mb-2 text-base font-bold text-text-primary group-hover:text-accent transition-colors'>
+                {tl('feat2Title')}
+              </h3>
+              <p className='text-sm leading-relaxed text-text-secondary'>
+                {tl('feat2Desc')}
+              </p>
+            </div>
+
+            {/* Card 3 — subtle surface variant */}
+            <div className='group rounded-3xl border border-dashed border-border bg-surface-1 p-6 hover:border-accent/20 hover:bg-surface-2 transition-all duration-300'>
+              <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-3 text-text-secondary group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300'>
+                <Download size={22} aria-hidden />
+              </div>
+              <h3 className='mb-2 text-base font-bold text-text-secondary group-hover:text-text-primary transition-colors'>
+                {tl('feat3Title')}
+              </h3>
+              <p className='text-sm leading-relaxed text-text-tertiary group-hover:text-text-secondary transition-colors'>
+                {tl('feat3Desc')}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -359,9 +355,7 @@ export default function LandingPage() {
             {tl('pricingTitle')}
           </h2>
           <p className='mt-2 text-sm text-text-secondary'>
-            {isVi
-              ? 'Bắt đầu miễn phí, nâng cấp khi bạn sẵn sàng'
-              : 'Start for free, upgrade when you are ready'}
+            {tl('pricingSubtitle')}
           </p>
         </div>
 
@@ -375,12 +369,18 @@ export default function LandingPage() {
               <p className='mb-6 font-mono text-4xl font-black text-text-primary tracking-tight'>
                 0₫{' '}
                 <span className='text-xs font-normal text-text-tertiary'>
-                  / {isVi ? 'vĩnh viễn' : 'forever'}
+                  / {tl('forever')}
                 </span>
               </p>
               <div className='h-px bg-border mb-6' />
               <ul className='space-y-4'>
-                {freeFeatures.map(f => (
+                {(
+                  [
+                    tl('freeFeature1'),
+                    tl('freeFeature2'),
+                    tl('freeFeature3'),
+                  ] as string[]
+                ).map(f => (
                   <li
                     key={f}
                     className='flex items-start gap-3 text-sm text-text-secondary'
@@ -401,7 +401,7 @@ export default function LandingPage() {
                 className='w-full'
                 onClick={handleSignIn}
               >
-                {isVi ? 'Bắt đầu ngay' : 'Get Started'}
+                {tl('getStarted')}
               </Button>
             </div>
           </div>
@@ -419,7 +419,7 @@ export default function LandingPage() {
                 <p className='mb-6 font-mono text-4xl font-black text-accent tracking-tight'>
                   199.000₫{' '}
                   <span className='text-xs font-normal text-text-secondary'>
-                    / trọn đời
+                    {tl('proLifetime')}
                   </span>
                 </p>
               ) : (
@@ -428,13 +428,20 @@ export default function LandingPage() {
                     $9.99
                   </p>
                   <span className='text-[10px] text-text-tertiary'>
-                    (Vietnam region pricing only)
+                    {tl('proRegionNote')}
                   </span>
                 </div>
               )}
               <div className='h-px bg-accent/20 mb-6' />
               <ul className='space-y-4'>
-                {proFeatures.map(f => (
+                {(
+                  [
+                    tl('proFeature1'),
+                    tl('proFeature2'),
+                    tl('proFeature3'),
+                    tl('proFeature4'),
+                  ] as string[]
+                ).map(f => (
                   <li
                     key={f}
                     className='flex items-start gap-3 text-sm text-text-primary'
@@ -464,7 +471,7 @@ export default function LandingPage() {
               ) : (
                 <div className='flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 text-xs font-semibold text-text-tertiary cursor-not-allowed select-none'>
                   <Globe size={14} aria-hidden />
-                  Coming soon for international users
+                  {tl('comingSoonInternational')}
                 </div>
               )}
             </div>
@@ -477,7 +484,7 @@ export default function LandingPage() {
         <div className='mx-auto flex max-w-5xl flex-col sm:flex-row items-center justify-between gap-4 px-4 py-6 sm:px-6'>
           <p className='text-xs text-text-tertiary'>
             &copy; {new Date().getFullYear()} Sport Notebook.{' '}
-            {isVi ? 'Mọi quyền được bảo lưu.' : 'All rights reserved.'}
+            {tl('allRightsReserved')}
           </p>
           <div className='flex gap-6'>
             <Link

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { ArrowLeft, ChevronRight, ChevronLeft, Check } from 'lucide-react';
@@ -55,14 +55,10 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
   const tPrivate = useTranslations('privateExercise');
   const tc = useTranslations('common');
   const router = useRouter();
+  const routeParams = useParams();
   const { data: session } = useSession();
 
-  const [locale] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.location.pathname.split('/')[1] || 'vi';
-    }
-    return 'vi';
-  });
+  const locale = (routeParams?.locale as string) ?? 'vi';
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
@@ -291,7 +287,7 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
               {tPrivate('instructionsLabel')}
             </h2>
             <p className="text-xs text-text-tertiary mb-4">
-              Mô tả từng bước thực hiện bài tập (tùy chọn)
+              {tPrivate('instructionsHint')}
             </p>
             <PrivateInstructionsEditor
               steps={form.instructions.length > 0 ? form.instructions : ['']}
@@ -324,7 +320,7 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
             onClick={() => { set('instructions', []); setStep(3); }}
             className="w-full text-xs text-text-tertiary hover:text-text-secondary transition-colors py-1"
           >
-            Bỏ qua bước này
+            {tPrivate('skipStep')}
           </button>
         </div>
       )}
@@ -333,9 +329,9 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
       {step === 3 && (
         <div className="space-y-5">
           <div>
-            <h2 className="text-base font-semibold text-text-primary mb-1">Cấu hình mặc định</h2>
+            <h2 className="text-base font-semibold text-text-primary mb-1">{tPrivate('configTitle2')}</h2>
             <p className="text-xs text-text-tertiary mb-4">
-              Thiết lập các thông số mặc định cho bài tập (tùy chọn)
+              {tPrivate('configHint')}
             </p>
           </div>
 
@@ -343,16 +339,16 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
             <div className="grid grid-cols-2 gap-3">
               {(
                 [
-                  { key: 'defaultSets', label: 'Sets' },
-                  { key: 'defaultReps', label: 'Reps' },
-                  { key: 'defaultWeightKg', label: 'Weight (kg)' },
-                  { key: 'defaultRpe', label: 'RPE (1-10)' },
-                  { key: 'restTimeSecs', label: 'Rest time (s)' },
-                  { key: 'restBetweenExercisesSecs', label: 'Rest between (s)' },
+                  { key: 'defaultSets', labelKey: 'defaultSets' },
+                  { key: 'defaultReps', labelKey: 'defaultReps' },
+                  { key: 'defaultWeightKg', labelKey: 'defaultWeight' },
+                  { key: 'defaultRpe', labelKey: 'defaultRpe' },
+                  { key: 'restTimeSecs', labelKey: 'restTimeSecs' },
+                  { key: 'restBetweenExercisesSecs', labelKey: 'restBetweenExercisesSecs' },
                 ] as const
-              ).map(({ key, label }) => (
+              ).map(({ key, labelKey }) => (
                 <div key={key}>
-                  <label className="mb-1 block text-xs font-medium text-text-secondary">{label}</label>
+                  <label className="mb-1 block text-xs font-medium text-text-secondary">{tPrivate(labelKey)}</label>
                   <input
                     type="number"
                     min="0"
@@ -370,11 +366,11 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
             <div className="grid grid-cols-2 gap-3">
               {(
                 [
-                  { key: 'restTimeSecs', label: 'Rest time (s)' },
+                  { key: 'restTimeSecs', labelKey: 'restTimeSecs' },
                 ] as const
-              ).map(({ key, label }) => (
+              ).map(({ key, labelKey }) => (
                 <div key={key}>
-                  <label className="mb-1 block text-xs font-medium text-text-secondary">{label}</label>
+                  <label className="mb-1 block text-xs font-medium text-text-secondary">{tPrivate(labelKey)}</label>
                   <input
                     type="number"
                     min="0"
@@ -407,7 +403,7 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
               onClick={submit}
               className="flex-1 gap-2"
             >
-              {submitting ? 'Đang lưu...' : (
+              {submitting ? tPrivate('saving') : (
                 <><Check size={15} aria-hidden /> {tc('create')}</>
               )}
             </Button>
@@ -418,7 +414,7 @@ export default function NewPrivateExercisePage({ params: _params }: PageProps) {
             disabled={submitting}
             className="w-full text-xs text-text-tertiary hover:text-text-secondary transition-colors py-1 disabled:opacity-40"
           >
-            Bỏ qua và tạo ngay
+            {tPrivate('skipAndCreate')}
           </button>
         </div>
       )}

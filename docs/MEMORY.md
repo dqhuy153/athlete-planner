@@ -6,7 +6,7 @@
 
 **Product:** The Sport Notebook Planner - A digital training notebook for hybrid athletes (Gym + Running) who use Garmin devices.
 
-**Stack:** Turborepo | Next.js 16.2.6 (App Router) | NestJS 11 (CQRS) | PostgreSQL (Prisma v7.8.0) | Redis
+**Stack:** Turborepo | Next.js 16.2.6 (App Router) | NestJS 11 (CQRS) | PostgreSQL (Prisma v7.8.0) | In-memory cache (no Redis)
 
 **Namespace:** `@athlete-planner/*`
 
@@ -424,3 +424,42 @@ modules/
   - Added theme toggle row (`md:hidden`) between instruction level and language rows
   - Uses `useTheme` from `next-themes`; shows `Sun`/`Moon` icons; `setTheme` toggles dark/light
   - Displays `t('common.lightMode')` / `t('common.darkMode')` labels (existing i18n keys)
+
+---
+
+### 2026-05-31: Landing Redesign Finalized + i18n Mass Update
+
+**Landing page (`apps/web/app/[locale]/page.tsx`) — complete:**
+- Full redesign: sticky header with logo/nav/locale-switcher/theme-toggle, hero badge + gradient accent text, secondary "Browse Exercises" CTA, ambient blur decorators, asymmetric 3-feature card grid (card 1 accent `bg-accent/5 border-accent/20`, card 2 standard, card 3 dashed `border-dashed border-border`), pricing with PRO ribbon badge, footer
+- Mobile header: logo + globe-icon-only (text hidden `sm:hidden`) + sign-in; desktop: full nav + language label + theme toggle + separator + sign-in
+- Theme toggle hidden on mobile (`hidden sm:flex`); separator hidden on mobile (`hidden sm:block`)
+- `DEV_ACCOUNTS` emails: `dev-free@example.com` / `dev-pro@example.com` (corrected from `@local.dev`)
+- All `isVi ?` ternaries replaced with `tl()` calls; `variant='outline'` → `variant='surface'` (outline uses undefined `bg-surface-container` token)
+- Feature card visual variation: card 1 accent, card 2 standard, card 3 dashed/surface-1
+- Routing: `useParams()` from `next/navigation` for locale (no `@/i18n/routing`)
+
+**i18n — new keys added this session (en.json + vi.json):**
+- `landing`: `heroBadge`, `browseExercises`, `pricingSubtitle`, `forever`, `getStarted`, `proLifetime`, `proRegionNote`, `comingSoonInternational`, `allRightsReserved`, `navLibrary`
+- `upgrade`: `vietnamOnly`, `internationalComingSoon`, `oneTimeDetail`, `internationalGatewaySoon`, `paymentError`
+- `common`: `home`
+- `library`: `searching`
+- `privateExercise`: `instructionsHint`, `skipStep`, `configTitle2`, `configHint`, `skipAndCreate`
+- New namespace `importJSON`: `title`, `mustBeArray`, `maxItems`, `invalidItemsRemoved`, `readError`, `readyToImport`, `dropPrompt`, `noNotes`, `muscleGroupPlaceholder`, `exerciseNamePlaceholder`, `importFailed`, `importCount`, `importing`
+- New namespace `aiCreate`: `title`, `promptPlaceholder`, `generate`, `generating`, `generateError`, `saveError`, `regenerate`, `addToLibrary`, `saving`
+
+**Components updated:**
+- `upgrade/page.tsx`: All `isVi ?` ternaries replaced with `t('vietnamOnly')`, `t('internationalComingSoon')`, `t('oneTimeDetail')`, `t('internationalGatewaySoon')`, `t('paymentError')`
+- `library/my/page.tsx`: `'Nhập JSON'` → `t('my.importJSON')`; `'AI Tạo Bài'` → `t('my.aiCreateExercise')`
+- `library/my/new/page.tsx`: Locale detection `window.location.pathname.split...` → `useParams()` (hydration-safe); step 2 hint + skip button + step 3 heading/hint/submit/skip all use `tPrivate()` keys; config field labels use `tPrivate()` keys
+- `ImportJSONModal.tsx`: Full `useTranslations('importJSON')` rewrite — all Vietnamese hardcodes replaced
+- `AICreateExerciseModal.tsx`: Full `useTranslations('aiCreate')` rewrite — all Vietnamese hardcodes replaced
+- `WorkoutComplete.tsx`: `'Sport Notebook'` → `tc('appName')` via `useTranslations('common')`
+- `LibrarySearch.tsx`: `'Searching...'` → `t('searching')` from library namespace
+- `privacy/page.tsx` + `terms/page.tsx`: `getTranslations({ locale, namespace: 'common' })` from `next-intl/server`; breadcrumb `'Home'/'Trang chủ'` → `tc('home')`
+
+**Infrastructure:**
+- Redis removed entirely: `CacheModule.register({ store: 'memory', max: 1000, ttl: 600 })` in `app.module.ts`; deleted `config/redis.config.ts`; removed `cache-manager-redis-yet` and `ioredis` packages
+- Root admin seeding: `ROOT_ADMIN_EMAIL` env var; dev accounts seeded at startup; removed broken `seed.ts`
+- AuthGate dev buttons: FREE/PRO bypass in `AuthGate.tsx` overlay (dev-only); uses `dev-credentials` provider
+
+**TypeScript:** `pnpm --filter web exec tsc --noEmit` passes with 0 errors after all changes.

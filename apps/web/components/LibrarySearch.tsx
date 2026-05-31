@@ -109,7 +109,7 @@ export function LibrarySearch({ type, locale }: LibrarySearchProps) {
           className="absolute z-30 mt-1 w-full rounded-xl border border-border bg-surface-1 shadow-lg overflow-hidden"
         >
           {loading && (
-            <li className="px-4 py-3 text-sm text-text-tertiary">Searching...</li>
+            <li className="px-4 py-3 text-sm text-text-tertiary">{t('searching')}</li>
           )}
           {!loading && suggestions.map((s) => (
             <li key={s.id} role="option" aria-selected={false}>

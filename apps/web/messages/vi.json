@@ -19,7 +19,8 @@
     "darkMode": "Chế độ tối",
     "switchToLight": "Chuyển sang chế độ sáng",
     "switchToDark": "Chuyển sang chế độ tối",
-    "userAlt": "Người dùng"
+    "userAlt": "Người dùng",
+    "home": "Trang chủ"
   },
   "auth": {
     "signIn": "Đăng nhập",
@@ -230,7 +231,8 @@
       "importJSON": "Nhập JSON",
       "aiCreateExercise": "AI Tạo Bài",
       "proRequired": "Cần PRO"
-    }
+    },
+    "searching": "Đang tìm..."
   },
   "blog": {
     "title": "Bài viết",
@@ -251,22 +253,21 @@
     "free": "Miễn phí",
     "pro": "Pro",
     "upgrade": "Nâng cấp PRO",
-    "signOut": "Đăng xuất",
-    "settings": "Cài đặt",
-    "language": "Ngôn ngữ",
-    "langVi": "Tiếng Việt",
-    "langEn": "English",
-    "notSignedIn": "Chưa đăng nhập",
-    "signIn": "Đăng nhập",
-    "instructionLevel": "Cấp độ hướng dẫn",
-    "instructionLevelBeginner": "Cơ bản",
-    "instructionLevelAdvanced": "Nâng cao",
-    "instructionLevelHint": "Hiển thị hướng dẫn phù hợp trong thư viện bài tập",
-    "instructionLevelSaved": "Đã lưu cấp độ hướng dẫn",
-    "upgradeTitle": "Nâng cấp lên PRO",
-    "upgradeBenefits": "Xuất Garmin, bài tập không giới hạn, lịch sử trọn đời",
-    "authRequired": "Đăng nhập để quản lý hồ sơ",
-    "saveFailed": "Không lưu được cài đặt"
+    "alreadyPro": "Bạn đã có PRO",
+    "loading": "Đang chuẩn bị thanh toán...",
+    "successTitle": "Chào mừng đến PRO",
+    "successSubtitle": "Dữ liệu tập luyện của bạn đã được mở khóa hoàn toàn.",
+    "successCta": "Bắt đầu tập",
+    "cancelTitle": "Thanh toán đã hủy",
+    "cancelSubtitle": "Tài khoản của bạn vẫn ở gói miễn phí.",
+    "cancelCta": "Quay lại nâng cấp",
+    "promoHint": "Nâng cấp một lần, sử dụng mãi mãi.",
+    "socialProof": "Được tin dùng bởi các vận động viên kết hợp gym + chạy bộ",
+    "vietnamOnly": "Chỉ Việt Nam",
+    "internationalComingSoon": "Thanh toán quốc tế sắp ra mắt. Hiện chỉ hỗ trợ tài khoản ngân hàng Việt Nam.",
+    "oneTimeDetail": "Thanh toán một lần — không đăng ký, không phí định kỳ",
+    "internationalGatewaySoon": "Cổng thanh toán quốc tế sắp ra mắt",
+    "paymentError": "Khởi tạo thanh toán thất bại. Vui lòng thử lại."
   },
   "tier": {
     "upgradeTitle": "Nâng cấp Pro",
@@ -338,7 +339,17 @@
     "proFeature4": "Lưu trữ đám mây trọn đời",
     "proCtaLanding": "Nâng cấp lên PRO",
     "footerTerms": "Điều khoản",
-    "footerPrivacy": "Chính sách"
+    "footerPrivacy": "Chính sách",
+    "heroBadge": "Ứng dụng lên kế hoạch Hybrid Athlete tối ưu",
+    "browseExercises": "Khám phá bài tập",
+    "pricingSubtitle": "Bắt đầu miễn phí, nâng cấp khi bạn sẵn sàng",
+    "forever": "vĩnh viễn",
+    "getStarted": "Bắt đầu ngay",
+    "proLifetime": "/ trọn đời",
+    "proRegionNote": "(Giá khu vực Việt Nam)",
+    "comingSoonInternational": "Sắp hỗ trợ người dùng quốc tế",
+    "allRightsReserved": "Mọi quyền được bảo lưu.",
+    "navLibrary": "Thư viện bài tập"
   },
   "authGate": {
     "scheduleMessage": "Đăng nhập để xem và lập lịch tập luyện",
@@ -489,7 +500,12 @@
     "gifLabel": "Link ảnh GIF",
     "mediaLinksLabel": "Link tham khảo",
     "addMediaLink": "Gắn link",
-    "removeLink": "Xóa"
+    "removeLink": "Xóa",
+    "instructionsHint": "Mô tả từng bước thực hiện bài tập (tùy chọn)",
+    "skipStep": "Bỏ qua bước này",
+    "configTitle2": "Cấu hình mặc định",
+    "configHint": "Thiết lập các thông số mặc định cho bài tập (tùy chọn)",
+    "skipAndCreate": "Bỏ qua và tạo ngay"
   },
   "starterTemplate": {
     "title": "Bắt đầu với mẫu lịch",
@@ -549,5 +565,31 @@
     "findAlternative": "Tìm bài thay thế",
     "keepOriginal": "Giữ bài cũ",
     "swapExercise": "Đổi bài"
+  },
+  "importJSON": {
+    "title": "Nhập bài tập từ JSON",
+    "mustBeArray": "File phải là một JSON array.",
+    "maxItems": "Tối đa 50 bài tập mỗi lần nhập.",
+    "invalidItemsRemoved": "{count} mục không hợp lệ đã bị loại bỏ.",
+    "readError": "Không thể đọc file JSON.",
+    "readyToImport": "{count} bài tập sẵn sàng nhập",
+    "dropPrompt": "Nhấn để chọn file .json",
+    "noNotes": "Không có ghi chú",
+    "muscleGroupPlaceholder": "— Nhóm cơ —",
+    "exerciseNamePlaceholder": "Tên bài",
+    "importFailed": "Nhập thất bại.",
+    "importCount": "Nhập {count} bài tập",
+    "importing": "Đang nhập..."
+  },
+  "aiCreate": {
+    "title": "AI Tạo bài tập",
+    "promptPlaceholder": "Mô tả bài tập muốn tạo... VD: Bài squat biến thể có thêm jump, cường độ cao",
+    "generate": "Tạo bài tập",
+    "generating": "Đang sinh...",
+    "generateError": "Không thể sinh bài tập. Thử lại.",
+    "saveError": "Lưu thất bại.",
+    "regenerate": "Tạo lại",
+    "addToLibrary": "Thêm vào thư viện",
+    "saving": "Đang lưu..."
   }
 }

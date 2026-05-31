@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { Upload, Trash2, X } from 'lucide-react';
 import { api, FlatExerciseImportItem } from '@/lib/api';
 
@@ -14,6 +15,8 @@ const MUSCLE_OPTIONS = ['Chest', 'Back', 'Shoulders', 'Biceps', 'Triceps', 'Legs
 
 export function ImportJSONModal({ onClose, onSuccess }: Props) {
   const { data: session } = useSession();
+  const t = useTranslations('importJSON');
+  const tc = useTranslations('common');
   const [items, setItems] = useState<FlatExerciseImportItem[]>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,18 +29,18 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
     reader.onload = (ev) => {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
-        if (!Array.isArray(parsed)) { setError('File phải là một JSON array.'); return; }
-        if (parsed.length > 50) { setError('Tối đa 50 bài tập mỗi lần nhập.'); return; }
+        if (!Array.isArray(parsed)) { setError(t('mustBeArray')); return; }
+        if (parsed.length > 50) { setError(t('maxItems')); return; }
         const valid = parsed.filter((item): item is FlatExerciseImportItem =>
           typeof item.name === 'string' && item.name.trim() !== '' &&
           (item.sportType === 'GYM' || item.sportType === 'RUNNING')
         );
         if (valid.length !== parsed.length) {
-          setError(`${parsed.length - valid.length} mục không hợp lệ đã bị loại bỏ.`);
+          setError(t('invalidItemsRemoved', { count: parsed.length - valid.length }));
         }
         setItems(valid);
       } catch {
-        setError('Không thể đọc file JSON.');
+        setError(t('readError'));
       }
     };
     reader.readAsText(file);
@@ -58,7 +61,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
       await api.bulkCreatePrivateExercises(session.accessToken as string, items);
       onSuccess();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Nhập thất bại.');
+      setError(e instanceof Error ? e.message : t('importFailed'));
     } finally {
       setLoading(false);
     }
@@ -69,7 +72,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
       <div className="w-full max-w-2xl bg-surface-1 rounded-2xl border border-border shadow-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-border shrink-0">
-          <h2 className="font-semibold text-text-primary">Nhập bài tập từ JSON</h2>
+          <h2 className="font-semibold text-text-primary">{t('title')}</h2>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-surface-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <X size={18} aria-hidden />
           </button>
@@ -89,7 +92,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
               onClick={() => fileRef.current?.click()}
             >
               <Upload size={24} className="mx-auto mb-3 text-text-tertiary" aria-hidden />
-              <p className="text-sm text-text-secondary">Nhấn để chọn file .json</p>
+              <p className="text-sm text-text-secondary">{t('dropPrompt')}</p>
               <p className="text-xs text-text-tertiary mt-1 font-mono">
                 [{'{'}name, sportType: &quot;GYM&quot;|&quot;RUNNING&quot;, ...{'}'}]
               </p>
@@ -103,14 +106,14 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
             </div>
           ) : (
             <div className="space-y-2">
-              <p className="text-xs text-text-tertiary">{items.length} bài tập sẵn sàng nhập</p>
+              <p className="text-xs text-text-tertiary">{t('readyToImport', { count: items.length })}</p>
               {items.map((item, index) => (
                 <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-surface-2 border border-border">
                   <div className="flex-1 grid grid-cols-2 gap-2">
                     <input
                       value={item.name}
                       onChange={(e) => updateItem(index, 'name', e.target.value)}
-                      placeholder="Tên bài"
+                      placeholder={t('exerciseNamePlaceholder')}
                       className="rounded-lg border border-border bg-surface-1 px-2.5 py-1.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 min-h-[40px]"
                     />
                     <select
@@ -118,11 +121,11 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
                       onChange={(e) => updateItem(index, 'targetMuscleGroup', e.target.value)}
                       className="rounded-lg border border-border bg-surface-1 px-2.5 py-1.5 text-sm text-text-primary focus:outline-none min-h-[40px]"
                     >
-                      <option value="">— Nhóm cơ —</option>
+                      <option value="">{t('muscleGroupPlaceholder')}</option>
                       {MUSCLE_OPTIONS.map(m => <option key={m} value={m}>{m}</option>)}
                     </select>
                     <span className="text-xs text-text-tertiary col-span-2">
-                      {item.sportType} · {item.customNotes ? item.customNotes.slice(0, 40) : 'Không có ghi chú'}
+                      {item.sportType} · {item.customNotes ? item.customNotes.slice(0, 40) : t('noNotes')}
                     </span>
                   </div>
                   <button
@@ -143,14 +146,14 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
             onClick={onClose}
             className="flex-1 min-h-[48px] rounded-xl border border-border text-sm text-text-secondary hover:border-accent/40 transition-colors"
           >
-            Hủy
+            {tc('cancel')}
           </button>
           <button
             onClick={handleSubmit}
             disabled={items.length === 0 || loading}
             className="flex-1 min-h-[48px] rounded-xl bg-accent text-black font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent/90 transition-colors"
           >
-            {loading ? 'Đang nhập...' : `Nhập ${items.length} bài tập`}
+            {loading ? t('importing') : t('importCount', { count: items.length })}
           </button>
         </div>
       </div>

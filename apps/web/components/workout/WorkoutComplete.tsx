@@ -35,6 +35,7 @@ function formatVolume(kg: number): string {
 export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
   const t = useTranslations('workout');
   const tExport = useTranslations('export');
+  const tc = useTranslations('common');
   const { data: authSession } = useSession();
   const { push: pushToast } = useToast();
   const { session, discardSession } = useWorkoutStore();
@@ -157,7 +158,7 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
           </div>
           <div className="text-right">
             <p className="text-caption font-bold text-text-primary truncate max-w-[120px]">{userName}</p>
-            <p className="text-micro text-text-tertiary">Sport Notebook</p>
+            <p className="text-micro text-text-tertiary">{tc('appName')}</p>
           </div>
         </div>
 

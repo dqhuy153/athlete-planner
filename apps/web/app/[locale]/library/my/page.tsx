@@ -86,14 +86,14 @@ export default function MyExercisesPage({ params }: PageProps) {
                   className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors"
                 >
                   <FileJson size={13} aria-hidden />
-                  Nhập JSON
+                  {t('my.importJSON')}
                 </button>
                 <button
                   onClick={() => setShowAICreateModal(true)}
                   className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors"
                 >
                   <Sparkles size={13} aria-hidden />
-                  AI Tạo Bài
+                  {t('my.aiCreateExercise')}
                 </button>
               </>
             ) : (
@@ -105,7 +105,7 @@ export default function MyExercisesPage({ params }: PageProps) {
                     aria-disabled="true"
                   >
                     <FileJson size={13} aria-hidden />
-                    Nhập JSON
+                    {t('my.importJSON')}
                   </button>
                   <Lock size={11} className="absolute -top-1.5 -right-1.5 text-accent" aria-hidden />
                 </div>
@@ -116,7 +116,7 @@ export default function MyExercisesPage({ params }: PageProps) {
                     aria-disabled="true"
                   >
                     <Sparkles size={13} aria-hidden />
-                    AI Tạo Bài
+                    {t('my.aiCreateExercise')}
                   </button>
                   <Lock size={11} className="absolute -top-1.5 -right-1.5 text-accent" aria-hidden />
                 </div>

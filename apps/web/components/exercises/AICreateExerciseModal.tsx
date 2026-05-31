@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { X, Loader2 } from 'lucide-react';
 import { api, DraftExercise } from '@/lib/api';
 
@@ -12,6 +13,7 @@ interface Props {
 
 export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
   const { data: session } = useSession();
+  const t = useTranslations('aiCreate');
   const [prompt, setPrompt] = useState('');
   const [draft, setDraft] = useState<DraftExercise | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -26,7 +28,7 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
       const result = await api.createExerciseAI(session.accessToken as string, prompt);
       setDraft(result);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Không thể sinh bài tập. Thử lại.');
+      setError(e instanceof Error ? e.message : t('generateError'));
     } finally {
       setGenerating(false);
     }
@@ -46,7 +48,7 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
       });
       onSuccess();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Lưu thất bại.');
+      setError(e instanceof Error ? e.message : t('saveError'));
     } finally {
       setSaving(false);
     }
@@ -57,7 +59,7 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
       <div className="w-full max-w-lg bg-surface-1 rounded-2xl border border-border shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-border">
-          <h2 className="font-semibold text-text-primary">AI Tạo bài tập</h2>
+          <h2 className="font-semibold text-text-primary">{t('title')}</h2>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-surface-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <X size={18} aria-hidden />
           </button>
@@ -73,7 +75,7 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Mô tả bài tập muốn tạo... VD: Bài squat biến thể có thêm jump, cường độ cao"
+            placeholder={t('promptPlaceholder')}
             rows={3}
             className="w-full rounded-xl border border-border bg-surface-2 px-3 py-2.5 text-sm resize-none placeholder:text-text-tertiary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent/30"
           />
@@ -85,8 +87,8 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
               className="w-full min-h-[48px] flex items-center justify-center gap-2 rounded-xl bg-accent text-black font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent/90 transition-colors"
             >
               {generating ? (
-                <><Loader2 size={15} className="animate-spin" aria-hidden /> Đang sinh...</>
-              ) : 'Tạo bài tập'}
+                <><Loader2 size={15} className="animate-spin" aria-hidden /> {t('generating')}</>
+              ) : t('generate')}
             </button>
           ) : (
             <div className="space-y-3 rounded-xl border border-border bg-surface-2 p-4">
@@ -118,14 +120,14 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
                   onClick={() => { setDraft(null); setPrompt(''); }}
                   className="flex-1 min-h-[44px] rounded-xl border border-border text-sm text-text-secondary hover:border-accent/40 transition-colors"
                 >
-                  Tạo lại
+                  {t('regenerate')}
                 </button>
                 <button
                   onClick={save}
                   disabled={saving}
                   className="flex-1 min-h-[44px] rounded-xl bg-accent text-black font-semibold text-sm disabled:opacity-40 hover:bg-accent/90 transition-colors"
                 >
-                  {saving ? 'Đang lưu...' : 'Thêm vào thư viện'}
+                  {saving ? t('saving') : t('addToLibrary')}
                 </button>
               </div>
             </div>

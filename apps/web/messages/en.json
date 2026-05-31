@@ -19,7 +19,8 @@
     "darkMode": "Dark mode",
     "switchToLight": "Switch to light mode",
     "switchToDark": "Switch to dark mode",
-    "userAlt": "User"
+    "userAlt": "User",
+    "home": "Home"
   },
   "auth": {
     "signIn": "Sign in",
@@ -230,7 +231,8 @@
       "importJSON": "Import JSON",
       "aiCreateExercise": "AI Create Exercise",
       "proRequired": "PRO required"
-    }
+    },
+    "searching": "Searching..."
   },
   "blog": {
     "title": "Articles",
@@ -251,22 +253,21 @@
     "free": "Free",
     "pro": "Pro",
     "upgrade": "Upgrade to PRO",
-    "signOut": "Sign out",
-    "settings": "Settings",
-    "language": "Language",
-    "langVi": "Tiếng Việt",
-    "langEn": "English",
-    "notSignedIn": "Not signed in",
-    "signIn": "Sign in",
-    "instructionLevel": "Instruction level",
-    "instructionLevelBeginner": "Beginner",
-    "instructionLevelAdvanced": "Advanced",
-    "instructionLevelHint": "Sets your default tab in the exercise library",
-    "instructionLevelSaved": "Instruction level saved",
-    "upgradeTitle": "Upgrade to PRO",
-    "upgradeBenefits": "Garmin export, unlimited exercises, lifetime history",
-    "authRequired": "Sign in to manage your profile",
-    "saveFailed": "Failed to save settings"
+    "alreadyPro": "You already have PRO",
+    "loading": "Preparing payment...",
+    "successTitle": "Welcome to PRO",
+    "successSubtitle": "Your training data is now fully unlocked.",
+    "successCta": "Start Training",
+    "cancelTitle": "Payment Cancelled",
+    "cancelSubtitle": "Your account remains on the free plan.",
+    "cancelCta": "Back to Upgrade",
+    "promoHint": "Upgrade once, use forever.",
+    "socialProof": "Trusted by athletes tracking gym + running",
+    "vietnamOnly": "Vietnam only",
+    "internationalComingSoon": "International payments are coming soon. Currently available for Vietnam bank accounts only.",
+    "oneTimeDetail": "One-time payment — no subscriptions, no recurring fees",
+    "internationalGatewaySoon": "International gateway coming soon",
+    "paymentError": "Payment init failed. Please try again."
   },
   "tier": {
     "upgradeTitle": "Upgrade to Pro",
@@ -338,7 +339,17 @@
     "proFeature4": "Lifetime cloud backup",
     "proCtaLanding": "Upgrade to PRO",
     "footerTerms": "Terms",
-    "footerPrivacy": "Privacy"
+    "footerPrivacy": "Privacy",
+    "heroBadge": "The Ultimate Hybrid Athlete Planner",
+    "browseExercises": "Browse Exercises",
+    "pricingSubtitle": "Start for free, upgrade when you are ready",
+    "forever": "forever",
+    "getStarted": "Get Started",
+    "proLifetime": "/ lifetime",
+    "proRegionNote": "(Vietnam region pricing only)",
+    "comingSoonInternational": "Coming soon for international users",
+    "allRightsReserved": "All rights reserved.",
+    "navLibrary": "Exercise Library"
   },
   "authGate": {
     "scheduleMessage": "Sign in to view and plan your training schedule",
@@ -489,7 +500,12 @@
     "gifLabel": "GIF image link",
     "mediaLinksLabel": "Reference links",
     "addMediaLink": "Add link",
-    "removeLink": "Remove"
+    "removeLink": "Remove",
+    "instructionsHint": "Describe each step (optional)",
+    "skipStep": "Skip this step",
+    "configTitle2": "Default configuration",
+    "configHint": "Set default parameters (optional)",
+    "skipAndCreate": "Skip and create"
   },
   "starterTemplate": {
     "title": "Start with a template",
@@ -549,5 +565,31 @@
     "findAlternative": "Find alternative",
     "keepOriginal": "Keep original",
     "swapExercise": "Swap"
+  },
+  "importJSON": {
+    "title": "Import Exercises from JSON",
+    "mustBeArray": "File must be a JSON array.",
+    "maxItems": "Maximum 50 exercises per import.",
+    "invalidItemsRemoved": "{count} invalid items removed.",
+    "readError": "Cannot read JSON file.",
+    "readyToImport": "{count} exercises ready to import",
+    "dropPrompt": "Click to select .json file",
+    "noNotes": "No notes",
+    "muscleGroupPlaceholder": "— Muscle group —",
+    "exerciseNamePlaceholder": "Exercise name",
+    "importFailed": "Import failed.",
+    "importCount": "Import {count} exercises",
+    "importing": "Importing..."
+  },
+  "aiCreate": {
+    "title": "Create Exercise",
+    "promptPlaceholder": "Describe the exercise you want to create... e.g. Squat variation with jump, high intensity",
+    "generate": "Create exercise",
+    "generating": "Generating...",
+    "generateError": "Could not generate exercise. Try again.",
+    "saveError": "Save failed.",
+    "regenerate": "Regenerate",
+    "addToLibrary": "Add to library",
+    "saving": "Saving..."
   }
 }

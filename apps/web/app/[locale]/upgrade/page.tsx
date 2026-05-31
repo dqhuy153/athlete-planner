@@ -48,7 +48,7 @@ export default function UpgradePage() {
       );
       window.location.href = checkoutUrl;
     } catch {
-      setError('Payment init failed. Please try again.');
+      setError(t('paymentError'));
       setLoading(false);
     }
   }
@@ -98,17 +98,17 @@ export default function UpgradePage() {
               <div className="flex items-center gap-3">
                 <span className="font-mono text-4xl font-black text-text-tertiary line-through opacity-60">$9.99</span>
                 <span className="rounded-full border border-border bg-surface-2 px-2.5 py-0.5 text-xs text-text-tertiary">
-                  Vietnam only
+                  {t('vietnamOnly')}
                 </span>
               </div>
               <p className="mt-2 text-sm text-text-secondary">
-                International payments are coming soon. Currently available for Vietnam bank accounts only.
+                {t('internationalComingSoon')}
               </p>
             </>
           )}
         </div>
         <div className="border-t border-accent/20 bg-accent/5 px-6 py-3">
-          <p className="text-xs text-text-secondary">One-time payment — no subscriptions, no recurring fees</p>
+          <p className="text-xs text-text-secondary">{t('oneTimeDetail')}</p>
         </div>
       </div>
 
@@ -133,7 +133,7 @@ export default function UpgradePage() {
       ) : (
         <div className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-1 text-sm text-text-tertiary cursor-not-allowed select-none">
           <Globe size={16} aria-hidden />
-          International gateway coming soon
+          {t('internationalGatewaySoon')}
         </div>
       )}
     </main>

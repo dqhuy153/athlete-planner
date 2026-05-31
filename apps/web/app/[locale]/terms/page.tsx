@@ -3,6 +3,7 @@ import { join } from 'path';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -28,6 +29,7 @@ function markdownToHtml(md: string): string {
 
 export default async function TermsPage({ params }: PageProps) {
   const { locale } = await params;
+  const tc = await getTranslations({ locale, namespace: 'common' });
 
   let content: string;
   try {
@@ -50,7 +52,7 @@ export default async function TermsPage({ params }: PageProps) {
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
       >
         <ArrowLeft size={14} aria-hidden />
-        {locale === 'vi' ? 'Trang chủ' : 'Home'}
+        {tc('home')}
       </Link>
       <article dangerouslySetInnerHTML={{ __html: html }} />
     </div>
