@@ -12,6 +12,7 @@ import { api } from '@/lib/api';
 import { Button } from '@athlete-planner/ui';
 import { GymExerciseConfig } from './GymExerciseConfig';
 import { RunningExerciseConfig } from './RunningExerciseConfig';
+import { MediaUrlsManager } from '@/components/MediaUrlsManager';
 
 const MUSCLE_GROUPS = Object.values(MuscleGroup);
 const RUNNING_TYPES = Object.values(RunningType);
@@ -37,6 +38,7 @@ export function PrivateExerciseDetailClient({
   const [muscleGroup, setMuscleGroup] = useState<MuscleGroup | ''>(exercise.targetMuscleGroup ?? '');
   const [runningType, setRunningType] = useState<RunningType | ''>(exercise.runningType ?? '');
   const [notes, setNotes] = useState(exercise.customNotes ?? '');
+  const [mediaUrls, setMediaUrls] = useState<string[]>(exercise.mediaUrls ?? []);
 
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -61,6 +63,7 @@ export function PrivateExerciseDetailClient({
       await api.updatePrivateExercise(token, exercise.id, {
         name: name.trim(),
         customNotes: notes,
+        mediaUrls,
         ...(exercise.sportType === SportType.GYM && muscleGroup
           ? { targetMuscleGroup: muscleGroup }
           : {}),
@@ -173,6 +176,12 @@ export function PrivateExerciseDetailClient({
             className="w-full resize-none rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
           />
         </div>
+
+        {/* Media URLs */}
+        <MediaUrlsManager
+          urls={mediaUrls}
+          onChange={setMediaUrls}
+        />
 
         {saveError && <p className="text-xs text-error">{saveError}</p>}
 
