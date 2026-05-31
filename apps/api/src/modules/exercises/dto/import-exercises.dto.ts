@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
+  IsInt,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -68,6 +69,54 @@ export class GymExerciseImportItemDto {
   @ValidateNested({ each: true })
   @Type(() => GymInstructionDto)
   instructions?: GymInstructionDto[];
+
+  @IsOptional()
+  @IsInt()
+  defaultBeginnerSets?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultBeginnerReps?: number;
+
+  @IsOptional()
+  @IsNumber()
+  defaultBeginnerWeightKg?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultBeginnerRpe?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultBeginnerRestTimeSecs?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultBeginnerRestBetweenExercisesSecs?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultAdvancedSets?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultAdvancedReps?: number;
+
+  @IsOptional()
+  @IsNumber()
+  defaultAdvancedWeightKg?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultAdvancedRpe?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultAdvancedRestTimeSecs?: number;
+
+  @IsOptional()
+  @IsInt()
+  defaultAdvancedRestBetweenExercisesSecs?: number;
 }
 
 export class ImportGymExercisesDto {

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { Prisma, PrismaService, RunningType } from '@athlete-planner/database';
 import { ImportRunningExercisesCommand } from './import-running-exercises.command';
 import {
   RunningExerciseImportItemDto,
@@ -47,11 +47,11 @@ function validateRunningExercise(ex: RunningExerciseImportItemDto): string[] {
   return errors;
 }
 
-function diffRunningFields(existing: any, incoming: RunningExerciseImportItemDto): string[] {
+function diffRunningFields(existing: Record<string, unknown>, incoming: RunningExerciseImportItemDto): string[] {
   const changed: string[] = [];
   const fields = ['vietnameseName', 'youtubeEmbedUrl', 'gifUrl', 'instructions', 'workoutStructure'];
   for (const f of fields) {
-    if (JSON.stringify((existing as any)[f]) !== JSON.stringify((incoming as any)[f])) {
+    if (JSON.stringify(existing[f]) !== JSON.stringify((incoming as unknown as Record<string, unknown>)[f])) {
       changed.push(f);
     }
   }
@@ -121,11 +121,11 @@ export class ImportRunningExercisesHandler
       const data = {
         name: ex.name,
         vietnameseName: ex.vietnameseName,
-        runningType: ex.runningType as any,
+        runningType: ex.runningType as RunningType,
         youtubeEmbedUrl: ex.youtubeEmbedUrl ?? null,
         gifUrl: ex.gifUrl ?? null,
-        instructions: (ex.instructions ?? { vi: [], en: [] }) as any,
-        workoutStructure: (ex.workoutStructure ?? []) as any,
+        instructions: (ex.instructions ?? { vi: [], en: [] }) as unknown as Prisma.InputJsonValue,
+        workoutStructure: (ex.workoutStructure ?? []) as unknown as Prisma.InputJsonValue,
       };
 
       if (result.status === 'duplicate' && result.existingId) {

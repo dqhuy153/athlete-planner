@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { MuscleGroup, Prisma, PrismaService } from '@athlete-planner/database';
 import { ImportGymExercisesCommand } from './import-gym-exercises.command';
 import {
   GymExerciseImportItemDto,
@@ -40,7 +40,7 @@ function validateGymExercise(ex: GymExerciseImportItemDto): string[] {
   return errors;
 }
 
-function diffGymFields(existing: any, incoming: GymExerciseImportItemDto): string[] {
+function diffGymFields(existing: Record<string, unknown>, incoming: GymExerciseImportItemDto): string[] {
   const changed: string[] = [];
   const fields = [
     'vietnameseName',
@@ -51,7 +51,7 @@ function diffGymFields(existing: any, incoming: GymExerciseImportItemDto): strin
     'instructions',
   ];
   for (const f of fields) {
-    if (JSON.stringify((existing as any)[f]) !== JSON.stringify((incoming as any)[f])) {
+    if (JSON.stringify(existing[f]) !== JSON.stringify((incoming as unknown as Record<string, unknown>)[f])) {
       changed.push(f);
     }
   }
@@ -122,24 +122,24 @@ export class ImportGymExercisesHandler implements ICommandHandler<ImportGymExerc
       const data = {
         name: ex.name,
         vietnameseName: ex.vietnameseName,
-        targetMuscleGroup: ex.targetMuscleGroup as any,
+        targetMuscleGroup: ex.targetMuscleGroup as MuscleGroup,
         secondaryMuscleGroups: ex.secondaryMuscleGroups ?? [],
         garminExerciseEnum: ex.garminExerciseEnum ?? null,
         youtubeEmbedUrl: ex.youtubeEmbedUrl ?? null,
         gifUrl: ex.gifUrl ?? null,
-        instructions: (ex.instructions ?? []) as any,
-        defaultBeginnerSets: (ex as any).defaultBeginnerSets ?? null,
-        defaultBeginnerReps: (ex as any).defaultBeginnerReps ?? null,
-        defaultBeginnerWeightKg: (ex as any).defaultBeginnerWeightKg ?? null,
-        defaultBeginnerRpe: (ex as any).defaultBeginnerRpe ?? null,
-        defaultBeginnerRestTimeSecs: (ex as any).defaultBeginnerRestTimeSecs ?? null,
-        defaultBeginnerRestBetweenExercisesSecs: (ex as any).defaultBeginnerRestBetweenExercisesSecs ?? null,
-        defaultAdvancedSets: (ex as any).defaultAdvancedSets ?? null,
-        defaultAdvancedReps: (ex as any).defaultAdvancedReps ?? null,
-        defaultAdvancedWeightKg: (ex as any).defaultAdvancedWeightKg ?? null,
-        defaultAdvancedRpe: (ex as any).defaultAdvancedRpe ?? null,
-        defaultAdvancedRestTimeSecs: (ex as any).defaultAdvancedRestTimeSecs ?? null,
-        defaultAdvancedRestBetweenExercisesSecs: (ex as any).defaultAdvancedRestBetweenExercisesSecs ?? null,
+        instructions: (ex.instructions ?? []) as unknown as Prisma.InputJsonValue,
+        defaultBeginnerSets: ex.defaultBeginnerSets ?? null,
+        defaultBeginnerReps: ex.defaultBeginnerReps ?? null,
+        defaultBeginnerWeightKg: ex.defaultBeginnerWeightKg ?? null,
+        defaultBeginnerRpe: ex.defaultBeginnerRpe ?? null,
+        defaultBeginnerRestTimeSecs: ex.defaultBeginnerRestTimeSecs ?? null,
+        defaultBeginnerRestBetweenExercisesSecs: ex.defaultBeginnerRestBetweenExercisesSecs ?? null,
+        defaultAdvancedSets: ex.defaultAdvancedSets ?? null,
+        defaultAdvancedReps: ex.defaultAdvancedReps ?? null,
+        defaultAdvancedWeightKg: ex.defaultAdvancedWeightKg ?? null,
+        defaultAdvancedRpe: ex.defaultAdvancedRpe ?? null,
+        defaultAdvancedRestTimeSecs: ex.defaultAdvancedRestTimeSecs ?? null,
+        defaultAdvancedRestBetweenExercisesSecs: ex.defaultAdvancedRestBetweenExercisesSecs ?? null,
       };
 
       if (result.status === 'duplicate' && result.existingId) {
