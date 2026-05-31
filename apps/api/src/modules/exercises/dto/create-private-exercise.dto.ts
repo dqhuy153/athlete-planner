@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum, IsOptional, IsNumber, Min, Max } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsNumber, Min, Max, IsArray, IsUrl } from 'class-validator';
 import { MuscleGroup, RunningType } from '@athlete-planner/database';
 import { SportType } from '@athlete-planner/contracts';
 
@@ -25,6 +25,11 @@ export class CreatePrivateExerciseDto {
   @IsOptional()
   @IsString()
   gifUrl?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsUrl({ require_tld: false }, { each: true })
+  mediaUrls?: string[];
 
   @IsOptional()
   @IsString()
