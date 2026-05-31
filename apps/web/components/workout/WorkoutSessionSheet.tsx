@@ -132,7 +132,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                   {/* Type-specific summary chip */}
                   {item.sportType === SportType.GYM && item.sets.length > 0 && (
                     <span className="text-xs font-mono text-text-tertiary shrink-0">
-                      {item.sets.length}×{item.gymPayload?.sets[0]?.reps ?? '?'} reps
+                      {item.sets.length}×{item.gymPayload?.sets[0]?.reps ?? '?'} {t('repsLabel')}
                     </span>
                   )}
                   {item.sportType === SportType.RUNNING && item.runningPayload && (
@@ -617,7 +617,7 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
                 <span className="flex-1 text-sm text-text-primary truncate">{item.label}</span>
                 {item.sportType === SportType.GYM && item.sets.length > 0 && (
                   <span className="text-xs font-mono text-text-tertiary shrink-0">
-                    {item.sets.length} sets
+                    {item.sets.length} {t('setsLabel')}
                   </span>
                 )}
               </button>

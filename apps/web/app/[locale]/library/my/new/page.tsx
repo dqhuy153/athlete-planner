@@ -17,6 +17,7 @@ interface PageProps {
 
 export default function NewPrivateExercisePage({ params }: PageProps) {
   const t = useTranslations('library');
+  const tPrivate = useTranslations('privateExercise');
   const tc = useTranslations('common');
   const router = useRouter();
   const { data: session } = useSession();
@@ -54,9 +55,9 @@ export default function NewPrivateExercisePage({ params }: PageProps) {
       router.push(`/${locale}/library/my`);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Failed to create exercise');
+        setError(err.message || tPrivate('createFailed'));
       } else {
-        setError('Failed to create exercise');
+        setError(tPrivate('createFailed'));
       }
     } finally {
       setSubmitting(false);

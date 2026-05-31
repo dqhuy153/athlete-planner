@@ -129,7 +129,8 @@
     "daySu": "CN",
     "dayCompleted": "Ngày đã hoàn thành",
     "daySkipped": "Ngày đã bỏ qua",
-    "dayRestDay": "Ngày nghỉ"
+    "dayRestDay": "Ngày nghỉ",
+    "authRequired": "Đăng nhập để xem và lên kế hoạch tập luyện"
   },
   "library": {
     "title": "Thư viện bài tập",
@@ -242,7 +243,8 @@
     "instructionLevelHint": "Hiển thị hướng dẫn phù hợp trong thư viện bài tập",
     "instructionLevelSaved": "Đã lưu cấp độ hướng dẫn",
     "upgradeTitle": "Nâng cấp lên PRO",
-    "upgradeBenefits": "Xuất Garmin, bài tập không giới hạn, lịch sử trọn đời"
+    "upgradeBenefits": "Xuất Garmin, bài tập không giới hạn, lịch sử trọn đời",
+    "authRequired": "Đăng nhập để quản lý hồ sơ"
   },
   "tier": {
     "upgradeTitle": "Nâng cấp Pro",
@@ -434,6 +436,7 @@
     "deleteConfirm": "Bạn có chắc muốn xoá bài tập này?",
     "cancel": "Huỷ",
     "confirmDelete": "Xoá",
-    "deleting": "Đang xoá..."
+    "deleting": "Đang xoá...",
+    "createFailed": "Tạo bài tập thất bại"
   }
 }

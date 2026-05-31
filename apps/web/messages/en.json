@@ -129,7 +129,8 @@
     "daySu": "Su",
     "dayCompleted": "Day completed",
     "daySkipped": "Day skipped",
-    "dayRestDay": "Rest day"
+    "dayRestDay": "Rest day",
+    "authRequired": "Sign in to view and plan your training schedule"
   },
   "library": {
     "title": "Exercise Library",
@@ -242,7 +243,8 @@
     "instructionLevelHint": "Sets your default tab in the exercise library",
     "instructionLevelSaved": "Instruction level saved",
     "upgradeTitle": "Upgrade to PRO",
-    "upgradeBenefits": "Garmin export, unlimited exercises, lifetime history"
+    "upgradeBenefits": "Garmin export, unlimited exercises, lifetime history",
+    "authRequired": "Sign in to manage your profile"
   },
   "tier": {
     "upgradeTitle": "Upgrade to Pro",
@@ -434,6 +436,7 @@
     "deleteConfirm": "Are you sure you want to delete this exercise?",
     "cancel": "Cancel",
     "confirmDelete": "Delete",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "createFailed": "Failed to create exercise"
   }
 }

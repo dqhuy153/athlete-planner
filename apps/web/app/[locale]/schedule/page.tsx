@@ -437,7 +437,7 @@ export default function SchedulePage() {
   const dayLabel = format(selectedDateObj, 'EEE, d MMM')
 
   return (
-    <AuthGate message='Sign in to view and plan your training schedule'>
+    <AuthGate message={t('authRequired')}>
       <>
         <div className='flex min-h-[calc(100vh-0px)]'>
           <ScheduleSidebar

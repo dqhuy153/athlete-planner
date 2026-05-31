@@ -43,17 +43,19 @@ export function WorkoutGymItem({ item, itemIndex }: WorkoutGymItemProps) {
   );
 
   // Sync if sets array grows (when user adds a set)
-  if (editValues.length < item.sets.length) {
-    const last = editValues[editValues.length - 1];
-    setEditValues((prev) => [
-      ...prev,
-      ...item.sets.slice(prev.length).map(() => ({
-        weight_kg: last?.weight_kg ?? 0,
-        reps: last?.reps ?? 10,
-        rpe: last?.rpe ?? 7,
-      })),
-    ]);
-  }
+  useEffect(() => {
+    if (editValues.length < item.sets.length) {
+      const last = editValues[editValues.length - 1];
+      setEditValues((prev) => [
+        ...prev,
+        ...item.sets.slice(prev.length).map(() => ({
+          weight_kg: last?.weight_kg ?? 0,
+          reps: last?.reps ?? 10,
+          rpe: last?.rpe ?? 7,
+        })),
+      ]);
+    }
+  }, [item.sets.length]);
 
   function handleDone(setIndex: number) {
     if (!session) return;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useDeferredValue } from 'react';
+import { useState, useEffect, useDeferredValue } from 'react';
 import { Search, X, Dumbbell, PersonStanding } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
@@ -35,6 +35,14 @@ export function ExercisePicker({
 }: ExercisePickerProps) {
   const t      = useTranslations('schedule');
   const locale = useLocale();
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const [tab, setTab]       = useState<Tab>('gym');
   const [query, setQuery]   = useState('');
@@ -73,7 +81,7 @@ export function ExercisePicker({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-text-tertiary hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-text-tertiary hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>

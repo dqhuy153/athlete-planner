@@ -48,7 +48,7 @@ export function MobileActionBar({
         <button
           type='button'
           onClick={onOpenCopyDay}
-          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px]'
+          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]'
         >
           <Copy size={13} aria-hidden />
           {t('copyDay')}
@@ -57,7 +57,7 @@ export function MobileActionBar({
           type='button'
           onClick={onExportDay}
           disabled={exportingDay}
-          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px] disabled:opacity-50'
+          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-2 text-xs text-text-secondary hover:bg-surface-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px] disabled:opacity-50'
         >
           <Download size={13} aria-hidden />
           {tExport('exportDay')}

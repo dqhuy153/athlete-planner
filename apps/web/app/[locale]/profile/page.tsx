@@ -91,7 +91,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <AuthGate message='Sign in to manage your profile'>
+    <AuthGate message={t('authRequired')}>
       <div className='mx-auto max-w-lg px-4 py-6 md:py-10'>
         <div className='mb-6 flex items-center gap-4'>
           {user?.image ? (
