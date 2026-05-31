@@ -26,7 +26,7 @@ function FieldRow({ label, fieldName, min = 0, max, step = 1, unit }: FieldRowPr
         max={max}
         step={step}
         {...register(fieldName)}
-        className="w-full rounded-lg border border-border/60 bg-surface-3 px-3 py-2 text-sm text-text-primary text-right font-mono focus:outline-none focus:ring-2 focus:ring-accent"
+        className="w-full rounded-lg border border-border bg-surface-3 px-3 py-2 text-sm text-text-primary text-right font-mono hover:border-accent/40 focus:outline-none focus:ring-2 focus:ring-accent transition-colors placeholder:text-on-surface-variant/40"
         placeholder="—"
       />
     </div>

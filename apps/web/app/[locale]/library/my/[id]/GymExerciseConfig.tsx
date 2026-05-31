@@ -40,7 +40,7 @@ function NumericField({
           const v = e.target.value;
           onChange(v === '' ? null : parseFloat(v));
         }}
-        className="rounded-lg border border-border/60 bg-surface-3 px-3 py-2 font-mono text-sm text-text-primary text-right focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50 placeholder:text-text-tertiary"
+        className="rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text-primary text-right hover:border-accent/40 focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 placeholder:text-text-tertiary transition-colors"
       />
     </div>
   );
