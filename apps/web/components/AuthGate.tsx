@@ -1,72 +1,132 @@
-'use client';
+'use client'
 
-import { signIn } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
-import { Lock } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useAuthView } from '@/lib/hooks/useAuthView';
-import { Button } from '@athlete-planner/ui';
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
+import { Lock } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { useAuthView } from '@/lib/hooks/useAuthView'
+import { Button, cn } from '@athlete-planner/ui'
+
+const isDev = process.env.NODE_ENV === 'development'
+type DevTier = 'FREE' | 'PRO'
+const DEV_ACCOUNTS: Record<DevTier, { email: string }> = {
+  FREE: { email: 'dev-free@local.dev' },
+  PRO: { email: 'dev-pro@local.dev' },
+}
 
 interface AuthGateProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   /** Override the fallback callback URL. Defaults to current pathname. */
-  callbackUrl?: string;
+  callbackUrl?: string
   /** Custom lock message. Defaults to generic sign-in prompt. */
-  message?: string;
+  message?: string
 }
 
 export function AuthGate({ children, callbackUrl, message }: AuthGateProps) {
-  const { authView, isLoading } = useAuthView();
-  const pathname = usePathname();
-  const t = useTranslations('authGate');
+  const { authView, isLoading } = useAuthView()
+  const pathname = usePathname()
+  const t = useTranslations('authGate')
+  const [devLoading, setDevLoading] = useState<DevTier | null>(null)
 
   // Show children for authenticated users (or while loading)
   if (isLoading || authView !== 'guest') {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
-  const redirectUrl = callbackUrl ?? pathname;
+  const redirectUrl = callbackUrl ?? pathname
+
+  async function handleDevLogin(tier: DevTier) {
+    setDevLoading(tier)
+    await signIn('dev-credentials', {
+      email: DEV_ACCOUNTS[tier].email,
+      tier,
+      callbackUrl: redirectUrl,
+    })
+  }
 
   return (
-    <div className="relative min-h-[60vh]">
+    <div className='relative min-h-[60vh]'>
       {/* Blurred preview of underlying content */}
       <div
-        className="pointer-events-none select-none"
+        className='pointer-events-none select-none'
         style={{ filter: 'blur(6px)', opacity: 0.3 }}
-        aria-hidden="true"
+        aria-hidden='true'
       >
         {children}
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center backdrop-blur-md bg-background/60">
-        <div className="mx-auto max-w-sm px-6 text-center">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-2 border border-border">
-              <Lock size={24} className="text-text-secondary" aria-hidden />
+      <div className='absolute inset-0 z-10 flex items-center justify-center backdrop-blur-md bg-background/60'>
+        <div className='mx-auto max-w-sm px-6 text-center'>
+          <div className='mb-4 flex justify-center'>
+            <div className='flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-2 border border-border'>
+              <Lock size={24} className='text-text-secondary' aria-hidden />
             </div>
           </div>
-          <p className="mb-6 text-sm text-text-secondary leading-relaxed">
+          <p className='mb-6 text-sm text-text-secondary leading-relaxed'>
             {message ?? t('defaultMessage')}
           </p>
           <Button
-            type="button"
-            variant="accent"
-            size="lg"
+            type='button'
+            variant='accent'
+            size='lg'
             onClick={() => signIn('google', { callbackUrl: redirectUrl })}
-            className="gap-3"
+            className='gap-3'
           >
             {/* Google G logo */}
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-              <path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.039l3.007-2.332z"/>
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/>
+            <svg width='18' height='18' viewBox='0 0 18 18' aria-hidden='true'>
+              <path
+                fill='#4285F4'
+                d='M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z'
+              />
+              <path
+                fill='#34A853'
+                d='M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z'
+              />
+              <path
+                fill='#FBBC05'
+                d='M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.039l3.007-2.332z'
+              />
+              <path
+                fill='#EA4335'
+                d='M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z'
+              />
             </svg>
             {t('signInButton')}
           </Button>
+
+          {isDev && (
+            <div className='mt-4 space-y-2'>
+              <div className='flex items-center gap-3'>
+                <div className='h-px flex-1 bg-border' />
+                <span className='text-[10px] font-bold text-text-tertiary uppercase tracking-wider'>
+                  dev
+                </span>
+                <div className='h-px flex-1 bg-border' />
+              </div>
+              <div className='flex gap-2'>
+                {(['FREE', 'PRO'] as DevTier[]).map(tier => (
+                  <button
+                    key={tier}
+                    type='button'
+                    onClick={() => handleDevLogin(tier)}
+                    disabled={devLoading !== null}
+                    className={cn(
+                      'flex-1 flex min-h-[36px] items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition-all disabled:opacity-50 active:scale-95',
+                      tier === 'PRO'
+                        ? 'border-accent/30 bg-accent/5 text-accent hover:bg-accent/10'
+                        : 'border-border bg-surface-2 text-text-primary hover:bg-surface-3',
+                    )}
+                  >
+                    {devLoading === tier ? '…' : tier}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
-  );
+  )
 }

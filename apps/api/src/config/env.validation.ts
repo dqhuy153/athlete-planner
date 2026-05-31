@@ -17,12 +17,6 @@ export const envValidationSchema = Joi.object({
     .min(16)
     .required()
     .description('Secret for signing JWT access tokens'),
-  GOOGLE_CLIENT_ID: Joi.string()
-    .required()
-    .description('Google OAuth 2.0 client ID'),
-  GOOGLE_CLIENT_SECRET: Joi.string()
-    .required()
-    .description('Google OAuth 2.0 client secret'),
 
   // ─── Admin ───────────────────────────────────────────────────────────────
   ADMIN_API_TOKEN: Joi.string()
@@ -46,14 +40,6 @@ export const envValidationSchema = Joi.object({
     .uri()
     .required()
     .description('Primary web app URL (used in emails/redirects)'),
-
-  // ─── Next.js (consumed by web app, declared in root .env) ────────────────
-  NEXTAUTH_SECRET: Joi.string()
-    .allow('')
-    .optional()
-    .description('NextAuth.js secret — required in apps/web/.env.local'),
-  NEXTAUTH_URL: Joi.string().uri().allow('').optional(),
-  NEXT_PUBLIC_API_URL: Joi.string().uri().allow('').optional(),
 
   // ─── Storage: Cloudflare R2 / MinIO ──────────────────────────────────────
   R2_ACCESS_KEY_ID: Joi.string()
