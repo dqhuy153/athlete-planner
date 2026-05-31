@@ -845,10 +845,6 @@ export type GymExerciseMasterCreatesecondaryMuscleGroupsInput = {
   set: string[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type EnumMuscleGroupFieldUpdateOperationsInput = {
   set?: $Enums.MuscleGroup
 }

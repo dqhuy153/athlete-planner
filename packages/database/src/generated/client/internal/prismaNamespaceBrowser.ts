@@ -89,6 +89,7 @@ export const UserScalarFieldEnum = {
   tier: 'tier',
   role: 'role',
   preferredLevel: 'preferredLevel',
+  hasUsedFreeExport: 'hasUsedFreeExport',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

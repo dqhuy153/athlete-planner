@@ -33,6 +33,7 @@ export type UserMinAggregateOutputType = {
   tier: $Enums.UserTier | null
   role: $Enums.UserRole | null
   preferredLevel: string | null
+  hasUsedFreeExport: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +47,7 @@ export type UserMaxAggregateOutputType = {
   tier: $Enums.UserTier | null
   role: $Enums.UserRole | null
   preferredLevel: string | null
+  hasUsedFreeExport: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,6 +61,7 @@ export type UserCountAggregateOutputType = {
   tier: number
   role: number
   preferredLevel: number
+  hasUsedFreeExport: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,6 +77,7 @@ export type UserMinAggregateInputType = {
   tier?: true
   role?: true
   preferredLevel?: true
+  hasUsedFreeExport?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,6 +91,7 @@ export type UserMaxAggregateInputType = {
   tier?: true
   role?: true
   preferredLevel?: true
+  hasUsedFreeExport?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +105,7 @@ export type UserCountAggregateInputType = {
   tier?: true
   role?: true
   preferredLevel?: true
+  hasUsedFreeExport?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -186,6 +192,7 @@ export type UserGroupByOutputType = {
   tier: $Enums.UserTier
   role: $Enums.UserRole
   preferredLevel: string | null
+  hasUsedFreeExport: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -220,6 +227,7 @@ export type UserWhereInput = {
   tier?: Prisma.EnumUserTierFilter<"User"> | $Enums.UserTier
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   preferredLevel?: Prisma.StringNullableFilter<"User"> | string | null
+  hasUsedFreeExport?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   privateExercises?: Prisma.PrivateExerciseListRelationFilter
@@ -236,6 +244,7 @@ export type UserOrderByWithRelationInput = {
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasUsedFreeExport?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   privateExercises?: Prisma.PrivateExerciseOrderByRelationAggregateInput
@@ -255,6 +264,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   tier?: Prisma.EnumUserTierFilter<"User"> | $Enums.UserTier
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   preferredLevel?: Prisma.StringNullableFilter<"User"> | string | null
+  hasUsedFreeExport?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   privateExercises?: Prisma.PrivateExerciseListRelationFilter
@@ -271,6 +281,7 @@ export type UserOrderByWithAggregationInput = {
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasUsedFreeExport?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -290,6 +301,7 @@ export type UserScalarWhereWithAggregatesInput = {
   tier?: Prisma.EnumUserTierWithAggregatesFilter<"User"> | $Enums.UserTier
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   preferredLevel?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  hasUsedFreeExport?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -303,6 +315,7 @@ export type UserCreateInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -319,6 +332,7 @@ export type UserUncheckedCreateInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -335,6 +349,7 @@ export type UserUpdateInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -351,6 +366,7 @@ export type UserUncheckedUpdateInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -367,6 +383,7 @@ export type UserCreateManyInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -380,6 +397,7 @@ export type UserUpdateManyMutationInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -393,6 +411,7 @@ export type UserUncheckedUpdateManyInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -406,6 +425,7 @@ export type UserCountOrderByAggregateInput = {
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrder
+  hasUsedFreeExport?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -419,6 +439,7 @@ export type UserMaxOrderByAggregateInput = {
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrder
+  hasUsedFreeExport?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -432,6 +453,7 @@ export type UserMinOrderByAggregateInput = {
   tier?: Prisma.SortOrder
   role?: Prisma.SortOrder
   preferredLevel?: Prisma.SortOrder
+  hasUsedFreeExport?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -455,6 +477,10 @@ export type EnumUserTierFieldUpdateOperationsInput = {
 
 export type EnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -512,6 +538,7 @@ export type UserCreateWithoutPrivateExercisesInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   dailySchedules?: Prisma.DailyScheduleCreateNestedManyWithoutUserInput
@@ -527,6 +554,7 @@ export type UserUncheckedCreateWithoutPrivateExercisesInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   dailySchedules?: Prisma.DailyScheduleUncheckedCreateNestedManyWithoutUserInput
@@ -558,6 +586,7 @@ export type UserUpdateWithoutPrivateExercisesInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dailySchedules?: Prisma.DailyScheduleUpdateManyWithoutUserNestedInput
@@ -573,6 +602,7 @@ export type UserUncheckedUpdateWithoutPrivateExercisesInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dailySchedules?: Prisma.DailyScheduleUncheckedUpdateManyWithoutUserNestedInput
@@ -588,6 +618,7 @@ export type UserCreateWithoutDailySchedulesInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -603,6 +634,7 @@ export type UserUncheckedCreateWithoutDailySchedulesInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -634,6 +666,7 @@ export type UserUpdateWithoutDailySchedulesInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -649,6 +682,7 @@ export type UserUncheckedUpdateWithoutDailySchedulesInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -664,6 +698,7 @@ export type UserCreateWithoutPaymentsInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseCreateNestedManyWithoutUserInput
@@ -679,6 +714,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   tier?: $Enums.UserTier
   role?: $Enums.UserRole
   preferredLevel?: string | null
+  hasUsedFreeExport?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedCreateNestedManyWithoutUserInput
@@ -710,6 +746,7 @@ export type UserUpdateWithoutPaymentsInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUpdateManyWithoutUserNestedInput
@@ -725,6 +762,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   preferredLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasUsedFreeExport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   privateExercises?: Prisma.PrivateExerciseUncheckedUpdateManyWithoutUserNestedInput
@@ -789,6 +827,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   tier?: boolean
   role?: boolean
   preferredLevel?: boolean
+  hasUsedFreeExport?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   privateExercises?: boolean | Prisma.User$privateExercisesArgs<ExtArgs>
@@ -806,6 +845,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   tier?: boolean
   role?: boolean
   preferredLevel?: boolean
+  hasUsedFreeExport?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -819,6 +859,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   tier?: boolean
   role?: boolean
   preferredLevel?: boolean
+  hasUsedFreeExport?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -832,11 +873,12 @@ export type UserSelectScalar = {
   tier?: boolean
   role?: boolean
   preferredLevel?: boolean
+  hasUsedFreeExport?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "googleId" | "avatarUrl" | "tier" | "role" | "preferredLevel" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "googleId" | "avatarUrl" | "tier" | "role" | "preferredLevel" | "hasUsedFreeExport" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   privateExercises?: boolean | Prisma.User$privateExercisesArgs<ExtArgs>
   dailySchedules?: boolean | Prisma.User$dailySchedulesArgs<ExtArgs>
@@ -862,6 +904,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     tier: $Enums.UserTier
     role: $Enums.UserRole
     preferredLevel: string | null
+    hasUsedFreeExport: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1298,6 +1341,7 @@ export interface UserFieldRefs {
   readonly tier: Prisma.FieldRef<"User", 'UserTier'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly preferredLevel: Prisma.FieldRef<"User", 'String'>
+  readonly hasUsedFreeExport: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
