@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
+import { Prisma, PrismaService } from '@athlete-planner/database';
 import { CreatePrivateExerciseCommand } from './create-private-exercise.command';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 
@@ -23,6 +23,9 @@ export class CreatePrivateExerciseHandler implements ICommandHandler<CreatePriva
         runningType: dto.runningType,
         customNotes: dto.customNotes,
         gifUrl: dto.gifUrl,
+        instructions: (dto.instructions as unknown as Prisma.InputJsonValue) ?? undefined,
+        workoutStructure: (dto.workoutStructure as unknown as Prisma.InputJsonValue) ?? undefined,
+        youtubeEmbedUrl: dto.youtubeEmbedUrl,
         sourceGymMasterId: dto.sourceGymMasterId,
         defaultSets: dto.defaultSets,
         defaultReps: dto.defaultReps,

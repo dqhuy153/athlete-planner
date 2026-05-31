@@ -17,6 +17,7 @@ import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handl
 import { ImportRunningExercisesHandler } from './commands/import-running-exercises.handler';
 import { DeleteExerciseHandler } from './commands/delete-exercise.handler';
 import { DeletePrivateExerciseHandler } from './commands/delete-private-exercise.handler';
+import { BulkCreatePrivateExercisesHandler } from './commands/bulk-create-private-exercises.handler';
 
 // Queries
 import { GetExerciseLibraryHandler } from './queries/get-exercise-library.handler';
@@ -35,6 +36,7 @@ const CommandHandlers = [
   ImportRunningExercisesHandler,
   DeleteExerciseHandler,
   DeletePrivateExerciseHandler,
+  BulkCreatePrivateExercisesHandler,
 ];
 
 const QueryHandlers = [

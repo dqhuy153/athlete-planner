@@ -65,4 +65,17 @@ export class CreatePrivateExerciseDto {
   @IsNumber()
   @Min(0)
   restBetweenExercisesSecs?: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  instructions?: string[];
+
+  @IsOptional()
+  @IsArray()
+  workoutStructure?: object[];
+
+  @IsOptional()
+  @IsString()
+  youtubeEmbedUrl?: string;
 }

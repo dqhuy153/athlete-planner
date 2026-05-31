@@ -21,6 +21,7 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
         defaultSets, defaultReps, defaultWeightKg, defaultRpe,
         restTimeSecs, restBetweenExercisesSecs,
         mediaUrls,
+        instructions, workoutStructure, youtubeEmbedUrl,
       } = dto as Record<string, unknown>;
       return this.prisma.privateExercise.update({
         where: { id },
@@ -28,6 +29,9 @@ export class UpdateExerciseHandler implements ICommandHandler<UpdateExerciseComm
           defaultSets, defaultReps, defaultWeightKg, defaultRpe,
           restTimeSecs, restBetweenExercisesSecs,
           mediaUrls: (mediaUrls as string[] | undefined) ?? undefined,
+          instructions: (instructions as unknown as Prisma.InputJsonValue) ?? undefined,
+          workoutStructure: (workoutStructure as unknown as Prisma.InputJsonValue) ?? undefined,
+          youtubeEmbedUrl: youtubeEmbedUrl as string | undefined,
         },
       });
     }

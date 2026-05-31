@@ -38,6 +38,8 @@ import { ImportRunningExercisesCommand } from './commands/import-running-exercis
 import { ConfigPrivateExerciseCommand } from './commands/config-private-exercise.command';
 import { ConfigPrivateExerciseDto } from './dto/config-private-exercise.dto';
 import { DeletePrivateExerciseCommand } from './commands/delete-private-exercise.command';
+import { BulkCreatePrivateExercisesDto } from './dto/bulk-create-private-exercises.dto';
+import { BulkCreatePrivateExercisesCommand } from './commands/bulk-create-private-exercises.command';
 
 @Controller('exercises')
 export class ExercisesController {
@@ -177,6 +179,17 @@ export class ExercisesController {
       throw new ForbiddenException('Force delete requires root role');
     }
     return this.commandBus.execute(new DeleteExerciseCommand(id, type, isForce));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('private/bulk')
+  async bulkCreatePrivateExercises(
+    @Body() body: BulkCreatePrivateExercisesDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.commandBus.execute(
+      new BulkCreatePrivateExercisesCommand(body.exercises, req.user.sub),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
