@@ -447,5 +447,20 @@
     "confirmDelete": "Delete",
     "deleting": "Deleting...",
     "createFailed": "Failed to create exercise"
+  },
+  "starterTemplate": {
+    "title": "Start with a template",
+    "subtitle": "Set up your first week in seconds",
+    "gymTitle": "Beginner Gym",
+    "gymSubtitle": "3 Days/Week",
+    "gymDesc": "Chest · Back · Legs. Build the foundation.",
+    "runningTitle": "Couch to 5K",
+    "runningSubtitle": "Run/Walk intervals",
+    "runningDesc": "Easy runs and intervals. Start moving.",
+    "skip": "Skip for now",
+    "applying": "Setting up your week...",
+    "successToast": "Template applied! Ready to sweat?",
+    "errorToast": "Could not apply template. Try adding manually.",
+    "chooseTemplate": "Choose a template"
   }
 }

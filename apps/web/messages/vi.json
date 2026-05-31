@@ -447,5 +447,20 @@
     "confirmDelete": "Xoá",
     "deleting": "Đang xoá...",
     "createFailed": "Tạo bài tập thất bại"
+  },
+  "starterTemplate": {
+    "title": "Bắt đầu với mẫu lịch",
+    "subtitle": "Thiết lập tuần đầu tiên trong vài giây",
+    "gymTitle": "Gym Cơ Bản",
+    "gymSubtitle": "3 Ngày/Tuần",
+    "gymDesc": "Ngực · Lưng · Chân. Xây nền tảng.",
+    "runningTitle": "Couch to 5K",
+    "runningSubtitle": "Chạy xen kẽ đi bộ",
+    "runningDesc": "Easy run và interval. Bắt đầu vận động.",
+    "skip": "Bỏ qua",
+    "applying": "Đang thiết lập tuần của bạn...",
+    "successToast": "Đã áp dụng mẫu! Sẵn sàng tập chưa?",
+    "errorToast": "Không áp dụng được mẫu. Hãy thêm thủ công.",
+    "chooseTemplate": "Chọn mẫu lịch"
   }
 }

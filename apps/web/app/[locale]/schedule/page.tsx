@@ -37,6 +37,7 @@ import { ScheduleSidebar } from './components/ScheduleSidebar'
 import { DayHeader } from './components/DayHeader'
 import { MobileActionBar } from './components/MobileActionBar'
 import { ReplaceWorkoutModal } from './components/ReplaceWorkoutModal'
+import { StarterTemplateModal } from '@/components/StarterTemplateModal'
 
 const ExercisePicker = dynamic(
   () =>
@@ -173,6 +174,8 @@ export default function SchedulePage() {
   const [showReplaceWorkout, setShowReplaceWorkout] = useState(false)
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week')
   const [displayMonth, setDisplayMonth] = useState<Date>(() => startOfMonth(new Date()))
+  const [showStarterModal, setShowStarterModal] = useState(false)
+  const starterCheckedRef = useRef(false)
 
   const {
     session: workoutSession,
@@ -188,6 +191,23 @@ export default function SchedulePage() {
   }, [])
 
   const _pendingLabel = useRef('')
+
+  useEffect(() => {
+    if (starterCheckedRef.current) return;
+    if (status !== 'authenticated') return;
+    if (!token) return;
+    if (gymExercises.length === 0 && runningExercises.length === 0) return;
+    if (loading) return;
+
+    starterCheckedRef.current = true;
+    const hasSeen = localStorage.getItem('hasSeenTemplates');
+    if (hasSeen) return;
+
+    const hasItems = Array.from(schedules.values()).some(s => s.items.length > 0);
+    if (!hasItems) {
+      setShowStarterModal(true);
+    }
+  }, [status, token, gymExercises, runningExercises, loading, schedules]);
 
   const handlePick = useCallback(
     async (picked: PickedExercise) => {
@@ -681,6 +701,23 @@ export default function SchedulePage() {
             onResume={() => {
               setShowReplaceWorkout(false)
               setWorkoutOpen(true)
+            }}
+          />
+        )}
+
+        {showStarterModal && (
+          <StarterTemplateModal
+            token={token}
+            gymExercises={gymExercises}
+            runningExercises={runningExercises}
+            onClose={() => {
+              localStorage.setItem('hasSeenTemplates', '1');
+              setShowStarterModal(false);
+            }}
+            onApplied={() => {
+              localStorage.setItem('hasSeenTemplates', '1');
+              setShowStarterModal(false);
+              loadWeek(weekOffset);
             }}
           />
         )}
