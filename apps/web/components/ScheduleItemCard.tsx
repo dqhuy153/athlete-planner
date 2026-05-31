@@ -169,9 +169,10 @@ export function ScheduleItemCard({
         <button
           type="button"
           {...attributes}
-          {...listeners}
+          {...(isLockedFree ? {} : listeners)}
           aria-label={t('dragToReorder')}
-          className="touch-none text-text-tertiary hover:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded p-1"
+          disabled={isLockedFree}
+          className="touch-none text-text-tertiary hover:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded p-1 disabled:opacity-30 disabled:cursor-default"
         >
           <GripVertical className="h-4 w-4" aria-hidden />
         </button>
@@ -218,7 +219,8 @@ export function ScheduleItemCard({
           }
         </button>
 
-        {/* Remove */}
+        {/* Remove — hidden for locked historical items */}
+        {!isLockedFree && (
         <button
           type="button"
           onClick={() => onRemove(item.id)}
@@ -227,6 +229,7 @@ export function ScheduleItemCard({
         >
           <Trash2 className="h-4 w-4" aria-hidden />
         </button>
+        )}
       </div>
 
       {isLockedFree && (
