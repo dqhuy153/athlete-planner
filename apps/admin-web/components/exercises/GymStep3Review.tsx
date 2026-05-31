@@ -14,7 +14,7 @@ export function Step3Review() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">
+      <div className="rounded-[20px] border border-accent/30 bg-accent/5 p-4">
         <div className="flex items-center gap-2 mb-3">
           <CheckCircle2 className="h-5 w-5 text-accent" />
           <h3 className="text-sm font-semibold text-on-surface">Review before saving</h3>

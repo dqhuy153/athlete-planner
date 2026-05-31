@@ -124,7 +124,7 @@ export function PrivateExerciseDetailClient({
 
       {/* Custom notes */}
       {exercise.customNotes && (
-        <div className="mb-6 rounded-xl border border-border/60 bg-surface-2 p-4">
+        <div className="mb-6 rounded-[20px] border border-border/60 bg-surface-2 p-4">
           <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-2">
             {t('notes')}
           </p>
@@ -138,7 +138,7 @@ export function PrivateExerciseDetailClient({
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
             {t('configTitle')}
           </h2>
-          <div className="rounded-xl border border-border/60 bg-surface-2 p-4 space-y-4">
+          <div className="rounded-[20px] border border-border/60 bg-surface-2 p-4 space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <NumericField
                 label={t('defaultSets')}

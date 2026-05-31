@@ -76,7 +76,7 @@ export default function UpgradePage() {
       </ul>
 
       {/* Price block */}
-      <div className="mb-6 overflow-hidden rounded-2xl border border-accent/30 bg-accent/5">
+      <div className="mb-6 overflow-hidden rounded-[20px] border border-accent/30 bg-accent/5">
         <div className="p-6">
           {isVi ? (
             <>

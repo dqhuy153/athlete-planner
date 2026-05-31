@@ -158,7 +158,7 @@ export function ScheduleItemCard({
   }
 
   return (
-    <div ref={setNodeRef} style={style} className="rounded-xl bg-surface-2 border border-border overflow-hidden">
+    <div ref={setNodeRef} style={style} className="rounded-[20px] bg-surface-2 border border-border overflow-hidden">
       {/* Main row */}
       <div className="flex items-center gap-2 px-3 py-3">
         {/* Drag handle */}

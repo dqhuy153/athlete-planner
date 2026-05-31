@@ -165,13 +165,13 @@ html::-webkit-scrollbar-thumb:hover {
 .card-surface {
   background-color: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 20px;
 }
 
 .card-surface-elevated {
   background-color: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 

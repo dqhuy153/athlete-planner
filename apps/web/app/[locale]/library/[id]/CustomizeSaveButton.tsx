@@ -112,7 +112,7 @@ export function CustomizeSaveButton({
           onClick={() => setShowConfirm(false)}
         >
           <div
-            className="w-full max-w-sm rounded-2xl border border-border bg-surface-1 p-5 shadow-xl"
+            className="w-full max-w-sm rounded-[20px] border border-border bg-surface-1 p-5 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-start justify-between gap-3">

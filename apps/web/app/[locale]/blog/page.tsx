@@ -100,7 +100,7 @@ export default async function BlogPage({
           {featured && (
             <Link
               href={`/${locale}/blog/${featured.slug}`}
-              className="group block rounded-2xl border border-border bg-surface-1 overflow-hidden hover:border-accent/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="group block rounded-[20px] border border-border bg-surface-1 overflow-hidden hover:border-accent/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               {featured.coverImage && (
                 <div className="relative h-52 w-full overflow-hidden">
@@ -154,7 +154,7 @@ export default async function BlogPage({
                 <li key={post.id}>
                   <Link
                     href={`/${locale}/blog/${post.slug}`}
-                    className="group flex gap-4 rounded-xl border border-border bg-surface-1 p-4 hover:border-accent/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="group flex gap-4 rounded-[20px] border border-border bg-surface-1 p-4 hover:border-accent/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     {post.coverImage ? (
                       <div className="relative w-20 h-20 shrink-0 overflow-hidden rounded-lg">

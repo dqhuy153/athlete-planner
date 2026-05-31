@@ -552,7 +552,7 @@ export default function BlogPage() {
           {posts.map((post) => (
             <div
               key={post.id}
-              className="flex items-center gap-4 p-4 rounded-xl border border-border bg-surface hover:border-border/60 transition-colors group"
+              className="flex items-center gap-4 p-4 rounded-[20px] border border-border bg-surface hover:border-border/60 transition-colors group"
             >
               {post.coverImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -613,7 +613,7 @@ export default function BlogPage() {
       ) : (
         <div className="space-y-2">
           {categories.map((cat) => (
-            <div key={cat.key} className="flex items-center gap-4 p-4 rounded-xl border border-border bg-surface hover:border-border/60 transition-colors group">
+            <div key={cat.key} className="flex items-center gap-4 p-4 rounded-[20px] border border-border bg-surface hover:border-border/60 transition-colors group">
               {cat.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={cat.imageUrl} alt="" className="w-10 h-10 object-cover rounded-lg shrink-0 border border-border" />
@@ -664,7 +664,7 @@ export default function BlogPage() {
       {/* Category form modal */}
       {showCatForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-surface rounded-2xl border border-border p-6 w-full max-w-md mx-4 shadow-2xl">
+          <div className="bg-surface rounded-[20px] border border-border p-6 w-full max-w-md mx-4 shadow-2xl">
             <h2 className="text-base font-bold mb-5 text-foreground">
               {editingCat ? 'Edit Category' : 'New Category'}
             </h2>

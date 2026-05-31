@@ -97,7 +97,7 @@ function PreviewModal({ asset, assets, onClose, onDelete, onNavigate }: PreviewM
       onClick={onClose}
     >
       <div
-        className="relative flex w-full max-w-5xl mx-4 max-h-[90vh] rounded-2xl overflow-hidden border border-border bg-surface shadow-2xl"
+        className="relative flex w-full max-w-5xl mx-4 max-h-[90vh] rounded-[20px] overflow-hidden border border-border bg-surface shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Media area */}
@@ -376,7 +376,7 @@ export default function AssetsPage() {
 
       {/* Upload zone */}
       <div
-        className={`mb-6 rounded-2xl border-2 border-dashed transition-colors cursor-pointer ${
+        className={`mb-6 rounded-[20px] border-2 border-dashed transition-colors cursor-pointer ${
           uploadState.dragging
             ? 'border-accent bg-accent/5'
             : 'border-border hover:border-border/60 bg-surface'
@@ -465,7 +465,7 @@ export default function AssetsPage() {
             <div
               key={asset.id}
               onClick={() => setPreview(asset)}
-              className="group cursor-pointer rounded-xl border border-border bg-surface overflow-hidden hover:border-border/60 transition-colors"
+              className="group cursor-pointer rounded-[20px] border border-border bg-surface overflow-hidden hover:border-border/60 transition-colors"
             >
               <div className="aspect-square bg-background flex items-center justify-center overflow-hidden relative">
                 {asset.mimeType?.startsWith('image/') ? (

@@ -192,7 +192,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
           <div className="grid gap-6 sm:grid-cols-3">
             {features.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="rounded-xl border border-border bg-surface-2 p-5">
+              <div key={title} className="rounded-[20px] border border-border bg-surface-2 p-5">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10">
                   <Icon size={20} className="text-accent" aria-hidden />
                 </div>
@@ -209,7 +209,7 @@ export default function LandingPage() {
         <h2 className="mb-8 text-center text-2xl font-bold tracking-tight">{tl('pricingTitle')}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {/* FREE column */}
-          <div className="rounded-2xl border border-border bg-surface-1 p-6">
+          <div className="rounded-[20px] border border-border bg-surface-1 p-6">
             <p className="mb-1 text-sm font-semibold text-text-secondary">{tl('freePlan')}</p>
             <p className="mb-4 font-mono text-3xl font-black text-text-primary">0₫</p>
             <ul className="space-y-2.5">
@@ -223,7 +223,7 @@ export default function LandingPage() {
           </div>
 
           {/* PRO column */}
-          <div className="relative rounded-2xl border border-accent/40 bg-accent/5 p-6">
+          <div className="relative rounded-[20px] border border-accent/40 bg-accent/5 p-6">
             <div className="absolute right-4 top-4 rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-accent-foreground">
               PRO
             </div>

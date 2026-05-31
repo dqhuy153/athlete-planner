@@ -43,7 +43,7 @@ export function GymStep3DefaultConfig() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {/* Beginner column */}
-        <div className="rounded-xl border border-border bg-surface-1 p-4 space-y-4">
+        <div className="rounded-[20px] border border-border bg-surface-1 p-4 space-y-4">
           <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wide">
             Beginner
           </h3>
@@ -75,7 +75,7 @@ export function GymStep3DefaultConfig() {
         </div>
 
         {/* Advanced column */}
-        <div className="rounded-xl border border-border bg-surface-1 p-4 space-y-4">
+        <div className="rounded-[20px] border border-border bg-surface-1 p-4 space-y-4">
           <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wide">
             Advanced
           </h3>

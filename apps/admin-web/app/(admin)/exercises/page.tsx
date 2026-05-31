@@ -372,7 +372,7 @@ export default function ExercisesPage() {
           onClick={() => !deleteModal.deleting && setDeleteModal(null)}
         >
           <div
-            className='w-full max-w-md rounded-xl border border-border bg-surface p-6 shadow-xl'
+            className='w-full max-w-md rounded-[20px] border border-border bg-surface p-6 shadow-xl'
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}

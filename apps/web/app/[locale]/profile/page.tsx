@@ -128,7 +128,7 @@ export default function ProfilePage() {
         </div>
 
         {!isPro && (
-          <div className='mb-6 overflow-hidden rounded-xl border border-accent/30 bg-accent/5'>
+          <div className='mb-6 overflow-hidden rounded-[20px] border border-accent/30 bg-accent/5'>
             <div className='flex items-center justify-between p-4'>
               <div>
                 <p className='text-sm font-semibold text-text-primary'>
@@ -150,7 +150,7 @@ export default function ProfilePage() {
         )}
 
         {/* Settings card — all rows unified */}
-        <div className='rounded-xl border border-border bg-surface-1 overflow-hidden divide-y divide-border'>
+        <div className='rounded-[20px] border border-border bg-surface-1 overflow-hidden divide-y divide-border'>
           {/* Preferred instruction level */}
           <div className='px-4 py-3'>
             <p className='text-sm font-medium text-text-primary mb-1'>

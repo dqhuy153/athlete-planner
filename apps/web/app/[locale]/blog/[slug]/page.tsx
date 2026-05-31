@@ -113,7 +113,7 @@ export default async function BlogPostPage({
 
       {/* Cover image */}
       {post.coverImage && (
-        <div className="relative mb-7 h-52 w-full overflow-hidden rounded-2xl border border-border">
+        <div className="relative mb-7 h-52 w-full overflow-hidden rounded-[20px] border border-border">
           <Image
             src={post.coverImage}
             alt=""
@@ -183,7 +183,7 @@ export default async function BlogPostPage({
               <Link
                 key={rel.id}
                 href={`/${locale}/blog/${rel.slug}`}
-                className="group block rounded-xl border border-border bg-surface-1 overflow-hidden hover:border-accent/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="group block rounded-[20px] border border-border bg-surface-1 overflow-hidden hover:border-accent/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 {rel.coverImage ? (
                   <div className="relative h-28 overflow-hidden">

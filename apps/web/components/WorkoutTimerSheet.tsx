@@ -96,7 +96,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
               </p>
 
               {/* Step content */}
-              <div className="min-h-[120px] rounded-xl bg-surface-1 border border-border p-4">
+              <div className="min-h-[120px] rounded-[20px] bg-surface-1 border border-border p-4">
                 {isGym ? (
                   <>
                     <div className="flex items-center gap-2 mb-2">
@@ -152,7 +152,7 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
 
           {/* Guest sign-in CTA */}
           {!session && (
-            <div className="rounded-xl border border-accent/30 bg-accent/5 p-3 text-center">
+            <div className="rounded-[20px] border border-accent/30 bg-accent/5 p-3 text-center">
               <p className="text-xs text-text-secondary mb-2">{t('signInToAdd')}</p>
               <button type="button"
                 onClick={() => signIn('google', { callbackUrl: pathname })}
