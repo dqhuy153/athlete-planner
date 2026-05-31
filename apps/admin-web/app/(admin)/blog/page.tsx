@@ -78,9 +78,9 @@ const EMPTY_FORM: PostForm = {
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    published: 'bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20',
-    draft: 'bg-[#525252]/20 text-[#A3A3A3] border border-[#525252]/20',
-    archived: 'bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20',
+    published: 'bg-accent/10 text-accent border border-accent/20',
+    draft: 'bg-text-tertiary/20 text-text-secondary border border-text-tertiary/20',
+    archived: 'bg-warning/10 text-warning border border-warning/20',
   };
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${map[status] ?? map.draft}`}>
@@ -442,7 +442,7 @@ export default function BlogPage() {
               {form.tags && (
                 <div className="mt-1.5 flex flex-wrap gap-1">
                   {form.tags.split(',').map((t) => t.trim()).filter(Boolean).map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 rounded-full bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20 text-[10px]">
+                    <span key={tag} className="px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20 text-[10px]">
                       {tag}
                     </span>
                   ))}
@@ -627,7 +627,7 @@ export default function BlogPage() {
                   <span className="font-medium text-foreground">{cat.label}</span>
                   <span className="text-xs text-on-surface-variant font-mono">({cat.key})</span>
                   {!cat.isActive && (
-                    <span className="text-xs text-[#F59E0B]">inactive</span>
+                    <span className="text-xs text-warning">inactive</span>
                   )}
                 </div>
                 {cat.description && (

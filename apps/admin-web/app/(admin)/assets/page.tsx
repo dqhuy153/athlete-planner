@@ -42,13 +42,14 @@ function AssetIcon({ mimeType }: { mimeType: string | null }) {
 function ProviderBadge({ provider }: { provider: StorageProvider }) {
   if (provider === StorageProvider.CLOUDINARY) {
     return (
+      // TODO: design token needed — #7C3AED/#A78BFA (purple) not in MA design system
       <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#7C3AED]/10 text-[#A78BFA] border border-[#7C3AED]/20">
         <Cloud size={9} /> Cloudinary
       </span>
     );
   }
   return (
-    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20">
+    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-accent/10 text-accent border border-accent/20">
       <HardDrive size={9} /> R2
     </span>
   );
@@ -483,6 +484,7 @@ export default function AssetsPage() {
                 <div className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   {asset.storageProvider === StorageProvider.CLOUDINARY ? (
                     <span className="p-1 rounded-md bg-black/60 backdrop-blur-sm">
+                       {/* TODO: design token needed — #A78BFA (purple) not in MA design system */}
                       <Cloud size={10} className="text-[#A78BFA]" />
                     </span>
                   ) : (

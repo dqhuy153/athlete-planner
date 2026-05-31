@@ -21,6 +21,9 @@ import { FormLabel, FormError } from '@athlete-planner/ui';
 import { SortablePhaseItem } from './SortablePhaseItem';
 import type { RunningExerciseFormValues, WorkoutPhaseFormValues } from './schemas';
 
+// TODO: design token needed — these colors are used as dynamic JS style values (style={{ color }})
+// and cannot be replaced with Tailwind classes. #22C55E=success, #EF4444=error, #F59E0B=warning;
+// #3B82F6 (blue) and #6B7280 (gray) have no token in MA design system.
 const PHASE_TYPES = [
   { value: 'warm_up', label: 'Warm-up', color: '#22C55E' },
   { value: 'interval', label: 'Interval', color: '#EF4444' },
@@ -31,7 +34,7 @@ const PHASE_TYPES = [
 ] as const;
 
 function getPhaseColor(type: string): string {
-  return PHASE_TYPES.find((t) => t.value === type)?.color ?? '#6B7280';
+  return PHASE_TYPES.find((t) => t.value === type)?.color ?? '#6B7280'; // TODO: design token needed
 }
 
 export function WorkoutStructureEditor() {

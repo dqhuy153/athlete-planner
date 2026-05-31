@@ -61,6 +61,7 @@ const CONFIG_SECTIONS: ConfigSection[] = [
     id: 'payment',
     title: 'Payment Settings',
     description: 'Pricing and currency configuration.',
+    // TODO: design token needed — #7C3AED (purple) not in MA design system
     icon: <CreditCard size={18} className="text-[#7C3AED]" />,
     items: [
       { key: 'PRO_PRICE_VND', label: 'PRO Price', description: 'One-time PRO tier price charged via PayOS.', type: 'number', defaultValue: 199000, unit: 'VND', min: 1000 },
@@ -221,7 +222,7 @@ export default function ConfigPage() {
 
       <div className="space-y-6">
         {CONFIG_SECTIONS.map((section) => (
-          <div key={section.id} className="rounded-2xl border border-border bg-surface overflow-hidden">
+          <div key={section.id} className="rounded-[20px] border border-border bg-surface overflow-hidden">
             {/* Section header */}
             <div className="flex items-start gap-3 px-5 py-4 border-b border-border">
               <div className="mt-0.5">{section.icon}</div>
@@ -274,7 +275,7 @@ export default function ConfigPage() {
                             title="Save"
                             className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
                               saved
-                                ? 'bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20'
+                                ? 'bg-success/10 text-success border border-success/20'
                                 : dirty
                                 ? 'bg-accent text-black hover:opacity-90'
                                 : 'border border-border text-on-surface-variant cursor-default'
@@ -291,7 +292,7 @@ export default function ConfigPage() {
                         </>
                       )}
                       {def.type === 'boolean' && saved && (
-                        <span className="flex items-center gap-1 text-xs text-[#22C55E]">
+                        <span className="flex items-center gap-1 text-xs text-success">
                           <Check size={12} /> Saved
                         </span>
                       )}
