@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   X, Settings, Dumbbell, PersonStanding, CheckCircle2,
-  Play, Pause, Square, ChevronDown, ChevronRight, RotateCcw, SkipForward,
+  Play, Pause, Square, ChevronDown, ChevronRight, RotateCcw, SkipForward, ExternalLink,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn, BottomSheet } from '@athlete-planner/ui';
@@ -16,6 +16,35 @@ import { WorkoutComplete } from './WorkoutComplete';
 import { triggerWorkoutComplete } from '@/lib/workout-alerts';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { InstructionsPanel } from '@/components/InstructionsPanel';
+
+function makeYoutubeEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (u.hostname === 'youtu.be') {
+      return `https://www.youtube.com/embed${u.pathname}`;
+    }
+    if (u.hostname.includes('youtube.com')) {
+      if (u.pathname.includes('/shorts/')) {
+        const id = u.pathname.split('/shorts/')[1]?.split('/')[0];
+        if (id) return `https://www.youtube.com/embed/${id}`;
+      }
+      const v = u.searchParams.get('v');
+      if (v) return `https://www.youtube.com/embed/${v}`;
+    }
+  } catch {
+    // invalid URL
+  }
+  return null;
+}
+
+function isYoutubeUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return hostname.includes('youtube.com') || hostname === 'youtu.be';
+  } catch {
+    return false;
+  }
+}
 
 interface WorkoutSessionSheetProps {
   onClose: () => void;
@@ -46,6 +75,8 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
     skipItem,
     activeGuideItem,
     closeGuide,
+    activeMediaItem,
+    closeMedia,
   } = useWorkoutStore();
 
   const [showAbandonConfirm, setShowAbandonConfirm] = useState(false);
@@ -452,6 +483,42 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
   // ── ACTIVE / PAUSED SCREEN ──────────────────────────────────────────────────
   const isPaused = workoutPhase === 'paused';
 
+  function renderMediaAttachments(urls: string[]) {
+    return (
+      <div className="space-y-3 p-4 pb-8">
+        {urls.map((url) => {
+          if (isYoutubeUrl(url)) {
+            const embedUrl = makeYoutubeEmbedUrl(url);
+            if (!embedUrl) return null;
+            return (
+              <div key={url} className="aspect-video w-full overflow-hidden rounded-xl bg-surface-2">
+                <iframe
+                  src={embedUrl}
+                  className="h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Media reference"
+                />
+              </div>
+            );
+          }
+          return (
+            <a
+              key={url}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-[48px] items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm font-medium text-text-secondary transition-colors hover:text-accent hover:border-accent"
+            >
+              <ExternalLink size={14} className="shrink-0" aria-hidden />
+              <span className="font-mono truncate text-xs">{url}</span>
+            </a>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col bg-background"
@@ -783,6 +850,18 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
             <InstructionsPanel instructions={activeGuideItem.instructions} />
           )}
         </div>
+      </BottomSheet>
+
+      {/* Media Attachments Sheet */}
+      <BottomSheet open={!!activeMediaItem} onClose={closeMedia} maxHeight="88vh">
+        <div className="px-4 pb-2 pt-1">
+          <p className="text-sm font-semibold text-text-primary">
+            {activeMediaItem?.label ?? t('mediaSheetTitle')}
+          </p>
+        </div>
+        {activeMediaItem?.mediaUrls && activeMediaItem.mediaUrls.length > 0
+          ? renderMediaAttachments(activeMediaItem.mediaUrls)
+          : null}
       </BottomSheet>
     </div>
   );
