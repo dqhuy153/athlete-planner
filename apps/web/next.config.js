@@ -17,13 +17,14 @@ const nextConfig = {
 const withPWAConfig = withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
-
-  // SỬA TẠI ĐÂY: Tắt tính năng cache dồn dập gây deadlock trên iOS Safari
   cacheOnFrontEndNav: false,
   aggressiveFrontEndNavCaching: false,
-
   reloadOnOnline: false,
+
   workboxOptions: {
+    skipWaiting: true,
+    clientsClaim: true,
+
     runtimeCaching: [
       {
         // API routes — network first, fall back to cache
