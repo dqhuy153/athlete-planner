@@ -1,7 +1,7 @@
-const createNextIntlPlugin = require('next-intl/plugin');
-const withPWA = require('@ducanh2912/next-pwa').default;
+const createNextIntlPlugin = require('next-intl/plugin')
+const withPWA = require('@ducanh2912/next-pwa').default
 
-const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,17 +9,20 @@ const nextConfig = {
   transpilePackages: ['@athlete-planner/ui', '@athlete-planner/contracts'],
   images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+    NEXT_PUBLIC_API_URL:
+      process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
   },
-};
+}
 
 const withPWAConfig = withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
+
+  // SỬA TẠI ĐÂY: Tắt tính năng cache dồn dập gây deadlock trên iOS Safari
+  cacheOnFrontEndNav: false,
+  aggressiveFrontEndNavCaching: false,
+
   reloadOnOnline: false,
-  // Cache media assets (GIFs, videos) for offline guide overlay
   workboxOptions: {
     runtimeCaching: [
       {
@@ -43,6 +46,6 @@ const withPWAConfig = withPWA({
       },
     ],
   },
-});
+})
 
-module.exports = withPWAConfig(withNextIntl(nextConfig));
+module.exports = withPWAConfig(withNextIntl(nextConfig))
