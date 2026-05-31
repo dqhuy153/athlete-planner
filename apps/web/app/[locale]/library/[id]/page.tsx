@@ -35,13 +35,25 @@ function isRunning(ex: GymExerciseMaster | RunningExerciseMaster): ex is Running
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>;
+  searchParams: Promise<{ fromType?: string }>;
 }
 
-export default async function ExerciseDetailPage({ params }: PageProps) {
+export default async function ExerciseDetailPage({ params, searchParams }: PageProps) {
   const { locale, id } = await params;
+  const { fromType } = await searchParams;
   const [exercise, t] = await Promise.all([fetchExercise(id), getTranslations('library')]);
 
   if (!exercise) notFound();
+
+  const isFromRunning =
+    fromType === 'RUNNING' ||
+    fromType === 'Interval' ||
+    fromType === 'Easy' ||
+    fromType === 'Tempo' ||
+    fromType === 'Long_Run';
+
+  const backHref = isFromRunning ? `/${locale}/library/running` : `/${locale}/library`;
+  const backLabel = isFromRunning ? t('running') : t('gym');
 
   function translateMuscleGroup(mg: string): string {
     const map: Record<string, string> = {
@@ -70,7 +82,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
       <div className="mx-auto max-w-2xl pb-12 lg:pb-24">
       {/* Back */}
       <Link
-        href={`/${locale}/library`}
+        href={backHref}
         className={[
           'mb-4 inline-flex items-center gap-1.5 text-caption text-text-secondary',
           'hover:text-text-primary transition-colors',
@@ -78,7 +90,7 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
         ].join(' ')}
       >
         <ArrowLeft className="h-4 w-4" aria-hidden />
-        {t('gym')}
+        {backLabel}
       </Link>
 
       {/* Video / GIF */}

@@ -28,7 +28,11 @@ export function ExerciseCard({
 }: ExerciseCardProps) {
   return (
     <Link
-      href={isPrivate ? `/${locale}/library/my/${id}` : `/${locale}/library/${id}`}
+      href={
+        isPrivate
+          ? `/${locale}/library/my/${id}`
+          : `/${locale}/library/${id}?fromType=${encodeURIComponent(badge)}`
+      }
       className={cn(
         'group relative flex flex-col overflow-hidden rounded-xl',
         'border border-border bg-surface-1 transition-all duration-150',
