@@ -109,6 +109,10 @@ export function ExerciseActionBar({
         done: false,
         restTimeSecs,
         restBetweenExercisesSecs: restBetweenExercisesSecs ?? undefined,
+        gifUrl: exercise.gifUrl,
+        youtubeEmbedUrl: exercise.youtubeEmbedUrl,
+        instructions: exercise.instructions ?? [],
+        mediaUrls: (exercise as GymExerciseMaster).mediaUrls ?? [],
       }
     }
     if (isRunningExercise(exercise)) {
@@ -121,6 +125,9 @@ export function ExerciseActionBar({
         sets: [],
         currentPhaseIndex: 0,
         done: false,
+        youtubeEmbedUrl: exercise.youtubeEmbedUrl,
+        gifUrl: exercise.gifUrl,
+        mediaUrls: (exercise as RunningExerciseMaster).mediaUrls ?? [],
       }
     }
     // Private exercise
@@ -153,6 +160,8 @@ export function ExerciseActionBar({
       done: false,
       restTimeSecs: isGymPrivate ? privRestTime : undefined,
       restBetweenExercisesSecs: isGymPrivate ? privRestBetween : undefined,
+      gifUrl: priv.gifUrl ?? null,
+      mediaUrls: priv.mediaUrls ?? [],
     }
   }
 

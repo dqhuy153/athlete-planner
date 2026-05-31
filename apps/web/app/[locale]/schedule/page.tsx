@@ -485,6 +485,11 @@ export default function SchedulePage() {
         done: false,
         restTimeSecs,
         restBetweenExercisesSecs,
+        // ── Guide overlay fields ──
+        gifUrl: gymMaster?.gifUrl ?? privateEx?.gifUrl ?? null,
+        youtubeEmbedUrl: gymMaster?.youtubeEmbedUrl ?? runningEx?.youtubeEmbedUrl ?? null,
+        instructions: gymMaster?.instructions ?? [],
+        mediaUrls: gymMaster?.mediaUrls ?? runningEx?.mediaUrls ?? privateEx?.mediaUrls ?? [],
       }
       return workoutItem
     })

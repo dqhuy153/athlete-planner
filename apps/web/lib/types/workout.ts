@@ -39,6 +39,7 @@ export interface WorkoutItem {
   gifUrl?: string | null;
   youtubeEmbedUrl?: string | null;
   instructions?: ExerciseInstruction[];
+  mediaUrls?: string[];
 }
 
 export interface WorkoutSession {
