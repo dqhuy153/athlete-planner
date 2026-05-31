@@ -7,18 +7,20 @@
 
 ## Overview
 
-A full-screen workout execution mode that lets athletes track gym sets and running phases in real-time, directly inside the Sport Notebook Planner. Two modes: multi-exercise session (from schedule page) and single-exercise session (from exercise detail page).
+A full-screen workout execution mode that lets athletes track gym sets and running phases in real-time, directly inside the Athlete Planner Planner. Two modes: multi-exercise session (from schedule page) and single-exercise session (from exercise detail page).
 
 ---
 
 ## Entry Points
 
 ### 1. Schedule Page — Multi-Exercise Session
+
 - "Start Workout" button in the day header, visible when ≥ 1 undone item exists for the selected day
 - Session includes all items from that day's schedule (done + undone — done items are greyed out and skippable)
 - Item order matches current `sequenceOrder`
 
 ### 2. Exercise Detail Page — Single-Exercise Session
+
 - "Start Workout" button in `ExerciseActionBar` (currently opens `WorkoutTimerSheet` — to be replaced)
 - Session contains exactly one item; no schedule linkage
 - Gym default: 3 sets × 10 reps × 0 kg
@@ -28,59 +30,62 @@ A full-screen workout execution mode that lets athletes track gym sets and runni
 
 ## User Tier Behavior
 
-| Feature | Guest (unauthenticated) | FREE | PRO |
-|---------|------------------------|------|-----|
-| Schedule page access | ❌ `AuthGate` blocks entire page | ✅ | ✅ |
-| Start Workout (schedule) | n/a | ✅ | ✅ |
-| Start Workout (exercise detail) | ❌ `signIn('google')` triggered | ✅ | ✅ |
-| Set / phase tracking | — | ✅ | ✅ |
-| Auto rest timer | — | ✅ | ✅ |
-| Alerts (vibration + sound) | — | ✅ | ✅ |
-| Completion summary | — | ✅ | ✅ |
-| Mark day COMPLETED on finish | — | ✅ MULTI only | ✅ MULTI only |
-| Export FIT from summary | — | ❌ `UpgradePrompt` shown | ✅ enabled |
-| localStorage session persistence | — | ✅ | ✅ |
+| Feature                          | Guest (unauthenticated)          | FREE                     | PRO           |
+| -------------------------------- | -------------------------------- | ------------------------ | ------------- |
+| Schedule page access             | ❌ `AuthGate` blocks entire page | ✅                       | ✅            |
+| Start Workout (schedule)         | n/a                              | ✅                       | ✅            |
+| Start Workout (exercise detail)  | ❌ `signIn('google')` triggered  | ✅                       | ✅            |
+| Set / phase tracking             | —                                | ✅                       | ✅            |
+| Auto rest timer                  | —                                | ✅                       | ✅            |
+| Alerts (vibration + sound)       | —                                | ✅                       | ✅            |
+| Completion summary               | —                                | ✅                       | ✅            |
+| Mark day COMPLETED on finish     | —                                | ✅ MULTI only            | ✅ MULTI only |
+| Export FIT from summary          | —                                | ❌ `UpgradePrompt` shown | ✅ enabled    |
+| localStorage session persistence | —                                | ✅                       | ✅            |
 
 ---
 
 ## Client-Side Data Model
 
 ```ts
-enum WorkoutMode { MULTI = 'MULTI', SINGLE = 'SINGLE' }
+enum WorkoutMode {
+  MULTI = 'MULTI',
+  SINGLE = 'SINGLE',
+}
 
 interface WorkoutSetRecord {
-  setNumber: number;
-  weight_kg: number;
-  reps: number;
-  completed: boolean;
+  setNumber: number
+  weight_kg: number
+  reps: number
+  completed: boolean
 }
 
 interface WorkoutItem {
-  id: string;               // scheduleItem.id OR crypto.randomUUID() for SINGLE
-  sportType: SportType;
-  label: string;            // locale-aware display name
-  gymMasterId?: string;
-  runningMasterId?: string;
-  privateExerciseId?: string;
-  workoutStructure?: WorkoutPhase[]; // running phases reference
-  gymPayload?: GymPayload;           // pre-filled from scheduleItem
-  runningPayload?: RunningPayload;
-  sets: WorkoutSetRecord[];          // gym: live tracking array
-  currentPhaseIndex: number;         // running: phase cursor
-  done: boolean;
+  id: string // scheduleItem.id OR crypto.randomUUID() for SINGLE
+  sportType: SportType
+  label: string // locale-aware display name
+  gymMasterId?: string
+  runningMasterId?: string
+  privateExerciseId?: string
+  workoutStructure?: WorkoutPhase[] // running phases reference
+  gymPayload?: GymPayload // pre-filled from scheduleItem
+  runningPayload?: RunningPayload
+  sets: WorkoutSetRecord[] // gym: live tracking array
+  currentPhaseIndex: number // running: phase cursor
+  done: boolean
 }
 
 interface WorkoutSession {
-  id: string;               // crypto.randomUUID()
-  mode: WorkoutMode;
-  scheduleId?: string;      // MULTI only
-  dateString?: string;      // MULTI only
-  startedAt: number;        // Date.now()
-  items: WorkoutItem[];
-  currentItemIndex: number;
-  soundEnabled: boolean;    // default false
-  vibrationEnabled: boolean; // default true
-  autoAdvance: boolean;     // default true
+  id: string // crypto.randomUUID()
+  mode: WorkoutMode
+  scheduleId?: string // MULTI only
+  dateString?: string // MULTI only
+  startedAt: number // Date.now()
+  items: WorkoutItem[]
+  currentItemIndex: number
+  soundEnabled: boolean // default false
+  vibrationEnabled: boolean // default true
+  autoAdvance: boolean // default true
 }
 ```
 
@@ -102,11 +107,13 @@ interface WorkoutSession {
 **File:** `apps/web/lib/workout-alerts.ts`
 
 ### Sound (Web Audio API — no external files)
+
 - `playSetComplete()` — 880 Hz, 100 ms
 - `playRestDone()` — 880 Hz then 1047 Hz, 150 ms each
 - `playWorkoutComplete()` — ascending: 523, 659, 784, 1047 Hz
 
 ### Vibration (`navigator.vibrate()` with guard)
+
 - `vibrateSetComplete()` — `[150]`
 - `vibrateRestDone()` — `[200, 100, 200]`
 - `vibrateWorkoutComplete()` — `[300, 100, 300, 100, 500]`
@@ -116,14 +123,17 @@ interface WorkoutSession {
 ## Components
 
 ### WorkoutSessionSheet
+
 **File:** `apps/web/components/workout/WorkoutSessionSheet.tsx`
 
 Full-screen overlay (`fixed inset-0 z-50`). Three internal views:
+
 1. **Active view** — current exercise (gym or running), rest timer overlay
 2. **Complete view** — shown when all items are done
 3. **Settings panel** — slides up from bottom when gear icon tapped
 
 **Header (always visible):**
+
 - Back/previous exercise button (if not first item)
 - Exercise name + sport icon (Dumbbell / PersonStanding)
 - Progress: "2 / 4" pill + thin progress bar below header
@@ -131,6 +141,7 @@ Full-screen overlay (`fixed inset-0 z-50`). Three internal views:
 - X button → "Abandon?" confirm dialog
 
 **Item navigation:**
+
 - Swipe or button to move between exercises
 - Completed items show checkmark; current item highlighted
 - Bottom exercise index dots
@@ -138,9 +149,11 @@ Full-screen overlay (`fixed inset-0 z-50`). Three internal views:
 ---
 
 ### WorkoutGymItem
+
 **File:** `apps/web/components/workout/WorkoutGymItem.tsx`
 
 Vertical list of set cards. Each card:
+
 - Set number badge
 - Weight field (number, kg, 0.5 step)
 - `×` separator
@@ -148,6 +161,7 @@ Vertical list of set cards. Each card:
 - Done button (checkmark, 48px tap target)
 
 Behaviour:
+
 - Tapping Done on active set: mark completed → alert → start rest timer (if autoAdvance)
 - Completed set: `bg-accent/10 border-accent/30` green-ish tint, dimmed
 - Active set: white ring, enlarged touch targets
@@ -157,9 +171,11 @@ Behaviour:
 ---
 
 ### WorkoutRunningItem
+
 **File:** `apps/web/components/workout/WorkoutRunningItem.tsx`
 
 Phase-based display for running exercises:
+
 - Phase type label (`WARM_UP` → "Khởi động" / "Warm Up", etc.)
 - Large countdown timer if `duration_minutes` set; elapsed timer otherwise
 - Target info row: pace range / HR zone / distance (whichever applies)
@@ -170,9 +186,11 @@ Phase-based display for running exercises:
 ---
 
 ### WorkoutRestTimer
+
 **File:** `apps/web/components/workout/WorkoutRestTimer.tsx`
 
 Inline overlay appearing after a gym set completes:
+
 - Ring SVG countdown (adapted from `RestTimer.tsx`)
 - Default time from `gymPayload.rest_time_seconds` (fallback 90s)
 - Quick presets: 60s / 90s / 120s / 180s
@@ -183,9 +201,11 @@ Inline overlay appearing after a gym set completes:
 ---
 
 ### WorkoutComplete
+
 **File:** `apps/web/components/workout/WorkoutComplete.tsx`
 
 Full-screen completion view:
+
 - Large checkmark icon animation (`scale-in` with accent color)
 - Duration (elapsed since `session.startedAt`, formatted as `H:MM:SS` or `MM:SS`)
 - Stats grid (2×2 or 2×3):
@@ -204,9 +224,11 @@ Full-screen completion view:
 ---
 
 ### WorkoutResumePrompt
+
 **File:** `apps/web/components/workout/WorkoutResumePrompt.tsx`
 
 Sticky banner (above BottomNav on mobile) on schedule page:
+
 - Shown when `session !== null && !expired`
 - "Workout in progress" label + timer showing elapsed
 - "Resume" button (accent) + "Discard" button (ghost)
@@ -216,9 +238,11 @@ Sticky banner (above BottomNav on mobile) on schedule page:
 ---
 
 ### WorkoutSettings
+
 **File:** `apps/web/components/workout/WorkoutSettings.tsx`
 
 Bottom panel inside WorkoutSessionSheet (slides up):
+
 - Toggle rows:
   - Sound alerts (default off)
   - Vibration (default on)
@@ -268,6 +292,7 @@ workout.startReplace
 ## Files Summary
 
 ### Create
+
 - `apps/web/lib/types/workout.ts`
 - `apps/web/lib/store/workout.ts`
 - `apps/web/lib/workout-alerts.ts`
@@ -280,7 +305,8 @@ workout.startReplace
 - `apps/web/components/workout/WorkoutSessionSheet.tsx`
 
 ### Modify
+
 - `apps/web/components/ExerciseActionBar.tsx` — wire Start Workout to WorkoutSessionSheet
 - `apps/web/app/[locale]/schedule/page.tsx` — Start Workout button + resume prompt
-- `apps/web/messages/vi.json` — workout.* namespace
-- `apps/web/messages/en.json` — workout.* namespace
+- `apps/web/messages/vi.json` — workout.\* namespace
+- `apps/web/messages/en.json` — workout.\* namespace

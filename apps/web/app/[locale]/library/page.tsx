@@ -63,7 +63,7 @@ export default async function GymLibraryPage({
 
   return (
     <div className='flex flex-col h-full'>
-      <div className='sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur-sm py-3 space-y-2'>
+      <div className='border-b border-border bg-background py-3 space-y-2'>
         <Suspense fallback={null}>
           <LibrarySearch type="gym" locale={locale} />
         </Suspense>

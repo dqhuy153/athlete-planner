@@ -1,131 +1,523 @@
 <h2>Config Page — Domain-Specific Sections</h2>
-<p class="subtitle">Grouped by purpose with descriptive labels, not raw key-value pairs</p>
+<p class="subtitle">
+  Grouped by purpose with descriptive labels, not raw key-value pairs
+</p>
 
 <div class="mockup">
   <div class="mockup-header">Application Configuration</div>
-  <div class="mockup-body" style="padding:16px;max-height:500px;overflow-y:auto">
+  <div
+    class="mockup-body"
+    style="padding: 16px; max-height: 500px; overflow-y: auto"
+  >
     <!-- Section: Free Tier Limits -->
-    <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:10px;padding:16px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-        <div style="width:28px;height:28px;border-radius:6px;background:rgba(0,212,170,0.15);display:flex;align-items:center;justify-content:center;font-size:14px">👤</div>
+    <div
+      style="
+        background: var(--surface);
+        border: 1px solid var(--outline-variant);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 12px;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+        "
+      >
+        <div
+          style="
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(0, 212, 170, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+          "
+        >
+          👤
+        </div>
         <div>
-          <h4 style="font-size:12px;font-weight:600;color:var(--text-primary);margin:0">Free Tier Limits</h4>
-          <p style="font-size:9px;color:var(--text-tertiary);margin:0">Constraints for non-paying users</p>
+          <h4
+            style="
+              font-size: 12px;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin: 0;
+            "
+          >
+            Free Tier Limits
+          </h4>
+          <p style="font-size: 9px; color: var(--text-tertiary); margin: 0">
+            Constraints for non-paying users
+          </p>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">Max private exercises</label>
-          <input class="mock-input" type="number" value="10" style="width:100%;font-size:11px">
-          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">FREE users can create up to N private exercises</p>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >Max private exercises</label
+          >
+          <input
+            class="mock-input"
+            type="number"
+            value="10"
+            style="width: 100%; font-size: 11px"
+          />
+          <p
+            style="font-size: 8px; color: var(--text-tertiary); margin: 2px 0 0"
+          >
+            FREE users can create up to N private exercises
+          </p>
         </div>
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">Planning horizon (days)</label>
-          <input class="mock-input" type="number" value="14" style="width:100%;font-size:11px">
-          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">How far ahead FREE users can plan schedules</p>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >Planning horizon (days)</label
+          >
+          <input
+            class="mock-input"
+            type="number"
+            value="14"
+            style="width: 100%; font-size: 11px"
+          />
+          <p
+            style="font-size: 8px; color: var(--text-tertiary); margin: 2px 0 0"
+          >
+            How far ahead FREE users can plan schedules
+          </p>
         </div>
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">History retention (days)</label>
-          <input class="mock-input" type="number" value="30" style="width:100%;font-size:11px">
-          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">Rolling window for workout history detail</p>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >History retention (days)</label
+          >
+          <input
+            class="mock-input"
+            type="number"
+            value="30"
+            style="width: 100%; font-size: 11px"
+          />
+          <p
+            style="font-size: 8px; color: var(--text-tertiary); margin: 2px 0 0"
+          >
+            Rolling window for workout history detail
+          </p>
         </div>
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">Max schedule items per day</label>
-          <input class="mock-input" type="number" value="5" style="width:100%;font-size:11px">
-          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">Limit exercises per single day for FREE tier</p>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >Max schedule items per day</label
+          >
+          <input
+            class="mock-input"
+            type="number"
+            value="5"
+            style="width: 100%; font-size: 11px"
+          />
+          <p
+            style="font-size: 8px; color: var(--text-tertiary); margin: 2px 0 0"
+          >
+            Limit exercises per single day for FREE tier
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Section: Feature Flags -->
-    <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:10px;padding:16px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-        <div style="width:28px;height:28px;border-radius:6px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:14px">⚡</div>
+    <div
+      style="
+        background: var(--surface);
+        border: 1px solid var(--outline-variant);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 12px;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+        "
+      >
+        <div
+          style="
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(245, 158, 11, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+          "
+        >
+          ⚡
+        </div>
         <div>
-          <h4 style="font-size:12px;font-weight:600;color:var(--text-primary);margin:0">Feature Flags</h4>
-          <p style="font-size:9px;color:var(--text-tertiary);margin:0">Enable or disable app features</p>
+          <h4
+            style="
+              font-size: 12px;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin: 0;
+            "
+          >
+            Feature Flags
+          </h4>
+          <p style="font-size: 9px; color: var(--text-tertiary); margin: 0">
+            Enable or disable app features
+          </p>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--surface-container);cursor:pointer">
-          <input type="checkbox" checked style="accent-color:var(--primary)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            background: var(--surface-container);
+            cursor: pointer;
+          "
+        >
+          <input type="checkbox" checked style="accent-color: var(--primary)" />
           <div>
-            <p style="font-size:10px;color:var(--text-primary);margin:0;font-weight:500">Garmin FIT Export</p>
-            <p style="font-size:8px;color:var(--text-tertiary);margin:0">Allow PRO users to export schedules as .fit files</p>
+            <p
+              style="
+                font-size: 10px;
+                color: var(--text-primary);
+                margin: 0;
+                font-weight: 500;
+              "
+            >
+              Garmin FIT Export
+            </p>
+            <p style="font-size: 8px; color: var(--text-tertiary); margin: 0">
+              Allow PRO users to export schedules as .fit files
+            </p>
           </div>
         </label>
-        <label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--surface-container);cursor:pointer">
-          <input type="checkbox" checked style="accent-color:var(--primary)">
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            background: var(--surface-container);
+            cursor: pointer;
+          "
+        >
+          <input type="checkbox" checked style="accent-color: var(--primary)" />
           <div>
-            <p style="font-size:10px;color:var(--text-primary);margin:0;font-weight:500">AI Content Generation</p>
-            <p style="font-size:8px;color:var(--text-tertiary);margin:0">Generate exercise instructions via AI in admin</p>
+            <p
+              style="
+                font-size: 10px;
+                color: var(--text-primary);
+                margin: 0;
+                font-weight: 500;
+              "
+            >
+              AI Content Generation
+            </p>
+            <p style="font-size: 8px; color: var(--text-tertiary); margin: 0">
+              Generate exercise instructions via AI in admin
+            </p>
           </div>
         </label>
-        <label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--surface-container);cursor:pointer">
-          <input type="checkbox" checked style="accent-color:var(--primary)">
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            background: var(--surface-container);
+            cursor: pointer;
+          "
+        >
+          <input type="checkbox" checked style="accent-color: var(--primary)" />
           <div>
-            <p style="font-size:10px;color:var(--text-primary);margin:0;font-weight:500">Blog</p>
-            <p style="font-size:8px;color:var(--text-tertiary);margin:0">Show blog section in the web app</p>
+            <p
+              style="
+                font-size: 10px;
+                color: var(--text-primary);
+                margin: 0;
+                font-weight: 500;
+              "
+            >
+              Blog
+            </p>
+            <p style="font-size: 8px; color: var(--text-tertiary); margin: 0">
+              Show blog section in the web app
+            </p>
           </div>
         </label>
-        <label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--surface-container);cursor:pointer">
-          <input type="checkbox" style="accent-color:var(--primary)">
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            background: var(--surface-container);
+            cursor: pointer;
+          "
+        >
+          <input type="checkbox" style="accent-color: var(--primary)" />
           <div>
-            <p style="font-size:10px;color:var(--text-primary);margin:0;font-weight:500">Maintenance Mode</p>
-            <p style="font-size:8px;color:var(--text-tertiary);margin:0">Show maintenance page to all non-admin users</p>
+            <p
+              style="
+                font-size: 10px;
+                color: var(--text-primary);
+                margin: 0;
+                font-weight: 500;
+              "
+            >
+              Maintenance Mode
+            </p>
+            <p style="font-size: 8px; color: var(--text-tertiary); margin: 0">
+              Show maintenance page to all non-admin users
+            </p>
           </div>
         </label>
       </div>
     </div>
 
     <!-- Section: Payment Settings -->
-    <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:10px;padding:16px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-        <div style="width:28px;height:28px;border-radius:6px;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:14px">💳</div>
+    <div
+      style="
+        background: var(--surface);
+        border: 1px solid var(--outline-variant);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 12px;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+        "
+      >
+        <div
+          style="
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+          "
+        >
+          💳
+        </div>
         <div>
-          <h4 style="font-size:12px;font-weight:600;color:var(--text-primary);margin:0">Payment Settings</h4>
-          <p style="font-size:9px;color:var(--text-tertiary);margin:0">PayOS integration configuration</p>
+          <h4
+            style="
+              font-size: 12px;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin: 0;
+            "
+          >
+            Payment Settings
+          </h4>
+          <p style="font-size: 9px; color: var(--text-tertiary); margin: 0">
+            PayOS integration configuration
+          </p>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">PRO price (VND)</label>
-          <input class="mock-input" type="number" value="199000" style="width:100%;font-size:11px">
-          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">One-time purchase price in Vietnamese Dong</p>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >PRO price (VND)</label
+          >
+          <input
+            class="mock-input"
+            type="number"
+            value="199000"
+            style="width: 100%; font-size: 11px"
+          />
+          <p
+            style="font-size: 8px; color: var(--text-tertiary); margin: 2px 0 0"
+          >
+            One-time purchase price in Vietnamese Dong
+          </p>
         </div>
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">Currency</label>
-          <select class="mock-input" style="width:100%;font-size:11px"><option>VND</option><option>USD</option></select>
-          <p style="font-size:8px;color:var(--text-tertiary);margin:2px 0 0">Display currency for pricing</p>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >Currency</label
+          >
+          <select class="mock-input" style="width: 100%; font-size: 11px">
+            <option>VND</option>
+            <option>USD</option>
+          </select>
+          <p
+            style="font-size: 8px; color: var(--text-tertiary); margin: 2px 0 0"
+          >
+            Display currency for pricing
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Section: App Info -->
-    <div style="background:var(--surface);border:1px solid var(--outline-variant);border-radius:10px;padding:16px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-        <div style="width:28px;height:28px;border-radius:6px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:14px">ℹ️</div>
+    <div
+      style="
+        background: var(--surface);
+        border: 1px solid var(--outline-variant);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 12px;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+        "
+      >
+        <div
+          style="
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+          "
+        >
+          ℹ️
+        </div>
         <div>
-          <h4 style="font-size:12px;font-weight:600;color:var(--text-primary);margin:0">App Info</h4>
-          <p style="font-size:9px;color:var(--text-tertiary);margin:0">Version and display settings</p>
+          <h4
+            style="
+              font-size: 12px;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin: 0;
+            "
+          >
+            App Info
+          </h4>
+          <p style="font-size: 9px; color: var(--text-tertiary); margin: 0">
+            Version and display settings
+          </p>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">App name</label>
-          <input class="mock-input" type="text" value="The Sport Notebook" style="width:100%;font-size:11px">
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >App name</label
+          >
+          <input
+            class="mock-input"
+            type="text"
+            value="The Athlete Planner"
+            style="width: 100%; font-size: 11px"
+          />
         </div>
         <div>
-          <label style="display:block;font-size:9px;color:var(--text-secondary);margin-bottom:4px">Version</label>
-          <input class="mock-input" type="text" value="1.0.0" style="width:100%;font-size:11px" readonly>
+          <label
+            style="
+              display: block;
+              font-size: 9px;
+              color: var(--text-secondary);
+              margin-bottom: 4px;
+            "
+            >Version</label
+          >
+          <input
+            class="mock-input"
+            type="text"
+            value="1.0.0"
+            style="width: 100%; font-size: 11px"
+            readonly
+          />
         </div>
       </div>
     </div>
 
     <!-- Footer -->
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px">
-      <button class="mock-button" style="font-size:10px;padding:6px 14px">Reset to defaults</button>
-      <button class="mock-button" style="font-size:10px;padding:6px 14px;background:var(--primary);color:#000;font-weight:600">Save configuration</button>
+    <div
+      style="
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 8px;
+      "
+    >
+      <button class="mock-button" style="font-size: 10px; padding: 6px 14px">
+        Reset to defaults
+      </button>
+      <button
+        class="mock-button"
+        style="
+          font-size: 10px;
+          padding: 6px 14px;
+          background: var(--primary);
+          color: #000;
+          font-weight: 600;
+        "
+      >
+        Save configuration
+      </button>
     </div>
   </div>
 </div>

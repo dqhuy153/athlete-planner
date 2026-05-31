@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" width="200" height="40">
+  <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+  <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+  <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+  <text x="52" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="-0.5">Athlete</text>
+  <text x="132" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="300" fill="#b0b0b0" letter-spacing="-0.5">Planner</text>
+</svg>

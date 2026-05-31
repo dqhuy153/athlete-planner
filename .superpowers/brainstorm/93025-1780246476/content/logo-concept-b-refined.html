@@ -1,0 +1,175 @@
+<h2>Concept B — Refined Color</h2>
+<p class="subtitle">Same mark, updated text colors for better dark mode readability.</p>
+
+<style>
+  .logo-concept {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid #2a2a2a;
+  }
+  .logo-preview {
+    background: #0a0a0a;
+    border-radius: 12px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+    min-height: 100px;
+  }
+  .logo-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo-preview-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  .context-card {
+    background: #111;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #222;
+  }
+  .context-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  .app-icon-mock {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-mock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+  }
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+</style>
+
+<div class="logo-concept">
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+    <div style="width: 8px; height: 8px; border-radius: 50%; background: #00D4AA;"></div>
+    <span style="font-size: 13px; font-weight: 700; color: #fff;">Concept B — Winner</span>
+  </div>
+
+  <!-- Main preview: dark background (default app theme) -->
+  <div class="logo-preview">
+    <div>
+      <div class="logo-preview-label">Mark (App Icon)</div>
+      <div class="app-icon-mock" style="background: #00D4AA; border-radius: 14px; width: 56px; height: 56px;">
+        <svg viewBox="0 0 40 40" width="40" height="40">
+          <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+          <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+          <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <div class="logo-preview-label">Full Logo (Dark Mode)</div>
+      <div class="logo-preview-row">
+        <svg viewBox="0 0 40 40" width="32" height="32">
+          <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+          <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+          <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+        </svg>
+        <span style="font-family: system-ui; font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: #ffffff;">
+          Athlete <span style="font-weight: 300; color: #b0b0b0;">Planner</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare: old vs new "Planner" color -->
+  <div class="compare-row">
+    <div class="context-card">
+      <div class="context-label">Before — #888 (too dark)</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg viewBox="0 0 40 40" width="24" height="24">
+          <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+          <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+          <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+        </svg>
+        <span style="font-family: system-ui; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: #ffffff;">
+          Athlete <span style="font-weight: 300; color: #888888;">Planner</span>
+        </span>
+      </div>
+    </div>
+    <div class="context-card" style="border-color: rgba(0,212,170,0.3);">
+      <div class="context-label" style="color: #00D4AA;">After — #b0b0b0 (readable)</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg viewBox="0 0 40 40" width="24" height="24">
+          <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+          <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+          <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+        </svg>
+        <span style="font-family: system-ui; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: #ffffff;">
+          Athlete <span style="font-weight: 300; color: #b0b0b0;">Planner</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context mockups -->
+  <div class="compare-row">
+    <div class="context-card">
+      <div class="context-label">In SideNav (Dark)</div>
+      <div style="background: #141414; border-radius: 8px; padding: 12px; border: 1px solid #222;">
+        <div class="header-mock">
+          <svg viewBox="0 0 40 40" width="22" height="22">
+            <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+            <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+            <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: #fff;">
+            Athlete <span style="font-weight: 300; color: #b0b0b0;">Planner</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="context-card">
+      <div class="context-label">Light Mode Preview</div>
+      <div style="background: #fafafa; border-radius: 8px; padding: 12px; border: 1px solid #e5e5e5;">
+        <div class="header-mock">
+          <svg viewBox="0 0 40 40" width="22" height="22">
+            <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+            <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+            <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: #0a0a0a;">
+            Athlete <span style="font-weight: 300; color: #555;">Planner</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 20px; padding: 14px; background: rgba(0,212,170,0.05); border: 1px solid rgba(0,212,170,0.15); border-radius: 10px;">
+    <p style="font-size: 12px; color: #aaa; line-height: 1.6;">
+      <strong style="color: #00D4AA;">Planner</strong> color updated from <code style="color:#888;">#888</code> → <code style="color:#b0b0b0;">#b0b0b0</code> for dark mode readability.
+      Still maintains weight contrast (700 vs 300) and color separation, but now clearly legible.
+      In light mode, "Planner" uses <code style="color:#555;">#555</code> for the same effect.
+    </p>
+  </div>
+</div>

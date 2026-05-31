@@ -1,0 +1,301 @@
+<h2>Athlete Planner — Logo Concepts</h2>
+<p class="subtitle">3 directions for the brand identity. Click to select your favorite.</p>
+
+<style>
+  .logo-concept {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid #2a2a2a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .logo-concept:hover {
+    border-color: #00D4AA;
+    transform: translateY(-2px);
+  }
+  .logo-concept.selected {
+    border-color: #00D4AA;
+    box-shadow: 0 0 0 2px rgba(0,212,170,0.3);
+  }
+  .logo-concept .concept-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #00D4AA;
+    margin-bottom: 16px;
+  }
+  .logo-concept .concept-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .logo-concept .concept-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  .logo-preview {
+    background: #0a0a0a;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    min-height: 100px;
+  }
+  .logo-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-preview-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .logo-context {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .context-card {
+    background: #111;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #222;
+  }
+  .context-card .context-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  .app-icon-mock {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-mock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+  }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT A: Bold Wordmark + Geometric Chevron -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="option" data-choice="a" onclick="toggleSelect(this)">
+  <div class="logo-concept">
+    <div class="concept-label">Concept A</div>
+    <div class="concept-name">Bold Wordmark + Chevron Mark</div>
+    <div class="concept-desc">
+      A sharp upward chevron as the icon — suggests ascent, power, speed.
+      The wordmark uses weight contrast: heavy "ATHLETE" + light "PLANNER".
+      Clean, scalable, works at every size.
+    </div>
+    <div class="logo-preview">
+      <div>
+        <div class="logo-preview-label">Mark (App Icon)</div>
+        <div class="app-icon-mock" style="background: #00D4AA;">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
+            <path d="M4 22L16 6L28 22" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="8" y1="18" x2="24" y2="18" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-preview-label">Full Logo</div>
+        <div class="logo-preview-row">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
+            <path d="M4 22L16 6L28 22" stroke="#00D4AA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="8" y1="18" x2="24" y2="18" stroke="#00D4AA" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 20px; font-weight: 900; letter-spacing: -0.03em; color: #fff;">
+            ATHLETE <span style="font-weight: 300; color: #00D4AA;">PLANNER</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="logo-context">
+      <div class="context-card">
+        <div class="context-label">In Header</div>
+        <div class="header-mock">
+          <svg viewBox="0 0 32 32" width="20" height="20" fill="none">
+            <path d="M4 22L16 6L28 22" stroke="#00D4AA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="8" y1="18" x2="24" y2="18" stroke="#00D4AA" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 14px; font-weight: 900; letter-spacing: -0.02em; color: #fff;">
+            ATHLETE <span style="font-weight: 300; color: #00D4AA;">PLANNER</span>
+          </span>
+        </div>
+      </div>
+      <div class="context-card">
+        <div class="context-label">App Icon</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div class="app-icon-mock" style="background: #00D4AA;">
+            <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
+              <path d="M4 22L16 6L28 22" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="8" y1="18" x2="24" y2="18" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; color: #666;">Works as standalone icon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT B: Solid Square + Knockout A -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="option" data-choice="b" onclick="toggleSelect(this)">
+  <div class="logo-concept">
+    <div class="concept-label">Concept B</div>
+    <div class="concept-name">Solid Mark + Knockout Letter</div>
+    <div class="concept-desc">
+      A bold "A" knocked out of a solid accent-colored square — premium,
+      modern, unmistakable. Like a luxury monogram. The wordmark is
+      clean all-caps with subtle weight contrast.
+    </div>
+    <div class="logo-preview">
+      <div>
+        <div class="logo-preview-label">Mark (App Icon)</div>
+        <div class="app-icon-mock" style="background: #00D4AA; border-radius: 14px;">
+          <svg viewBox="0 0 40 40" width="36" height="36">
+            <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+            <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+            <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-preview-label">Full Logo</div>
+        <div class="logo-preview-row">
+          <svg viewBox="0 0 40 40" width="28" height="28">
+            <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+            <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+            <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 20px; font-weight: 900; letter-spacing: -0.03em; color: #fff;">
+            Athlete <span style="font-weight: 300; color: #888;">Planner</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="logo-context">
+      <div class="context-card">
+        <div class="context-label">In Header</div>
+        <div class="header-mock">
+          <svg viewBox="0 0 40 40" width="22" height="22">
+            <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+            <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+            <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 14px; font-weight: 700; letter-spacing: -0.01em; color: #fff;">
+            Athlete <span style="font-weight: 300; color: #888;">Planner</span>
+          </span>
+        </div>
+      </div>
+      <div class="context-card">
+        <div class="context-label">App Icon</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div class="app-icon-mock" style="background: #00D4AA; border-radius: 14px;">
+            <svg viewBox="0 0 40 40" width="36" height="36">
+              <rect width="40" height="40" rx="8" fill="#00D4AA"/>
+              <path d="M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z" fill="white"/>
+              <rect x="16" y="22.5" width="8" height="3" rx="1" fill="#00D4AA"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; color: #666;">Strong app icon identity</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT C: Inline Accent Mark + Stacked Wordmark -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="option" data-choice="c" onclick="toggleSelect(this)">
+  <div class="logo-concept">
+    <div class="concept-label">Concept C</div>
+    <div class="concept-name">Minimal Icon + Stacked Wordmark</div>
+    <div class="concept-desc">
+      A tiny accent-colored lightning bolt as the icon — universal energy symbol.
+      Stacked wordmark: "ATHLETE" in bold + "PLANNER" in light below.
+      Compact, distinctive, works great in narrow sidebars.
+    </div>
+    <div class="logo-preview">
+      <div>
+        <div class="logo-preview-label">Mark (App Icon)</div>
+        <div class="app-icon-mock" style="background: #1a1a1a; border: 1px solid #333;">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#00D4AA" stroke="#00D4AA" stroke-width="1" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-preview-label">Full Logo</div>
+        <div class="logo-preview-row">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#00D4AA"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 18px; font-weight: 900; letter-spacing: 0.05em; color: #fff;">
+            ATHLETE <span style="font-weight: 300; color: #666;">PLANNER</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="logo-context">
+      <div class="context-card">
+        <div class="context-label">In Header</div>
+        <div class="header-mock">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#00D4AA"/>
+          </svg>
+          <span style="font-family: system-ui; font-size: 13px; font-weight: 900; letter-spacing: 0.04em; color: #fff;">
+            ATHLETE <span style="font-weight: 300; color: #666;">PLANNER</span>
+          </span>
+        </div>
+      </div>
+      <div class="context-card">
+        <div class="context-label">App Icon</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div class="app-icon-mock" style="background: #0a0a0a; border: 1px solid #333;">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#00D4AA"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; color: #666;">Universal energy symbol</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recommendation -->
+<div style="margin-top: 24px; padding: 16px; background: rgba(0,212,170,0.05); border: 1px solid rgba(0,212,170,0.15); border-radius: 12px;">
+  <p style="font-size: 13px; color: #00D4AA; font-weight: 600; margin-bottom: 4px;">My recommendation: Concept B</p>
+  <p style="font-size: 12px; color: #888; line-height: 1.5;">
+    The solid square + knockout A is the strongest option. It works as a standalone app icon (critical for mobile),
+    scales down to favicon size, and has the premium feel that matches the athletic aesthetic.
+    The white A on teal background is immediately recognizable.
+  </p>
+</div>

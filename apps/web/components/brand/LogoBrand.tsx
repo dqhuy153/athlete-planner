@@ -15,33 +15,22 @@ export function LogoBrand({
   interactive = true,
   className,
 }: LogoBrandProps) {
-  // Size configuration
   const sizeConfig = {
-    sm: { container: 'gap-2', mark: 'w-5 h-5', text: 'text-lg' },
-    md: { container: 'gap-2.5', mark: 'w-6 h-6', text: 'text-2xl' },
-    lg: { container: 'gap-3', mark: 'w-8 h-8', text: 'text-3xl' },
+    sm: { container: 'gap-2', mark: 'w-7 h-7', text: 'text-base' },
+    md: { container: 'gap-3', mark: 'w-9 h-9', text: 'text-xl' },
+    lg: { container: 'gap-4', mark: 'w-11 h-11', text: 'text-2xl' },
   }
 
   const config = sizeConfig[size]
 
-  // SVG Mark: Minimalist dumbbell integrated with a circle
   const MarkIcon = () => (
-    <svg
-      viewBox='0 0 24 24'
-      className='w-full h-full'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='1.5'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    >
-      {/* Left plate */}
-      <rect x='2' y='8' width='4' height='8' rx='1' ry='1' />
-      {/* Center bar */}
-      <line x1='7' y1='11' x2='17' y2='11' strokeWidth='2' />
-      <line x1='7' y1='13' x2='17' y2='13' strokeWidth='2' />
-      {/* Right plate */}
-      <rect x='18' y='8' width='4' height='8' rx='1' ry='1' />
+    <svg viewBox='0 0 40 40' className='w-full h-full'>
+      <rect width='40' height='40' rx='8' fill='currentColor' />
+      <path
+        d='M20 6L34 34H30L27.5 29H12.5L10 34H6L20 6ZM13 27H27L20 12L13 27Z'
+        fill='var(--background)'
+      />
+      <rect x='16' y='22.5' width='8' height='3' rx='1' fill='currentColor' />
     </svg>
   )
 
@@ -49,8 +38,8 @@ export function LogoBrand({
     return (
       <div
         className={cn(
-          'text-accent flex items-center justify-center transition-all duration-300',
-          interactive && 'hover:scale-110 hover:rotate-3 active:scale-95',
+          'text-accent flex items-center justify-center transition-transform duration-200 ease-out',
+          interactive && 'hover:scale-110 active:scale-95',
           config.mark,
           className,
         )}
@@ -60,48 +49,39 @@ export function LogoBrand({
     )
   }
 
-  const containerClasses = cn(
-    'flex items-center group transition-all duration-300',
-    interactive && 'hover:scale-102',
-    variant === 'stacked' ? 'flex-col' : 'flex-row',
-    config.container,
-    className,
-  )
-
   return (
-    <div className={containerClasses}>
-      {/* Mark */}
+    <div
+      className={cn(
+        'flex items-center group transition-all duration-200',
+        interactive && 'hover:scale-[1.03]',
+        variant === 'stacked' ? 'flex-col' : 'flex-row',
+        config.container,
+        className,
+      )}
+    >
       <div
         className={cn(
-          'text-accent flex items-center justify-center transition-all duration-300',
-          interactive && 'group-hover:scale-110 group-hover:rotate-2',
+          'text-accent flex items-center justify-center transition-transform duration-200 ease-out',
+          interactive && 'group-hover:scale-110',
           config.mark,
         )}
       >
         <MarkIcon />
       </div>
 
-      {/* Text */}
-      {variant === 'full' || variant === 'stacked' ? (
+      {(variant === 'full' || variant === 'stacked') && (
         <span
           className={cn(
-            'font-black tracking-tight uppercase text-text-primary transition-all duration-300',
-            interactive && 'group-hover:translate-x-1',
+            'font-bold tracking-tight transition-transform duration-200 ease-out',
+            interactive && 'group-hover:translate-x-0.5',
             config.text,
             variant === 'stacked' && 'text-center text-sm',
           )}
         >
-          {variant === 'stacked' ? (
-            <>
-              <div>Athlete</div>
-              <div>Planner</div>
-            </>
-          ) : (
-            'Athlete Planner'
-          )}
+          <span className='text-text-primary'>Athlete</span>{' '}
+          <span className='text-[#b0b0b0]'>Planner</span>
         </span>
-      ) : null}
+      )}
     </div>
   )
 }
-

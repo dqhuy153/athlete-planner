@@ -13,6 +13,7 @@
 ## File Map
 
 **New files:**
+
 - `apps/api/src/modules/exercises/dto/import-exercises.dto.ts` — ImportGymExercisesDto, ImportRunningExercisesDto, ImportPreviewResultItem
 - `apps/api/src/modules/exercises/commands/import-gym-exercises.command.ts`
 - `apps/api/src/modules/exercises/commands/import-gym-exercises.handler.ts`
@@ -24,11 +25,12 @@
 - `apps/admin-web/public/skills/running-exercise-import.md`
 
 **Modified files:**
+
 - `apps/api/src/modules/exercises/exercises.controller.ts` — add two import endpoints
 - `apps/api/src/modules/exercises/exercises.module.ts` — register ImportGymExercisesHandler + ImportRunningExercisesHandler
 - `apps/api/src/modules/admin/commands/ai-generate-gym-exercises.handler.ts` — fix prompt + AIGeneratedGymExercise interface
 - `apps/api/src/modules/admin/commands/ai-generate-running-exercises.handler.ts` — fix prompt + AIGeneratedRunningExercise interface
-- `apps/admin-web/lib/api.ts` — add importGymExercises, importRunningExercises; fix AIGenerated* types
+- `apps/admin-web/lib/api.ts` — add importGymExercises, importRunningExercises; fix AIGenerated\* types
 - `apps/admin-web/components/AIGenerateModal.tsx` — use ExercisePreviewTable + call import API
 - `apps/admin-web/app/(admin)/exercises/page.tsx` — add Import JSON button
 - `docs/MEMORY.md` — add import pipeline section
@@ -39,115 +41,123 @@
 ## Task 1: Backend DTOs + Types
 
 **Files:**
+
 - Create: `apps/api/src/modules/exercises/dto/import-exercises.dto.ts`
 
 - [ ] Create the DTO file with full type definitions:
 
 ```typescript
 // apps/api/src/modules/exercises/dto/import-exercises.dto.ts
-import { IsArray, IsBoolean, IsOptional, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsArray, IsBoolean, IsOptional, ValidateNested } from 'class-validator'
+import { Type } from 'class-transformer'
 
 // ─── Gym Import ───────────────────────────────────────────────────────────────
 
 export class GymInstructionStepsDto {
-  vi: string[];
-  en: string[];
+  vi: string[]
+  en: string[]
 }
 
 export class GymInstructionDto {
-  level: 'BEGINNER' | 'ADVANCED';
-  steps: GymInstructionStepsDto;
-  form_cues: GymInstructionStepsDto;
+  level: 'BEGINNER' | 'ADVANCED'
+  steps: GymInstructionStepsDto
+  form_cues: GymInstructionStepsDto
 }
 
 export class GymExerciseImportItemDto {
-  name: string;
-  vietnameseName: string;
-  targetMuscleGroup: string;
-  secondaryMuscleGroups?: string[];
-  garminExerciseEnum?: string;
-  youtubeEmbedUrl?: string;
-  gifUrl?: string;
-  instructions?: GymInstructionDto[];
+  name: string
+  vietnameseName: string
+  targetMuscleGroup: string
+  secondaryMuscleGroups?: string[]
+  garminExerciseEnum?: string
+  youtubeEmbedUrl?: string
+  gifUrl?: string
+  instructions?: GymInstructionDto[]
 }
 
 export class ImportGymExercisesDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => GymExerciseImportItemDto)
-  exercises: GymExerciseImportItemDto[];
+  exercises: GymExerciseImportItemDto[]
 
   @IsBoolean()
   @IsOptional()
-  dryRun?: boolean;
+  dryRun?: boolean
 }
 
 // ─── Running Import ───────────────────────────────────────────────────────────
 
 export class WorkoutPhaseImportDto {
-  phase: string;
-  type: 'interval' | 'recovery' | 'steady_state' | 'warm_up' | 'cool_down' | 'custom';
-  duration_minutes?: number;
-  distance_meters?: number;
-  hr_zone?: number;
-  hr_min?: number;
-  hr_max?: number;
-  pace_min_per_km?: string;
-  pace_max_per_km?: string;
-  rpe?: number;
-  cadence?: number;
-  power_zone?: number;
-  repeat_count?: number;
-  repeat_rest_seconds?: number;
-  notes?: { vi: string; en: string };
+  phase: string
+  type:
+    | 'interval'
+    | 'recovery'
+    | 'steady_state'
+    | 'warm_up'
+    | 'cool_down'
+    | 'custom'
+  duration_minutes?: number
+  distance_meters?: number
+  hr_zone?: number
+  hr_min?: number
+  hr_max?: number
+  pace_min_per_km?: string
+  pace_max_per_km?: string
+  rpe?: number
+  cadence?: number
+  power_zone?: number
+  repeat_count?: number
+  repeat_rest_seconds?: number
+  notes?: { vi: string; en: string }
 }
 
 export class RunningExerciseImportItemDto {
-  name: string;
-  vietnameseName: string;
-  runningType: string;
-  youtubeEmbedUrl?: string;
-  gifUrl?: string;
-  instructions?: { vi: string[]; en: string[] };
-  workoutStructure?: WorkoutPhaseImportDto[];
+  name: string
+  vietnameseName: string
+  runningType: string
+  youtubeEmbedUrl?: string
+  gifUrl?: string
+  instructions?: { vi: string[]; en: string[] }
+  workoutStructure?: WorkoutPhaseImportDto[]
 }
 
 export class ImportRunningExercisesDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RunningExerciseImportItemDto)
-  exercises: RunningExerciseImportItemDto[];
+  exercises: RunningExerciseImportItemDto[]
 
   @IsBoolean()
   @IsOptional()
-  dryRun?: boolean;
+  dryRun?: boolean
 }
 
 // ─── Preview Response ─────────────────────────────────────────────────────────
 
 export interface ImportPreviewResultItem {
-  index: number;
-  name: string;
-  status: 'new' | 'duplicate' | 'error';
-  existingId?: string;
-  changedFields?: string[];
-  errors?: string[];
+  index: number
+  name: string
+  status: 'new' | 'duplicate' | 'error'
+  existingId?: string
+  changedFields?: string[]
+  errors?: string[]
 }
 
 export interface ImportPreviewResponse {
-  results: ImportPreviewResultItem[];
-  summary: { new: number; duplicate: number; errors: number };
+  results: ImportPreviewResultItem[]
+  summary: { new: number; duplicate: number; errors: number }
 }
 
 export interface ImportExecuteResponse {
-  imported: number;
-  updated: number;
-  skipped: number;
+  imported: number
+  updated: number
+  skipped: number
 }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/api/src/modules/exercises/dto/import-exercises.dto.ts
 git commit -m "feat: add import exercises DTOs and preview response types"
@@ -158,6 +168,7 @@ git commit -m "feat: add import exercises DTOs and preview response types"
 ## Task 2: Backend — ImportGymExercisesHandler
 
 **Files:**
+
 - Create: `apps/api/src/modules/exercises/commands/import-gym-exercises.command.ts`
 - Create: `apps/api/src/modules/exercises/commands/import-gym-exercises.handler.ts`
 
@@ -165,7 +176,7 @@ git commit -m "feat: add import exercises DTOs and preview response types"
 
 ```typescript
 // apps/api/src/modules/exercises/commands/import-gym-exercises.command.ts
-import { GymExerciseImportItemDto } from '../dto/import-exercises.dto';
+import { GymExerciseImportItemDto } from '../dto/import-exercises.dto'
 
 export class ImportGymExercisesCommand {
   constructor(
@@ -179,114 +190,150 @@ export class ImportGymExercisesCommand {
 
 ```typescript
 // apps/api/src/modules/exercises/commands/import-gym-exercises.handler.ts
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
-import { ImportGymExercisesCommand } from './import-gym-exercises.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { PrismaService } from '@athlete-planner/database'
+import { ImportGymExercisesCommand } from './import-gym-exercises.command'
 import {
   ImportPreviewResultItem,
   ImportPreviewResponse,
   ImportExecuteResponse,
-} from '../dto/import-exercises.dto';
+} from '../dto/import-exercises.dto'
 
-const VALID_MUSCLE_GROUPS = ['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs'] as const;
+const VALID_MUSCLE_GROUPS = [
+  'Chest',
+  'Back',
+  'Shoulders',
+  'Arms',
+  'Legs',
+  'Abs',
+] as const
 
 function validateGymExercise(ex: any, index: number): string[] {
-  const errors: string[] = [];
+  const errors: string[] = []
   if (!ex.name || typeof ex.name !== 'string' || ex.name.trim().length < 2) {
-    errors.push('name is required and must be at least 2 characters');
+    errors.push('name is required and must be at least 2 characters')
   }
-  if (!ex.vietnameseName || typeof ex.vietnameseName !== 'string' || ex.vietnameseName.trim().length < 2) {
-    errors.push('vietnameseName is required and must be at least 2 characters');
+  if (
+    !ex.vietnameseName ||
+    typeof ex.vietnameseName !== 'string' ||
+    ex.vietnameseName.trim().length < 2
+  ) {
+    errors.push('vietnameseName is required and must be at least 2 characters')
   }
-  if (!ex.targetMuscleGroup || !VALID_MUSCLE_GROUPS.includes(ex.targetMuscleGroup)) {
-    errors.push(`targetMuscleGroup must be one of: ${VALID_MUSCLE_GROUPS.join(' | ')}`);
+  if (
+    !ex.targetMuscleGroup ||
+    !VALID_MUSCLE_GROUPS.includes(ex.targetMuscleGroup)
+  ) {
+    errors.push(
+      `targetMuscleGroup must be one of: ${VALID_MUSCLE_GROUPS.join(' | ')}`,
+    )
   }
   if (ex.instructions && !Array.isArray(ex.instructions)) {
-    errors.push('instructions must be an array');
+    errors.push('instructions must be an array')
   }
   if (Array.isArray(ex.instructions)) {
     for (const inst of ex.instructions) {
       if (!['BEGINNER', 'ADVANCED'].includes(inst.level)) {
-        errors.push(`instructions[].level must be BEGINNER or ADVANCED, got "${inst.level}"`);
+        errors.push(
+          `instructions[].level must be BEGINNER or ADVANCED, got "${inst.level}"`,
+        )
       }
       if (!inst.steps || !inst.steps.vi || !inst.steps.en) {
-        errors.push('instructions[].steps must have { vi: string[], en: string[] }');
+        errors.push(
+          'instructions[].steps must have { vi: string[], en: string[] }',
+        )
       }
       if (!inst.form_cues || !inst.form_cues.vi || !inst.form_cues.en) {
-        errors.push('instructions[].form_cues must have { vi: string[], en: string[] }');
+        errors.push(
+          'instructions[].form_cues must have { vi: string[], en: string[] }',
+        )
       }
     }
   }
-  return errors;
+  return errors
 }
 
 function diffGymFields(existing: any, incoming: any): string[] {
-  const changed: string[] = [];
-  const fields = ['vietnameseName', 'secondaryMuscleGroups', 'garminExerciseEnum', 'youtubeEmbedUrl', 'gifUrl', 'instructions'];
+  const changed: string[] = []
+  const fields = [
+    'vietnameseName',
+    'secondaryMuscleGroups',
+    'garminExerciseEnum',
+    'youtubeEmbedUrl',
+    'gifUrl',
+    'instructions',
+  ]
   for (const f of fields) {
     if (JSON.stringify(existing[f]) !== JSON.stringify(incoming[f])) {
-      changed.push(f);
+      changed.push(f)
     }
   }
-  return changed;
+  return changed
 }
 
 @CommandHandler(ImportGymExercisesCommand)
 export class ImportGymExercisesHandler implements ICommandHandler<ImportGymExercisesCommand> {
   constructor(private readonly prisma: PrismaService) {}
 
-  async execute(command: ImportGymExercisesCommand): Promise<ImportPreviewResponse | ImportExecuteResponse> {
-    const { exercises, dryRun } = command;
+  async execute(
+    command: ImportGymExercisesCommand,
+  ): Promise<ImportPreviewResponse | ImportExecuteResponse> {
+    const { exercises, dryRun } = command
 
     // 1. Validate all items
-    const validationResults: ImportPreviewResultItem[] = exercises.map((ex, index) => {
-      const errors = validateGymExercise(ex, index);
-      return {
-        index,
-        name: ex.name || `Row ${index + 1}`,
-        status: errors.length > 0 ? 'error' : 'new',
-        errors,
-      };
-    });
+    const validationResults: ImportPreviewResultItem[] = exercises.map(
+      (ex, index) => {
+        const errors = validateGymExercise(ex, index)
+        return {
+          index,
+          name: ex.name || `Row ${index + 1}`,
+          status: errors.length > 0 ? 'error' : 'new',
+          errors,
+        }
+      },
+    )
 
     // 2. For valid items, check for duplicates
-    const validItems = validationResults.filter((r) => r.status !== 'error');
+    const validItems = validationResults.filter(r => r.status !== 'error')
     if (validItems.length > 0) {
-      const names = validItems.map((r) => exercises[r.index].name.toLowerCase());
+      const names = validItems.map(r => exercises[r.index].name.toLowerCase())
       const existing = await this.prisma.gymExerciseMaster.findMany({
         where: { name: { in: names, mode: 'insensitive' } },
-      });
-      const existingMap = new Map(existing.map((e) => [e.name.toLowerCase(), e]));
+      })
+      const existingMap = new Map(existing.map(e => [e.name.toLowerCase(), e]))
 
       for (const result of validItems) {
-        const ex = exercises[result.index];
-        const match = existingMap.get(ex.name.toLowerCase());
+        const ex = exercises[result.index]
+        const match = existingMap.get(ex.name.toLowerCase())
         if (match && match.targetMuscleGroup === ex.targetMuscleGroup) {
-          result.status = 'duplicate';
-          result.existingId = match.id;
-          result.changedFields = diffGymFields(match, ex);
+          result.status = 'duplicate'
+          result.existingId = match.id
+          result.changedFields = diffGymFields(match, ex)
         }
       }
     }
 
     const summary = {
-      new: validationResults.filter((r) => r.status === 'new').length,
-      duplicate: validationResults.filter((r) => r.status === 'duplicate').length,
-      errors: validationResults.filter((r) => r.status === 'error').length,
-    };
+      new: validationResults.filter(r => r.status === 'new').length,
+      duplicate: validationResults.filter(r => r.status === 'duplicate').length,
+      errors: validationResults.filter(r => r.status === 'error').length,
+    }
 
     if (dryRun) {
-      return { results: validationResults, summary };
+      return { results: validationResults, summary }
     }
 
     // 3. Execute upsert for new + duplicate items
-    let imported = 0;
-    let updated = 0;
-    let skipped = 0;
+    let imported = 0
+    let updated = 0
+    let skipped = 0
 
     for (const result of validationResults) {
-      if (result.status === 'error') { skipped++; continue; }
-      const ex = exercises[result.index];
+      if (result.status === 'error') {
+        skipped++
+        continue
+      }
+      const ex = exercises[result.index]
       const data = {
         name: ex.name,
         vietnameseName: ex.vietnameseName,
@@ -296,23 +343,27 @@ export class ImportGymExercisesHandler implements ICommandHandler<ImportGymExerc
         youtubeEmbedUrl: ex.youtubeEmbedUrl ?? null,
         gifUrl: ex.gifUrl ?? null,
         instructions: (ex.instructions ?? []) as any,
-      };
+      }
 
       if (result.status === 'duplicate' && result.existingId) {
-        await this.prisma.gymExerciseMaster.update({ where: { id: result.existingId }, data });
-        updated++;
+        await this.prisma.gymExerciseMaster.update({
+          where: { id: result.existingId },
+          data,
+        })
+        updated++
       } else {
-        await this.prisma.gymExerciseMaster.create({ data });
-        imported++;
+        await this.prisma.gymExerciseMaster.create({ data })
+        imported++
       }
     }
 
-    return { imported, updated, skipped };
+    return { imported, updated, skipped }
   }
 }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/api/src/modules/exercises/commands/import-gym-exercises.command.ts \
         apps/api/src/modules/exercises/commands/import-gym-exercises.handler.ts
@@ -324,6 +375,7 @@ git commit -m "feat: add ImportGymExercisesHandler with validation and duplicate
 ## Task 3: Backend — ImportRunningExercisesHandler
 
 **Files:**
+
 - Create: `apps/api/src/modules/exercises/commands/import-running-exercises.command.ts`
 - Create: `apps/api/src/modules/exercises/commands/import-running-exercises.handler.ts`
 
@@ -331,7 +383,7 @@ git commit -m "feat: add ImportGymExercisesHandler with validation and duplicate
 
 ```typescript
 // apps/api/src/modules/exercises/commands/import-running-exercises.command.ts
-import { RunningExerciseImportItemDto } from '../dto/import-exercises.dto';
+import { RunningExerciseImportItemDto } from '../dto/import-exercises.dto'
 
 export class ImportRunningExercisesCommand {
   constructor(
@@ -345,109 +397,137 @@ export class ImportRunningExercisesCommand {
 
 ```typescript
 // apps/api/src/modules/exercises/commands/import-running-exercises.handler.ts
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@athlete-planner/database';
-import { ImportRunningExercisesCommand } from './import-running-exercises.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { PrismaService } from '@athlete-planner/database'
+import { ImportRunningExercisesCommand } from './import-running-exercises.command'
 import {
   ImportPreviewResultItem,
   ImportPreviewResponse,
   ImportExecuteResponse,
-} from '../dto/import-exercises.dto';
+} from '../dto/import-exercises.dto'
 
-const VALID_RUNNING_TYPES = ['Interval', 'Easy', 'Tempo', 'Long_Run'] as const;
-const VALID_PHASE_TYPES = ['interval', 'recovery', 'steady_state', 'warm_up', 'cool_down', 'custom'] as const;
+const VALID_RUNNING_TYPES = ['Interval', 'Easy', 'Tempo', 'Long_Run'] as const
+const VALID_PHASE_TYPES = [
+  'interval',
+  'recovery',
+  'steady_state',
+  'warm_up',
+  'cool_down',
+  'custom',
+] as const
 
 function validateRunningExercise(ex: any, index: number): string[] {
-  const errors: string[] = [];
+  const errors: string[] = []
   if (!ex.name || typeof ex.name !== 'string' || ex.name.trim().length < 2) {
-    errors.push('name is required and must be at least 2 characters');
+    errors.push('name is required and must be at least 2 characters')
   }
-  if (!ex.vietnameseName || typeof ex.vietnameseName !== 'string' || ex.vietnameseName.trim().length < 2) {
-    errors.push('vietnameseName is required and must be at least 2 characters');
+  if (
+    !ex.vietnameseName ||
+    typeof ex.vietnameseName !== 'string' ||
+    ex.vietnameseName.trim().length < 2
+  ) {
+    errors.push('vietnameseName is required and must be at least 2 characters')
   }
   if (!ex.runningType || !VALID_RUNNING_TYPES.includes(ex.runningType)) {
-    errors.push(`runningType must be one of: ${VALID_RUNNING_TYPES.join(' | ')}`);
+    errors.push(
+      `runningType must be one of: ${VALID_RUNNING_TYPES.join(' | ')}`,
+    )
   }
   if (ex.workoutStructure && !Array.isArray(ex.workoutStructure)) {
-    errors.push('workoutStructure must be an array');
+    errors.push('workoutStructure must be an array')
   }
   if (Array.isArray(ex.workoutStructure)) {
     for (const phase of ex.workoutStructure) {
       if (!phase.phase || typeof phase.phase !== 'string') {
-        errors.push('workoutStructure[].phase (name) is required');
+        errors.push('workoutStructure[].phase (name) is required')
       }
       if (!phase.type || !VALID_PHASE_TYPES.includes(phase.type)) {
-        errors.push(`workoutStructure[].type must be one of: ${VALID_PHASE_TYPES.join(' | ')}, got "${phase.type}"`);
+        errors.push(
+          `workoutStructure[].type must be one of: ${VALID_PHASE_TYPES.join(' | ')}, got "${phase.type}"`,
+        )
       }
     }
   }
-  return errors;
+  return errors
 }
 
 function diffRunningFields(existing: any, incoming: any): string[] {
-  const changed: string[] = [];
-  const fields = ['vietnameseName', 'youtubeEmbedUrl', 'gifUrl', 'instructions', 'workoutStructure'];
+  const changed: string[] = []
+  const fields = [
+    'vietnameseName',
+    'youtubeEmbedUrl',
+    'gifUrl',
+    'instructions',
+    'workoutStructure',
+  ]
   for (const f of fields) {
     if (JSON.stringify(existing[f]) !== JSON.stringify(incoming[f])) {
-      changed.push(f);
+      changed.push(f)
     }
   }
-  return changed;
+  return changed
 }
 
 @CommandHandler(ImportRunningExercisesCommand)
 export class ImportRunningExercisesHandler implements ICommandHandler<ImportRunningExercisesCommand> {
   constructor(private readonly prisma: PrismaService) {}
 
-  async execute(command: ImportRunningExercisesCommand): Promise<ImportPreviewResponse | ImportExecuteResponse> {
-    const { exercises, dryRun } = command;
+  async execute(
+    command: ImportRunningExercisesCommand,
+  ): Promise<ImportPreviewResponse | ImportExecuteResponse> {
+    const { exercises, dryRun } = command
 
-    const validationResults: ImportPreviewResultItem[] = exercises.map((ex, index) => {
-      const errors = validateRunningExercise(ex, index);
-      return {
-        index,
-        name: ex.name || `Row ${index + 1}`,
-        status: errors.length > 0 ? 'error' : 'new',
-        errors,
-      };
-    });
+    const validationResults: ImportPreviewResultItem[] = exercises.map(
+      (ex, index) => {
+        const errors = validateRunningExercise(ex, index)
+        return {
+          index,
+          name: ex.name || `Row ${index + 1}`,
+          status: errors.length > 0 ? 'error' : 'new',
+          errors,
+        }
+      },
+    )
 
-    const validItems = validationResults.filter((r) => r.status !== 'error');
+    const validItems = validationResults.filter(r => r.status !== 'error')
     if (validItems.length > 0) {
-      const names = validItems.map((r) => exercises[r.index].name.toLowerCase());
+      const names = validItems.map(r => exercises[r.index].name.toLowerCase())
       const existing = await this.prisma.runningExerciseMaster.findMany({
         where: { name: { in: names, mode: 'insensitive' } },
-      });
-      const existingMap = new Map(existing.map((e) => [e.name.toLowerCase(), e]));
+      })
+      const existingMap = new Map(existing.map(e => [e.name.toLowerCase(), e]))
 
       for (const result of validItems) {
-        const ex = exercises[result.index];
-        const match = existingMap.get(ex.name.toLowerCase());
+        const ex = exercises[result.index]
+        const match = existingMap.get(ex.name.toLowerCase())
         if (match && match.runningType === ex.runningType) {
-          result.status = 'duplicate';
-          result.existingId = match.id;
-          result.changedFields = diffRunningFields(match, ex);
+          result.status = 'duplicate'
+          result.existingId = match.id
+          result.changedFields = diffRunningFields(match, ex)
         }
       }
     }
 
     const summary = {
-      new: validationResults.filter((r) => r.status === 'new').length,
-      duplicate: validationResults.filter((r) => r.status === 'duplicate').length,
-      errors: validationResults.filter((r) => r.status === 'error').length,
-    };
-
-    if (dryRun) {
-      return { results: validationResults, summary };
+      new: validationResults.filter(r => r.status === 'new').length,
+      duplicate: validationResults.filter(r => r.status === 'duplicate').length,
+      errors: validationResults.filter(r => r.status === 'error').length,
     }
 
-    let imported = 0;
-    let updated = 0;
-    let skipped = 0;
+    if (dryRun) {
+      return { results: validationResults, summary }
+    }
+
+    let imported = 0
+    let updated = 0
+    let skipped = 0
 
     for (const result of validationResults) {
-      if (result.status === 'error') { skipped++; continue; }
-      const ex = exercises[result.index];
+      if (result.status === 'error') {
+        skipped++
+        continue
+      }
+      const ex = exercises[result.index]
       const data = {
         name: ex.name,
         vietnameseName: ex.vietnameseName,
@@ -456,23 +536,27 @@ export class ImportRunningExercisesHandler implements ICommandHandler<ImportRunn
         gifUrl: ex.gifUrl ?? null,
         instructions: (ex.instructions ?? { vi: [], en: [] }) as any,
         workoutStructure: (ex.workoutStructure ?? []) as any,
-      };
+      }
 
       if (result.status === 'duplicate' && result.existingId) {
-        await this.prisma.runningExerciseMaster.update({ where: { id: result.existingId }, data });
-        updated++;
+        await this.prisma.runningExerciseMaster.update({
+          where: { id: result.existingId },
+          data,
+        })
+        updated++
       } else {
-        await this.prisma.runningExerciseMaster.create({ data });
-        imported++;
+        await this.prisma.runningExerciseMaster.create({ data })
+        imported++
       }
     }
 
-    return { imported, updated, skipped };
+    return { imported, updated, skipped }
   }
 }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/api/src/modules/exercises/commands/import-running-exercises.command.ts \
         apps/api/src/modules/exercises/commands/import-running-exercises.handler.ts
@@ -484,6 +568,7 @@ git commit -m "feat: add ImportRunningExercisesHandler with validation and dupli
 ## Task 4: Backend — Register Handlers + Add Endpoints
 
 **Files:**
+
 - Modify: `apps/api/src/modules/exercises/exercises.module.ts`
 - Modify: `apps/api/src/modules/exercises/exercises.controller.ts`
 
@@ -491,8 +576,8 @@ git commit -m "feat: add ImportRunningExercisesHandler with validation and dupli
 
 ```typescript
 // Add imports at top of exercises.module.ts:
-import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handler';
-import { ImportRunningExercisesHandler } from './commands/import-running-exercises.handler';
+import { ImportGymExercisesHandler } from './commands/import-gym-exercises.handler'
+import { ImportRunningExercisesHandler } from './commands/import-running-exercises.handler'
 
 // Update CommandHandlers array to add:
 const CommandHandlers = [
@@ -503,7 +588,7 @@ const CommandHandlers = [
   ToggleExerciseActiveHandler,
   ImportGymExercisesHandler,
   ImportRunningExercisesHandler,
-];
+]
 ```
 
 - [ ] Update `exercises.controller.ts` — add import endpoints after existing `@Post('running')`:
@@ -539,12 +624,15 @@ async importRunningExercises(
 ```
 
 - [ ] Verify API compiles:
+
 ```bash
 pnpm --filter api build 2>&1 | tail -10
 ```
+
 Expected: Build completes with no TypeScript errors.
 
 - [ ] Commit:
+
 ```bash
 git add apps/api/src/modules/exercises/exercises.module.ts \
         apps/api/src/modules/exercises/exercises.controller.ts
@@ -556,42 +644,45 @@ git commit -m "feat: register import handlers and add POST /exercises/gym|runnin
 ## Task 5: Fix AI Generate Gym Handler
 
 **Files:**
+
 - Modify: `apps/api/src/modules/admin/commands/ai-generate-gym-exercises.handler.ts`
 
 - [ ] Replace the entire file:
 
 ```typescript
 // apps/api/src/modules/admin/commands/ai-generate-gym-exercises.handler.ts
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { AIService } from '../../shared/ai.service';
-import { AIGenerateGymExercisesCommand } from './ai-generate-gym-exercises.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { AIService } from '../../shared/ai.service'
+import { AIGenerateGymExercisesCommand } from './ai-generate-gym-exercises.command'
 
 export interface AIGeneratedGymExercise {
-  name: string;
-  vietnameseName: string;
-  targetMuscleGroup: 'Chest' | 'Back' | 'Shoulders' | 'Arms' | 'Legs' | 'Abs';
-  secondaryMuscleGroups: string[];
-  garminExerciseEnum?: string | null;
+  name: string
+  vietnameseName: string
+  targetMuscleGroup: 'Chest' | 'Back' | 'Shoulders' | 'Arms' | 'Legs' | 'Abs'
+  secondaryMuscleGroups: string[]
+  garminExerciseEnum?: string | null
   instructions: Array<{
-    level: 'BEGINNER' | 'ADVANCED';
-    steps: { vi: string[]; en: string[] };
-    form_cues: { vi: string[]; en: string[] };
-  }>;
+    level: 'BEGINNER' | 'ADVANCED'
+    steps: { vi: string[]; en: string[] }
+    form_cues: { vi: string[]; en: string[] }
+  }>
 }
 
 @CommandHandler(AIGenerateGymExercisesCommand)
-export class AIGenerateGymExercisesHandler
-  implements ICommandHandler<AIGenerateGymExercisesCommand>
-{
+export class AIGenerateGymExercisesHandler implements ICommandHandler<AIGenerateGymExercisesCommand> {
   constructor(private readonly aiService: AIService) {}
 
-  async execute(command: AIGenerateGymExercisesCommand): Promise<AIGeneratedGymExercise[]> {
-    const { prompt, count, muscleGroup } = command;
+  async execute(
+    command: AIGenerateGymExercisesCommand,
+  ): Promise<AIGeneratedGymExercise[]> {
+    const { prompt, count, muscleGroup } = command
 
-    const muscleGroups = ['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs'];
-    const muscleFilter = muscleGroup ? `Focus on muscle group: ${muscleGroup}.` : '';
+    const muscleGroups = ['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs']
+    const muscleFilter = muscleGroup
+      ? `Focus on muscle group: ${muscleGroup}.`
+      : ''
 
-    const systemPrompt = `You are a bilingual Vietnamese/English strength and conditioning coach. Generate gym exercise data following the EXACT JSON schema. All text fields must be in BOTH Vietnamese (vi) and English (en).`;
+    const systemPrompt = `You are a bilingual Vietnamese/English strength and conditioning coach. Generate gym exercise data following the EXACT JSON schema. All text fields must be in BOTH Vietnamese (vi) and English (en).`
 
     const userPrompt = `Generate ${count} gym exercises based on: "${prompt}". ${muscleFilter}
 
@@ -633,26 +724,29 @@ RULES:
 - steps.vi and steps.en must have the SAME number of items (3-5 items each)
 - form_cues.vi and form_cues.en must have the SAME number of items (2-4 items each)
 - targetMuscleGroup must be exactly one of the listed values
-- No markdown, no explanation, only the JSON array.`;
+- No markdown, no explanation, only the JSON array.`
 
     const result = await this.aiService.generateText({
       prompt: userPrompt,
       system: systemPrompt,
-    });
+    })
 
     try {
-      const jsonMatch = result.text.match(/\[[\s\S]*\]/);
-      if (!jsonMatch) throw new Error('No JSON array found in response');
-      const exercises: AIGeneratedGymExercise[] = JSON.parse(jsonMatch[0]);
-      return exercises.slice(0, count);
+      const jsonMatch = result.text.match(/\[[\s\S]*\]/)
+      if (!jsonMatch) throw new Error('No JSON array found in response')
+      const exercises: AIGeneratedGymExercise[] = JSON.parse(jsonMatch[0])
+      return exercises.slice(0, count)
     } catch {
-      throw new Error(`Failed to parse AI response: ${result.text.slice(0, 200)}`);
+      throw new Error(
+        `Failed to parse AI response: ${result.text.slice(0, 200)}`,
+      )
     }
   }
 }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/api/src/modules/admin/commands/ai-generate-gym-exercises.handler.ts
 git commit -m "fix: update gym AI generate to return bilingual BEGINNER+ADVANCED instructions"
@@ -663,50 +757,59 @@ git commit -m "fix: update gym AI generate to return bilingual BEGINNER+ADVANCED
 ## Task 6: Fix AI Generate Running Handler
 
 **Files:**
+
 - Modify: `apps/api/src/modules/admin/commands/ai-generate-running-exercises.handler.ts`
 
 - [ ] Replace the entire file:
 
 ```typescript
 // apps/api/src/modules/admin/commands/ai-generate-running-exercises.handler.ts
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { AIService } from '../../shared/ai.service';
-import { AIGenerateRunningExercisesCommand } from './ai-generate-running-exercises.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { AIService } from '../../shared/ai.service'
+import { AIGenerateRunningExercisesCommand } from './ai-generate-running-exercises.command'
 
 export interface AIGeneratedRunningExercise {
-  name: string;
-  vietnameseName: string;
-  runningType: 'Interval' | 'Easy' | 'Tempo' | 'Long_Run';
-  instructions: { vi: string[]; en: string[] };
+  name: string
+  vietnameseName: string
+  runningType: 'Interval' | 'Easy' | 'Tempo' | 'Long_Run'
+  instructions: { vi: string[]; en: string[] }
   workoutStructure: Array<{
-    phase: string;
-    type: 'interval' | 'recovery' | 'steady_state' | 'warm_up' | 'cool_down' | 'custom';
-    duration_minutes?: number;
-    distance_meters?: number;
-    hr_zone?: number;
-    pace_min_per_km?: string;
-    pace_max_per_km?: string;
-    rpe?: number;
-    cadence?: number;
-    repeat_count?: number;
-    repeat_rest_seconds?: number;
-    notes?: { vi: string; en: string };
-  }>;
+    phase: string
+    type:
+      | 'interval'
+      | 'recovery'
+      | 'steady_state'
+      | 'warm_up'
+      | 'cool_down'
+      | 'custom'
+    duration_minutes?: number
+    distance_meters?: number
+    hr_zone?: number
+    pace_min_per_km?: string
+    pace_max_per_km?: string
+    rpe?: number
+    cadence?: number
+    repeat_count?: number
+    repeat_rest_seconds?: number
+    notes?: { vi: string; en: string }
+  }>
 }
 
 @CommandHandler(AIGenerateRunningExercisesCommand)
-export class AIGenerateRunningExercisesHandler
-  implements ICommandHandler<AIGenerateRunningExercisesCommand>
-{
+export class AIGenerateRunningExercisesHandler implements ICommandHandler<AIGenerateRunningExercisesCommand> {
   constructor(private readonly aiService: AIService) {}
 
-  async execute(command: AIGenerateRunningExercisesCommand): Promise<AIGeneratedRunningExercise[]> {
-    const { prompt, count, runningType } = command;
+  async execute(
+    command: AIGenerateRunningExercisesCommand,
+  ): Promise<AIGeneratedRunningExercise[]> {
+    const { prompt, count, runningType } = command
 
-    const runningTypes = ['Interval', 'Easy', 'Tempo', 'Long_Run'];
-    const typeFilter = runningType ? `Focus on running type: ${runningType}.` : '';
+    const runningTypes = ['Interval', 'Easy', 'Tempo', 'Long_Run']
+    const typeFilter = runningType
+      ? `Focus on running type: ${runningType}.`
+      : ''
 
-    const systemPrompt = `You are a bilingual Vietnamese/English running coach. Generate running workout data following the EXACT JSON schema with complete workout phase details.`;
+    const systemPrompt = `You are a bilingual Vietnamese/English running coach. Generate running workout data following the EXACT JSON schema with complete workout phase details.`
 
     const userPrompt = `Generate ${count} running workouts based on: "${prompt}". ${typeFilter}
 
@@ -747,26 +850,29 @@ RULES:
 - rpe is 1-10
 - For Interval workouts, include repeat_count and repeat_rest_seconds on interval phases
 - Each workout must have at least 3 phases: warm_up, main phase(s), cool_down
-- No markdown, no explanation, only the JSON array.`;
+- No markdown, no explanation, only the JSON array.`
 
     const result = await this.aiService.generateText({
       prompt: userPrompt,
       system: systemPrompt,
-    });
+    })
 
     try {
-      const jsonMatch = result.text.match(/\[[\s\S]*\]/);
-      if (!jsonMatch) throw new Error('No JSON array found in response');
-      const exercises: AIGeneratedRunningExercise[] = JSON.parse(jsonMatch[0]);
-      return exercises.slice(0, count);
+      const jsonMatch = result.text.match(/\[[\s\S]*\]/)
+      if (!jsonMatch) throw new Error('No JSON array found in response')
+      const exercises: AIGeneratedRunningExercise[] = JSON.parse(jsonMatch[0])
+      return exercises.slice(0, count)
     } catch {
-      throw new Error(`Failed to parse AI response: ${result.text.slice(0, 200)}`);
+      throw new Error(
+        `Failed to parse AI response: ${result.text.slice(0, 200)}`,
+      )
     }
   }
 }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/api/src/modules/admin/commands/ai-generate-running-exercises.handler.ts
 git commit -m "fix: update running AI generate to return full WorkoutPhase structure with bilingual notes"
@@ -777,6 +883,7 @@ git commit -m "fix: update running AI generate to return full WorkoutPhase struc
 ## Task 7: Frontend — Update api.ts
 
 **Files:**
+
 - Modify: `apps/admin-web/lib/api.ts`
 
 - [ ] Add import API functions and update AI generated types. Find the `AIGeneratedGymExercise` interface (around line 337) and replace it and the two AI generate functions through the end of that section:
@@ -787,46 +894,52 @@ git commit -m "fix: update running AI generate to return full WorkoutPhase struc
 // ── AI Generate types (canonical bilingual format) ────────────────────────────
 
 export interface GymInstructionSteps {
-  vi: string[];
-  en: string[];
+  vi: string[]
+  en: string[]
 }
 
 export interface GymInstruction {
-  level: 'BEGINNER' | 'ADVANCED';
-  steps: GymInstructionSteps;
-  form_cues: GymInstructionSteps;
+  level: 'BEGINNER' | 'ADVANCED'
+  steps: GymInstructionSteps
+  form_cues: GymInstructionSteps
 }
 
 export interface AIGeneratedGymExercise {
-  name: string;
-  vietnameseName: string;
-  targetMuscleGroup: string;
-  secondaryMuscleGroups: string[];
-  garminExerciseEnum?: string | null;
-  instructions: GymInstruction[];
+  name: string
+  vietnameseName: string
+  targetMuscleGroup: string
+  secondaryMuscleGroups: string[]
+  garminExerciseEnum?: string | null
+  instructions: GymInstruction[]
 }
 
 export interface WorkoutPhaseImport {
-  phase: string;
-  type: 'interval' | 'recovery' | 'steady_state' | 'warm_up' | 'cool_down' | 'custom';
-  duration_minutes?: number;
-  distance_meters?: number;
-  hr_zone?: number;
-  pace_min_per_km?: string;
-  pace_max_per_km?: string;
-  rpe?: number;
-  cadence?: number;
-  repeat_count?: number;
-  repeat_rest_seconds?: number;
-  notes?: { vi: string; en: string };
+  phase: string
+  type:
+    | 'interval'
+    | 'recovery'
+    | 'steady_state'
+    | 'warm_up'
+    | 'cool_down'
+    | 'custom'
+  duration_minutes?: number
+  distance_meters?: number
+  hr_zone?: number
+  pace_min_per_km?: string
+  pace_max_per_km?: string
+  rpe?: number
+  cadence?: number
+  repeat_count?: number
+  repeat_rest_seconds?: number
+  notes?: { vi: string; en: string }
 }
 
 export interface AIGeneratedRunningExercise {
-  name: string;
-  vietnameseName: string;
-  runningType: string;
-  instructions: { vi: string[]; en: string[] };
-  workoutStructure: WorkoutPhaseImport[];
+  name: string
+  vietnameseName: string
+  runningType: string
+  instructions: { vi: string[]; en: string[] }
+  workoutStructure: WorkoutPhaseImport[]
 }
 
 export function aiGenerateGymExercises(
@@ -836,7 +949,7 @@ export function aiGenerateGymExercises(
   return apiFetch('/admin/exercises/ai-generate/gym', accessToken, {
     method: 'POST',
     body: JSON.stringify({ count: 5, ...data }),
-  });
+  })
 }
 
 export function aiGenerateRunningExercises(
@@ -846,29 +959,29 @@ export function aiGenerateRunningExercises(
   return apiFetch('/admin/exercises/ai-generate/running', accessToken, {
     method: 'POST',
     body: JSON.stringify({ count: 5, ...data }),
-  });
+  })
 }
 
 // ── Import Pipeline types ─────────────────────────────────────────────────────
 
 export interface ImportPreviewResultItem {
-  index: number;
-  name: string;
-  status: 'new' | 'duplicate' | 'error';
-  existingId?: string;
-  changedFields?: string[];
-  errors?: string[];
+  index: number
+  name: string
+  status: 'new' | 'duplicate' | 'error'
+  existingId?: string
+  changedFields?: string[]
+  errors?: string[]
 }
 
 export interface ImportPreviewResponse {
-  results: ImportPreviewResultItem[];
-  summary: { new: number; duplicate: number; errors: number };
+  results: ImportPreviewResultItem[]
+  summary: { new: number; duplicate: number; errors: number }
 }
 
 export interface ImportExecuteResponse {
-  imported: number;
-  updated: number;
-  skipped: number;
+  imported: number
+  updated: number
+  skipped: number
 }
 
 export function importGymExercises(
@@ -879,7 +992,7 @@ export function importGymExercises(
   return apiFetch(`/exercises/gym/import?dryRun=${dryRun}`, accessToken, {
     method: 'POST',
     body: JSON.stringify({ exercises }),
-  });
+  })
 }
 
 export function importRunningExercises(
@@ -890,11 +1003,12 @@ export function importRunningExercises(
   return apiFetch(`/exercises/running/import?dryRun=${dryRun}`, accessToken, {
     method: 'POST',
     body: JSON.stringify({ exercises }),
-  });
+  })
 }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/admin-web/lib/api.ts
 git commit -m "feat: add import API functions and update AI generated exercise types to bilingual canonical format"
@@ -905,6 +1019,7 @@ git commit -m "feat: add import API functions and update AI generated exercise t
 ## Task 8: Frontend — ExercisePreviewTable Component
 
 **Files:**
+
 - Create: `apps/admin-web/components/exercises/ExercisePreviewTable.tsx`
 
 - [ ] Create the shared preview table component:
@@ -1271,6 +1386,7 @@ export function ExercisePreviewTable({
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/admin-web/components/exercises/ExercisePreviewTable.tsx
 git commit -m "feat: add shared ExercisePreviewTable component with inline editing and status badges"
@@ -1281,6 +1397,7 @@ git commit -m "feat: add shared ExercisePreviewTable component with inline editi
 ## Task 9: Frontend — ImportJSONModal
 
 **Files:**
+
 - Create: `apps/admin-web/components/exercises/ImportJSONModal.tsx`
 
 - [ ] Create the import modal:
@@ -1596,6 +1713,7 @@ export function ImportJSONModal({ initialTab, accessToken, onClose, onImported }
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/admin-web/components/exercises/ImportJSONModal.tsx
 git commit -m "feat: add ImportJSONModal with file upload, dry-run validation, preview, and bulk import"
@@ -1606,6 +1724,7 @@ git commit -m "feat: add ImportJSONModal with file upload, dry-run validation, p
 ## Task 10: Frontend — Update AIGenerateModal
 
 **Files:**
+
 - Modify: `apps/admin-web/components/AIGenerateModal.tsx`
 
 - [ ] Replace `AIGenerateModal.tsx` entirely to use the shared pipeline:
@@ -1840,6 +1959,7 @@ export { AIGenerateModal };
 ```
 
 - [ ] Commit:
+
 ```bash
 git add apps/admin-web/components/AIGenerateModal.tsx
 git commit -m "feat: update AIGenerateModal to use shared ExercisePreviewTable and import pipeline"
@@ -1850,51 +1970,64 @@ git commit -m "feat: update AIGenerateModal to use shared ExercisePreviewTable a
 ## Task 11: Frontend — Import JSON Button on Exercises Page
 
 **Files:**
+
 - Modify: `apps/admin-web/app/(admin)/exercises/page.tsx`
 
 - [ ] Add Import JSON button and modal state. Add these changes to `exercises/page.tsx`:
 
 At the top, add to imports:
+
 ```typescript
-import { Upload } from 'lucide-react';
-import { ImportJSONModal } from '@/components/exercises/ImportJSONModal';
+import { Upload } from 'lucide-react'
+import { ImportJSONModal } from '@/components/exercises/ImportJSONModal'
 ```
 
 In the component state section, add after `const [showAIModal, setShowAIModal] = useState(false);`:
+
 ```typescript
-const [showImportModal, setShowImportModal] = useState(false);
+const [showImportModal, setShowImportModal] = useState(false)
 ```
 
 Find the Generate button in the JSX (look for `setShowAIModal(true)`) and add the Import button right after it:
+
 ```tsx
 <button
   onClick={() => setShowImportModal(true)}
-  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors"
+  className='inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors'
 >
-  <Upload className="h-4 w-4" aria-hidden />
+  <Upload className='h-4 w-4' aria-hidden />
   Import JSON
 </button>
 ```
 
 Find where `{showAIModal && <AIGenerateModal ...>}` is rendered and add after it:
+
 ```tsx
-{showImportModal && session?.accessToken && (
-  <ImportJSONModal
-    initialTab={tab}
-    accessToken={session.accessToken}
-    onClose={() => setShowImportModal(false)}
-    onImported={() => { setShowImportModal(false); loadExercises(); }}
-  />
-)}
+{
+  showImportModal && session?.accessToken && (
+    <ImportJSONModal
+      initialTab={tab}
+      accessToken={session.accessToken}
+      onClose={() => setShowImportModal(false)}
+      onImported={() => {
+        setShowImportModal(false)
+        loadExercises()
+      }}
+    />
+  )
+}
 ```
 
 - [ ] Verify the admin web compiles:
+
 ```bash
 pnpm --filter admin-web build 2>&1 | tail -15
 ```
+
 Expected: Compiled successfully.
 
 - [ ] Commit:
+
 ```bash
 git add apps/admin-web/app/\(admin\)/exercises/page.tsx
 git commit -m "feat: add Import JSON button to exercises page"
@@ -1905,6 +2038,7 @@ git commit -m "feat: add Import JSON button to exercises page"
 ## Task 12: Skill Files
 
 **Files:**
+
 - Create: `apps/admin-web/public/skills/gym-exercise-import.md`
 - Create: `apps/admin-web/public/skills/running-exercise-import.md`
 
@@ -1914,7 +2048,7 @@ git commit -m "feat: add Import JSON button to exercises page"
 # Gym Exercise JSON Import Skill
 
 Use this prompt with ChatGPT, Claude, or Gemini to generate gym exercise data
-in the correct format for importing into the Sport Notebook Planner admin.
+in the correct format for importing into the Athlete Planner Planner admin.
 
 ---
 
@@ -1929,48 +2063,49 @@ All instruction text must be written in BOTH Vietnamese (vi) and English (en).
 ## User Prompt Template
 
 Copy and customize this prompt, then paste it into any AI chat:
-
 ```
+
 Generate [NUMBER] gym exercises for [THEME/MUSCLE GROUP].
 
 Return ONLY a valid JSON array. No markdown, no explanation. Each object must match:
 
 [
-  {
-    "name": "Exercise Name in English",
-    "vietnameseName": "Tên bài tập tiếng Việt",
-    "targetMuscleGroup": "ONE OF: Chest | Back | Shoulders | Arms | Legs | Abs",
-    "secondaryMuscleGroups": ["Secondary muscle 1", "Secondary muscle 2"],
-    "garminExerciseEnum": "SNAKE_CASE_NAME or null",
-    "youtubeEmbedUrl": null,
-    "gifUrl": null,
-    "instructions": [
-      {
-        "level": "BEGINNER",
-        "steps": {
-          "vi": ["Bước 1 tiếng Việt", "Bước 2", "Bước 3", "Bước 4"],
-          "en": ["Step 1 in English", "Step 2", "Step 3", "Step 4"]
-        },
-        "form_cues": {
-          "vi": ["Lưu ý kỹ thuật 1", "Lưu ý 2", "Lưu ý 3"],
-          "en": ["Form cue 1", "Cue 2", "Cue 3"]
-        }
-      },
-      {
-        "level": "ADVANCED",
-        "steps": {
-          "vi": ["Bước nâng cao 1", "Bước 2", "Bước 3", "Bước 4"],
-          "en": ["Advanced step 1", "Step 2", "Step 3", "Step 4"]
-        },
-        "form_cues": {
-          "vi": ["Lưu ý nâng cao 1", "Lưu ý 2", "Lưu ý 3"],
-          "en": ["Advanced cue 1", "Cue 2", "Cue 3"]
-        }
-      }
-    ]
-  }
+{
+"name": "Exercise Name in English",
+"vietnameseName": "Tên bài tập tiếng Việt",
+"targetMuscleGroup": "ONE OF: Chest | Back | Shoulders | Arms | Legs | Abs",
+"secondaryMuscleGroups": ["Secondary muscle 1", "Secondary muscle 2"],
+"garminExerciseEnum": "SNAKE_CASE_NAME or null",
+"youtubeEmbedUrl": null,
+"gifUrl": null,
+"instructions": [
+{
+"level": "BEGINNER",
+"steps": {
+"vi": ["Bước 1 tiếng Việt", "Bước 2", "Bước 3", "Bước 4"],
+"en": ["Step 1 in English", "Step 2", "Step 3", "Step 4"]
+},
+"form_cues": {
+"vi": ["Lưu ý kỹ thuật 1", "Lưu ý 2", "Lưu ý 3"],
+"en": ["Form cue 1", "Cue 2", "Cue 3"]
+}
+},
+{
+"level": "ADVANCED",
+"steps": {
+"vi": ["Bước nâng cao 1", "Bước 2", "Bước 3", "Bước 4"],
+"en": ["Advanced step 1", "Step 2", "Step 3", "Step 4"]
+},
+"form_cues": {
+"vi": ["Lưu ý nâng cao 1", "Lưu ý 2", "Lưu ý 3"],
+"en": ["Advanced cue 1", "Cue 2", "Cue 3"]
+}
+}
 ]
-```
+}
+]
+
+````
 
 ---
 
@@ -2076,7 +2211,7 @@ Return ONLY a valid JSON array. No markdown, no explanation. Each object must ma
     ]
   }
 ]
-```
+````
 
 ---
 
@@ -2088,7 +2223,8 @@ Return ONLY a valid JSON array. No markdown, no explanation. Each object must ma
 4. Copy the JSON output and save as a `.json` file
 5. In the admin dashboard: **Exercises → Import JSON**
 6. Upload the file, review the preview, and confirm
-```
+
+````
 
 - [ ] Create `apps/admin-web/public/skills/running-exercise-import.md`:
 
@@ -2096,7 +2232,7 @@ Return ONLY a valid JSON array. No markdown, no explanation. Each object must ma
 # Running Exercise JSON Import Skill
 
 Use this prompt with ChatGPT, Claude, or Gemini to generate running workout data
-in the correct format for importing into the Sport Notebook Planner admin.
+in the correct format for importing into the Athlete Planner Planner admin.
 
 ---
 
@@ -2112,44 +2248,46 @@ All instructional text must be written in BOTH Vietnamese (vi) and English (en).
 
 Copy and customize this prompt, then paste it into any AI chat:
 
-```
+````
+
 Generate [NUMBER] running workouts for [THEME/TYPE].
 
 Return ONLY a valid JSON array. No markdown, no explanation. Each object must match:
 
 [
-  {
-    "name": "Workout Name in English",
-    "vietnameseName": "Tên bài chạy tiếng Việt",
-    "runningType": "ONE OF: Interval | Easy | Tempo | Long_Run",
-    "youtubeEmbedUrl": null,
-    "gifUrl": null,
-    "instructions": {
-      "vi": ["Hướng dẫn 1 tiếng Việt", "Hướng dẫn 2", "Hướng dẫn 3"],
-      "en": ["Instruction 1 in English", "Instruction 2", "Instruction 3"]
-    },
-    "workoutStructure": [
-      {
-        "phase": "Phase Name",
-        "type": "ONE OF: warm_up | interval | recovery | steady_state | cool_down | custom",
-        "duration_minutes": 10,
-        "distance_meters": 1500,
-        "hr_zone": 2,
-        "pace_min_per_km": "5:30",
-        "pace_max_per_km": "6:30",
-        "rpe": 4,
-        "cadence": 168,
-        "repeat_count": null,
-        "repeat_rest_seconds": null,
-        "notes": {
-          "vi": "Ghi chú tiếng Việt cho phase này",
-          "en": "English note for this phase"
-        }
-      }
-    ]
-  }
+{
+"name": "Workout Name in English",
+"vietnameseName": "Tên bài chạy tiếng Việt",
+"runningType": "ONE OF: Interval | Easy | Tempo | Long_Run",
+"youtubeEmbedUrl": null,
+"gifUrl": null,
+"instructions": {
+"vi": ["Hướng dẫn 1 tiếng Việt", "Hướng dẫn 2", "Hướng dẫn 3"],
+"en": ["Instruction 1 in English", "Instruction 2", "Instruction 3"]
+},
+"workoutStructure": [
+{
+"phase": "Phase Name",
+"type": "ONE OF: warm_up | interval | recovery | steady_state | cool_down | custom",
+"duration_minutes": 10,
+"distance_meters": 1500,
+"hr_zone": 2,
+"pace_min_per_km": "5:30",
+"pace_max_per_km": "6:30",
+"rpe": 4,
+"cadence": 168,
+"repeat_count": null,
+"repeat_rest_seconds": null,
+"notes": {
+"vi": "Ghi chú tiếng Việt cho phase này",
+"en": "English note for this phase"
+}
+}
 ]
-```
+}
+]
+
+````
 
 ---
 
@@ -2307,7 +2445,7 @@ Return ONLY a valid JSON array. No markdown, no explanation. Each object must ma
     ]
   }
 ]
-```
+````
 
 ---
 
@@ -2319,20 +2457,22 @@ Return ONLY a valid JSON array. No markdown, no explanation. Each object must ma
 4. Copy the JSON output and save as a `.json` file
 5. In the admin dashboard: **Exercises → Import JSON**
 6. Upload the file, review the preview, and confirm
-```
+
+````
 
 - [ ] Commit:
 ```bash
 git add apps/admin-web/public/skills/gym-exercise-import.md \
         apps/admin-web/public/skills/running-exercise-import.md
 git commit -m "docs: add AI prompt skill files for gym and running exercise JSON import"
-```
+````
 
 ---
 
 ## Task 13: Documentation Update
 
 **Files:**
+
 - Modify: `docs/MEMORY.md`
 - Modify: `AGENTS.md`
 
@@ -2344,6 +2484,7 @@ Find the line `## Domain Models (Prisma)` and add this section after the domain 
 ## Exercise Import Pipeline
 
 ### Canonical JSON Format
+
 Both the AI Generate button and JSON Import use the same canonical format — the DB format.
 
 **Gym:** `name`, `vietnameseName`, `targetMuscleGroup` (enum), `secondaryMuscleGroups[]`, `garminExerciseEnum?`, `instructions[]` with `level: BEGINNER|ADVANCED`, `steps: {vi, en}`, `form_cues: {vi, en}`
@@ -2351,16 +2492,19 @@ Both the AI Generate button and JSON Import use the same canonical format — th
 **Running:** `name`, `vietnameseName`, `runningType` (enum: `Interval|Easy|Tempo|Long_Run`), `instructions: {vi[], en[]}`, `workoutStructure[]` with full phase details — `distance_meters` (not km), `cadence` (not rpm), `pace_min/max_per_km` as `"M:SS"` strings
 
 ### Two Flows, Shared Pipeline
+
 - **AI Generate** (`POST /admin/exercises/ai-generate/gym|running`) — backend generates via AI prompt, then calls `dryRun=true` for status check, shows `ExercisePreviewTable`
 - **JSON Import** (`POST /exercises/gym|running/import?dryRun=true|false`) — admin uploads `.json` file, validates + detects duplicates, shows `ExercisePreviewTable`
 - Both flows use `ExercisePreviewTable` (`apps/admin-web/components/exercises/ExercisePreviewTable.tsx`)
 
 ### Duplicate Detection
+
 - Gym: match by `name` (case-insensitive) + `targetMuscleGroup`
 - Running: match by `name` (case-insensitive) + `runningType`
 - Duplicates shown in yellow with changed field list; admin can overwrite or skip
 
 ### Skill Files (downloadable)
+
 - `apps/admin-web/public/skills/gym-exercise-import.md` — prompt + schema for gym exercises
 - `apps/admin-web/public/skills/running-exercise-import.md` — prompt + schema for running workouts
 ```
@@ -2368,8 +2512,10 @@ Both the AI Generate button and JSON Import use the same canonical format — th
 - [ ] Add import endpoints to `AGENTS.md` in the Backend section under Key modules or routes:
 
 Find the exercises routes section in AGENTS.md and add:
+
 ```markdown
 ### Exercise Import Endpoints
+
 - `POST /exercises/gym/import?dryRun=true` — validate + detect duplicates, return preview (AdminGuard)
 - `POST /exercises/gym/import?dryRun=false` — execute bulk upsert (AdminGuard)
 - `POST /exercises/running/import?dryRun=true` — same for running
@@ -2380,6 +2526,7 @@ Find the exercises routes section in AGENTS.md and add:
 ```
 
 - [ ] Commit:
+
 ```bash
 git add docs/MEMORY.md AGENTS.md
 git commit -m "docs: update MEMORY.md and AGENTS.md with import pipeline architecture"
@@ -2390,12 +2537,15 @@ git commit -m "docs: update MEMORY.md and AGENTS.md with import pipeline archite
 ## Task 14: Final Build Verification
 
 - [ ] Run full build to confirm no TypeScript errors:
+
 ```bash
 pnpm build 2>&1 | tail -20
 ```
+
 Expected: All packages build successfully.
 
 - [ ] Verify new files exist:
+
 ```bash
 ls apps/api/src/modules/exercises/commands/import-*.ts
 ls apps/admin-web/components/exercises/
@@ -2403,6 +2553,7 @@ ls apps/admin-web/public/skills/
 ```
 
 - [ ] Commit if any minor fixes needed, then tag:
+
 ```bash
 git log --oneline -15
 ```

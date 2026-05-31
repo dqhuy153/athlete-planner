@@ -94,10 +94,10 @@ export default function ProfilePage() {
 
   return (
     <AuthGate message={t('authRequired')}>
-      <div className='flex items-center justify-center mb-8 mt-4'>
-        <LogoBrand variant='full' size='md' interactive />
-      </div>
       <div className='mx-auto max-w-lg px-4 py-6 md:py-10'>
+        <div className='md:hidden flex items-center justify-start mb-8 mt-4'>
+          <LogoBrand variant='full' size='md' interactive />
+        </div>
         <div className='mb-6 flex items-center gap-4'>
           {user?.image ? (
             <Image

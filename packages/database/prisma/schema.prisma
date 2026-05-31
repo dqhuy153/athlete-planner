@@ -1,4 +1,4 @@
-// The Sport Notebook Planner - Prisma Schema
+// The Athlete Planner Planner - Prisma Schema
 // Run `pnpm --filter @athlete-planner/database prisma generate` to generate the client.
 // Run `pnpm --filter @athlete-planner/database prisma migrate dev` to create/apply migrations.
 

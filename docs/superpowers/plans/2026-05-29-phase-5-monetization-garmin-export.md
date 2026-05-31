@@ -14,51 +14,51 @@
 
 ### New — API
 
-| File | Purpose |
-|---|---|
-| `apps/api/src/modules/payments/payments.module.ts` | PaymentsModule — registers commands, controller, PayosService |
-| `apps/api/src/modules/payments/payments.controller.ts` | `POST /payments/create-link`, `POST /payments/webhook` |
-| `apps/api/src/modules/payments/services/payos.service.ts` | Wraps `@payos/node` SDK — createLink, verifyWebhook |
-| `apps/api/src/modules/payments/commands/create-payment-link.command.ts` | Command data for link creation |
-| `apps/api/src/modules/payments/commands/create-payment-link.handler.ts` | Creates PayOS link, stores Payment record |
-| `apps/api/src/modules/payments/commands/handle-payment-webhook.command.ts` | Command data for webhook processing |
-| `apps/api/src/modules/payments/commands/handle-payment-webhook.handler.ts` | Verifies webhook, upgrades user tier |
-| `apps/api/src/modules/payments/dto/create-payment-link.dto.ts` | DTO for payment link request |
-| `apps/api/src/modules/export/export.module.ts` | ExportModule — registers service, controller |
-| `apps/api/src/modules/export/export.controller.ts` | `GET /export/day/:dateString`, `GET /export/week/:year/:weekNumber` |
-| `apps/api/src/modules/export/services/fit-builder.service.ts` | Builds FIT Uint8Array from schedule items |
-| `apps/api/src/modules/export/services/zip-export.service.ts` | Bundles FIT buffers into ZIP using jszip |
+| File                                                                       | Purpose                                                             |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `apps/api/src/modules/payments/payments.module.ts`                         | PaymentsModule — registers commands, controller, PayosService       |
+| `apps/api/src/modules/payments/payments.controller.ts`                     | `POST /payments/create-link`, `POST /payments/webhook`              |
+| `apps/api/src/modules/payments/services/payos.service.ts`                  | Wraps `@payos/node` SDK — createLink, verifyWebhook                 |
+| `apps/api/src/modules/payments/commands/create-payment-link.command.ts`    | Command data for link creation                                      |
+| `apps/api/src/modules/payments/commands/create-payment-link.handler.ts`    | Creates PayOS link, stores Payment record                           |
+| `apps/api/src/modules/payments/commands/handle-payment-webhook.command.ts` | Command data for webhook processing                                 |
+| `apps/api/src/modules/payments/commands/handle-payment-webhook.handler.ts` | Verifies webhook, upgrades user tier                                |
+| `apps/api/src/modules/payments/dto/create-payment-link.dto.ts`             | DTO for payment link request                                        |
+| `apps/api/src/modules/export/export.module.ts`                             | ExportModule — registers service, controller                        |
+| `apps/api/src/modules/export/export.controller.ts`                         | `GET /export/day/:dateString`, `GET /export/week/:year/:weekNumber` |
+| `apps/api/src/modules/export/services/fit-builder.service.ts`              | Builds FIT Uint8Array from schedule items                           |
+| `apps/api/src/modules/export/services/zip-export.service.ts`               | Bundles FIT buffers into ZIP using jszip                            |
 
 ### Modified — API
 
-| File | Change |
-|---|---|
-| `packages/database/prisma/schema.prisma` | Add `Payment` model + `payments` relation on `User` |
-| `apps/api/src/app.module.ts` | Add PaymentsModule, ExportModule |
-| `apps/api/src/config/env.validation.ts` | Add PAYOS_CLIENT_ID, PAYOS_API_KEY, PAYOS_CHECKSUM_KEY |
+| File                                     | Change                                                 |
+| ---------------------------------------- | ------------------------------------------------------ |
+| `packages/database/prisma/schema.prisma` | Add `Payment` model + `payments` relation on `User`    |
+| `apps/api/src/app.module.ts`             | Add PaymentsModule, ExportModule                       |
+| `apps/api/src/config/env.validation.ts`  | Add PAYOS_CLIENT_ID, PAYOS_API_KEY, PAYOS_CHECKSUM_KEY |
 
 ### New — Web
 
-| File | Purpose |
-|---|---|
-| `apps/web/app/[locale]/upgrade/page.tsx` | PRO upgrade page (price, features, CTA) |
-| `apps/web/app/[locale]/upgrade/success/page.tsx` | Post-payment success page |
-| `apps/web/app/[locale]/upgrade/cancel/page.tsx` | Payment-cancelled page |
-| `apps/web/components/UpgradePrompt.tsx` | Bottom sheet shown when FREE user hits PRO feature |
+| File                                             | Purpose                                            |
+| ------------------------------------------------ | -------------------------------------------------- |
+| `apps/web/app/[locale]/upgrade/page.tsx`         | PRO upgrade page (price, features, CTA)            |
+| `apps/web/app/[locale]/upgrade/success/page.tsx` | Post-payment success page                          |
+| `apps/web/app/[locale]/upgrade/cancel/page.tsx`  | Payment-cancelled page                             |
+| `apps/web/components/UpgradePrompt.tsx`          | Bottom sheet shown when FREE user hits PRO feature |
 
 ### Modified — Web
 
-| File | Change |
-|---|---|
-| `apps/web/lib/api.ts` | Add `createPaymentLink()`, `exportDayFit()`, `exportWeekZip()` |
-| `apps/web/messages/en.json` | Add `upgrade.*` and `export.*` keys |
-| `apps/web/messages/vi.json` | Same keys in Vietnamese |
-| `apps/web/app/[locale]/schedule/page.tsx` | Add export buttons + UpgradePrompt wiring |
+| File                                      | Change                                                         |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| `apps/web/lib/api.ts`                     | Add `createPaymentLink()`, `exportDayFit()`, `exportWeekZip()` |
+| `apps/web/messages/en.json`               | Add `upgrade.*` and `export.*` keys                            |
+| `apps/web/messages/vi.json`               | Same keys in Vietnamese                                        |
+| `apps/web/app/[locale]/schedule/page.tsx` | Add export buttons + UpgradePrompt wiring                      |
 
 ### Modified — Contracts
 
-| File | Change |
-|---|---|
+| File                              | Change                                    |
+| --------------------------------- | ----------------------------------------- |
 | `packages/contracts/src/index.ts` | Add `CreatePaymentLinkResponse` interface |
 
 ---
@@ -66,6 +66,7 @@
 ## Task 1: Prisma Schema — Add Payment Model
 
 **Files:**
+
 - Modify: `packages/database/prisma/schema.prisma`
 
 - [ ] **Step 1: Add Payment model to schema**
@@ -123,6 +124,7 @@ git commit -m "feat(db): add Payment model for PayOS one-time PRO purchase"
 ## Task 2: ENV Validation — Add PayOS Variables
 
 **Files:**
+
 - Modify: `apps/api/src/config/env.validation.ts`
 
 - [ ] **Step 1: Read current env.validation.ts and add PayOS keys**
@@ -169,6 +171,7 @@ git commit -m "feat(api): add PayOS env vars to validation schema"
 ## Task 3: PaymentsModule — Service, Commands, Controller
 
 **Files:**
+
 - Create: all `apps/api/src/modules/payments/` files listed in the File Map
 
 - [ ] **Step 1: Create PayOS Service**
@@ -176,34 +179,36 @@ git commit -m "feat(api): add PayOS env vars to validation schema"
 Create `apps/api/src/modules/payments/services/payos.service.ts`:
 
 ```typescript
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PayOS } from '@payos/node';
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { PayOS } from '@payos/node'
 import type {
   CreatePaymentLinkRequest,
   CreatePaymentLinkResponse,
   Webhook,
   WebhookData,
-} from '@payos/node';
+} from '@payos/node'
 
 @Injectable()
 export class PayosService {
-  private readonly client: PayOS;
+  private readonly client: PayOS
 
   constructor(private readonly config: ConfigService) {
     this.client = new PayOS({
-      clientId:    config.getOrThrow<string>('PAYOS_CLIENT_ID'),
-      apiKey:      config.getOrThrow<string>('PAYOS_API_KEY'),
+      clientId: config.getOrThrow<string>('PAYOS_CLIENT_ID'),
+      apiKey: config.getOrThrow<string>('PAYOS_API_KEY'),
       checksumKey: config.getOrThrow<string>('PAYOS_CHECKSUM_KEY'),
-    });
+    })
   }
 
-  async createPaymentLink(data: CreatePaymentLinkRequest): Promise<CreatePaymentLinkResponse> {
-    return this.client.paymentRequests.create(data);
+  async createPaymentLink(
+    data: CreatePaymentLinkRequest,
+  ): Promise<CreatePaymentLinkResponse> {
+    return this.client.paymentRequests.create(data)
   }
 
   async verifyWebhook(webhook: Webhook): Promise<WebhookData> {
-    return this.client.webhooks.verify(webhook);
+    return this.client.webhooks.verify(webhook)
   }
 }
 ```
@@ -225,43 +230,45 @@ export class CreatePaymentLinkCommand {
 Create `apps/api/src/modules/payments/commands/create-payment-link.handler.ts`:
 
 ```typescript
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { ConflictException } from '@nestjs/common';
-import { PrismaService } from '@athlete-planner/database';
-import { PayosService } from '../services/payos.service';
-import { CreatePaymentLinkCommand } from './create-payment-link.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { ConflictException } from '@nestjs/common'
+import { PrismaService } from '@athlete-planner/database'
+import { PayosService } from '../services/payos.service'
+import { CreatePaymentLinkCommand } from './create-payment-link.command'
 
-const PRO_PRICE_VND = 199_000;
+const PRO_PRICE_VND = 199_000
 
 @CommandHandler(CreatePaymentLinkCommand)
-export class CreatePaymentLinkHandler
-  implements ICommandHandler<CreatePaymentLinkCommand>
-{
+export class CreatePaymentLinkHandler implements ICommandHandler<CreatePaymentLinkCommand> {
   constructor(
     private readonly prisma: PrismaService,
     private readonly payos: PayosService,
   ) {}
 
-  async execute(cmd: CreatePaymentLinkCommand): Promise<{ checkoutUrl: string }> {
+  async execute(
+    cmd: CreatePaymentLinkCommand,
+  ): Promise<{ checkoutUrl: string }> {
     // Prevent duplicate active payments
     const existing = await this.prisma.payment.findFirst({
       where: { userId: cmd.userId, status: 'PENDING' },
-    });
+    })
     if (existing) {
-      return { checkoutUrl: existing.checkoutUrl! };
+      return { checkoutUrl: existing.checkoutUrl! }
     }
 
     // orderCode must be a unique positive integer (PayOS limit: ≤ 2^31 - 1)
-    const orderCode = Math.floor(Date.now() / 1000); // Unix seconds (safe for decades)
+    const orderCode = Math.floor(Date.now() / 1000) // Unix seconds (safe for decades)
 
     const link = await this.payos.createPaymentLink({
       orderCode,
       amount: PRO_PRICE_VND,
       description: 'PRO Upgrade',
-      items: [{ name: 'Sport Notebook PRO', quantity: 1, price: PRO_PRICE_VND }],
+      items: [
+        { name: 'Athlete Planner PRO', quantity: 1, price: PRO_PRICE_VND },
+      ],
       returnUrl: cmd.returnUrl,
       cancelUrl: cmd.cancelUrl,
-    });
+    })
 
     await this.prisma.payment.create({
       data: {
@@ -271,9 +278,9 @@ export class CreatePaymentLinkHandler
         status: 'PENDING',
         checkoutUrl: link.checkoutUrl,
       },
-    });
+    })
 
-    return { checkoutUrl: link.checkoutUrl };
+    return { checkoutUrl: link.checkoutUrl }
   }
 }
 ```
@@ -283,7 +290,7 @@ export class CreatePaymentLinkHandler
 Create `apps/api/src/modules/payments/commands/handle-payment-webhook.command.ts`:
 
 ```typescript
-import type { Webhook } from '@payos/node';
+import type { Webhook } from '@payos/node'
 
 export class HandlePaymentWebhookCommand {
   constructor(public readonly webhook: Webhook) {}
@@ -293,17 +300,15 @@ export class HandlePaymentWebhookCommand {
 Create `apps/api/src/modules/payments/commands/handle-payment-webhook.handler.ts`:
 
 ```typescript
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Logger } from '@nestjs/common';
-import { PrismaService } from '@athlete-planner/database';
-import { PayosService } from '../services/payos.service';
-import { HandlePaymentWebhookCommand } from './handle-payment-webhook.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { Logger } from '@nestjs/common'
+import { PrismaService } from '@athlete-planner/database'
+import { PayosService } from '../services/payos.service'
+import { HandlePaymentWebhookCommand } from './handle-payment-webhook.command'
 
 @CommandHandler(HandlePaymentWebhookCommand)
-export class HandlePaymentWebhookHandler
-  implements ICommandHandler<HandlePaymentWebhookCommand>
-{
-  private readonly logger = new Logger(HandlePaymentWebhookHandler.name);
+export class HandlePaymentWebhookHandler implements ICommandHandler<HandlePaymentWebhookCommand> {
+  private readonly logger = new Logger(HandlePaymentWebhookHandler.name)
 
   constructor(
     private readonly prisma: PrismaService,
@@ -311,30 +316,32 @@ export class HandlePaymentWebhookHandler
   ) {}
 
   async execute(cmd: HandlePaymentWebhookCommand): Promise<void> {
-    let webhookData;
+    let webhookData
     try {
-      webhookData = await this.payos.verifyWebhook(cmd.webhook);
+      webhookData = await this.payos.verifyWebhook(cmd.webhook)
     } catch (err) {
-      this.logger.warn('PayOS webhook signature invalid', err);
-      return; // silently discard — never throw, 200 response keeps PayOS from retrying
+      this.logger.warn('PayOS webhook signature invalid', err)
+      return // silently discard — never throw, 200 response keeps PayOS from retrying
     }
 
     // code "00" means success
     if (webhookData.code !== '00') {
-      this.logger.log(`PayOS webhook non-success code: ${webhookData.code}`);
-      return;
+      this.logger.log(`PayOS webhook non-success code: ${webhookData.code}`)
+      return
     }
 
     const payment = await this.prisma.payment.findUnique({
       where: { orderCode: webhookData.orderCode },
-    });
+    })
 
     if (!payment) {
-      this.logger.warn(`No payment record for orderCode ${webhookData.orderCode}`);
-      return;
+      this.logger.warn(
+        `No payment record for orderCode ${webhookData.orderCode}`,
+      )
+      return
     }
 
-    if (payment.status === 'PAID') return; // idempotent
+    if (payment.status === 'PAID') return // idempotent
 
     await this.prisma.$transaction([
       this.prisma.payment.update({
@@ -345,9 +352,11 @@ export class HandlePaymentWebhookHandler
         where: { id: payment.userId },
         data: { tier: 'PRO' },
       }),
-    ]);
+    ])
 
-    this.logger.log(`User ${payment.userId} upgraded to PRO (orderCode ${webhookData.orderCode})`);
+    this.logger.log(
+      `User ${payment.userId} upgraded to PRO (orderCode ${webhookData.orderCode})`,
+    )
   }
 }
 ```
@@ -357,14 +366,14 @@ export class HandlePaymentWebhookHandler
 Create `apps/api/src/modules/payments/dto/create-payment-link.dto.ts`:
 
 ```typescript
-import { IsUrl } from 'class-validator';
+import { IsUrl } from 'class-validator'
 
 export class CreatePaymentLinkDto {
   @IsUrl({}, { message: 'returnUrl must be a valid URL' })
-  returnUrl: string;
+  returnUrl: string
 
   @IsUrl({}, { message: 'cancelUrl must be a valid URL' })
-  cancelUrl: string;
+  cancelUrl: string
 }
 ```
 
@@ -380,13 +389,13 @@ import {
   Post,
   Request,
   UseGuards,
-} from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreatePaymentLinkCommand } from './commands/create-payment-link.command';
-import { HandlePaymentWebhookCommand } from './commands/handle-payment-webhook.command';
-import { CreatePaymentLinkDto } from './dto/create-payment-link.dto';
-import type { Webhook } from '@payos/node';
+} from '@nestjs/common'
+import { CommandBus } from '@nestjs/cqrs'
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
+import { CreatePaymentLinkCommand } from './commands/create-payment-link.command'
+import { HandlePaymentWebhookCommand } from './commands/handle-payment-webhook.command'
+import { CreatePaymentLinkDto } from './dto/create-payment-link.dto'
+import type { Webhook } from '@payos/node'
 
 @Controller('payments')
 export class PaymentsController {
@@ -401,14 +410,14 @@ export class PaymentsController {
   ): Promise<{ checkoutUrl: string }> {
     return this.commandBus.execute(
       new CreatePaymentLinkCommand(req.user.id, dto.returnUrl, dto.cancelUrl),
-    );
+    )
   }
 
   /** PayOS webhook — no auth, must always return 200 */
   @Post('webhook')
   @HttpCode(200)
   async handleWebhook(@Body() body: Webhook): Promise<void> {
-    await this.commandBus.execute(new HandlePaymentWebhookCommand(body));
+    await this.commandBus.execute(new HandlePaymentWebhookCommand(body))
   }
 }
 ```
@@ -418,12 +427,12 @@ export class PaymentsController {
 Create `apps/api/src/modules/payments/payments.module.ts`:
 
 ```typescript
-import { Module } from '@nestjs/common';
-import { CqrsModule } from '@nestjs/cqrs';
-import { PaymentsController } from './payments.controller';
-import { PayosService } from './services/payos.service';
-import { CreatePaymentLinkHandler } from './commands/create-payment-link.handler';
-import { HandlePaymentWebhookHandler } from './commands/handle-payment-webhook.handler';
+import { Module } from '@nestjs/common'
+import { CqrsModule } from '@nestjs/cqrs'
+import { PaymentsController } from './payments.controller'
+import { PayosService } from './services/payos.service'
+import { CreatePaymentLinkHandler } from './commands/create-payment-link.handler'
+import { HandlePaymentWebhookHandler } from './commands/handle-payment-webhook.handler'
 
 @Module({
   imports: [CqrsModule],
@@ -468,11 +477,13 @@ git commit -m "feat(api): PaymentsModule — PayOS create-link + webhook handler
 ## Task 4: FIT Builder Service
 
 **Files:**
+
 - Create: `apps/api/src/modules/export/services/fit-builder.service.ts`
 
 The Garmin FIT SDK `Encoder` from `@garmin/fitsdk` accepts camelCase field names matching the FIT profile. Sport values, exercise categories, etc. are passed as the string key from `Profile.types.*` (e.g., `"running"`, `"training"`, `"benchPress"`).
 
 **FIT encoding rules used here:**
+
 - Running workout: `sport = "running"`, step `durationType = "open"` (user runs until done)
   - Pace target → `targetType = "speed"`, custom values in mm/s (= `1_000_000 / pace_seconds`)
   - HR target → `targetType = "heartRate"`, `targetValue = zone` (1-5) or custom bpm
@@ -486,41 +497,46 @@ The Garmin FIT SDK `Encoder` from `@garmin/fitsdk` accepts camelCase field names
 Create `apps/api/src/modules/export/services/fit-builder.service.ts`:
 
 ```typescript
-import { Injectable } from '@nestjs/common';
-import { Encoder, Profile } from '@garmin/fitsdk';
-import type { DailySchedule, ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
-import { SportType, RunningIntensityType } from '@athlete-planner/contracts';
+import { Injectable } from '@nestjs/common'
+import { Encoder, Profile } from '@garmin/fitsdk'
+import type {
+  DailySchedule,
+  ScheduleItem,
+  GymPayload,
+  RunningPayload,
+} from '@athlete-planner/contracts'
+import { SportType, RunningIntensityType } from '@athlete-planner/contracts'
 
 // Build reverse map: SCREAMING_SNAKE → FIT exerciseCategory string (camelCase)
 // e.g. garminExerciseEnum "SQUAT" → "squat" (FIT category string value)
 function buildExerciseCategoryMap(): Map<string, string> {
-  const ec = Profile.types.exerciseCategory as Record<string, string>;
-  const map = new Map<string, string>();
+  const ec = Profile.types.exerciseCategory as Record<string, string>
+  const map = new Map<string, string>()
   for (const [, camel] of Object.entries(ec)) {
-    if (camel === 'invalid') continue;
+    if (camel === 'invalid') continue
     // camelCase → SCREAMING_SNAKE: "benchPress" → "BENCH_PRESS"
     const snake = camel
       .replace(/([A-Z])/g, '_$1')
       .toUpperCase()
-      .replace(/^_/, '');
-    map.set(snake, camel);
+      .replace(/^_/, '')
+    map.set(snake, camel)
     // Also accept exact camelCase key
-    map.set(camel, camel);
+    map.set(camel, camel)
   }
-  return map;
+  return map
 }
 
-const EXERCISE_CATEGORY_MAP = buildExerciseCategoryMap();
+const EXERCISE_CATEGORY_MAP = buildExerciseCategoryMap()
 
 function garminEnumToFitCategory(garminEnum: string | null): string {
-  if (!garminEnum) return 'unknown';
-  return EXERCISE_CATEGORY_MAP.get(garminEnum) ?? 'unknown';
+  if (!garminEnum) return 'unknown'
+  return EXERCISE_CATEGORY_MAP.get(garminEnum) ?? 'unknown'
 }
 
 /** pace_seconds = seconds per 1 km; returns mm/s for FIT custom speed target */
 function paceSecondsToMmPerSecond(paceSeconds: number): number {
-  if (paceSeconds <= 0) return 0;
-  return Math.round(1_000_000 / paceSeconds);
+  if (paceSeconds <= 0) return 0
+  return Math.round(1_000_000 / paceSeconds)
 }
 
 @Injectable()
@@ -534,52 +550,62 @@ export class FitBuilderService {
     item: ScheduleItem,
     exerciseName: string,
   ): Uint8Array {
-    const encoder = new Encoder();
-    const now = new Date();
+    const encoder = new Encoder()
+    const now = new Date()
 
     encoder.onMesg(Profile.MesgNum.FILE_ID, {
       type: 'workout',
       manufacturer: 'development',
       product: 0,
       timeCreated: now,
-    });
+    })
 
-    const payload = item.runningPayload as RunningPayload | null;
+    const payload = item.runningPayload as RunningPayload | null
 
     // Workout message
     encoder.onMesg(Profile.MesgNum.WORKOUT, {
       sport: 'running',
       numValidSteps: 1,
       wktName: exerciseName.slice(0, 16),
-    });
+    })
 
     // Determine duration type and value
-    let durationType: string;
-    let durationValue: number;
+    let durationType: string
+    let durationValue: number
 
     if (payload?.target_distance_km) {
-      durationType = 'distance';
-      durationValue = Math.round(payload.target_distance_km * 1000); // m
+      durationType = 'distance'
+      durationValue = Math.round(payload.target_distance_km * 1000) // m
     } else if (payload?.duration_minutes) {
-      durationType = 'time';
-      durationValue = Math.round(payload.duration_minutes * 60 * 1000); // ms
+      durationType = 'time'
+      durationValue = Math.round(payload.duration_minutes * 60 * 1000) // ms
     } else {
-      durationType = 'open';
-      durationValue = 0;
+      durationType = 'open'
+      durationValue = 0
     }
 
     // Determine target type
-    let targetType: string = 'open';
-    let customTargetValueLow: number | undefined;
-    let customTargetValueHigh: number | undefined;
+    let targetType: string = 'open'
+    let customTargetValueLow: number | undefined
+    let customTargetValueHigh: number | undefined
 
-    if (payload?.intensity_type === RunningIntensityType.PACE && payload.pace_target_range) {
-      targetType = 'speed';
+    if (
+      payload?.intensity_type === RunningIntensityType.PACE &&
+      payload.pace_target_range
+    ) {
+      targetType = 'speed'
       // slowest pace = lower speed bound
-      customTargetValueLow = paceSecondsToMmPerSecond(payload.pace_target_range.slowest_pace_seconds);
-      customTargetValueHigh = paceSecondsToMmPerSecond(payload.pace_target_range.fastest_pace_seconds);
-    } else if (payload?.intensity_type === RunningIntensityType.HEART_RATE && payload.hr_target_range) {
-      targetType = 'heartRate';
+      customTargetValueLow = paceSecondsToMmPerSecond(
+        payload.pace_target_range.slowest_pace_seconds,
+      )
+      customTargetValueHigh = paceSecondsToMmPerSecond(
+        payload.pace_target_range.fastest_pace_seconds,
+      )
+    } else if (
+      payload?.intensity_type === RunningIntensityType.HEART_RATE &&
+      payload.hr_target_range
+    ) {
+      targetType = 'heartRate'
       if (payload.hr_target_range.zone) {
         // Zone-based: use targetValue = zone number
         encoder.onMesg(Profile.MesgNum.WORKOUT_STEP, {
@@ -590,12 +616,12 @@ export class FitBuilderService {
           targetType: 'heartRate',
           targetValue: payload.hr_target_range.zone,
           messageIndex: 0,
-        });
-        return encoder.close();
+        })
+        return encoder.close()
       }
       // BPM-based custom target
-      customTargetValueLow = payload.hr_target_range.min_bpm ?? 0;
-      customTargetValueHigh = payload.hr_target_range.max_bpm ?? 220;
+      customTargetValueLow = payload.hr_target_range.min_bpm ?? 0
+      customTargetValueHigh = payload.hr_target_range.max_bpm ?? 220
     }
 
     const stepData: Record<string, unknown> = {
@@ -605,12 +631,14 @@ export class FitBuilderService {
       durationValue,
       targetType,
       messageIndex: 0,
-    };
-    if (customTargetValueLow !== undefined) stepData.customTargetValueLow = customTargetValueLow;
-    if (customTargetValueHigh !== undefined) stepData.customTargetValueHigh = customTargetValueHigh;
+    }
+    if (customTargetValueLow !== undefined)
+      stepData.customTargetValueLow = customTargetValueLow
+    if (customTargetValueHigh !== undefined)
+      stepData.customTargetValueHigh = customTargetValueHigh
 
-    encoder.onMesg(Profile.MesgNum.WORKOUT_STEP, stepData);
-    return encoder.close();
+    encoder.onMesg(Profile.MesgNum.WORKOUT_STEP, stepData)
+    return encoder.close()
   }
 
   /**
@@ -623,29 +651,29 @@ export class FitBuilderService {
     exerciseName: string,
     garminExerciseEnum: string | null,
   ): Uint8Array {
-    const encoder = new Encoder();
-    const now = new Date();
+    const encoder = new Encoder()
+    const now = new Date()
 
-    const payload = item.gymPayload as GymPayload | null;
-    const sets = payload?.sets ?? [];
-    const restMs = (payload?.rest_time_seconds ?? 60) * 1000;
-    const fitCategory = garminEnumToFitCategory(garminExerciseEnum);
+    const payload = item.gymPayload as GymPayload | null
+    const sets = payload?.sets ?? []
+    const restMs = (payload?.rest_time_seconds ?? 60) * 1000
+    const fitCategory = garminEnumToFitCategory(garminExerciseEnum)
 
     // Count valid steps: active + rest (last set has no rest after)
-    const numValidSteps = sets.length > 0 ? sets.length * 2 - 1 : 1;
+    const numValidSteps = sets.length > 0 ? sets.length * 2 - 1 : 1
 
     encoder.onMesg(Profile.MesgNum.FILE_ID, {
       type: 'workout',
       manufacturer: 'development',
       product: 0,
       timeCreated: now,
-    });
+    })
 
     encoder.onMesg(Profile.MesgNum.WORKOUT, {
       sport: 'training',
       numValidSteps,
       wktName: exerciseName.slice(0, 16),
-    });
+    })
 
     if (sets.length === 0) {
       // Fallback: single open step
@@ -657,14 +685,14 @@ export class FitBuilderService {
         targetType: 'open',
         exerciseCategory: fitCategory,
         messageIndex: 0,
-      });
-      return encoder.close();
+      })
+      return encoder.close()
     }
 
-    let messageIndex = 0;
+    let messageIndex = 0
     for (let i = 0; i < sets.length; i++) {
-      const set = sets[i];
-      const weightRaw = Math.round((set.weight_kg ?? 0) * 100); // FIT: kg * 100
+      const set = sets[i]
+      const weightRaw = Math.round((set.weight_kg ?? 0) * 100) // FIT: kg * 100
 
       // Active set step
       encoder.onMesg(Profile.MesgNum.WORKOUT_STEP, {
@@ -676,7 +704,7 @@ export class FitBuilderService {
         exerciseCategory: fitCategory,
         exerciseWeight: weightRaw,
         messageIndex: messageIndex++,
-      });
+      })
 
       // Rest step (not after last set)
       if (i < sets.length - 1) {
@@ -687,11 +715,11 @@ export class FitBuilderService {
           durationValue: restMs,
           targetType: 'open',
           messageIndex: messageIndex++,
-        });
+        })
       }
     }
 
-    return encoder.close();
+    return encoder.close()
   }
 
   /**
@@ -701,25 +729,30 @@ export class FitBuilderService {
   buildDayFits(
     schedule: DailySchedule,
     items: ScheduleItem[],
-    exerciseNames: Map<string, string>,          // itemId → display name
-    gymEnums: Map<string, string | null>,        // itemId → garminExerciseEnum
+    exerciseNames: Map<string, string>, // itemId → display name
+    gymEnums: Map<string, string | null>, // itemId → garminExerciseEnum
   ): Array<{ filename: string; data: Uint8Array }> {
     return items.map((item, index) => {
-      const name = exerciseNames.get(item.id) ?? `Exercise ${index + 1}`;
-      const safeName = name.replace(/[^a-zA-Z0-9_-]/g, '_');
-      let data: Uint8Array;
+      const name = exerciseNames.get(item.id) ?? `Exercise ${index + 1}`
+      const safeName = name.replace(/[^a-zA-Z0-9_-]/g, '_')
+      let data: Uint8Array
 
       if (item.sportType === SportType.RUNNING) {
-        data = this.buildRunningFit(schedule, item, name);
+        data = this.buildRunningFit(schedule, item, name)
       } else {
-        data = this.buildGymFit(schedule, item, name, gymEnums.get(item.id) ?? null);
+        data = this.buildGymFit(
+          schedule,
+          item,
+          name,
+          gymEnums.get(item.id) ?? null,
+        )
       }
 
       return {
         filename: `${schedule.dateString}_${String(index + 1).padStart(2, '0')}_${safeName}.fit`,
         data,
-      };
-    });
+      }
+    })
   }
 }
 ```
@@ -736,6 +769,7 @@ git commit -m "feat(api): FitBuilderService — running pace/HR + gym sets FIT e
 ## Task 5: ZIP Export Service + Export Module
 
 **Files:**
+
 - Create: `apps/api/src/modules/export/services/zip-export.service.ts`
 - Create: `apps/api/src/modules/export/export.controller.ts`
 - Create: `apps/api/src/modules/export/export.module.ts`
@@ -746,19 +780,19 @@ git commit -m "feat(api): FitBuilderService — running pace/HR + gym sets FIT e
 Create `apps/api/src/modules/export/services/zip-export.service.ts`:
 
 ```typescript
-import { Injectable } from '@nestjs/common';
-import JSZip from 'jszip';
+import { Injectable } from '@nestjs/common'
+import JSZip from 'jszip'
 
 @Injectable()
 export class ZipExportService {
   async buildZip(
     files: Array<{ filename: string; data: Uint8Array }>,
   ): Promise<Buffer> {
-    const zip = new JSZip();
+    const zip = new JSZip()
     for (const file of files) {
-      zip.file(file.filename, file.data);
+      zip.file(file.filename, file.data)
     }
-    return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
+    return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' })
   }
 }
 ```
@@ -778,13 +812,13 @@ import {
   Res,
   UseGuards,
   Request,
-} from '@nestjs/common';
-import { Response } from 'express';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { PrismaService } from '@athlete-planner/database';
-import { FitBuilderService } from './services/fit-builder.service';
-import { ZipExportService } from './services/zip-export.service';
-import { SportType } from '@athlete-planner/contracts';
+} from '@nestjs/common'
+import { Response } from 'express'
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
+import { PrismaService } from '@athlete-planner/database'
+import { FitBuilderService } from './services/fit-builder.service'
+import { ZipExportService } from './services/zip-export.service'
+import { SportType } from '@athlete-planner/contracts'
 
 @Controller('export')
 @UseGuards(JwtAuthGuard)
@@ -802,43 +836,46 @@ export class ExportController {
     @Request() req: any,
     @Res() res: Response,
   ): Promise<void> {
-    const user = await this.prisma.user.findUnique({ where: { id: req.user.id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: req.user.id },
+    })
     if (!user || user.tier !== 'PRO') {
-      throw new ForbiddenException('Garmin export is a PRO feature');
+      throw new ForbiddenException('Garmin export is a PRO feature')
     }
 
     const schedule = await this.prisma.dailySchedule.findUnique({
       where: { userId_dateString: { userId: req.user.id, dateString } },
       include: { items: { orderBy: { sequenceOrder: 'asc' } } },
-    });
+    })
 
-    if (!schedule) throw new NotFoundException('No schedule for this date');
+    if (!schedule) throw new NotFoundException('No schedule for this date')
 
-    const items = schedule.items as any[];
-    const { exerciseNames, gymEnums } = await this.resolveExerciseMetadata(items);
+    const items = schedule.items as any[]
+    const { exerciseNames, gymEnums } =
+      await this.resolveExerciseMetadata(items)
 
     const fits = this.fitBuilder.buildDayFits(
       schedule as any,
       items,
       exerciseNames,
       gymEnums,
-    );
+    )
 
     if (fits.length === 1) {
       // Single FIT file — download directly
       res.set({
         'Content-Type': 'application/octet-stream',
         'Content-Disposition': `attachment; filename="${fits[0].filename}"`,
-      });
-      res.send(Buffer.from(fits[0].data));
+      })
+      res.send(Buffer.from(fits[0].data))
     } else {
       // Multiple items — bundle into ZIP
-      const zipBuffer = await this.zipExport.buildZip(fits);
+      const zipBuffer = await this.zipExport.buildZip(fits)
       res.set({
         'Content-Type': 'application/zip',
         'Content-Disposition': `attachment; filename="${dateString}_workouts.zip"`,
-      });
-      res.send(zipBuffer);
+      })
+      res.send(zipBuffer)
     }
   }
 
@@ -850,80 +887,85 @@ export class ExportController {
     @Request() req: any,
     @Res() res: Response,
   ): Promise<void> {
-    const user = await this.prisma.user.findUnique({ where: { id: req.user.id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: req.user.id },
+    })
     if (!user || user.tier !== 'PRO') {
-      throw new ForbiddenException('Garmin export is a PRO feature');
+      throw new ForbiddenException('Garmin export is a PRO feature')
     }
 
     const schedules = await this.prisma.dailySchedule.findMany({
       where: { userId: req.user.id, year, weekNumber },
       include: { items: { orderBy: { sequenceOrder: 'asc' } } },
       orderBy: { dateString: 'asc' },
-    });
+    })
 
-    const allFits: Array<{ filename: string; data: Uint8Array }> = [];
+    const allFits: Array<{ filename: string; data: Uint8Array }> = []
 
     for (const schedule of schedules) {
-      const items = schedule.items as any[];
-      const { exerciseNames, gymEnums } = await this.resolveExerciseMetadata(items);
+      const items = schedule.items as any[]
+      const { exerciseNames, gymEnums } =
+        await this.resolveExerciseMetadata(items)
       const fits = this.fitBuilder.buildDayFits(
         schedule as any,
         items,
         exerciseNames,
         gymEnums,
-      );
-      allFits.push(...fits);
+      )
+      allFits.push(...fits)
     }
 
-    if (allFits.length === 0) throw new NotFoundException('No workouts for this week');
+    if (allFits.length === 0)
+      throw new NotFoundException('No workouts for this week')
 
-    const zipBuffer = await this.zipExport.buildZip(allFits);
+    const zipBuffer = await this.zipExport.buildZip(allFits)
     res.set({
       'Content-Type': 'application/zip',
       'Content-Disposition': `attachment; filename="week_${year}_W${String(weekNumber).padStart(2, '0')}.zip"`,
-    });
-    res.send(zipBuffer);
+    })
+    res.send(zipBuffer)
   }
 
   /** Resolve display names and garminExerciseEnum for each item */
-  private async resolveExerciseMetadata(
-    items: any[],
-  ): Promise<{
-    exerciseNames: Map<string, string>;
-    gymEnums: Map<string, string | null>;
+  private async resolveExerciseMetadata(items: any[]): Promise<{
+    exerciseNames: Map<string, string>
+    gymEnums: Map<string, string | null>
   }> {
-    const exerciseNames = new Map<string, string>();
-    const gymEnums = new Map<string, string | null>();
+    const exerciseNames = new Map<string, string>()
+    const gymEnums = new Map<string, string | null>()
 
     for (const item of items) {
-      let name = 'Exercise';
-      let gymEnum: string | null = null;
+      let name = 'Exercise'
+      let gymEnum: string | null = null
 
       if (item.gymMasterId) {
         const ex = await this.prisma.gymExerciseMaster.findUnique({
           where: { id: item.gymMasterId },
           select: { name: true, garminExerciseEnum: true },
-        });
-        if (ex) { name = ex.name; gymEnum = ex.garminExerciseEnum; }
+        })
+        if (ex) {
+          name = ex.name
+          gymEnum = ex.garminExerciseEnum
+        }
       } else if (item.runningMasterId) {
         const ex = await this.prisma.runningExerciseMaster.findUnique({
           where: { id: item.runningMasterId },
           select: { name: true },
-        });
-        if (ex) name = ex.name;
+        })
+        if (ex) name = ex.name
       } else if (item.privateExerciseId) {
         const ex = await this.prisma.privateExercise.findUnique({
           where: { id: item.privateExerciseId },
           select: { name: true },
-        });
-        if (ex) name = ex.name;
+        })
+        if (ex) name = ex.name
       }
 
-      exerciseNames.set(item.id, name);
-      gymEnums.set(item.id, gymEnum);
+      exerciseNames.set(item.id, name)
+      gymEnums.set(item.id, gymEnum)
     }
 
-    return { exerciseNames, gymEnums };
+    return { exerciseNames, gymEnums }
   }
 }
 ```
@@ -933,10 +975,10 @@ export class ExportController {
 Create `apps/api/src/modules/export/export.module.ts`:
 
 ```typescript
-import { Module } from '@nestjs/common';
-import { ExportController } from './export.controller';
-import { FitBuilderService } from './services/fit-builder.service';
-import { ZipExportService } from './services/zip-export.service';
+import { Module } from '@nestjs/common'
+import { ExportController } from './export.controller'
+import { FitBuilderService } from './services/fit-builder.service'
+import { ZipExportService } from './services/zip-export.service'
 
 @Module({
   controllers: [ExportController],
@@ -976,6 +1018,7 @@ git commit -m "feat(api): ExportModule — day/week FIT download (PRO only)"
 ## Task 6: Contracts — Add Payment Types
 
 **Files:**
+
 - Modify: `packages/contracts/src/index.ts`
 
 - [ ] **Step 1: Add CreatePaymentLinkResponse interface**
@@ -986,7 +1029,7 @@ Append at the end of `packages/contracts/src/index.ts` (before the final line if
 // ─── Payment Types ────────────────────────────────────────────────────────────
 
 export interface CreatePaymentLinkResponse {
-  checkoutUrl: string;
+  checkoutUrl: string
 }
 ```
 
@@ -1009,6 +1052,7 @@ git commit -m "feat(contracts): add CreatePaymentLinkResponse type"
 ## Task 7: i18n — Upgrade and Export Keys
 
 **Files:**
+
 - Modify: `apps/web/messages/en.json`
 - Modify: `apps/web/messages/vi.json`
 
@@ -1105,6 +1149,7 @@ git commit -m "feat(web): add upgrade and export i18n keys (en + vi)"
 ## Task 8: ApiClient — Payment and Export Methods
 
 **Files:**
+
 - Modify: `apps/web/lib/api.ts`
 
 - [ ] **Step 1: Read current api.ts and add new methods**
@@ -1173,6 +1218,7 @@ git commit -m "feat(web): add createPaymentLink, exportDayFit, exportWeekZip to 
 ## Task 9: UpgradePrompt Component
 
 **Files:**
+
 - Create: `apps/web/components/UpgradePrompt.tsx`
 
 This is a bottom-sheet style component that shows PRO features and a link to the upgrade page. It follows the project UI rules: Lucide icons only, no emoji, dark mode, 48px touch targets.
@@ -1281,6 +1327,7 @@ git commit -m "feat(web): UpgradePrompt bottom-sheet component"
 ## Task 10: Upgrade Pages
 
 **Files:**
+
 - Create: `apps/web/app/[locale]/upgrade/page.tsx`
 - Create: `apps/web/app/[locale]/upgrade/success/page.tsx`
 - Create: `apps/web/app/[locale]/upgrade/cancel/page.tsx`
@@ -1467,6 +1514,7 @@ git commit -m "feat(web): upgrade page, success and cancel redirects"
 ## Task 11: Export Buttons in Schedule UI
 
 **Files:**
+
 - Modify: `apps/web/app/[locale]/schedule/page.tsx`
 
 Add export buttons to the schedule page header. When a FREE user taps an export button, show the `UpgradePrompt`. When a PRO user taps, trigger the download.
@@ -1476,61 +1524,64 @@ Add export buttons to the schedule page header. When a FREE user taps an export 
 Open `apps/web/app/[locale]/schedule/page.tsx`. At the top of the component function, add:
 
 ```typescript
-const [upgradePromptOpen, setUpgradePromptOpen] = useState(false);
-const [exportingDay, setExportingDay] = useState(false);
-const [exportingWeek, setExportingWeek] = useState(false);
+const [upgradePromptOpen, setUpgradePromptOpen] = useState(false)
+const [exportingDay, setExportingDay] = useState(false)
+const [exportingWeek, setExportingWeek] = useState(false)
 ```
 
 Add these helper functions inside the component:
 
 ```typescript
 function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
 async function handleExportDay() {
   if ((session?.user as any)?.tier !== UserTier.PRO) {
-    setUpgradePromptOpen(true);
-    return;
+    setUpgradePromptOpen(true)
+    return
   }
-  if (!selectedDate || !session?.accessToken) return;
-  setExportingDay(true);
+  if (!selectedDate || !session?.accessToken) return
+  setExportingDay(true)
   try {
-    const dateString = format(selectedDate, 'yyyy-MM-dd');
-    const { blob, filename } = await apiClient.exportDayFit(dateString, session.accessToken as string);
-    triggerDownload(blob, filename);
+    const dateString = format(selectedDate, 'yyyy-MM-dd')
+    const { blob, filename } = await apiClient.exportDayFit(
+      dateString,
+      session.accessToken as string,
+    )
+    triggerDownload(blob, filename)
   } catch {
     // silently fail — could show toast
   } finally {
-    setExportingDay(false);
+    setExportingDay(false)
   }
 }
 
 async function handleExportWeek() {
   if ((session?.user as any)?.tier !== UserTier.PRO) {
-    setUpgradePromptOpen(true);
-    return;
+    setUpgradePromptOpen(true)
+    return
   }
-  if (!session?.accessToken) return;
-  setExportingWeek(true);
+  if (!session?.accessToken) return
+  setExportingWeek(true)
   try {
     const { blob, filename } = await apiClient.exportWeekZip(
       currentYear,
       currentWeek,
       session.accessToken as string,
-    );
-    triggerDownload(blob, filename);
+    )
+    triggerDownload(blob, filename)
   } catch {
     // silently fail
   } finally {
-    setExportingWeek(false);
+    setExportingWeek(false)
   }
 }
 ```
@@ -1581,7 +1632,7 @@ At the bottom of the schedule page JSX (before the closing tag), add:
 <UpgradePrompt
   isOpen={upgradePromptOpen}
   onClose={() => setUpgradePromptOpen(false)}
-  featureHint="export.upgradeToExport"
+  featureHint='export.upgradeToExport'
 />
 ```
 
@@ -1628,12 +1679,14 @@ git commit -m "docs: mark Phase 5 complete — monetization + Garmin export"
 ## Self-Review Checklist
 
 **Spec coverage:**
+
 - [x] 5.1 PRO Tier Purchase — PayOS create-link + webhook → tier upgrade (Tasks 3, 8, 10)
 - [x] 5.2 FIT File Builder — running pace/HR + gym exercise category + private fallback (Task 4)
 - [x] 5.3 Export Endpoints — day FIT + week ZIP (Task 5), client methods (Task 8)
 - [x] 5.4 Upgrade Prompts — UpgradePrompt bottom sheet + upgrade page (Tasks 9, 10)
 
 **Potential gaps:**
+
 - PayOS `orderCode` uses `Math.floor(Date.now() / 1000)` — in theory two users upgrading in the same second would collide. In practice, the `@unique` DB constraint will catch this and the second request returns the existing pending link. Acceptable trade-off without adding UUID encoding complexity.
 - The `garminExerciseEnum` field is populated by admin at exercise creation time (existing Phase 1 feature). If null, FIT uses `"unknown"` category — this is the spec's "private → generic fallback" behavior.
 - FIT `exerciseWeight` scale (weight_kg × 100) follows FIT protocol spec for uint16 kg fields. Displayed correctly by Garmin Connect.

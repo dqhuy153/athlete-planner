@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Activity, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { MobileMenu } from '@/components/MobileMenu'
+import { LogoBrand } from '@/components/brand/LogoBrand'
 
 interface MobileHeaderProps {
   locale: string
@@ -19,14 +20,9 @@ export function MobileHeader({ locale }: MobileHeaderProps) {
         <div className='mx-auto flex h-14 max-w-5xl items-center justify-between px-4'>
           <Link
             href={`/${locale}`}
-            className='flex items-center gap-2 group'
+            className='flex items-center'
           >
-            <div className='flex h-8 w-8 items-center justify-center rounded-xl bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300'>
-              <Activity size={16} aria-hidden />
-            </div>
-            <span className='text-sm font-black tracking-tight uppercase text-text-primary'>
-              Athlete Planner
-            </span>
+            <LogoBrand variant='full' size='sm' interactive />
           </Link>
 
           <button

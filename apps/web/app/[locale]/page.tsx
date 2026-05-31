@@ -123,17 +123,14 @@ export default function LandingPage() {
       <MobileMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} showDevSandbox />
 
       {/* ── Header ── */}
-      <header className='sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md'>
+      <header className='fixed top-0 left-0 right-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md'>
         <div className='mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6'>
           <div className='flex items-center gap-6'>
             <Link
               href={`/${locale}`}
-              className='flex items-center gap-2.5'
+              className='flex items-center'
             >
-              <LogoBrand variant='mark' size='sm' interactive />
-              <span className='text-base font-black tracking-tight uppercase text-text-primary hidden sm:inline'>
-                Athlete Planner
-              </span>
+              <LogoBrand variant='full' size='sm' interactive />
             </Link>
 
             {/* Desktop library nav */}
@@ -196,7 +193,7 @@ export default function LandingPage() {
       </header>
 
       {/* ── Hero ── */}
-      <section className='relative mx-auto max-w-4xl px-4 pb-20 pt-20 sm:px-6 sm:pt-32 text-center z-10'>
+      <section className='relative mx-auto max-w-4xl px-4 pb-20 pt-28 sm:px-6 sm:pt-36 text-center z-10'>
         <div className='mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-accent animate-fade-in'>
           <Zap size={12} className='fill-current' />
           {tl('heroBadge')}

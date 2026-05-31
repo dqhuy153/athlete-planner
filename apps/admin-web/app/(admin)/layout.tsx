@@ -6,12 +6,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import {
   Users, FileText, FolderOpen, Settings, LogOut,
-  Dumbbell, Sun, Moon, Activity, ChevronLeft, ChevronRight,
+  Dumbbell, Sun, Moon, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
 import { useLang } from '@/lib/lang-context';
+import { LogoBrand } from '@/components/brand/LogoBrand';
 
 const NAV_ITEMS = [
   { href: '/users',     labelKey: 'nav.users',     icon: Users      },

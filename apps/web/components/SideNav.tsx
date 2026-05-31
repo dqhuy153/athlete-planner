@@ -7,11 +7,12 @@ import { useTranslations } from 'next-intl';
 import { useSession, signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import {
-  CalendarDays, BookOpen, User, Activity, FileText,
+  CalendarDays, BookOpen, User, FileText,
   Sun, Moon, Zap, LogOut,
 } from 'lucide-react';
 import { UserTier } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
+import { LogoBrand } from '@/components/brand/LogoBrand';
 
 interface NavItem {
   key: string;
@@ -104,13 +105,13 @@ export function SideNav({ locale }: SideNavProps) {
       aria-label="App navigation"
     >
       {/* Logo / brand */}
-      <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-3 md:justify-center lg:justify-start">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-          <Activity size={16} className="text-accent" aria-hidden />
+      <div className="flex h-14 shrink-0 items-center border-b border-border px-3 md:justify-center lg:justify-start">
+        <div className="hidden md:flex lg:hidden items-center justify-center">
+          <LogoBrand variant='mark' size='sm' interactive />
         </div>
-        <span className="hidden lg:block text-sm font-bold tracking-tight text-text-primary truncate">
-          Athlete Planner
-        </span>
+        <div className="hidden lg:flex items-center">
+          <LogoBrand variant='full' size='sm' interactive />
+        </div>
       </div>
 
       {/* Primary navigation */}
