@@ -591,36 +591,37 @@ export default function SchedulePage() {
 
             {/* Workout list */}
             <div className='flex-1 overflow-y-auto'>
-              <DailyScheduleView
-                items={activeSchedule?.items ?? []}
-                labelMap={labelMap}
-                onAdd={() => setPickerOpen(true)}
-                onRemove={id =>
-                  activeSchedule &&
-                  removeItem(id, activeSchedule.id, activeSchedule.dateString)
-                }
-                onReorder={ids =>
-                  activeSchedule &&
-                  reorderItems(
-                    activeSchedule.id,
-                    activeSchedule.dateString,
-                    ids,
-                  )
-                }
-                onSaveGym={(itemId, payload) =>
-                  saveGymPayload(itemId, payload, activeSchedule!.dateString)
-                }
-                onSaveRunning={(itemId, payload) =>
-                  saveRunningPayload(
-                    itemId,
-                    payload,
-                    activeSchedule!.dateString,
-                  )
-                }
-                isLocked={activeSchedule?.dayStatus !== DayStatus.PENDING}
-                canShift={canShift}
-                onShift={handleShift}
-              />
+                <DailyScheduleView
+                  items={activeSchedule?.items ?? []}
+                  labelMap={labelMap}
+                  onAdd={() => setPickerOpen(true)}
+                  onRemove={id =>
+                    activeSchedule &&
+                    removeItem(id, activeSchedule.id, activeSchedule.dateString)
+                  }
+                  onReorder={ids =>
+                    activeSchedule &&
+                    reorderItems(
+                      activeSchedule.id,
+                      activeSchedule.dateString,
+                      ids,
+                    )
+                  }
+                  onSaveGym={(itemId, payload) =>
+                    saveGymPayload(itemId, payload, activeSchedule!.dateString)
+                  }
+                  onSaveRunning={(itemId, payload) =>
+                    saveRunningPayload(
+                      itemId,
+                      payload,
+                      activeSchedule!.dateString,
+                    )
+                  }
+                  isLocked={activeSchedule?.dayStatus !== DayStatus.PENDING}
+                  canShift={canShift}
+                  onShift={handleShift}
+                  onUnlockRequest={() => setUpgradePromptOpen(true)}
+                />
             </div>
 
             <MobileActionBar

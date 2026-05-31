@@ -19,7 +19,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
 import { ScheduleItemCard } from './ScheduleItemCard';
-import { Button } from '@athlete-planner/ui';
+import { Button, ConfirmModal } from '@athlete-planner/ui';
 
 interface DailyScheduleViewProps {
   items: ScheduleItem[];
@@ -32,6 +32,7 @@ interface DailyScheduleViewProps {
   isLocked?: boolean;
   canShift?: boolean;
   onShift?: () => Promise<void>;
+  onUnlockRequest?: () => void;
 }
 
 export function DailyScheduleView({
@@ -45,6 +46,7 @@ export function DailyScheduleView({
   isLocked,
   canShift,
   onShift,
+  onUnlockRequest,
 }: DailyScheduleViewProps) {
   const t = useTranslations('schedule');
 
@@ -99,6 +101,7 @@ export function DailyScheduleView({
                     onSaveGym={onSaveGym}
                     onSaveRunning={onSaveRunning}
                     isLockedFree={item.isLockedFree}
+                    onUnlockRequest={onUnlockRequest}
                   />
                 ))}
               </div>
@@ -106,7 +109,7 @@ export function DailyScheduleView({
           </DndContext>
 
           {canShift && onShift && (
-            <ShiftButton onShift={onShift} />
+            <ShiftButton onShift={onShift} itemCount={items.length} />
           )}
 
           {!isLocked && (
@@ -125,11 +128,14 @@ export function DailyScheduleView({
   );
 }
 
-function ShiftButton({ onShift }: { onShift: () => Promise<void> }) {
+function ShiftButton({ onShift, itemCount }: { onShift: () => Promise<void>; itemCount: number }) {
   const t = useTranslations('schedule');
+  const tCommon = useTranslations('common');
   const [shifting, setShifting] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
-  async function handleShift() {
+  async function handleConfirmedShift() {
+    setConfirmOpen(false);
     setShifting(true);
     try {
       await onShift();
@@ -139,18 +145,31 @@ function ShiftButton({ onShift }: { onShift: () => Promise<void> }) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleShift}
-      disabled={shifting}
-      className="flex items-center justify-center gap-2 w-full rounded-lg border border-border px-4 py-3 text-caption text-text-secondary hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px] disabled:opacity-60"
-    >
-      {shifting
-        ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-        : <ArrowRightCircle className="h-4 w-4" aria-hidden />
-      }
-      {shifting ? t('shifting') : t('shiftToTomorrow')}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => setConfirmOpen(true)}
+        disabled={shifting}
+        className="flex items-center justify-center gap-2 w-full rounded-lg border border-border px-4 py-3 text-caption text-text-secondary hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px] disabled:opacity-60"
+      >
+        {shifting
+          ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+          : <ArrowRightCircle className="h-4 w-4" aria-hidden />
+        }
+        {shifting ? t('shifting') : t('shiftToTomorrow')}
+      </button>
+
+      <ConfirmModal
+        open={confirmOpen}
+        title={t('shiftConfirmTitle')}
+        message={t('shiftConfirmMessage', { count: itemCount })}
+        confirmLabel={t('shiftConfirm')}
+        cancelLabel={tCommon('cancel')}
+        destructive
+        onConfirm={handleConfirmedShift}
+        onCancel={() => setConfirmOpen(false)}
+      />
+    </>
   );
 }
 

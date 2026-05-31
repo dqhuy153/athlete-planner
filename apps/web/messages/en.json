@@ -139,7 +139,10 @@
     "shiftToTomorrow": "Shift unfinished to tomorrow",
     "shifting": "Shifting...",
     "shiftSuccess": "Workouts shifted to tomorrow",
-    "shiftError": "Could not shift workouts"
+    "shiftError": "Could not shift workouts",
+    "shiftConfirmTitle": "Confirm shift",
+    "shiftConfirmMessage": "You are shifting {count} pending workout(s) to tomorrow. This cannot be undone.",
+    "shiftConfirm": "Shift to tomorrow"
   },
   "library": {
     "title": "Exercise Library",

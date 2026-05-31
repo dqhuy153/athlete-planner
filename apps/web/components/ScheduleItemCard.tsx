@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import type { ScheduleItem, GymPayload, RunningPayload, GymExerciseMaster, RunningExerciseMaster, LocalizedStringArray } from '@athlete-planner/contracts';
 import { SportType, RunningIntensityType } from '@athlete-planner/contracts';
-import { BottomSheet, useToast } from '@athlete-planner/ui';
+import { BottomSheet } from '@athlete-planner/ui';
 import { GymPayloadEditor }     from './GymPayloadEditor';
 import { RunningPayloadEditor } from './RunningPayloadEditor';
 import { RestTimer }            from './RestTimer';
@@ -22,6 +22,7 @@ interface ScheduleItemCardProps {
   onSaveGym:     (itemId: string, payload: GymPayload) => Promise<void>;
   onSaveRunning: (itemId: string, payload: RunningPayload) => Promise<void>;
   isLockedFree?: boolean;
+  onUnlockRequest?: () => void;
 }
 
 export function ScheduleItemCard({
@@ -31,11 +32,11 @@ export function ScheduleItemCard({
   onSaveGym,
   onSaveRunning,
   isLockedFree,
+  onUnlockRequest,
 }: ScheduleItemCardProps) {
   const t = useTranslations('schedule');
   const params = useParams();
   const locale = (params.locale as string) ?? 'vi';
-  const { push: pushToast } = useToast();
 
   const {
     attributes,
@@ -204,7 +205,7 @@ export function ScheduleItemCard({
           type="button"
           onClick={() => {
             if (isLockedFree) {
-              pushToast({ title: t('historyLockedToast'), tone: 'info' });
+              onUnlockRequest?.();
               return;
             }
             setExpanded(v => !v);
@@ -236,7 +237,7 @@ export function ScheduleItemCard({
         <div className="px-3 pb-3">
           <button
             type="button"
-            onClick={() => pushToast({ title: t('historyLockedToast'), tone: 'info' })}
+            onClick={() => onUnlockRequest?.()}
             className="relative w-full h-12 rounded-lg overflow-hidden border border-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <div className="absolute inset-0 bg-surface-3/80 backdrop-blur-sm" />

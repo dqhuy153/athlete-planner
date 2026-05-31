@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { CheckCircle2, Download, Share, Dumbbell, PersonStanding } from 'lucide-react';
+import { CheckCircle2, Download, Share, Dumbbell, PersonStanding, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { format } from 'date-fns';
@@ -47,6 +47,8 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
   if (!session) return null;
 
   const userTier = (authSession?.user as { tier?: UserTier })?.tier ?? UserTier.FREE;
+  const hasUsedFreeExport = authSession?.user?.hasUsedFreeExport ?? false;
+  const isExportBlocked = userTier === UserTier.FREE && hasUsedFreeExport;
   const token = (authSession as { accessToken?: string })?.accessToken;
   const userName = authSession?.user?.name ?? 'Athlete';
   const s = session;
@@ -75,6 +77,10 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
   const hasRunning = runItems.length > 0;
 
   async function handleExportFit() {
+    if (isExportBlocked) {
+      setUpgradeOpen(true);
+      return;
+    }
     if (!s.dateString || !token) return;
     setExporting(true);
     try {
@@ -106,7 +112,7 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
       const dataUrl = await htmlToImage.toPng(el, { pixelRatio: 2 });
       const a = document.createElement('a');
       a.href = dataUrl;
-      a.download = 'workout-achievement.png';
+      a.download = `Athlete-Planner-${format(new Date(), 'yyyy-MM-dd')}.png`;
       document.body.appendChild(a); a.click(); a.remove();
     } catch {
       pushToast({ title: t('saveImageError'), tone: 'error' });
@@ -238,16 +244,24 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
           <div className="space-y-1">
             {userTier === UserTier.FREE && (
               <p className="text-center text-micro text-accent">
-                {tExport('freeExportHint')}
+                {isExportBlocked ? tExport('trialExhausted') : tExport('freeExportHint')}
               </p>
             )}
             <button
               type="button"
               onClick={handleExportFit}
               disabled={exporting}
-              className="flex w-full items-center justify-center gap-2 min-h-[48px] rounded-xl border border-border bg-surface-2 text-text-primary text-sm font-medium hover:bg-surface-3 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-60"
+              className={cn(
+                'flex w-full items-center justify-center gap-2 min-h-[48px] rounded-xl border border-border bg-surface-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-60',
+                isExportBlocked
+                  ? 'text-text-tertiary hover:bg-surface-3'
+                  : 'text-text-primary hover:bg-surface-3',
+              )}
             >
-              <Download size={15} aria-hidden />
+              {isExportBlocked
+                ? <Lock size={15} aria-hidden />
+                : <Download size={15} aria-hidden />
+              }
               {exporting ? '…' : t('exportFit')}
             </button>
           </div>

@@ -139,7 +139,10 @@
     "shiftToTomorrow": "Chuyển chưa xong sang ngày mai",
     "shifting": "Đang chuyển...",
     "shiftSuccess": "Đã chuyển bài tập sang ngày mai",
-    "shiftError": "Không chuyển được bài tập"
+    "shiftError": "Không chuyển được bài tập",
+    "shiftConfirmTitle": "Xác nhận dời lịch",
+    "shiftConfirmMessage": "Bạn đang dời {count} bài tập chưa hoàn thành sang ngày mai. Không thể hoàn tác.",
+    "shiftConfirm": "Dời sang ngày mai"
   },
   "library": {
     "title": "Thư viện bài tập",

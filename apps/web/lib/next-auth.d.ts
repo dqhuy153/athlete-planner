@@ -9,6 +9,7 @@ declare module 'next-auth' {
       role: string;
       tier: string;
       preferredLevel?: ExperienceLevel | null;
+      hasUsedFreeExport: boolean;
     } & DefaultSession['user'];
   }
 }

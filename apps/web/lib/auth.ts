@@ -112,6 +112,7 @@ const authConfig = NextAuth({
           token.picture = nestUser.avatarUrl as string;
           token.tier = nestUser.tier as UserTier;
           token.preferredLevel = (nestUser.preferredLevel as ExperienceLevel | null) ?? null;
+          token.hasUsedFreeExport = (nestUser.hasUsedFreeExport as boolean) ?? false;
         }
       }
       return token;
@@ -124,6 +125,7 @@ const authConfig = NextAuth({
         role: string;
         tier: UserTier;
         preferredLevel: ExperienceLevel | null;
+        hasUsedFreeExport: boolean;
       };
       return {
         ...session,
@@ -133,6 +135,7 @@ const authConfig = NextAuth({
           role: t.role,
           tier: t.tier,
           preferredLevel: t.preferredLevel ?? null,
+          hasUsedFreeExport: t.hasUsedFreeExport ?? false,
         },
         accessToken: t.accessToken,
       };

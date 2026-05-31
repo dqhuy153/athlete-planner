@@ -9,6 +9,7 @@ declare module 'next-auth' {
       role: string;
       tier: UserTier;
       preferredLevel: ExperienceLevel | null;
+      hasUsedFreeExport: boolean;
     } & DefaultSession['user'];
   }
 }
@@ -21,5 +22,6 @@ declare module 'next-auth/jwt' {
     role: string;
     tier: UserTier;
     preferredLevel: ExperienceLevel | null;
+    hasUsedFreeExport: boolean;
   }
 }
