@@ -23,6 +23,26 @@ import { DeleteExerciseModal, type DeleteModalState } from './components/DeleteE
 
 type Tab = 'gym' | 'running';
 
+function exportExercisesToCSV(exercises: (GymExerciseMaster | RunningExerciseMaster)[], tab: Tab) {
+  const headers = ['ID', 'Name', 'Vietnamese Name', tab === 'gym' ? 'Muscle Group' : 'Running Type', 'Active', 'Created At'];
+  const rows = exercises.map(ex => [
+    ex.id,
+    ex.name,
+    ex.vietnameseName,
+    'targetMuscleGroup' in ex ? ex.targetMuscleGroup : ex.runningType,
+    ex.isActive ? 'true' : 'false',
+    ex.createdAt,
+  ]);
+  const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `athlete-exercises-${tab}-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function ExercisesPage() {
   const { session } = useAuth();
   const isRoot = session?.role === UserRole.ROOT;
@@ -149,6 +169,14 @@ export default function ExercisesPage() {
           >
             <Upload className="h-4 w-4" aria-hidden />
             Import JSON
+          </button>
+          <button
+            type="button"
+            onClick={() => exportExercisesToCSV(tab === 'gym' ? gymExercises : runningExercises, tab)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          >
+            <Download className="h-4 w-4" aria-hidden />
+            Export CSV
           </button>
           <button
             type="button"
