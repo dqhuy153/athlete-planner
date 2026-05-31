@@ -44,34 +44,33 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
   const [remaining, setRemaining] = useState(totalSeconds);
   const [running, setRunning] = useState(totalSeconds > 0);
 
-  // Effect 1: Reset timer when phase index changes
+  // 1. Reset timer when phase index changes
   useEffect(() => {
     const secs = currentPhase?.duration_minutes
       ? Math.round(currentPhase.duration_minutes * 60)
       : 0;
     setRemaining(secs);
     setRunning(secs > 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item.currentPhaseIndex]);
+  }, [item.currentPhaseIndex, currentPhase]);
 
-  // Effect 2: Countdown tick — uses functional updater so only depends on [running]
+  // 2. Countdown tick
   useEffect(() => {
-    if (!running) return;
-    const id = setInterval(() => setRemaining((r) => Math.max(0, r - 1)), 1000);
+    if (!running || remaining <= 0) return;
+    const id = setInterval(() => setRemaining((r) => r - 1), 1000);
     return () => clearInterval(id);
-  }, [running]);
+  }, [running, remaining]);
 
-  // Effect 3: When timer reaches 0 while still running — stop timer and auto-advance
-  // Checks running === true to fire in the same render cycle where remaining hits 0,
-  // avoiding the race condition of waiting for a separate "stop timer" effect.
+  // 3. Handle timer reaching 0
   useEffect(() => {
-    if (remaining !== 0 || totalSeconds === 0 || !running) return;
-    setRunning(false);
-    if (automationMode === 'auto') {
-      handleAdvance();
+    if (remaining === 0 && totalSeconds > 0 && running) {
+      setRunning(false);
+      if (automationMode === 'auto') {
+        triggerRestDone(session?.soundEnabled ?? false, session?.vibrationEnabled ?? true);
+        handleAdvance();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [remaining, running, totalSeconds]);
+  }, [remaining, totalSeconds, running, automationMode]);
 
   // Between-exercises rest timer (local countdown)
   const [betweenRemaining, setBetweenRemaining] = useState(currentBetweenExercisesSeconds);

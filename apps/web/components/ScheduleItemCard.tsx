@@ -233,12 +233,18 @@ export function ScheduleItemCard({
       </div>
 
       {isLockedFree && (
-        <div className="relative mx-3 mb-3 h-12 rounded-lg overflow-hidden border border-accent/20">
-          <div className="absolute inset-0 bg-surface-3/80 backdrop-blur-sm" />
-          <div className="absolute inset-0 flex items-center justify-center gap-2 text-accent">
-            <Lock className="h-4 w-4" aria-hidden />
-            <span className="text-caption font-medium">{t('historyLockedCard')}</span>
-          </div>
+        <div className="px-3 pb-3">
+          <button
+            type="button"
+            onClick={() => pushToast({ title: t('historyLockedToast'), tone: 'info' })}
+            className="relative w-full h-12 rounded-lg overflow-hidden border border-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <div className="absolute inset-0 bg-surface-3/80 backdrop-blur-sm" />
+            <div className="absolute inset-0 flex items-center justify-center gap-2 text-accent">
+              <Lock className="h-4 w-4" aria-hidden />
+              <span className="text-caption font-medium">{t('historyLockedCard')}</span>
+            </div>
+          </button>
         </div>
       )}
 

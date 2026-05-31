@@ -37,15 +37,11 @@ export class ExportController {
     const user = await this.prisma.user.findUnique({ where: { id: req.user.userId } });
     if (!user) throw new ForbiddenException('User not found');
 
-    if (user.tier === UserTier.FREE) {
+    const isFreeTrialUser = user.tier === UserTier.FREE;
+    if (isFreeTrialUser) {
       if (user.hasUsedFreeExport) {
         throw new ForbiddenException('TRIAL_EXHAUSTED');
       }
-      // Consume the free trial
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: { hasUsedFreeExport: true },
-      });
     }
     // PRO users fall through
 
@@ -59,6 +55,7 @@ export class ExportController {
     const items = schedule.items;
     const { exerciseNames, gymEnums } = await this.resolveExerciseMetadata(items);
 
+    // Build FITs first — only consume the free trial once the export succeeds
     const fits = this.fitBuilder.buildDayFits(
       // any cast: DayStatus/SportType enums differ between Prisma and contracts
       schedule as any,
@@ -66,6 +63,14 @@ export class ExportController {
       exerciseNames,
       gymEnums,
     );
+
+    // Commit free trial consumption only after a successful build
+    if (isFreeTrialUser) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { hasUsedFreeExport: true },
+      });
+    }
 
     if (fits.length === 1) {
       res.set({

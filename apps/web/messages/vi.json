@@ -475,6 +475,7 @@
     "applying": "Đang thiết lập tuần của bạn...",
     "successToast": "Đã áp dụng mẫu! Sẵn sàng tập chưa?",
     "errorToast": "Không áp dụng được mẫu. Hãy thêm thủ công.",
+    "noExercisesFound": "Thư viện bài tập chưa có dữ liệu. Liên hệ admin để thêm.",
     "chooseTemplate": "Chọn mẫu lịch",
     "close": "Đóng"
   }

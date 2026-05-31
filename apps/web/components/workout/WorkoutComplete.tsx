@@ -136,7 +136,7 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
       <div
         ref={ticketRef}
         id="workout-ticket"
-        className="w-[350px] shrink-0 rounded-2xl border border-accent/30 bg-surface-1 p-6 shadow-lg"
+        className="w-full max-w-[350px] rounded-2xl border border-accent/30 bg-surface-1 p-6 shadow-lg"
       >
         {/* Ticket header */}
         <div className="flex items-start justify-between mb-5">

@@ -475,6 +475,7 @@
     "applying": "Setting up your week...",
     "successToast": "Template applied! Ready to sweat?",
     "errorToast": "Could not apply template. Try adding manually.",
+    "noExercisesFound": "No exercises in the library yet. Ask your admin to add some.",
     "chooseTemplate": "Choose a template",
     "close": "Close"
   }

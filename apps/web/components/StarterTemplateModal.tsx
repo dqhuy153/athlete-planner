@@ -52,6 +52,12 @@ export function StarterTemplateModal({
         { dateString: friday,    exerciseId: legsEx?.id  ?? '' },
       ].filter(s => s.exerciseId);
 
+      if (slots.length === 0) {
+        pushToast({ title: t('noExercisesFound'), tone: 'warning' });
+        onClose();
+        return;
+      }
+
       for (const { dateString, exerciseId } of slots) {
         const schedule = await api.getOrCreateDailySchedule(token, dateString);
         await api.addScheduleItem(token, schedule.id, {
@@ -80,6 +86,12 @@ export function StarterTemplateModal({
         { dateString: wednesday, exerciseId: intervalEx?.id ?? '' },
         { dateString: friday,    exerciseId: easyEx?.id     ?? '' },
       ].filter(s => s.exerciseId);
+
+      if (slots.length === 0) {
+        pushToast({ title: t('noExercisesFound'), tone: 'warning' });
+        onClose();
+        return;
+      }
 
       for (const { dateString, exerciseId } of slots) {
         const schedule = await api.getOrCreateDailySchedule(token, dateString);
