@@ -16,6 +16,8 @@ import {
   Sun,
   Moon,
   BookOpen,
+  Menu,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@athlete-planner/ui'
@@ -24,13 +26,14 @@ import { Button } from '@athlete-planner/ui'
 const isDev = process.env.NODE_ENV === 'development'
 type DevTier = 'FREE' | 'PRO'
 const DEV_ACCOUNTS: Record<DevTier, { email: string }> = {
-  FREE: { email: 'dev-free@local.dev' },
-  PRO: { email: 'dev-pro@local.dev' },
+  FREE: { email: 'dev-free@example.com' },
+  PRO: { email: 'dev-pro@example.com' },
 }
 
 export default function LandingPage() {
   const tl = useTranslations('landing')
   const ta = useTranslations('auth')
+  const tc = useTranslations('common')
   const { data: session, status } = useSession()
   const router = useRouter()
   const params = useParams()
@@ -39,6 +42,7 @@ export default function LandingPage() {
 
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const [googleLoading, setGoogleLoading] = useState(false)
   const [devLoading, setDevLoading] = useState<DevTier | null>(null)
@@ -56,9 +60,19 @@ export default function LandingPage() {
     }
   }, [status, session, locale, router, searchParams])
 
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 640) setMobileMenuOpen(false)
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   async function handleSignIn() {
     setError(null)
     setGoogleLoading(true)
+    setMobileMenuOpen(false)
     const cb = searchParams.get('callbackUrl') ?? `/${locale}/schedule`
     await signIn('google', { callbackUrl: cb })
   }
@@ -66,6 +80,7 @@ export default function LandingPage() {
   async function handleDevLogin(tier: DevTier) {
     setError(null)
     setDevLoading(tier)
+    setMobileMenuOpen(false)
     const result = await signIn('dev-credentials', {
       email: DEV_ACCOUNTS[tier].email,
       tier,
@@ -111,6 +126,107 @@ export default function LandingPage() {
       <div className='absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none' />
       <div className='absolute top-[40%] right-[-10%] w-[350px] h-[350px] bg-accent/5 blur-[100px] rounded-full pointer-events-none' />
 
+      {/* ── Mobile Menu Overlay ── */}
+      {mobileMenuOpen && (
+        <div
+          className='fixed inset-0 z-50 bg-black/60 backdrop-blur-sm sm:hidden'
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden='true'
+        />
+      )}
+
+      {/* ── Mobile Drawer ── */}
+      <div
+        className={cn(
+          'fixed top-0 right-0 z-50 h-full w-72 bg-surface-1 border-l border-border shadow-2xl transition-transform duration-300 ease-out sm:hidden',
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
+        )}
+      >
+        <div className='flex items-center justify-between p-4 border-b border-border'>
+          <span className='text-sm font-bold text-text-primary'>Menu</span>
+          <button
+            type='button'
+            onClick={() => setMobileMenuOpen(false)}
+            className='p-2 rounded-lg hover:bg-surface-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center'
+            aria-label='Close menu'
+          >
+            <X size={18} />
+          </button>
+        </div>
+        <nav className='flex flex-col p-4 gap-1'>
+          <Link
+            href={`/${locale}/library`}
+            className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors min-h-[48px]'
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <BookOpen size={18} />
+            {tl('navLibrary')}
+          </Link>
+
+          <div className='my-2 h-px bg-border' />
+
+          <button
+            type='button'
+            onClick={toggleLanguage}
+            className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors min-h-[48px] text-left'
+          >
+            <Globe size={18} />
+            {isVi ? 'English' : 'Tiếng Việt'}
+          </button>
+
+          {mounted && (
+            <button
+              type='button'
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors min-h-[48px] text-left'
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              {theme === 'dark' ? tc('lightMode') : tc('darkMode')}
+            </button>
+          )}
+
+          <div className='my-2 h-px bg-border' />
+
+          <button
+            type='button'
+            onClick={handleSignIn}
+            disabled={googleLoading}
+            className='flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-accent hover:text-accent/80 transition-colors disabled:opacity-50 min-h-[48px] text-left'
+          >
+            {googleLoading ? ta('signIn') + '…' : tl('ctaSignIn')}
+          </button>
+
+          {isDev && (
+            <>
+              <div className='my-2 h-px bg-border' />
+              <div className='px-3 py-2'>
+                <p className='text-[10px] font-bold text-text-tertiary uppercase tracking-wider mb-2'>
+                  Dev Sandbox
+                </p>
+                <div className='flex gap-2'>
+                  {(['FREE', 'PRO'] as DevTier[]).map(tier => (
+                    <button
+                      key={tier}
+                      type='button'
+                      onClick={() => handleDevLogin(tier)}
+                      disabled={devLoading !== null}
+                      className={cn(
+                        'flex-1 flex min-h-[40px] items-center justify-center gap-2 rounded-xl border px-3 text-xs font-bold transition-all duration-200 disabled:opacity-50 active:scale-95',
+                        tier === 'PRO'
+                          ? 'border-accent/30 bg-accent/5 text-accent hover:bg-accent/10'
+                          : 'border-border bg-surface-2 text-text-primary hover:bg-surface-3',
+                      )}
+                    >
+                      {devLoading === tier ? '…' : `${tier} Mode`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </nav>
+      </div>
+
       {/* ── Header ── */}
       <header className='sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md'>
         <div className='mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6'>
@@ -139,33 +255,30 @@ export default function LandingPage() {
             </nav>
           </div>
 
-          <div className='flex items-center gap-2'>
-            {/* Language switcher — icon-only on mobile, full on desktop */}
+          {/* Desktop: inline actions */}
+          <div className='hidden sm:flex items-center gap-2.5'>
             <button
               type='button'
               onClick={toggleLanguage}
-              className='flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg border border-border bg-surface-1 text-xs font-semibold text-text-secondary hover:bg-surface-2 hover:text-text-primary transition-all'
+              className='flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-surface-1 text-xs font-semibold text-text-secondary hover:bg-surface-2 hover:text-text-primary transition-all'
               title={isVi ? 'Switch to English' : 'Chuyển sang Tiếng Việt'}
             >
               <Globe size={14} />
-              <span className='hidden sm:inline uppercase'>
-                {isVi ? 'EN' : 'VI'}
-              </span>
+              <span className='uppercase'>{isVi ? 'EN' : 'VI'}</span>
             </button>
 
-            {/* Theme toggle — desktop only */}
             {mounted && (
               <button
                 type='button'
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className='hidden sm:flex p-2 rounded-lg border border-border bg-surface-1 text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-all'
+                className='p-2 rounded-lg border border-border bg-surface-1 text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-all'
                 title='Toggle Theme'
               >
                 {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
               </button>
             )}
 
-            <span className='hidden sm:block h-4 w-px bg-border mx-1' />
+            <span className='h-4 w-px bg-border mx-1' />
 
             <button
               type='button'
@@ -176,6 +289,16 @@ export default function LandingPage() {
               {tl('ctaSignIn')}
             </button>
           </div>
+
+          {/* Mobile: hamburger */}
+          <button
+            type='button'
+            onClick={() => setMobileMenuOpen(true)}
+            className='sm:hidden p-2 rounded-lg hover:bg-surface-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center'
+            aria-label='Open menu'
+          >
+            <Menu size={20} className='text-text-secondary' />
+          </button>
         </div>
       </header>
 
@@ -186,7 +309,7 @@ export default function LandingPage() {
           {tl('heroBadge')}
         </div>
 
-        <h1 className='mb-6 text-4xl font-extrabold leading-snug tracking-tight sm:text-6xl text-text-primary '>
+        <h1 className='mb-6 text-4xl font-extrabold leading-snug tracking-tight sm:text-6xl text-text-primary'>
           {tl('heroTitle')}
           <br />
           <span className='bg-gradient-to-r from-accent leading-snug to-slate-400 bg-clip-text text-transparent'>
