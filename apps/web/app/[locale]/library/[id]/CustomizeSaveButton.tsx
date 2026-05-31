@@ -6,6 +6,7 @@ import { signIn, useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Copy, Check, X } from 'lucide-react';
 import { cn } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
 import { SportType } from '@athlete-planner/contracts';
 
@@ -141,13 +142,14 @@ export function CustomizeSaveButton({
               >
                 {t('closeWorkout')}
               </button>
-              <button
+              <Button
                 type="button"
+                variant="accent"
                 onClick={handleConfirm}
-                className="flex-1 min-h-[44px] rounded-xl bg-accent text-sm font-semibold text-accent-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex-1"
               >
                 {t('customizeSaveConfirmBtn')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { useParams, usePathname } from 'next/navigation';
 import { Zap, Check, Activity, History, Download, LayoutGrid, Globe } from 'lucide-react';
 import { api } from '@/lib/api';
 import { UserTier } from '@athlete-planner/contracts';
+import { Button } from '@athlete-planner/ui';
 
 export default function UpgradePage() {
   const t = useTranslations('upgrade');
@@ -113,14 +114,16 @@ export default function UpgradePage() {
           {t('alreadyPro')}
         </div>
       ) : isVi ? (
-        <button
+        <Button
+          variant="accent"
+          size="lg"
           onClick={handleUpgrade}
           disabled={loading}
-          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="w-full gap-2"
         >
           <Zap size={16} aria-hidden />
           {loading ? t('loading') : t('cta')}
-        </button>
+        </Button>
       ) : (
         <div className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-1 text-sm text-text-tertiary cursor-not-allowed select-none">
           <Globe size={16} aria-hidden />

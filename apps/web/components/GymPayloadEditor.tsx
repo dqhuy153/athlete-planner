@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Plus, Trash2, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { GymPayload, GymSet } from '@athlete-planner/contracts';
+import { Button } from '@athlete-planner/ui';
 
 interface GymPayloadEditorProps {
   initial: GymPayload;
@@ -155,15 +156,17 @@ export function GymPayloadEditor({ initial, onSave, saving }: GymPayloadEditorPr
         {t('addSet')}
       </button>
 
-      <button
+      <Button
         type="button"
+        variant="accent"
+        size="lg"
         onClick={handleSave}
         disabled={saving}
-        className="mt-1 flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 text-body font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
+        className="mt-1 w-full gap-2"
       >
         {saving && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
         {t('savePayload')}
-      </button>
+      </Button>
     </div>
   );
 }

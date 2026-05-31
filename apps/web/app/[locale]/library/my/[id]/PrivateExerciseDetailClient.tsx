@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { SportType } from '@athlete-planner/contracts';
+import { Button } from '@athlete-planner/ui';
 
 interface PrivateExerciseDetailClientProps {
   exercise: PrivateExercise;
@@ -194,15 +195,17 @@ export function PrivateExerciseDetailClient({
             <p className="mt-2 text-center text-xs text-error">{error}</p>
           )}
 
-          <button
+          <Button
             type="button"
+            variant="accent"
+            size="lg"
             onClick={handleSave}
             disabled={saving || !token}
-            className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="mt-4 w-full gap-2"
           >
             <Save size={15} aria-hidden />
             {saving ? t('saving') : saved ? t('savedConfig') : t('saveConfig')}
-          </button>
+          </Button>
         </section>
       )}
     </div>

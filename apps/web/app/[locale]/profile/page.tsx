@@ -19,6 +19,7 @@ import {
 import { useTheme } from 'next-themes'
 import { UserTier, ExperienceLevel } from '@athlete-planner/contracts'
 import { cn } from '@athlete-planner/ui'
+import { Button } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { AuthGate } from '@/components/AuthGate'
 
@@ -138,13 +139,12 @@ export default function ProfilePage() {
                   {t('upgradeBenefits')}
                 </p>
               </div>
-              <Link
-                href={`/${locale}/upgrade`}
-                className='flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent shrink-0'
-              >
-                <Zap size={14} aria-hidden />
-                {t('upgrade')}
-              </Link>
+              <Button variant="accent" size="sm" asChild className="shrink-0 gap-1.5">
+                <Link href={`/${locale}/upgrade`}>
+                  <Zap size={14} aria-hidden />
+                  {t('upgrade')}
+                </Link>
+              </Button>
             </div>
           </div>
         )}

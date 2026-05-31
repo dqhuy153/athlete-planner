@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Play, Square, SkipForward, TimerReset } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { Button } from '@athlete-planner/ui';
 
 interface RestTimerProps {
   defaultSeconds?: number;
@@ -100,17 +101,19 @@ export function RestTimer({ defaultSeconds = 90, onDone }: RestTimerProps) {
           <TimerReset className="h-5 w-5" aria-hidden />
         </button>
 
-        <button
+        <Button
           type="button"
+          variant="accent"
+          size="icon"
           onClick={toggle}
           aria-label={running ? t('pauseTimer') : t('startRest')}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-opacity"
+          className="h-14 w-14 rounded-full"
         >
           {running
             ? <Square className="h-5 w-5" aria-hidden />
             : <Play className="h-5 w-5" aria-hidden />
           }
-        </button>
+        </Button>
 
         <button
           type="button"

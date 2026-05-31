@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { X, Zap, Repeat, History, Activity } from 'lucide-react';
+import { Button } from '@athlete-planner/ui';
 
 interface UpgradePromptProps {
   isOpen: boolean;
@@ -72,13 +73,11 @@ export function UpgradePrompt({ isOpen, onClose, featureHint }: UpgradePromptPro
           <span className="text-xs text-muted-foreground">{t('oneTime')}</span>
         </div>
 
-        <Link
-          href={`/${locale}/upgrade`}
-          onClick={onClose}
-          className="flex min-h-[48px] w-full items-center justify-center rounded-xl bg-accent px-6 font-semibold text-black transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-        >
-          {t('cta')}
-        </Link>
+        <Button variant="accent" size="lg" asChild className="w-full">
+          <Link href={`/${locale}/upgrade`} onClick={onClose}>
+            {t('cta')}
+          </Link>
+        </Button>
       </div>
     </div>
   );

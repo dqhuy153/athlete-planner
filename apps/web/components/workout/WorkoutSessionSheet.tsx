@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Settings, Dumbbell, PersonStanding, CheckCircle2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { SportType } from '@athlete-planner/contracts';
 import { WorkoutGymItem } from './WorkoutGymItem';
@@ -257,13 +258,14 @@ export function WorkoutSessionSheet({ onClose }: WorkoutSessionSheetProps) {
               {t('abandonBody')}
             </p>
             <div className="flex flex-col gap-2">
-              <button
+              <Button
                 type="button"
+                variant="accent"
+                className="w-full"
                 onClick={() => setShowAbandonConfirm(false)}
-                className="min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 {t('abandonCancel')}
-              </button>
+              </Button>
               <button
                 type="button"
                 onClick={() => {

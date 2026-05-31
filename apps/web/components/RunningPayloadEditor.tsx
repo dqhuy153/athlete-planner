@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { RunningIntensityType, type RunningPayload } from '@athlete-planner/contracts';
+import { Button } from '@athlete-planner/ui';
 
 interface RunningPayloadEditorProps {
   initial: RunningPayload;
@@ -203,14 +204,16 @@ export function RunningPayloadEditor({ initial, onSave, saving }: RunningPayload
         </div>
       )}
 
-      <button
+      <Button
         type="button"
+        variant="accent"
+        size="lg"
         onClick={handleSave}
         disabled={saving}
-        className="mt-1 rounded-lg bg-accent px-4 py-3 text-body font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
+        className="mt-1 w-full"
       >
         {t('savePayload')}
-      </button>
+      </Button>
     </div>
   );
 }

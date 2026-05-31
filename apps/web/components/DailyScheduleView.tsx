@@ -18,6 +18,7 @@ import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { ScheduleItem, GymPayload, RunningPayload } from '@athlete-planner/contracts';
 import { ScheduleItemCard } from './ScheduleItemCard';
+import { Button } from '@athlete-planner/ui';
 
 interface DailyScheduleViewProps {
   items: ScheduleItem[];
@@ -63,13 +64,13 @@ export function DailyScheduleView({
         <div className="flex flex-col items-center gap-3 py-10 text-center">
           <p className="text-body text-text-tertiary">{t('emptyDay')}</p>
           {!isLocked && (
-            <button
+            <Button
               type="button"
+              variant="accent"
               onClick={onAdd}
-              className="rounded-lg bg-accent px-5 py-2.5 text-caption font-semibold text-accent-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[44px]"
             >
               {t('startPlanning')}
-            </button>
+            </Button>
           )}
         </div>
       ) : (

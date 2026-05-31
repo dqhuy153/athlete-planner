@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 
 const isDev = process.env.NODE_ENV === 'development';
 type DevTier = 'FREE' | 'PRO';
@@ -127,11 +128,13 @@ export default function LandingPage() {
         )}
 
         {/* Primary CTA */}
-        <button
+        <Button
           type="button"
+          variant="accent"
+          size="lg"
           onClick={handleSignIn}
           disabled={googleLoading}
-          className="inline-flex min-h-[52px] items-center gap-3 rounded-xl bg-accent px-8 text-base font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="gap-3 px-8"
         >
           <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
             <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
@@ -140,7 +143,7 @@ export default function LandingPage() {
             <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/>
           </svg>
           {googleLoading ? ta('signIn') + '…' : tl('ctaStart')}
-        </button>
+        </Button>
 
         {/* Dev login buttons */}
         {isDev && (
@@ -245,13 +248,12 @@ export default function LandingPage() {
               ))}
             </ul>
             {isVi ? (
-              <Link
-                href={`/${locale}/upgrade`}
-                className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-accent font-semibold text-accent-foreground transition-opacity hover:opacity-90 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                <Zap size={15} aria-hidden />
-                {tl('proCtaLanding')}
-              </Link>
+              <Button variant="accent" size="default" className="w-full gap-2" asChild>
+                <Link href={`/${locale}/upgrade`}>
+                  <Zap size={15} aria-hidden />
+                  {tl('proCtaLanding')}
+                </Link>
+              </Button>
             ) : (
               <div className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 text-sm text-text-tertiary cursor-not-allowed select-none">
                 <Globe size={14} aria-hidden />

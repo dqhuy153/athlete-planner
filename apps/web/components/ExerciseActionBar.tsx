@@ -6,6 +6,7 @@ import { useSession, signIn } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { Play, Calendar, CalendarPlus, Check, Loader2 } from 'lucide-react'
 import { cn } from '@athlete-planner/ui'
+import { Button } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { WorkoutSessionSheet } from './workout/WorkoutSessionSheet'
 import { useWorkoutStore } from '@/lib/store/workout'
@@ -247,14 +248,16 @@ export function ExerciseActionBar({
 
           <div className='flex gap-2 max-w-lg mx-auto'>
             {/* Start workout — primary CTA */}
-            <button
+            <Button
               type='button'
+              variant='accent'
+              size='lg'
               onClick={handleStartWorkout}
-              className='flex flex-1 min-h-[48px] items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
+              className='flex-1 gap-2'
             >
               <Play size={15} aria-hidden />
               {t('startWorkout')}
-            </button>
+            </Button>
 
             {/* Add to today */}
             <button
@@ -320,18 +323,19 @@ export function ExerciseActionBar({
                   onChange={e => setSelectedDate(e.target.value)}
                   className='flex-1 rounded-lg border border-border/60 bg-surface-3 px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent'
                 />
-                <button
+                <Button
                   type='button'
+                  variant='accent'
+                  size='sm'
                   onClick={handleAddToSchedule}
                   disabled={addingSchedule || !selectedDate}
-                  className='min-h-[40px] rounded-lg bg-accent px-4 text-sm font-semibold text-accent-foreground disabled:opacity-60 hover:opacity-90 transition-opacity'
                 >
                   {addingSchedule ? (
                     <Loader2 size={14} className='animate-spin' />
                   ) : (
                     t('confirmDate')
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -357,13 +361,14 @@ export function ExerciseActionBar({
               {tWorkout('replaceBody')}
             </p>
             <div className='flex flex-col gap-2'>
-              <button
+              <Button
                 type='button'
+                variant='accent'
+                className='w-full'
                 onClick={handleReplaceConfirm}
-                className='min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
               >
                 {tWorkout('replaceConfirm')}
-              </button>
+              </Button>
               <button
                 type='button'
                 onClick={() => setShowReplaceConfirm(false)}

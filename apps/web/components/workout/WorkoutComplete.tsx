@@ -5,6 +5,7 @@ import { CheckCircle2, Download, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { cn } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { WorkoutMode } from '@/lib/types/workout';
 import { UpgradePrompt } from '@/components/UpgradePrompt';
@@ -135,14 +136,16 @@ export function WorkoutComplete({ onClose }: WorkoutCompleteProps) {
         )}
 
         {/* Done */}
-        <button
+        <Button
           type="button"
+          variant="accent"
+          size="lg"
           onClick={handleDone}
           disabled={finishing}
-          className="flex w-full items-center justify-center min-h-[52px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-60"
+          className="w-full"
         >
           {t('doneBtn')}
-        </button>
+        </Button>
       </div>
 
       <UpgradePrompt

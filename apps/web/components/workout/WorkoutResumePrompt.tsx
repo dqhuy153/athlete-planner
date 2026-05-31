@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Play, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useWorkoutStore } from '@/lib/store/workout';
+import { Button } from '@athlete-planner/ui';
 
 interface WorkoutResumePromptProps {
   onResume: () => void;
@@ -71,14 +72,16 @@ export function WorkoutResumePrompt({ onResume }: WorkoutResumePromptProps) {
           >
             <Trash2 size={15} aria-hidden />
           </button>
-          <button
+          <Button
             type="button"
+            variant="accent"
+            size="sm"
             onClick={onResume}
-            className="flex items-center gap-2 min-h-[40px] rounded-xl bg-accent px-4 text-sm font-semibold text-accent-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="gap-2"
           >
             <Play size={13} aria-hidden />
             {t('resumeBtn')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

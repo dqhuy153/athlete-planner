@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import type { GymExerciseMaster, RunningExerciseMaster, PrivateExercise, WorkoutPhase } from '@athlete-planner/contracts';
 import { ExperienceLevel } from '@athlete-planner/contracts';
 import { cn } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 
 type Exercise = GymExerciseMaster | RunningExerciseMaster | PrivateExercise;
 
@@ -135,16 +136,16 @@ export function WorkoutTimerSheet({ exercise, locale, onClose }: WorkoutTimerShe
                   <ChevronLeft size={16} />{t('prevStep')}
                 </button>
                 {stepIndex < total - 1 ? (
-                  <button type="button"
+                  <Button type="button" variant="accent" size="lg"
                     onClick={() => setStepIndex((i) => i + 1)}
-                    className="flex-1 flex items-center justify-center gap-2 min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity">
+                    className="flex-1 gap-2">
                     {t('nextStep')}<ChevronRight size={16} />
-                  </button>
+                  </Button>
                 ) : (
-                  <button type="button" onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-2 min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity">
+                  <Button type="button" variant="accent" size="lg" onClick={onClose}
+                    className="flex-1 gap-2">
                     {t('closeWorkout')}
-                  </button>
+                  </Button>
                 )}
               </div>
             </>

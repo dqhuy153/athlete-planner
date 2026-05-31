@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ChevronRight, Timer } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 import { useWorkoutStore } from '@/lib/store/workout';
 import { WorkoutPhaseType } from '@athlete-planner/contracts';
 import type { WorkoutItem } from '@/lib/types/workout';
@@ -203,15 +204,17 @@ export function WorkoutRunningItem({ item, itemIndex }: WorkoutRunningItemProps)
       )}
 
       {/* Continue / Finish button */}
-      <button
+      <Button
         type="button"
+        variant="accent"
+        size="lg"
         onClick={handleAdvance}
         disabled={item.done}
-        className="flex w-full items-center justify-center gap-2 min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
+        className="w-full gap-2"
       >
         {item.currentPhaseIndex >= phases.length - 1 ? t('finishWorkout') : t('continuePhase')}
         <ChevronRight size={16} aria-hidden />
-      </button>
+      </Button>
     </div>
   );
 }

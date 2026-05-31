@@ -5,6 +5,7 @@ import { format, addDays, differenceInCalendarDays } from 'date-fns';
 import { Copy, AlertCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { BottomSheet } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 import { UserTier } from '@athlete-planner/contracts';
 
 interface CopyDayModalProps {
@@ -126,14 +127,15 @@ export function CopyDayModal({
           >
             {tCommon('cancel')}
           </button>
-          <button
+          <Button
             type="button"
+            variant="accent"
             onClick={handleConfirm}
             disabled={copying || isTargetLocked || targetDate === sourceDateString}
-            className="flex-1 rounded-lg bg-accent py-3 text-body font-semibold text-accent-foreground hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[48px]"
+            className="flex-1"
           >
             {copying ? t('copying') : t('confirmCopy')}
-          </button>
+          </Button>
         </div>
       </div>
     </BottomSheet>

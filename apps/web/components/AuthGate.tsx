@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAuthView } from '@/lib/hooks/useAuthView';
+import { Button } from '@athlete-planner/ui';
 
 interface AuthGateProps {
   children: React.ReactNode;
@@ -48,10 +49,12 @@ export function AuthGate({ children, callbackUrl, message }: AuthGateProps) {
           <p className="mb-6 text-sm text-text-secondary leading-relaxed">
             {message ?? t('defaultMessage')}
           </p>
-          <button
+          <Button
             type="button"
+            variant="accent"
+            size="lg"
             onClick={() => signIn('google', { callbackUrl: redirectUrl })}
-            className="inline-flex min-h-[48px] items-center gap-3 rounded-xl bg-accent px-6 font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="gap-3"
           >
             {/* Google G logo */}
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -61,7 +64,7 @@ export function AuthGate({ children, callbackUrl, message }: AuthGateProps) {
               <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/>
             </svg>
             {t('signInButton')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

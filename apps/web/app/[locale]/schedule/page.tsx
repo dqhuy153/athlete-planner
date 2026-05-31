@@ -18,6 +18,7 @@ import type {
 } from '@athlete-planner/contracts'
 import { UserTier, DayStatus, SportType } from '@athlete-planner/contracts'
 import { cn } from '@athlete-planner/ui'
+import { Button } from '@athlete-planner/ui'
 import { api } from '@/lib/api'
 import { useSchedule } from '@/lib/hooks/useSchedule'
 import { WeekCalendar } from '@/components/WeekCalendar'
@@ -472,14 +473,15 @@ export default function SchedulePage() {
             <div className='p-4 flex flex-col gap-2'>
               {/* Start Workout — shown when day has items */}
               {(activeSchedule?.items?.length ?? 0) > 0 && (
-                <button
+                <Button
                   type='button'
+                  variant='accent'
+                  className='w-full gap-2'
                   onClick={handleStartWorkout}
-                  className='flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
                 >
                   <Play size={15} aria-hidden />
                   {tWorkout('startWorkout')}
-                </button>
+                </Button>
               )}
               <button
                 type='button'
@@ -571,14 +573,16 @@ export default function SchedulePage() {
                   {t('disciplineRate')}
                 </span>
               </div>
-              <button
+              <Button
                 type='button'
+                variant='accent'
+                size='icon'
+                className='lg:hidden h-9 w-9'
                 onClick={() => setPickerOpen(true)}
-                className='lg:hidden flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
                 aria-label={t('addWorkout')}
               >
                 <Plus size={16} aria-hidden />
-              </button>
+              </Button>
             </div>
 
             {/* Day status bar */}
@@ -631,14 +635,16 @@ export default function SchedulePage() {
               {/* Bar */}
               <div className='border-t border-border bg-surface-1/95 backdrop-blur-2xl shadow-[0_-8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_-20px_56px_rgba(0,0,0,0.7),0_-1px_0_rgba(255,255,255,0.07),inset_0_1px_0_rgba(255,255,255,0.04)] flex gap-2 p-3'>
                 {(activeSchedule?.items?.length ?? 0) > 0 && (
-                  <button
+                  <Button
                     type='button'
+                    variant='accent'
+                    size='sm'
+                    className='flex-1 gap-1.5'
                     onClick={handleStartWorkout}
-                    className='flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-accent py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent min-h-[40px]'
                   >
                     <Play size={13} aria-hidden />
                     {tWorkout('startWorkout')}
-                  </button>
+                  </Button>
                 )}
                 <button
                   type='button'
@@ -748,8 +754,10 @@ export default function SchedulePage() {
                 {tWorkout('replaceBody')}
               </p>
               <div className='flex flex-col gap-2'>
-                <button
+                <Button
                   type='button'
+                  variant='accent'
+                  className='w-full'
                   onClick={() => {
                     discardSession()
                     const items = buildMultiItems()
@@ -764,10 +772,9 @@ export default function SchedulePage() {
                     setShowReplaceWorkout(false)
                     setWorkoutOpen(true)
                   }}
-                  className='min-h-[48px] rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent'
                 >
                   {tWorkout('replaceConfirm')}
-                </button>
+                </Button>
                 <button
                   type='button'
                   onClick={() => {

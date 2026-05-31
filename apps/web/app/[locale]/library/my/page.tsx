@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { UserTier } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
+import { Button } from '@athlete-planner/ui';
 import { ExerciseCard } from '@/components/ExerciseCard';
 import { TierLimitBanner } from '@/components/TierLimitBanner';
 
@@ -49,18 +50,15 @@ export default function MyExercisesPage({ params }: PageProps) {
             {exercises.length}/10
           </p>
           {(!isAtLimit || isPro) && (
-            <Link
-              href={`/${locale}/library/my/new`}
-              aria-label={t('addNew')}
-              className={[
-                'inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-2 text-micro font-semibold text-accent-foreground',
-                'min-h-[40px] transition-colors hover:bg-accent/90',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-              ].join(' ')}
-            >
-              <Plus className="h-4 w-4" aria-hidden />
-              {t('addNew')}
-            </Link>
+            <Button variant="accent" size="sm" asChild>
+              <Link
+                href={`/${locale}/library/my/new`}
+                aria-label={t('addNew')}
+              >
+                <Plus className="h-4 w-4" aria-hidden />
+                {t('addNew')}
+              </Link>
+            </Button>
           )}
         </div>
 

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { SportType, MuscleGroup, RunningType } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 import { Select } from '@athlete-planner/ui';
+import { Button } from '@athlete-planner/ui';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -187,19 +188,15 @@ export default function NewPrivateExercisePage({ params }: PageProps) {
         )}
 
         {/* Submit */}
-        <button
+        <Button
           type="submit"
+          variant="accent"
+          size="lg"
           disabled={submitting || !name.trim()}
-          className={[
-            'w-full rounded-md bg-accent px-4 py-3 text-caption font-semibold text-accent-foreground',
-            'min-h-[48px] transition-colors',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-            'disabled:opacity-50 disabled:cursor-not-allowed',
-            'hover:bg-accent/90',
-          ].join(' ')}
+          className="w-full"
         >
           {submitting ? t('saving') : tc('create')}
-        </button>
+        </Button>
       </form>
     </div>
   );
