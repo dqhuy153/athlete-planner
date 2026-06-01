@@ -61,8 +61,8 @@ export function DayStatusBar({
             disabled={disabled}
             aria-pressed={isActive}
             className={[
-              'flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2.5',
-              'min-h-[44px] text-caption font-medium',
+              'flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-2 py-1.5',
+              'min-h-[44px] text-caption font-medium overflow-hidden',
               'transition-colors duration-150',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
               'disabled:opacity-50 disabled:cursor-not-allowed',
@@ -72,7 +72,7 @@ export function DayStatusBar({
             ].join(' ')}
           >
             <Icon className='h-4 w-4 shrink-0' aria-hidden={true} />
-            <span>{t(labelKey)}</span>
+            <span className='whitespace-nowrap'>{t(labelKey)}</span>
           </button>
         )
       })}
