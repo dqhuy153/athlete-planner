@@ -54,43 +54,46 @@ export default function MyExercisesPage({ params }: PageProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="px-4 py-4 overflow-x-hidden">
+    <div className='flex flex-col h-full'>
+      <div className='px-4 py-4 overflow-x-hidden'>
         {/* Header row */}
-        <div className="mb-4 flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-3">
-            <p className="text-micro text-text-tertiary font-data">
-              {exercises.length}/10
-            </p>
-            <div className="w-24 h-1 bg-surface-3 rounded-full overflow-hidden">
-              <div
-                className={cn(
-                  'h-full rounded-full transition-all duration-300 ease-out',
-                  exercises.length >= 10
-                    ? 'bg-error'
-                    : exercises.length >= 8
-                    ? 'bg-amber-400'
-                    : 'bg-accent',
-                )}
-                style={{ width: `${Math.min((exercises.length / 10) * 100, 100)}%` }}
-              />
+        <div className='mb-4 flex items-center justify-between gap-2 flex-wrap'>
+          {/* Limit indicator - only for FREE tier */}
+          {!isPro && (
+            <div className='flex items-center gap-3'>
+              <p className='text-micro text-text-tertiary font-data'>
+                {exercises.length}/10
+              </p>
+              <div className='w-24 h-1 bg-surface-3 rounded-full overflow-hidden'>
+                <div
+                  className={cn(
+                    'h-full rounded-full transition-all duration-300 ease-out',
+                    exercises.length >= 10
+                      ? 'bg-error'
+                      : exercises.length >= 8
+                        ? 'bg-amber-400'
+                        : 'bg-accent',
+                  )}
+                  style={{ width: `${Math.min((exercises.length / 10) * 100, 100)}%` }}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="flex items-center gap-2">
-            {/* PRO import/AI buttons */}
+          <div className='flex items-center gap-2 overflow-x-auto pb-1'>
+            {/* PRO import/AI buttons - full text with scroll on mobile */}
             {isPro ? (
               <>
                 <button
                   onClick={() => setShowImportModal(true)}
-                  className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors"
+                  className='flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors whitespace-nowrap'
                 >
                   <FileJson size={13} aria-hidden />
                   {t('my.importJSON')}
                 </button>
                 <button
                   onClick={() => setShowAICreateModal(true)}
-                  className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors"
+                  className='flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors whitespace-nowrap'
                 >
                   <Sparkles size={13} aria-hidden />
                   {t('my.aiCreateExercise')}
@@ -98,36 +101,39 @@ export default function MyExercisesPage({ params }: PageProps) {
               </>
             ) : (
               <>
-                <div className="relative">
+                <div className='relative'>
                   <button
-                    className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-tertiary opacity-50 cursor-not-allowed"
+                    className='flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-tertiary opacity-50 cursor-not-allowed whitespace-nowrap'
                     disabled
-                    aria-disabled="true"
+                    aria-disabled='true'
                   >
                     <FileJson size={13} aria-hidden />
                     {t('my.importJSON')}
                   </button>
-                  <Lock size={11} className="absolute -top-1.5 -right-1.5 text-accent" aria-hidden />
+                  <Lock size={11} className='absolute -top-1.5 -right-1.5 text-accent' aria-hidden />
                 </div>
-                <div className="relative">
+                <div className='relative'>
                   <button
-                    className="flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-tertiary opacity-50 cursor-not-allowed"
+                    className='flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-tertiary opacity-50 cursor-not-allowed whitespace-nowrap'
                     disabled
-                    aria-disabled="true"
+                    aria-disabled='true'
                   >
                     <Sparkles size={13} aria-hidden />
                     {t('my.aiCreateExercise')}
                   </button>
-                  <Lock size={11} className="absolute -top-1.5 -right-1.5 text-accent" aria-hidden />
+                  <Lock size={11} className='absolute -top-1.5 -right-1.5 text-accent' aria-hidden />
                 </div>
               </>
             )}
 
             {/* Add new button */}
             {(!isAtLimit || isPro) && (
-              <Button variant="accent" size="sm" asChild>
-                <Link href={`/${locale}/library/my/new`} aria-label={t('addNew')}>
-                  <Plus className="h-4 w-4" aria-hidden />
+              <Button variant='accent' size='sm' asChild className='whitespace-nowrap'>
+                <Link
+                  href={`/${locale}/library/my/new`}
+                  aria-label={t('addNew')}
+                >
+                  <Plus className='h-4 w-4' aria-hidden />
                   {t('addNew')}
                 </Link>
               </Button>
@@ -137,25 +143,29 @@ export default function MyExercisesPage({ params }: PageProps) {
 
         {/* Tier limit banner */}
         {isAtLimit && !isPro && (
-          <div className="mb-4">
-            <TierLimitBanner locale={locale} messageKey="library.limitBanner" />
+          <div className='mb-4'>
+            <TierLimitBanner locale={locale} messageKey='library.limitBanner' />
           </div>
         )}
 
         {/* Loading */}
         {loading && (
-          <div className="py-12 text-center">
-            <p className="text-caption text-text-tertiary animate-pulse-subtle">{tc('loading')}</p>
+          <div className='py-12 text-center'>
+            <p className='text-caption text-text-tertiary animate-pulse-subtle'>
+              {tc('loading')}
+            </p>
           </div>
         )}
 
         {/* Empty state */}
         {!loading && exercises.length === 0 && (
-          <div className="py-12 text-center">
-            <p className="text-caption text-text-secondary">{t('noPrivateExercises')}</p>
+          <div className='py-12 text-center'>
+            <p className='text-caption text-text-secondary'>
+              {t('noPrivateExercises')}
+            </p>
             <Link
               href={`/${locale}/library/my/new`}
-              className="mt-3 inline-flex items-center gap-1.5 text-caption text-accent underline-offset-2 hover:underline"
+              className='mt-3 inline-flex items-center gap-1.5 text-caption text-accent underline-offset-2 hover:underline'
             >
               {t('addNew')}
             </Link>
@@ -165,8 +175,8 @@ export default function MyExercisesPage({ params }: PageProps) {
         {/* Exercise grid */}
         {!loading && exercises.length > 0 && (
           <ul
-            className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-            role="list"
+            className='grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+            role='list'
             aria-label={t('myExercises')}
           >
             {exercises.map((ex) => (

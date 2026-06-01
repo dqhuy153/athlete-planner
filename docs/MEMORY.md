@@ -463,3 +463,20 @@ modules/
 - AuthGate dev buttons: FREE/PRO bypass in `AuthGate.tsx` overlay (dev-only); uses `dev-credentials` provider
 
 **TypeScript:** `pnpm --filter web exec tsc --noEmit` passes with 0 errors after all changes.
+
+---
+
+### 2026-06-01: Layout Fixes + Vibe Coding Harness + Import Pipeline Planning
+
+**Layout fixes:**
+- `ExerciseActionBar.tsx`: Mobile - Start Workout + ⋯ dropdown, Desktop - 3 buttons với Start Workout chiếm 66%
+- `my/page.tsx`: Buttons rút ngắn thành "JSON", "AI", "Bài tập mới" + scroll bar, progress bar chỉ FREE tier
+
+**Vibe Coding Harness:**
+- `AGENTS.md`: Thêm Vibe Coding Harness section với workflow bắt buộc
+- `VIBE.md`: Bản dịch tiếng Việt hướng dẫn vibing với opencode CLI
+
+**Plans created:**
+- `docs/superpowers/plans/2026-06-01-fix-my-exercises-layout.md`
+- `docs/superpowers/plans/2026-06-01-unlimited-custom-exercises.md` (logic đã có sẵn)
+- `docs/superpowers/plans/2026-06-01-import-json-verify-pipeline.md`

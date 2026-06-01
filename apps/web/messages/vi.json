@@ -46,6 +46,7 @@
     "pending": "Chờ tập",
     "disciplineRate": "Tỷ lệ kỷ luật",
     "copyDay": "Sao chép",
+    "moreActions": "Tùy chọn khác",
     "copyWeek": "Sao chép tuần",
     "copyDayTitle": "Sao chép ngày",
     "copyDayDesc": "Sao chép tất cả bài tập từ ngày này sang ngày khác.",
@@ -228,8 +229,8 @@
     "tempoType": "Tempo",
     "longRunType": "Long Run",
     "my": {
-      "importJSON": "Nhập JSON",
-      "aiCreateExercise": "AI Tạo Bài",
+      "importJSON": "JSON",
+      "aiCreateExercise": "AI",
       "proRequired": "Cần PRO"
     },
     "searching": "Đang tìm..."

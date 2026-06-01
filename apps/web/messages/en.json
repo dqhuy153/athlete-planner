@@ -46,6 +46,7 @@
     "pending": "Pending",
     "disciplineRate": "Discipline Rate",
     "copyDay": "Copy",
+    "moreActions": "More actions",
     "copyWeek": "Copy week",
     "copyDayTitle": "Copy day",
     "copyDayDesc": "Copy all workouts from this day to another date.",
@@ -228,8 +229,8 @@
     "tempoType": "Tempo",
     "longRunType": "Long Run",
     "my": {
-      "importJSON": "Import JSON",
-      "aiCreateExercise": "AI Create Exercise",
+      "importJSON": "JSON",
+      "aiCreateExercise": "AI",
       "proRequired": "PRO required"
     },
     "searching": "Searching..."
