@@ -55,6 +55,8 @@ export interface FlatExerciseImportItem {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+const DEFAULT_TIMEOUT_MS = 15_000;
+
 class ApiClient {
   private baseUrl: string;
 
@@ -64,10 +66,27 @@ class ApiClient {
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}/api${path}`;
-    const res = await fetch(url, {
-      ...options,
-      headers: { 'Content-Type': 'application/json', ...options?.headers },
-    });
+
+    // Per-request abort with a hard 15s ceiling. iOS Safari PWA reloads can
+    // stall on hung TCP connections for the full 30s kernel default — this
+    // surfaces the failure faster and lets the UI recover gracefully.
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      DEFAULT_TIMEOUT_MS,
+    );
+
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
     if (!res.ok) {
       const text = await res.text();
       try {

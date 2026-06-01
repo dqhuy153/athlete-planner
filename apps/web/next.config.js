@@ -22,8 +22,12 @@ const withPWAConfig = withPWA({
   reloadOnOnline: false,
 
   workboxOptions: {
-    skipWaiting: true,
-    clientsClaim: true,
+    // NOTE: skipWaiting + clientsClaim intentionally OFF for iOS Safari PWA.
+    // Aggressive SW takeover on iOS causes 30s+ reload hangs because iOS
+    // can't close PWA tabs cleanly — the SW transition stalls until TCP timeout.
+    // The default install-and-wait flow is fast on iOS and avoids the deadlock.
+    skipWaiting: false,
+    clientsClaim: false,
 
     runtimeCaching: [
       {
