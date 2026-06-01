@@ -1,102 +1,81 @@
-# Import JSON Verify Pipeline for PRO Users
+# Import JSON Verify Pipeline Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Cho phép PRO user import JSON bài tập với verify pipeline tương tự admin, xử lý 3 loại exercises (admin existing, custom existing, new).
+**Goal:** PRO user import JSON exercises với verify pipeline, phân biệt admin existing, custom existing, new exercises.
 
-**Architecture:** Modal import JSON mới với download skill prompt, dry-run preview, multi-action selection, bulk apply.
+**Architecture:** Modal với sport selector → preview với action selection → bulk apply. Backend xử lý classification qua dry-run API.
 
-**Tech Stack:** React 19, Next.js 16, Prisma, CQRS, next-intl
+**Tech Stack:** React 19, Next.js 16, NestJS, Prisma, CQRS
 
 ---
 
-### Task 1: Add Download Skill Prompt Feature
-
-**Files:**
-- Modify: `apps/web/components/exercises/ImportJSONModal.tsx`
-
-- [ ] **Step 1: Add download button và skill prompt URLs**
-```typescript
-// Trong ImportJSONModal
-const GYM_SKILL_URL = '/skills/gym-exercise-import.md'
-const RUNNING_SKILL_URL = '/skills/running-exercise-import.md'
-
-// Thêm nút download trước drop zone
-<a href={isGym ? GYM_SKILL_URL : RUNNING_SKILL_URL} download className="text-xs text-accent underline">
-  Download skill prompt
-</a>
-```
-
-### Task 2: Add Exercise Type Detection
+### Task 1: Update FlatExerciseImportItem type
 
 **Files:**
 - Modify: `apps/web/lib/api.ts`
 
-- [ ] **Step 1: Add endpoint check exercise exists**
-```typescript
-// Thêm function kiểm tra exercise đã tồn tại
-async checkExerciseExists(token: string, name: string, sportType: 'GYM' | 'RUNNING') {
-  const res = await this.request(`/exercises/check-exists?name=${encodeURIComponent(name)}&sportType=${sportType}`, { token })
-  return res.json()
-}
-```
+- [ ] **Step 1: Add private exercise reference field**
 
-### Task 3: Update Modal with Verify Preview
+- [ ] **Step 2: Chạy TypeScript check**
+
+- [ ] **Step 3: Commit**
+
+### Task 2: Add preview API function
 
 **Files:**
-- Modify: `apps/web/components/exercises/ImportJSONModal.tsx`
-- Add: Preview state cho 3 loại exercises
+- Modify: `apps/web/lib/api.ts`
 
-- [ ] **Step 1: Thêm state cho preview data**
-```typescript
-const [previewData, setPreviewData] = useState<PreviewItem[]>([])
-const [selectedActions, setSelectedActions] = useState<Record<number, string>>({})
-```
+- [ ] **Step 1: Add preview function**
 
-- [ ] **Step 2: Gọi dry-run API sau khi parse JSON**
-```typescript
-// Sau khi parse JSON, gọi POST /exercises/private/import?dryRun=true
-const preview = await api.previewPrivateExercises(token, items)
-setPreviewData(formatPreview(preview))
-```
+- [ ] **Step 2: Chạy TypeScript check**
 
-### Task 4: Render Preview Table with Actions
+- [ ] **Step 3: Commit**
+
+### Task 3: Refactor ImportJSONModal with multi-step
 
 **Files:**
 - Modify: `apps/web/components/exercises/ImportJSONModal.tsx`
 
-- [ ] **Step 1: Hiển thị bảng preview với action select**
-```typescript
-// Status badge cho mỗi loại
-// - admin: DUPLICATE (skip/clone)
-// - custom: DUPLICATE (skip/override)  
-// - new: NEW (skip/create)
+- [ ] **Step 1: Add step state và sport selector**
 
-// Dropdown action cho mỗi row
-<select onChange={(e) => setSelectedActions({...selectedActions, [i]: e.target.value})}>
-  <option value="skip">Skip</option>
-  <option value="clone">Clone</option>
-  <option value="override">Override</option>
-  <option value="create">Create</option>
-</select>
-```
+- [ ] **Step 2: Render sport selector step**
 
-### Task 5: Bulk Save All Selections
+- [ ] **Step 3: Add preview step với action selection**
+
+- [ ] **Step 4: Chạy TypeScript check**
+
+- [ ] **Step 5: Commit**
+
+### Task 4: Create Backend Preview Handler
 
 **Files:**
-- Modify: `apps/web/components/exercises/ImportJSONModal.tsx`
+- Create: `apps/api/modules/exercises/queries/preview-private-import.handler.ts`
 
-- [ ] **Step 1: Thêm nút Save All và xử lý bulk create**
-```typescript
-// Khi click Save All, gom tất cả selections
-// POST /exercises/private/import?dryRun=false với actions array
-```
+- [ ] **Step 1: Implement handler**
 
-### Task 6: Update API
+- [ ] **Step 2: Chạy TypeScript check**
+
+- [ ] **Step 3: Commit**
+
+### Task 5: Register handlers
 
 **Files:**
-- Create: `apps/api/modules/exercises/commands/import-private-exercises.handler.ts`
-- Create: `apps/api/modules/exercises/queries/check-exercise-exists.handler.ts`
+- Modify: `apps/api/modules/exercises/exercises.module.ts`
 
-- [ ] **Step 1: Tạo handler mới cho private exercise import**
-- [ ] **Step 2: Register handlers trong exercises.module.ts
+- [ ] **Step 1: Register PreviewPrivateImportHandler**
+
+- [ ] **Step 2: Chạy TypeScript check**
+
+- [ ] **Step 3: Commit**
+
+### Task 6: Add i18n keys
+
+**Files:**
+- Modify: `apps/web/messages/vi.json` and `en.json`
+
+- [ ] **Step 1: Add new keys**
+
+- [ ] **Step 2: Chạy TypeScript check**
+
+- [ ] **Step 3: Commit**

@@ -4,6 +4,55 @@
 
 **IMPORTANT:** Read `docs/MEMORY.md` first for full architectural context and design decisions.
 
+## Non-Negotiable Rule: Every Prompt Goes Through Superpowers
+
+**EVERY user prompt — questions, bug reports, feature requests, refactors, even quick chats — MUST invoke the relevant superpowers skill via the `skill` tool BEFORE any response or action.** No exceptions, no shortcuts.
+
+- Even a 1% chance a skill applies → invoke it to check
+- Process skills (`brainstorming`, `systematic-debugging`) take priority over implementation skills
+- Never skip, even for "simple" or "obvious" tasks — simple bugs have root causes, and "obvious" fixes usually aren't
+- If after checking no skill applies, proceed with the response
+- This rule supersedes any default behavior and any temptation to "just answer quickly"
+
+**Quick decision tree — run this for EVERY prompt:**
+
+| Prompt type | Invoke first |
+|---|---|
+| New feature / creative work / new behavior | `brainstorming` |
+| Bug / unexpected behavior / test failure | `systematic-debugging` |
+| Multi-step plan / spec to implement | `writing-plans` |
+| Executing a written plan | `executing-plans` or `subagent-driven-development` |
+| 2+ independent parallel tasks | `dispatching-parallel-agents` |
+| UI / frontend component / design | `minimalist-ui`, `tailwind-design-system`, `frontend-design` |
+| NestJS / backend code | `nestjs-best-practices` |
+| Form / validation | `react-hook-form-zod` |
+| Zustand store / state | `zustand` |
+| Prisma query / database | `prisma-client-api`, `prisma-cli` |
+| i18n / translation | `readme-i18n` |
+| Deployment to Vercel | `deploy-to-vercel`, `vercel-cli-with-tokens` |
+| React / Next.js performance | `vercel-react-best-practices` |
+| React component architecture | `vercel-composition-patterns` |
+| About to claim work is done | `verification-before-completion` |
+| Receiving code review feedback | `receiving-code-review` |
+| Requesting code review | `requesting-code-review` |
+| Completing a development branch | `finishing-a-development-branch` |
+| Editing opencode config / subagents / skills | `customize-opencode` |
+| Looking for a skill that might exist | `find-skills` |
+
+**Rationalizations to reject (these are all wrong):**
+
+- *"Just a simple question"* → Skill check still required, comes first
+- *"I need more context first"* → Skill check comes BEFORE clarifying questions
+- *"Let me explore the codebase first"* → Skills tell you HOW to explore
+- *"This is too small for a skill"* → If any skill applies, use it
+- *"I remember the skill content"* → Skills evolve; always load the current version
+- *"The skill is overkill"* → Use it anyway
+- *"I'll just do this one thing first"* → Check BEFORE doing anything
+
+**The agent that fails to invoke skills is the agent that produces low-quality work. There is no "too simple" prompt.**
+
+
+
 ## Architecture
 
 ```
