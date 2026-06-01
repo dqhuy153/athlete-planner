@@ -1,19 +1,44 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import { useTranslations } from 'next-intl';
-import { Upload, Trash2, X } from 'lucide-react';
-import { api, FlatExerciseImportItem } from '@/lib/api';
+import { useState, useRef } from "react";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
+import { Upload, Trash2, X, Download } from "lucide-react";
+import { api, FlatExerciseImportItem } from "@/lib/api";
+import { SportType } from "@athlete-planner/contracts";
 
 interface Props {
   onClose: () => void;
   onSuccess: () => void;
+  sportType?: SportType;
 }
 
-const MUSCLE_OPTIONS = ['Chest', 'Back', 'Shoulders', 'Biceps', 'Triceps', 'Legs', 'Core', 'Glutes'];
+// Scalable configuration - easily extendable for new sports
+const SPORT_CONFIG: Record<SportType, {
+  skillUrl: string;
+  labelKey: string;
+  optionField: keyof FlatExerciseImportItem;
+  options: readonly string[];
+  placeholderKey: string;
+}> = {
+  [SportType.GYM]: {
+    skillUrl: "/skills/gym-exercise-import.md",
+    labelKey: "gym",
+    optionField: "targetMuscleGroup",
+    options: ["Chest", "Back", "Shoulders", "Arms", "Legs", "Abs"],
+    placeholderKey: "muscleGroupPlaceholder",
+  },
+  [SportType.RUNNING]: {
+    skillUrl: "/skills/running-exercise-import.md",
+    labelKey: "running",
+    optionField: "runningType",
+    options: ["Interval", "Easy", "Tempo", "Long_Run"],
+    placeholderKey: "runningTypePlaceholder",
+  },
+};
 
-export function ImportJSONModal({ onClose, onSuccess }: Props) {
+export function ImportJSONModal({ onClose, onSuccess, sportType = SportType.GYM }: Props) {
   const { data: session } = useSession();
   const t = useTranslations('importJSON');
   const tc = useTranslations('common');
@@ -21,6 +46,8 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const config = SPORT_CONFIG[sportType] || SPORT_CONFIG[SportType.GYM];
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,7 +60,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
         if (parsed.length > 50) { setError(t('maxItems')); return; }
         const valid = parsed.filter((item): item is FlatExerciseImportItem =>
           typeof item.name === 'string' && item.name.trim() !== '' &&
-          (item.sportType === 'GYM' || item.sportType === 'RUNNING')
+          Object.values(SportType).includes(item.sportType as SportType)
         );
         if (valid.length !== parsed.length) {
           setError(t('invalidItemsRemoved', { count: parsed.length - valid.length }));
@@ -86,6 +113,21 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
             </div>
           )}
 
+          {/* Skill prompt download */}
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-text-tertiary">
+              {t('formatHelp', { type: config.labelKey })}
+            </p>
+            <a
+              href={config.skillUrl}
+              download
+              className="flex items-center gap-1 text-xs text-accent hover:underline"
+            >
+              <Download size={12} aria-hidden />
+              {t('downloadPrompt')}
+            </a>
+          </div>
+
           {items.length === 0 ? (
             <div
               className="border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer hover:border-accent/50 transition-colors"
@@ -94,7 +136,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
               <Upload size={24} className="mx-auto mb-3 text-text-tertiary" aria-hidden />
               <p className="text-sm text-text-secondary">{t('dropPrompt')}</p>
               <p className="text-xs text-text-tertiary mt-1 font-mono">
-                [{'{'}name, sportType: &quot;GYM&quot;|&quot;RUNNING&quot;, ...{'}'}]
+                [{'{'}name, sportType: "GYM"|"RUNNING", ...{'}'}]
               </p>
               <input
                 ref={fileRef}
@@ -117,12 +159,12 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
                       className="rounded-lg border border-border bg-surface-1 px-2.5 py-1.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 min-h-[40px]"
                     />
                     <select
-                      value={item.targetMuscleGroup ?? ''}
-                      onChange={(e) => updateItem(index, 'targetMuscleGroup', e.target.value)}
+                      value={(item as unknown as Record<string, unknown>)[config.optionField] as string ?? ''}
+                      onChange={(e) => updateItem(index, config.optionField, e.target.value)}
                       className="rounded-lg border border-border bg-surface-1 px-2.5 py-1.5 text-sm text-text-primary focus:outline-none min-h-[40px]"
                     >
-                      <option value="">{t('muscleGroupPlaceholder')}</option>
-                      {MUSCLE_OPTIONS.map(m => <option key={m} value={m}>{m}</option>)}
+                      <option value="">{t(config.placeholderKey)}</option>
+                      {config.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                     <span className="text-xs text-text-tertiary col-span-2">
                       {item.sportType} · {item.customNotes ? item.customNotes.slice(0, 40) : t('noNotes')}

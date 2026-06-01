@@ -7,7 +7,12 @@ export class CopyDayHandler implements ICommandHandler<CopyDayCommand> {
   constructor(private readonly scheduleReplicationService: ScheduleReplicationService) {}
 
   async execute(command: CopyDayCommand) {
-    const { userId, sourceDateString, targetDateString } = command;
-    return this.scheduleReplicationService.copyDay(userId, sourceDateString, targetDateString);
+    const { userId, sourceDateString, targetDateString, overwrite } = command;
+    return this.scheduleReplicationService.copyDay(
+      userId,
+      sourceDateString,
+      targetDateString,
+      overwrite,
+    );
   }
 }

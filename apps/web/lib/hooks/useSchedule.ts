@@ -60,10 +60,10 @@ export function useSchedule({ token }: UseScheduleOptions) {
     }
   }, [token]);
 
-  const selectDate = useCallback(async (dateString: string): Promise<DailySchedule | null> => {
+  const selectDate = useCallback(async (dateString: string, options?: { force?: boolean }): Promise<DailySchedule | null> => {
     // Use ref to always get fresh schedules without recreating on every change
     const cached = schedulesRef.current.get(dateString);
-    if (cached) {
+    if (cached && !options?.force) {
       setActive(cached);
       return cached;
     }

@@ -400,11 +400,14 @@ class ApiClient {
   }
 
   copyDay(token: string, sourceDateString: string, targetDateString: string, overwrite: boolean) {
-    return this.request<DailySchedule>('/schedules/copy-day', {
-      method: 'POST',
-      headers: this.authHeaders(token),
-      body: JSON.stringify({ source_date_string: sourceDateString, target_date_string: targetDateString, overwrite }),
-    });
+    return this.request<{ copied: number; skipped: boolean; targetScheduleId?: string }>(
+      '/schedules/copy-day',
+      {
+        method: 'POST',
+        headers: this.authHeaders(token),
+        body: JSON.stringify({ sourceDateString, targetDateString, overwrite }),
+      },
+    );
   }
 
   copyWeek(
@@ -415,17 +418,20 @@ class ApiClient {
     targetYear: number,
     overwrite: boolean,
   ) {
-    return this.request<{ copied: number }>('/schedules/copy-week', {
-      method: 'POST',
-      headers: this.authHeaders(token),
-      body: JSON.stringify({
-        source_week_number: sourceWeekNumber,
-        source_year: sourceYear,
-        target_week_number: targetWeekNumber,
-        target_year: targetYear,
-        overwrite,
-      }),
-    });
+    return this.request<{ totalCopied: number; daysProcessed: number; daysSkipped: number }>(
+      '/schedules/copy-week',
+      {
+        method: 'POST',
+        headers: this.authHeaders(token),
+        body: JSON.stringify({
+          sourceWeek: sourceWeekNumber,
+          sourceYear,
+          targetWeek: targetWeekNumber,
+          targetYear,
+          overwrite,
+        }),
+      },
+    );
   }
 
   shiftScheduleToTomorrow(token: string, dateString: string): Promise<{ shifted: number }> {

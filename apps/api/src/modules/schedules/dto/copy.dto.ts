@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsInt, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, IsBoolean } from 'class-validator';
 
 export class CopyDayDto {
   @IsString()
@@ -8,6 +8,9 @@ export class CopyDayDto {
   @IsString()
   @IsNotEmpty()
   targetDateString: string;
+
+  @IsBoolean()
+  overwrite: boolean;
 }
 
 export class CopyWeekDto {
@@ -22,4 +25,7 @@ export class CopyWeekDto {
 
   @IsInt()
   targetWeek: number;
+
+  @IsBoolean()
+  overwrite: boolean;
 }

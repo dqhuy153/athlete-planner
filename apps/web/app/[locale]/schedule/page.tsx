@@ -518,6 +518,21 @@ export default function SchedulePage() {
     })
   }
 
+  function weekOffsetForDate(dateStr: string): number {
+    const target = new Date(dateStr + 'T00:00:00')
+    const targetWeekStart = startOfISOWeek(target)
+    const todayWeekStart = startOfISOWeek(new Date())
+    return Math.round(
+      (targetWeekStart.getTime() - todayWeekStart.getTime()) / (7 * 86_400_000),
+    )
+  }
+
+  function isoWeekMonday(year: number, week: number): Date {
+    const jan4 = new Date(year, 0, 4)
+    const week1Monday = startOfISOWeek(jan4)
+    return addWeeks(week1Monday, week - 1)
+  }
+
   function handleMonthDaySelect(dateStr: string, offset: number) {
     setViewMode('week')
     setWeekOffset(offset)
@@ -755,14 +770,20 @@ export default function SchedulePage() {
             userTier={userTier}
             onClose={() => setCopyDayOpen(false)}
             onConfirm={async (targetDateString, overwrite) => {
-              await api.copyDay(
+              const result = await api.copyDay(
                 token,
                 selectedDate,
                 targetDateString,
                 overwrite,
               )
               setCopyDayOpen(false)
-              loadWeek(weekOffset)
+              setSelectedDate(targetDateString)
+              setWeekOffset(weekOffsetForDate(targetDateString))
+              await selectDate(targetDateString, { force: true })
+              pushToast({
+                title: result.skipped ? t('copySkipped') : t('copySuccess'),
+                tone: result.skipped ? 'warning' : 'success',
+              })
             }}
           />
         )}
@@ -780,7 +801,7 @@ export default function SchedulePage() {
               targetYear,
               overwrite,
             ) => {
-              await api.copyWeek(
+              const result = await api.copyWeek(
                 token,
                 sourceWeek,
                 sourceYear,
@@ -789,7 +810,21 @@ export default function SchedulePage() {
                 overwrite,
               )
               setCopyWeekOpen(false)
-              loadWeek(weekOffset)
+              const targetMonday = isoWeekMonday(targetYear, targetWeek)
+              const targetMondayStr = format(targetMonday, 'yyyy-MM-dd')
+              setSelectedDate(targetMondayStr)
+              setWeekOffset(weekOffsetForDate(targetMondayStr))
+              await selectDate(targetMondayStr, { force: true })
+              const label = result.daysSkipped > 0
+                ? t('copyWeekSkipped', {
+                    skipped: result.daysSkipped,
+                    copied: result.totalCopied,
+                  })
+                : t('copySuccess')
+              pushToast({
+                title: label,
+                tone: result.daysSkipped > 0 ? 'warning' : 'success',
+              })
             }}
           />
         )}

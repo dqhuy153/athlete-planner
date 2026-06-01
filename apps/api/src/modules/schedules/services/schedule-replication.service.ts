@@ -3,6 +3,18 @@ import { PrismaService, DayStatus } from '@athlete-planner/database';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { getISOWeek, getISOWeekYear, parseISO, format } from 'date-fns';
 
+export interface CopyDayResult {
+  copied: number;
+  skipped: boolean;
+  targetScheduleId?: string;
+}
+
+export interface CopyWeekResult {
+  totalCopied: number;
+  daysProcessed: number;
+  daysSkipped: number;
+}
+
 @Injectable()
 export class ScheduleReplicationService {
   constructor(
@@ -10,14 +22,28 @@ export class ScheduleReplicationService {
     private readonly tierGuard: TierGuardService,
   ) {}
 
-  async copyDay(userId: string, sourceDateString: string, targetDateString: string) {
+  async copyDay(
+    userId: string,
+    sourceDateString: string,
+    targetDateString: string,
+    overwrite: boolean,
+  ): Promise<CopyDayResult> {
     await this.tierGuard.checkCalendarBoundary(userId, targetDateString);
 
     const source = await this.prisma.dailySchedule.findUnique({
       where: { userId_dateString: { userId, dateString: sourceDateString } },
       include: { items: true },
     });
-    if (!source) return { copied: 0 };
+    if (!source) return { copied: 0, skipped: false };
+
+    const existingTarget = await this.prisma.dailySchedule.findUnique({
+      where: { userId_dateString: { userId, dateString: targetDateString } },
+      include: { _count: { select: { items: true } } },
+    });
+
+    if (!overwrite && existingTarget && existingTarget._count.items > 0) {
+      return { copied: 0, skipped: true };
+    }
 
     const target = await this.prisma.dailySchedule.upsert({
       where: { userId_dateString: { userId, dateString: targetDateString } },
@@ -49,7 +75,11 @@ export class ScheduleReplicationService {
       });
     }
 
-    return { copied: source.items.length, targetScheduleId: target.id };
+    return {
+      copied: source.items.length,
+      skipped: false,
+      targetScheduleId: target.id,
+    };
   }
 
   async copyWeek(
@@ -58,22 +88,32 @@ export class ScheduleReplicationService {
     sourceWeek: number,
     targetYear: number,
     targetWeek: number,
-  ) {
+    overwrite: boolean,
+  ): Promise<CopyWeekResult> {
     const sourceDays = await this.prisma.dailySchedule.findMany({
       where: { userId, year: sourceYear, weekNumber: sourceWeek },
     });
 
     let totalCopied = 0;
+    let daysSkipped = 0;
     for (const day of sourceDays) {
       const sourceDate = parseISO(day.dateString);
       const weekDiff = (targetYear - sourceYear) * 52 + (targetWeek - sourceWeek);
       const targetDate = new Date(sourceDate);
       targetDate.setDate(targetDate.getDate() + weekDiff * 7);
       const targetDateString = format(targetDate, 'yyyy-MM-dd');
-      const result = await this.copyDay(userId, day.dateString, targetDateString);
-      totalCopied += result.copied;
+      const result = await this.copyDay(userId, day.dateString, targetDateString, overwrite);
+      if (result.skipped) {
+        daysSkipped += 1;
+      } else {
+        totalCopied += result.copied;
+      }
     }
 
-    return { totalCopied, daysProcessed: sourceDays.length };
+    return {
+      totalCopied,
+      daysProcessed: sourceDays.length,
+      daysSkipped,
+    };
   }
 }

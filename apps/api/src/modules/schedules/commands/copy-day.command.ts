@@ -3,5 +3,6 @@ export class CopyDayCommand {
     public readonly userId: string,
     public readonly sourceDateString: string,
     public readonly targetDateString: string,
+    public readonly overwrite: boolean,
   ) {}
 }

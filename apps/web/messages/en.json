@@ -59,6 +59,8 @@
     "copying": "Copying...",
     "copySuccess": "Copied successfully",
     "copyError": "Copy failed — please try again",
+    "copySkipped": "Target day already has workouts — turn on \"Overwrite\" to replace them",
+    "copyWeekSkipped": "Copied {copied} items, skipped {skipped} day(s) with existing workouts",
     "sets": "Sets",
     "reps": "Reps",
     "weight": "Weight (kg)",

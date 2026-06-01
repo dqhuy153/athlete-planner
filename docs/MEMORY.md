@@ -472,6 +472,9 @@ modules/
 - `ExerciseActionBar.tsx`: Mobile - Start Workout + ⋯ dropdown, Desktop - 3 buttons với Start Workout chiếm 66%
 - `my/page.tsx`: Buttons rút ngắn thành "JSON", "AI", "Bài tập mới" + scroll bar, progress bar chỉ FREE tier
 
+**Scalable pattern applied:**
+- `ImportJSONModal.tsx`: Dùng `SPORT_CONFIG` mapping `SportType` → properties thay vì binary `isGym` check
+
 **Vibe Coding Harness:**
 - `AGENTS.md`: Thêm Vibe Coding Harness section với workflow bắt buộc
 - `VIBE.md`: Bản dịch tiếng Việt hướng dẫn vibing với opencode CLI

@@ -175,5 +175,22 @@ The following rules are ALWAYS enforced by opencode's superpowers system:
 - After UI text changes → update `apps/web/messages/vi.json` and `apps/web/messages/en.json`
 - After feature completion → summarize in MEMORY.md
 
+### Scalable Patterns (Important)
+
+**Sport Type Handling:**
+- Use `SportType` enum từ `@athlete-planner/contracts` thay vì boolean `isGym`
+- Cấu hình scalable bằng `SPORT_CONFIG` object mapping sport → properties
+- Dễ dàng mở rộng cho sport mới chỉ cần thêm entry mới vào config
+
+```typescript
+const SPORT_CONFIG: Record<SportType, {
+  skillUrl: string;
+  labelKey: string;
+  optionField: keyof FlatExerciseImportItem;
+  options: readonly string[];
+  placeholderKey: string;
+}> = { ... }
+```
+
 ### Vietnamese Guide
 Xem `VIBE.md` để hướng dẫn chi tiết bằng tiếng Việt về quy trình vibing.

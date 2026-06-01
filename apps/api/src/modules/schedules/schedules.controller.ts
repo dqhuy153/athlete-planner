@@ -133,7 +133,12 @@ export class SchedulesController {
   @Post('copy-day')
   async copyDay(@Body() dto: CopyDayDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(
-      new CopyDayCommand(req.user.sub, dto.sourceDateString, dto.targetDateString),
+      new CopyDayCommand(
+        req.user.sub,
+        dto.sourceDateString,
+        dto.targetDateString,
+        dto.overwrite,
+      ),
     );
   }
 
@@ -146,6 +151,7 @@ export class SchedulesController {
         dto.sourceWeek,
         dto.targetYear,
         dto.targetWeek,
+        dto.overwrite,
       ),
     );
   }

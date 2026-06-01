@@ -7,7 +7,14 @@ export class CopyWeekHandler implements ICommandHandler<CopyWeekCommand> {
   constructor(private readonly scheduleReplicationService: ScheduleReplicationService) {}
 
   async execute(command: CopyWeekCommand) {
-    const { userId, sourceYear, sourceWeek, targetYear, targetWeek } = command;
-    return this.scheduleReplicationService.copyWeek(userId, sourceYear, sourceWeek, targetYear, targetWeek);
+    const { userId, sourceYear, sourceWeek, targetYear, targetWeek, overwrite } = command;
+    return this.scheduleReplicationService.copyWeek(
+      userId,
+      sourceYear,
+      sourceWeek,
+      targetYear,
+      targetWeek,
+      overwrite,
+    );
   }
 }

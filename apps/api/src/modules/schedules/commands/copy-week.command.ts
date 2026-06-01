@@ -5,5 +5,6 @@ export class CopyWeekCommand {
     public readonly sourceWeek: number,
     public readonly targetYear: number,
     public readonly targetWeek: number,
+    public readonly overwrite: boolean,
   ) {}
 }
