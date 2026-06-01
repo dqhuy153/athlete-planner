@@ -101,3 +101,79 @@ packages/
 
 See `docs/deployment.md` for complete env var reference.
 Local: `docker-compose.yml` for PostgreSQL, Redis, MinIO.
+
+## Vibe Coding Harness (Opencode CLI Workflow)
+
+### Mandatory Workflow Steps
+When using opencode CLI for vibing, follow this exact sequence:
+
+1. **Skill Activation (ALWAYS FIRST)**
+   - Before ANY task, invoke relevant skills via `skill` tool
+   - Skills folder: `.agents/skills/` (check if task matches any skill)
+   - Pattern skills: `nestjs-best-practices`, `tailwind-design-system`, `zustand`, `react-hook-form-zod`, `prisma-client-api`
+   - Process skills: `brainstorming`, `systematic-debugging`, `test-driven-development`
+
+2. **Explore Phase (use `task` tool)**
+   - Use `explore` subagent to find files, patterns, conventions
+   - Search for existing reusable components in `packages/ui/src/` and `apps/*/components/`
+   - Check `docs/MEMORY.md` for architectural context
+   - Check `AGENTS.md` for project-specific rules
+
+3. **Implementation Rules**
+   - **Reuse first**: Check for existing components before creating new ones
+   - If creating new component, check `packages/ui/src/` structure first
+   - Follow existing naming conventions (PascalCase for components)
+   - Use Tailwind preset tokens: `bg-surface-*`, `text-text-*`, `border-*`, `accent-*`
+   - Lucide React only for icons (never emoji)
+
+4. **Post-Implementation**
+   - Run TypeScript check: `pnpm --filter <app> exec tsc --noEmit`
+   - Update `docs/MEMORY.md` with changes
+   - Update i18n files if UI text added/modified
+   - Run lint if available
+
+### Skill Matching Quick Reference
+| Task Type | Skills to Use |
+|-----------|--------------|
+| UI Components | `minimalist-ui`, `tailwind-design-system`, `design-taste-frontend` |
+| NestJS Backend | `nestjs-best-practices` |
+| Forms/Validation | `react-hook-form-zod` |
+| State Management | `zustand` |
+| Database Queries | `prisma-client-api`, `prisma-cli` |
+| New Features | `brainstorming`, `writing-plans` |
+| Bugs/Issues | `systematic-debugging` |
+| i18n Changes | `readme-i18n` |
+| Deployment | `deploy-to-vercel`, `vercel-cli-with-tokens` |
+
+### Superpowers Workflow (AUTO-APPLIED)
+The following rules are ALWAYS enforced by opencode's superpowers system:
+
+**Rule 0 - Skill Invocation Priority:**
+1. **ALWAYS** invoke `skill` tool first if ANY skill might apply (even 1% chance)
+2. Process skills take priority over implementation skills
+3. Use `brainstorming` BEFORE any creative work
+
+**Rule 1 - Skill Matching Decision Tree:**
+- Creative work → `brainstorming` → implementation skills
+- Bug/error → `systematic-debugging`
+- UI component → `minimalist-ui`, `tailwind-design-system`
+- NestJS code → `nestjs-best-practices`
+- Form/validation → `react-hook-form-zod`
+- State/store → `zustand`
+- Database → `prisma-client-api`, `prisma-cli`
+- i18n → `readme-i18n`
+- Deploy → `deploy-to-vercel`
+
+**Rule 2 - Reuse-First Policy:**
+- Before creating: check `packages/ui/src/components/` for existing components
+- Before implementing: search `apps/web/components/`, `apps/admin-web/components/`
+- New reusable component → add to `packages/ui/`
+- Single-use component → keep in app-specific `components/`
+
+**Rule 3 - Documentation Updates:**
+- After implementation → update `docs/MEMORY.md`
+- After UI text changes → update `apps/web/messages/vi.json` and `apps/web/messages/en.json`
+- After feature completion → summarize in MEMORY.md
+
+### Vietnamese Guide
+Xem `VIBE.md` để hướng dẫn chi tiết bằng tiếng Việt về quy trình vibing.
