@@ -70,11 +70,13 @@ export const envValidationSchema = Joi.object({
   CLOUDINARY_FOLDER: Joi.string().default('app/assets'),
 
   // ─── AI ──────────────────────────────────────────────────────────────────
-  ANTHROPIC_API_KEY: Joi.string()
+  // ANTHROPIC_API_KEY: disabled — using OpenRouter instead
+  ANTHROPIC_API_KEY: Joi.string().allow('').optional(),
+  GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().allow('').optional(),
+  OPENROUTER_API_KEY: Joi.string()
     .allow('')
     .optional()
     .description('Used by AIService for content generation (admin only)'),
-  GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().allow('').optional(),
 
   // ─── Payments: PayOS ─────────────────────────────────────────────────────
   PAYOS_CLIENT_ID: Joi.string().required(),

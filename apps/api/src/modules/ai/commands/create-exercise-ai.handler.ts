@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InternalServerErrorException } from '@nestjs/common';
+import { HttpException, InternalServerErrorException } from '@nestjs/common';
 import { AIService } from '../../shared/ai.service';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { CreateExerciseAiCommand } from './create-exercise-ai.command';
@@ -23,10 +23,11 @@ export class CreateExerciseAiHandler implements ICommandHandler<CreateExerciseAi
       const { text } = await this.ai.generateText({
         prompt,
         system: SYSTEM,
-        model: 'anthropic',
+        model: 'openrouter',
       });
       return parseAiJson(text);
-    } catch (_err) {
+    } catch (err) {
+      if (err instanceof HttpException) throw err;
       throw new InternalServerErrorException('AI generation failed. Please try again.');
     }
   }
