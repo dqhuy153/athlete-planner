@@ -587,7 +587,7 @@
     "keepOriginal": "Keep original",
     "swapExercise": "Swap"
   },
-  "importJSON": {
+"importJSON": {
     "title": "Import Exercises from JSON",
     "mustBeArray": "File must be a JSON array.",
     "maxItems": "Maximum 50 exercises per import.",
@@ -605,13 +605,12 @@
     "previewCount": "Preview {count} exercises",
     "previewFailed": "Preview failed.",
     "previewing": "Processing...",
+    "previewBtn": "Preview",
     "confirmImport": "Confirm import",
-    "formatHelp": "Format: {type}",
+    "downloadPrompt": "Download prompt template",
     "admin-existing": "Exists in master library",
     "custom-existing": "Exists in personal library",
-    "new": "New exercise",
-    "gymLabel": "Gym",
-    "runningLabel": "Running"
+    "new": "New exercise"
   },
   "aiCreate": {
     "title": "Create Exercise",

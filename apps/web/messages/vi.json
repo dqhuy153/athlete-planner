@@ -608,12 +608,12 @@
     "previewCount": "Xem trước {count} bài",
     "previewFailed": "Xử lý thất bại.",
     "previewing": "Đang xử lý...",
+    "previewBtn": "Xem trước",
     "confirmImport": "Xác nhận nhập",
+    "downloadPrompt": "Tải prompt mẫu",
     "admin-existing": "Tồn tại trong thư viện chung",
     "custom-existing": "Tồn tại trong thư viện cá nhân",
-    "new": "Bài tập mới",
-    "gymLabel": "Gym",
-    "runningLabel": "Chạy bộ"
+    "new": "Bài tập mới"
   },
   "aiCreate": {
     "title": "AI Tạo bài tập",

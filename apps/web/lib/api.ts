@@ -326,10 +326,12 @@ class ApiClient {
     token: string,
     items: PrivateImportPreviewItem[],
   ): Promise<{ imported: number; skipped: number }> {
-    const exercises: FlatExerciseImportItem[] = items.map((p) => ({
-      name: p.name,
-      sportType: p.sportType,
-    }));
+    const exercises = items
+      .filter((p) => p.status === 'new')
+      .map((p) => ({
+        name: p.name,
+        sportType: p.sportType,
+      }));
     return this.request<{ imported: number; skipped: number }>('/exercises/private/import', {
       method: 'POST',
       headers: this.authHeaders(token),
