@@ -15,67 +15,67 @@
 **Files:**
 - Modify: `apps/web/lib/api.ts`
 
-- [ ] **Step 1: Add private exercise reference field**
+- [x] **Step 1: Add private exercise reference field**
 
-- [ ] **Step 2: Chạy TypeScript check**
+- [x] **Step 2: Chạy TypeScript check**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ### Task 2: Add preview API function
 
 **Files:**
 - Modify: `apps/web/lib/api.ts`
 
-- [ ] **Step 1: Add preview function**
+- [x] **Step 1: Add preview function**
 
-- [ ] **Step 2: Chạy TypeScript check**
+- [x] **Step 2: Chạy TypeScript check**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ### Task 3: Refactor ImportJSONModal with multi-step
 
 **Files:**
 - Modify: `apps/web/components/exercises/ImportJSONModal.tsx`
 
-- [ ] **Step 1: Add step state và sport selector**
+- [x] **Step 1: Add step state và sport selector**
 
-- [ ] **Step 2: Render sport selector step**
+- [x] **Step 2: Render sport selector step**
 
-- [ ] **Step 3: Add preview step với action selection**
+- [x] **Step 3: Add preview step với action selection**
 
-- [ ] **Step 4: Chạy TypeScript check**
+- [x] **Step 4: Chạy TypeScript check**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ### Task 4: Create Backend Preview Handler
 
 **Files:**
 - Create: `apps/api/modules/exercises/queries/preview-private-import.handler.ts`
 
-- [ ] **Step 1: Implement handler**
+- [x] **Step 1: Implement handler**
 
-- [ ] **Step 2: Chạy TypeScript check**
+- [x] **Step 2: Chạy TypeScript check**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ### Task 5: Register handlers
 
 **Files:**
 - Modify: `apps/api/modules/exercises/exercises.module.ts`
 
-- [ ] **Step 1: Register PreviewPrivateImportHandler**
+- [x] **Step 1: Register PreviewPrivateImportHandler**
 
-- [ ] **Step 2: Chạy TypeScript check**
+- [x] **Step 2: Chạy TypeScript check**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ### Task 6: Add i18n keys
 
 **Files:**
 - Modify: `apps/web/messages/vi.json` and `en.json`
 
-- [ ] **Step 1: Add new keys**
+- [x] **Step 1: Add new keys**
 
-- [ ] **Step 2: Chạy TypeScript check**
+- [x] **Step 2: Chạy TypeScript check**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**

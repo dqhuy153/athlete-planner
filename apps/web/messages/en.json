@@ -597,10 +597,21 @@
     "dropPrompt": "Click to select .json file",
     "noNotes": "No notes",
     "muscleGroupPlaceholder": "— Muscle group —",
+    "runningTypePlaceholder": "— Run type —",
     "exerciseNamePlaceholder": "Exercise name",
     "importFailed": "Import failed.",
     "importCount": "Import {count} exercises",
-    "importing": "Importing..."
+    "importing": "Importing...",
+    "previewCount": "Preview {count} exercises",
+    "previewFailed": "Preview failed.",
+    "previewing": "Processing...",
+    "confirmImport": "Confirm import",
+    "formatHelp": "Format: {type}",
+    "admin-existing": "Exists in master library",
+    "custom-existing": "Exists in personal library",
+    "new": "New exercise",
+    "gymLabel": "Gym",
+    "runningLabel": "Running"
   },
   "aiCreate": {
     "title": "Create Exercise",

@@ -9,18 +9,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 hover:border-primary/50 shadow-sm',
+          'bg-accent/15 text-accent border border-accent/30 hover:bg-accent/25 hover:border-accent/50',
         destructive:
-          'bg-destructive/20 text-destructive border border-destructive/30 hover:bg-destructive/30',
+          'bg-error/15 text-error border border-error/30 hover:bg-error/25',
         outline:
-          'border border-outline-variant/60 bg-surface-container/50 text-on-surface hover:bg-surface-container-high/70 hover:border-outline-variant',
+          'border border-border bg-surface-2/50 text-text-primary hover:bg-surface-3/70',
         secondary:
-          'bg-secondary-container/20 text-on-secondary-container border border-secondary-container/30 hover:bg-secondary-container/30',
+          'bg-surface-2/40 text-text-primary border border-border hover:bg-surface-3/60',
         ghost:
-          'hover:bg-surface-container-high/60 text-on-surface-variant hover:text-on-surface',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'hover:bg-surface-2/60 text-text-secondary hover:text-text-primary',
+        link: 'text-accent underline-offset-4 hover:underline',
         gold:
-          'bg-gradient-to-b from-primary to-primary-container text-on-primary font-semibold border-none shadow-sm hover:opacity-90',
+          'bg-gradient-to-b from-accent to-accent text-accent-foreground font-semibold border-none hover:opacity-90',
         // ── Minimalist Athletic variants ──────────────────────────────────
         accent:
           'bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:bg-accent/80 focus-visible:ring-accent/50',

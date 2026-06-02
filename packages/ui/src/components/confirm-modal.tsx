@@ -38,8 +38,8 @@ export function ConfirmModal({
       <Card className="relative rounded-xl p-6 max-w-sm w-full mx-4 space-y-4">
         <div className="flex items-start gap-3">
           {destructive && (
-            <div className="p-2 rounded-lg bg-destructive/10">
-              <AlertTriangle size={20} className="text-destructive" />
+            <div className="p-2 rounded-lg bg-error/10">
+              <AlertTriangle size={20} className="text-error" />
             </div>
           )}
           <div className="flex-1">

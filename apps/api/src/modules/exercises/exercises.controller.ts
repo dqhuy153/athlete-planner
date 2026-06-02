@@ -1,17 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Patch,
-  Delete,
-  Body,
-  Param,
-  Query,
-  UseGuards,
-  Req,
-  ForbiddenException,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Patch, Delete, Body, Param, Query, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { Request } from 'express';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -38,8 +25,10 @@ import { ImportRunningExercisesCommand } from './commands/import-running-exercis
 import { ConfigPrivateExerciseCommand } from './commands/config-private-exercise.command';
 import { ConfigPrivateExerciseDto } from './dto/config-private-exercise.dto';
 import { DeletePrivateExerciseCommand } from './commands/delete-private-exercise.command';
-import { BulkCreatePrivateExercisesDto } from './dto/bulk-create-private-exercises.dto';
+import { PreviewPrivateImportQuery } from './queries/preview-private-import.query';
+import { BulkCreatePrivateExercisesDto, FlatExerciseImportItemDto } from './dto/bulk-create-private-exercises.dto';
 import { BulkCreatePrivateExercisesCommand } from './commands/bulk-create-private-exercises.command';
+import { ImportPrivateExercisesCommand } from './commands/import-private-exercises.command';
 
 @Controller('exercises')
 export class ExercisesController {
@@ -231,5 +220,23 @@ export class ExercisesController {
   @Delete('private/:id')
   async deletePrivateExercise(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(new DeletePrivateExerciseCommand(id, req.user.sub));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('private/preview')
+  async previewPrivateImport(
+    @Body() body: BulkCreatePrivateExercisesDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.queryBus.execute(new PreviewPrivateImportQuery(req.user.sub, body.exercises));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('private/import')
+  async importPrivateExercises(
+    @Body() body: BulkCreatePrivateExercisesDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.commandBus.execute(new ImportPrivateExercisesCommand(body.exercises, req.user.sub));
   }
 }

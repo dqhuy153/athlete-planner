@@ -46,11 +46,28 @@ export interface WorkoutDraftWeek {
 
 export interface FlatExerciseImportItem {
   name: string;
-  sportType: 'GYM' | 'RUNNING';
+  sportType: SportType;
   targetMuscleGroup?: string;
   runningType?: string;
   customNotes?: string;
   instructions?: string[];
+  vietnameseName?: string;
+  garminExerciseEnum?: string;
+}
+
+export interface PrivateImportPreviewItem {
+  index: number;
+  name: string;
+  sportType: SportType;
+  status: 'admin-existing' | 'custom-existing' | 'new';
+  existingId?: string;
+  adminExerciseId?: string;
+  customExerciseId?: string;
+}
+
+export interface PrivateImportPreviewResponse {
+  results: PrivateImportPreviewItem[];
+  summary: { admin: number; custom: number; new: number };
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -294,6 +311,29 @@ class ApiClient {
     return this.request<void>(`/exercises/private/${id}`, {
       method: 'DELETE',
       headers: this.authHeaders(token),
+    });
+  }
+
+  previewPrivateExercises(token: string, exercises: FlatExerciseImportItem[]): Promise<PrivateImportPreviewResponse> {
+    return this.request<PrivateImportPreviewResponse>('/exercises/private/preview', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ exercises }),
+    });
+  }
+
+  importPrivateExercises(
+    token: string,
+    items: PrivateImportPreviewItem[],
+  ): Promise<{ imported: number; skipped: number }> {
+    const exercises: FlatExerciseImportItem[] = items.map((p) => ({
+      name: p.name,
+      sportType: p.sportType,
+    }));
+    return this.request<{ imported: number; skipped: number }>('/exercises/private/import', {
+      method: 'POST',
+      headers: this.authHeaders(token),
+      body: JSON.stringify({ exercises }),
     });
   }
 

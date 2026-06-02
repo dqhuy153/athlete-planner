@@ -24,6 +24,20 @@ export class TierGuardService {
     }
   }
 
+  async checkPrivateExerciseAfterImport(userId: string, toAdd: number): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { tier: true },
+    });
+    if (!user) return;
+    if (user.tier === UserTier.FREE) {
+      const count = await this.prisma.privateExercise.count({ where: { userId } });
+      if (count + toAdd > 10) {
+        throw new ForbiddenException('LIMIT_REACHED_FREE_TIER');
+      }
+    }
+  }
+
   async checkCalendarBoundary(userId: string, targetDate: string): Promise<void> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },

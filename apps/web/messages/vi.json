@@ -590,7 +590,7 @@
     "keepOriginal": "Giữ bài cũ",
     "swapExercise": "Đổi bài"
   },
-  "importJSON": {
+"importJSON": {
     "title": "Nhập bài tập từ JSON",
     "mustBeArray": "File phải là một JSON array.",
     "maxItems": "Tối đa 50 bài tập mỗi lần nhập.",
@@ -600,10 +600,20 @@
     "dropPrompt": "Nhấn để chọn file .json",
     "noNotes": "Không có ghi chú",
     "muscleGroupPlaceholder": "— Nhóm cơ —",
+    "runningTypePlaceholder": "— Loại chạy —",
     "exerciseNamePlaceholder": "Tên bài",
     "importFailed": "Nhập thất bại.",
     "importCount": "Nhập {count} bài tập",
-    "importing": "Đang nhập..."
+    "importing": "Đang nhập...",
+    "previewCount": "Xem trước {count} bài",
+    "previewFailed": "Xử lý thất bại.",
+    "previewing": "Đang xử lý...",
+    "confirmImport": "Xác nhận nhập",
+    "admin-existing": "Tồn tại trong thư viện chung",
+    "custom-existing": "Tồn tại trong thư viện cá nhân",
+    "new": "Bài tập mới",
+    "gymLabel": "Gym",
+    "runningLabel": "Chạy bộ"
   },
   "aiCreate": {
     "title": "AI Tạo bài tập",
