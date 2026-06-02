@@ -81,17 +81,20 @@ class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  private async request<T>(path: string, options?: RequestInit): Promise<T> {
+  private async request<T>(
+    path: string,
+    options?: RequestInit & { timeoutMs?: number },
+  ): Promise<T> {
     const url = `${this.baseUrl}/api${path}`;
+    const timeoutMs = options?.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
-    // Per-request abort with a hard 15s ceiling. iOS Safari PWA reloads can
-    // stall on hung TCP connections for the full 30s kernel default — this
-    // surfaces the failure faster and lets the UI recover gracefully.
+    // Per-request abort with a configurable ceiling. iOS Safari PWA reloads
+    // can stall on hung TCP connections for the full 30s kernel default —
+    // the 15s default surfaces those failures faster. AI endpoints override
+    // with a longer timeout because free-tier providers (OpenRouter) often
+    // queue and take 30–90s to respond.
     const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      DEFAULT_TIMEOUT_MS,
-    );
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
     let res: Response;
     try {
@@ -540,6 +543,11 @@ class ApiClient {
   }
 
   // ─── AI ─────────────────────────────────────────────────────────────────────
+  // AI endpoints use a 90s client timeout (vs 15s default) because the free
+  // model (meta-llama/llama-3.3-70b-instruct:free on OpenRouter) frequently
+  // queues and takes 30–90s to respond.
+
+  private static readonly AI_TIMEOUT_MS = 90_000;
 
   generateWorkout(
     token: string,
@@ -550,6 +558,7 @@ class ApiClient {
       method: 'POST',
       headers: this.authHeaders(token),
       body: JSON.stringify({ prompt, mode }),
+      timeoutMs: ApiClient.AI_TIMEOUT_MS,
     });
   }
 
@@ -558,6 +567,7 @@ class ApiClient {
       method: 'POST',
       headers: this.authHeaders(token),
       body: JSON.stringify({ prompt }),
+      timeoutMs: ApiClient.AI_TIMEOUT_MS,
     });
   }
 
@@ -570,6 +580,7 @@ class ApiClient {
       method: 'POST',
       headers: this.authHeaders(token),
       body: JSON.stringify({ currentExerciseName, reason }),
+      timeoutMs: ApiClient.AI_TIMEOUT_MS,
     });
   }
 
