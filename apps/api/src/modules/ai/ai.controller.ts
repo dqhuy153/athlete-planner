@@ -6,6 +6,7 @@ import { AuthenticatedRequest } from '../../common/interfaces/authenticated-requ
 import { GenerateWorkoutCommand } from './commands/generate-workout.command';
 import { SuggestAlternativeCommand } from './commands/suggest-alternative.command';
 import { CreateExerciseAiCommand } from './commands/create-exercise-ai.command';
+import { CreateExercisesBulkCommand } from './commands/create-exercises-bulk.command';
 
 class GenerateWorkoutDto {
   @IsString() @IsNotEmpty() prompt: string;
@@ -44,6 +45,13 @@ export class AiController {
   createExercise(@Body() body: CreateExerciseAiDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(
       new CreateExerciseAiCommand(body.prompt, req.user.sub),
+    );
+  }
+
+  @Post('create-exercises')
+  createExercises(@Body() body: CreateExerciseAiDto, @Req() req: AuthenticatedRequest) {
+    return this.commandBus.execute(
+      new CreateExercisesBulkCommand(body.prompt, req.user.sub),
     );
   }
 }

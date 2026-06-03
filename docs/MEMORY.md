@@ -120,6 +120,8 @@ Both the AI Generate button and JSON Import use the same canonical format — th
 - `apps/web/public/skills/running-exercise-import.md` — full backend-aligned prompt for personal library running imports, including `workoutStructure[]` phase schema
 - Served by Next.js from `public/` and consumed by `ImportJSONModal` via the **Download prompt** and **Copy prompt** buttons
 - 2026-06-03: expanded to mirror the admin format (bilingual `vietnameseName`, full media fields, `workoutStructure` phases, workout defaults, Garmin mapping) so users get first-try-correct AI output. Parity with the admin import format means a personal exercise can later be promoted to admin master without re-authoring. Ingestion of the new optional fields is a separate follow-up — the modal still only uses `name` + `sportType` for classification & create.
+- 2026-06-03: bug fix — `FlatExerciseImportItemDto` and `ImportPrivateExercisesHandler` expanded to accept and persist every `PrivateExercise` model field (gym/running defaults, media, `workoutStructure`); the web modal now forwards the full `data` payload on import, not just `{name, sportType}`. Non-model fields (`vietnameseName`, `secondaryMuscleGroups`, `garminExerciseEnum`) are accepted by the DTO and silently dropped.
+- 2026-06-03: detail view — each preview row in the import modal now has an `Eye` icon that opens a `BottomSheet` (from `@athlete-planner/ui`) showing the full exercise payload, the classification reason, and the action selector. Reuses the `data` field already attached to each preview item; no backend changes.
 
 ---
 

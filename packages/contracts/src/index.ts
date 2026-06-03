@@ -306,6 +306,28 @@ export enum StorageProvider {
   CLOUDINARY = 'cloudinary',
 }
 
+// ─── AI Draft Types ────────────────────────────────────────────────────────
+
+export interface DraftExercise {
+  name: string;
+  sportType: 'GYM' | 'RUNNING';
+  targetMuscleGroup?: string;
+  runningType?: string;
+  customNotes?: string;
+  instructions?: string[];
+  gymPayload?: {
+    rest_time_seconds: number;
+    sets: Array<{ weight_kg: number; reps: number; rpe?: number }>;
+  };
+  runningPayload?: {
+    target_distance_km?: number;
+    duration_minutes?: number;
+    intensity_type?: 'PACE' | 'HEART_RATE' | 'NONE';
+    pace_min_sec_per_km?: number;
+    pace_max_sec_per_km?: number;
+  };
+}
+
 // ─── API Response Types ─────────────────────────────────────────────────────
 
 export interface Asset {

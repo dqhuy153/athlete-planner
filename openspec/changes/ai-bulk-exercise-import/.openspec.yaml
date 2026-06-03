@@ -1,0 +1,16 @@
+name: ai-bulk-exercise-import
+description: "Change AI exercise creation from single to multiple exercises with duplicate detection"
+created: "2026-06-03T14:45:00Z"
+status: ready
+artifacts:
+  proposal:
+    status: done
+    path: proposal.md
+  design:
+    status: done
+    path: design.md
+    dependencies: []
+  tasks:
+    status: done
+    path: tasks.md
+    dependencies: [design]

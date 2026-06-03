@@ -9,6 +9,7 @@ import type {
   BlogPost,
   BlogCategory,
   User,
+  DraftExercise,
 } from '@athlete-planner/contracts'
 import {
   SportType,
@@ -16,25 +17,8 @@ import {
   ExperienceLevel,
 } from '@athlete-planner/contracts'
 
-export interface DraftExercise {
-  name: string
-  sportType: 'GYM' | 'RUNNING'
-  targetMuscleGroup?: string
-  runningType?: string
-  customNotes?: string
-  instructions?: string[]
-  gymPayload?: {
-    rest_time_seconds: number
-    sets: Array<{ weight_kg: number; reps: number; rpe?: number }>
-  }
-  runningPayload?: {
-    target_distance_km?: number
-    duration_minutes?: number
-    intensity_type?: 'PACE' | 'HEART_RATE' | 'NONE'
-    pace_min_sec_per_km?: number
-    pace_max_sec_per_km?: number
-  }
-}
+export type { DraftExercise }
+export { SportType }
 
 export type WorkoutDraftDay = DraftExercise[]
 
@@ -671,6 +655,21 @@ class ApiClient {
       body: JSON.stringify({ prompt }),
       timeoutMs: ApiClient.AI_TIMEOUT_MS,
     })
+  }
+
+  createExercisesBulkAI(
+    token: string,
+    prompt: string,
+  ): Promise<{ exercises: DraftExercise[] }> {
+    return this.request<{ exercises: DraftExercise[] }>(
+      '/ai/create-exercises',
+      {
+        method: 'POST',
+        headers: this.authHeaders(token),
+        body: JSON.stringify({ prompt }),
+        timeoutMs: ApiClient.AI_TIMEOUT_MS,
+      },
+    )
   }
 
   suggestAlternative(

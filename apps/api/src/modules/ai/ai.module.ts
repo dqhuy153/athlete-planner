@@ -8,6 +8,7 @@ import { TierGuardModule } from '../tier-guard/tier-guard.module';
 import { GenerateWorkoutHandler } from './commands/generate-workout.handler';
 import { SuggestAlternativeHandler } from './commands/suggest-alternative.handler';
 import { CreateExerciseAiHandler } from './commands/create-exercise-ai.handler';
+import { CreateExercisesBulkHandler } from './commands/create-exercises-bulk.handler';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CreateExerciseAiHandler } from './commands/create-exercise-ai.handler';
     GenerateWorkoutHandler,
     SuggestAlternativeHandler,
     CreateExerciseAiHandler,
+    CreateExercisesBulkHandler,
   ],
 })
 export class AiModule {}

@@ -3,8 +3,9 @@
 import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { Upload, Trash2, X, Download, ChevronLeft, Copy, Check } from "lucide-react";
+import { Upload, Trash2, X, Download, ChevronLeft, Copy, Check, Eye } from "lucide-react";
 import { api, FlatExerciseImportItem } from "@/lib/api";
+import { BottomSheet } from "@athlete-planner/ui";
 import { SportType } from "@athlete-planner/contracts";
 import type { PrivateImportPreviewItem } from "@/lib/api";
 
@@ -28,6 +29,14 @@ const SPORT_CONFIG = {
   },
 };
 
+const secondsToPace = (sec: number | null | undefined) => {
+  if (sec === null || sec === undefined) return null;
+  if (!Number.isFinite(sec) || sec <= 0) return null;
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
+};
+
 type ItemAction = 'skip' | 'clone' | 'override' | 'create';
 
 interface PreviewItemWithAction extends PrivateImportPreviewItem {
@@ -47,6 +56,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [detailIndex, setDetailIndex] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,6 +184,21 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
       case 'custom-existing': return 'text-amber-400';
       default: return 'text-green-400';
     }
+  };
+
+  const detailItem = detailIndex !== null ? preview[detailIndex] : null;
+
+  const renderIfPresent = (value: unknown, formatter?: (v: unknown) => string) => {
+    if (value === null || value === undefined) return '—';
+    if (typeof value === 'string' && value.trim() === '') return '—';
+    if (Array.isArray(value) && value.length === 0) return '—';
+    return formatter ? formatter(value) : String(value);
+  };
+
+  const reasonKey = (status: string) => {
+    if (status === 'admin-existing') return 'reasonAdmin';
+    if (status === 'custom-existing') return 'reasonCustom';
+    return 'reasonNew';
   };
 
   return (
@@ -312,7 +337,14 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
             <div className="space-y-2 max-h-80 overflow-y-auto">
               {preview.map((p, index) => (
                 <div key={p.index} className="flex items-center justify-between p-3 rounded-lg bg-surface-2 border border-border">
-                  <div className="flex-1">
+                  <button
+                    onClick={() => setDetailIndex(index)}
+                    aria-label={t('viewDetail')}
+                    className="p-1.5 rounded text-text-tertiary hover:text-accent min-h-[36px] min-w-[36px] flex items-center justify-center shrink-0"
+                  >
+                    <Eye size={16} aria-hidden />
+                  </button>
+                  <div className="flex-1 mx-2">
                     <p className="text-sm font-medium text-text-primary">{p.name}</p>
                     <p className={`text-xs ${getStatusColor(p.status)}`}>{t(p.status as 'admin-existing' | 'custom-existing' | 'new')}</p>
                   </div>
@@ -353,6 +385,200 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
           )}
         </div>
       </div>
+
+      <BottomSheet open={detailIndex !== null} onClose={() => setDetailIndex(null)} maxHeight="88vh">
+        {detailItem && (
+          <div className="p-5 space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-text-primary">{detailItem.name}</h3>
+              <p className={`text-xs mt-1 ${getStatusColor(detailItem.status)}`}>
+                {t(detailItem.status as 'admin-existing' | 'custom-existing' | 'new')}
+              </p>
+            </div>
+
+            <p className="text-sm text-text-secondary leading-relaxed">
+              {t(reasonKey(detailItem.status) as 'reasonNew' | 'reasonAdmin' | 'reasonCustom')}
+            </p>
+
+            {detailItem.data && <ExerciseDetailSections data={detailItem.data} t={t} />}
+
+            <div className="pt-2 border-t border-border">
+              <label className="block text-xs text-text-tertiary mb-1.5">{t('sectionAction')}</label>
+              <select
+                value={detailItem.action}
+                onChange={(e) => updateAction(detailIndex!, e.target.value as ItemAction)}
+                className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm min-h-[44px] focus:outline-none focus:ring-2 focus:ring-accent/30"
+              >
+                <option value="skip">{t('actionSkip')}</option>
+                {detailItem.status === 'admin-existing' && <option value="clone">{t('actionClone')}</option>}
+                {detailItem.status === 'custom-existing' && <option value="override">{t('actionOverride')}</option>}
+                {detailItem.status === 'new' && <option value="create">{t('actionCreate')}</option>}
+              </select>
+            </div>
+          </div>
+        )}
+      </BottomSheet>
     </div>
   );
+}
+
+function ExerciseDetailSections({ data, t }: { data: FlatExerciseImportItem; t: ReturnType<typeof useTranslations> }) {
+  const sections: { title: string; rows: { label: string; value: string }[] }[] = [];
+  const isRunning = data.sportType === SportType.RUNNING;
+
+  const identityRows: { label: string; value: string }[] = [
+    { label: 'sportType', value: renderIfPresentRaw(data.sportType) },
+  ];
+  if (!isRunning && data.targetMuscleGroup) {
+    identityRows.push({ label: 'targetMuscleGroup', value: data.targetMuscleGroup });
+  }
+  if (isRunning && data.runningType) {
+    identityRows.push({ label: 'runningType', value: data.runningType });
+  }
+  if (identityRows.length > 0) {
+    sections.push({ title: t('sectionIdentity'), rows: identityRows });
+  }
+
+  if (data.customNotes && data.customNotes.trim()) {
+    sections.push({ title: t('sectionNotes'), rows: [{ label: '', value: data.customNotes }] });
+  }
+
+  if (data.instructions && data.instructions.length > 0) {
+    sections.push({
+      title: t('sectionInstructions'),
+      rows: data.instructions.map((step, i) => ({ label: `${i + 1}.`, value: step })),
+    });
+  }
+
+  const mediaRows: { label: string; value: string }[] = [];
+  if (data.gifUrl) mediaRows.push({ label: 'gifUrl', value: data.gifUrl });
+  if (data.youtubeEmbedUrl) mediaRows.push({ label: 'youtubeEmbedUrl', value: data.youtubeEmbedUrl });
+  if (data.mediaUrls && data.mediaUrls.length > 0) {
+    mediaRows.push({ label: 'mediaUrls', value: data.mediaUrls.join(', ') });
+  }
+  if (mediaRows.length > 0) {
+    sections.push({ title: t('sectionMedia'), rows: mediaRows });
+  }
+
+  const defaultsRows: { label: string; value: string }[] = [];
+  if (!isRunning) {
+    if (data.defaultSets != null) defaultsRows.push({ label: 'defaultSets', value: String(data.defaultSets) });
+    if (data.defaultReps != null) defaultsRows.push({ label: 'defaultReps', value: String(data.defaultReps) });
+    if (data.defaultWeightKg != null) defaultsRows.push({ label: 'defaultWeightKg', value: String(data.defaultWeightKg) });
+    if (data.defaultRpe != null) defaultsRows.push({ label: 'defaultRpe', value: String(data.defaultRpe) });
+    if (data.restTimeSecs != null) defaultsRows.push({ label: 'restTimeSecs', value: String(data.restTimeSecs) });
+    if (data.restBetweenExercisesSecs != null) defaultsRows.push({ label: 'restBetweenExercisesSecs', value: String(data.restBetweenExercisesSecs) });
+  } else {
+    if (data.defaultTargetDistanceKm != null) defaultsRows.push({ label: 'defaultTargetDistanceKm', value: `${data.defaultTargetDistanceKm} km` });
+    if (data.defaultDurationMinutes != null) defaultsRows.push({ label: 'defaultDurationMinutes', value: `${data.defaultDurationMinutes} min` });
+    const minPace = secondsToPace(data.defaultPaceMinSecPerKm);
+    const maxPace = secondsToPace(data.defaultPaceMaxSecPerKm);
+    if (minPace) defaultsRows.push({ label: 'defaultPaceMinSecPerKm', value: t('paceFormat', { pace: minPace }) });
+    if (maxPace) defaultsRows.push({ label: 'defaultPaceMaxSecPerKm', value: t('paceFormat', { pace: maxPace }) });
+    if (data.defaultHrZone != null) defaultsRows.push({ label: 'defaultHrZone', value: `Zone ${data.defaultHrZone}` });
+    if (data.defaultHrMin != null) defaultsRows.push({ label: 'defaultHrMin', value: `${data.defaultHrMin} bpm` });
+    if (data.defaultHrMax != null) defaultsRows.push({ label: 'defaultHrMax', value: `${data.defaultHrMax} bpm` });
+  }
+  if (defaultsRows.length > 0) {
+    sections.push({ title: t('sectionDefaults'), rows: defaultsRows });
+  }
+
+  if (sections.length === 0) {
+    return (
+      <p className="text-sm text-text-tertiary italic">
+        {t('emptyInstructions')}
+      </p>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {sections.map((section) => (
+        <div key={section.title}>
+          <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-2">
+            {section.title}
+          </h4>
+          <dl className="space-y-1.5">
+            {section.rows.map((row, i) => (
+              <div key={`${section.title}-${i}`} className="flex gap-2 text-sm">
+                {row.label && (
+                  <dt className="text-text-tertiary shrink-0 w-32 font-mono text-xs break-all">
+                    {row.label}
+                  </dt>
+                )}
+                <dd className="text-text-primary break-words flex-1">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+
+      {isRunning && data.workoutStructure && data.workoutStructure.length > 0 && (
+        <WorkoutStructureSection phases={data.workoutStructure} t={t} />
+      )}
+    </div>
+  );
+}
+
+function WorkoutStructureSection({ phases, t }: { phases: object[]; t: ReturnType<typeof useTranslations> }) {
+  return (
+    <div>
+      <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-2">
+        {t('sectionStructure')}
+      </h4>
+      <div className="space-y-2">
+        {phases.map((phase, i) => {
+          const p = phase as Record<string, unknown>;
+          return (
+            <div key={i} className="rounded-lg bg-surface-2 border border-border p-3 space-y-1">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-sm font-medium text-text-primary">{renderIfPresentRaw(p.phase)}</span>
+                {p.type != null && (
+                  <span className="text-xs font-mono text-text-tertiary">{String(p.type)}</span>
+                )}
+              </div>
+              <dl className="space-y-1 text-xs">
+                {p.duration_minutes != null && <PhaseRow label="duration" value={`${String(p.duration_minutes)} min`} />}
+                {p.distance_meters != null && <PhaseRow label="distance" value={`${String(p.distance_meters)} m`} />}
+                {p.hr_zone != null && <PhaseRow label="hr_zone" value={`Zone ${String(p.hr_zone)}`} />}
+                {p.pace_min_per_km != null && <PhaseRow label="pace_min" value={`${String(p.pace_min_per_km)} min/km`} />}
+                {p.pace_max_per_km != null && <PhaseRow label="pace_max" value={`${String(p.pace_max_per_km)} min/km`} />}
+                {p.rpe != null && <PhaseRow label="rpe" value={String(p.rpe)} />}
+                {p.cadence != null && <PhaseRow label="cadence" value={`${String(p.cadence)} spm`} />}
+                {p.repeat_count != null && <PhaseRow label="repeats" value={`× ${String(p.repeat_count)}`} />}
+                {p.repeat_rest_seconds != null && <PhaseRow label="rest" value={`${String(p.repeat_rest_seconds)} s`} />}
+                {(() => {
+                  if (!p.notes || typeof p.notes !== 'object') return null;
+                  const notes = p.notes as { vi?: string; en?: string };
+                  if (!notes.vi && !notes.en) return null;
+                  return (
+                    <div className="pt-1 border-t border-border/50 space-y-0.5">
+                      {notes.vi && <div className="text-text-secondary">vi: {notes.vi}</div>}
+                      {notes.en && <div className="text-text-secondary">en: {notes.en}</div>}
+                    </div>
+                  );
+                })() as React.ReactNode}
+              </dl>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PhaseRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex gap-2">
+      <dt className="text-text-tertiary shrink-0 w-20 font-mono">{label}</dt>
+      <dd className="text-text-primary flex-1">{value}</dd>
+    </div>
+  );
+}
+
+function renderIfPresentRaw(value: unknown): string {
+  if (value === null || value === undefined) return '—';
+  if (typeof value === 'string' && value.trim() === '') return '—';
+  if (Array.isArray(value) && value.length === 0) return '—';
+  return String(value);
 }
