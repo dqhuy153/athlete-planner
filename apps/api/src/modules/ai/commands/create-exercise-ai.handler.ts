@@ -6,13 +6,20 @@ import { CreateExerciseAiCommand } from './create-exercise-ai.command'
 import { parseAiJson } from '../parse-ai-json'
 
 const SYSTEM = `Create a single exercise definition from the user's description.
-Return a JSON object: {
+Return a JSON object with ALL these fields:
+{
   "name": string,
+  "vietnameseName": string,
   "sportType": "GYM"|"RUNNING",
   "targetMuscleGroup"?: "Chest"|"Back"|"Shoulders"|"Arms"|"Legs"|"Abs",
+  "secondaryMuscleGroups"?: string[],
   "runningType"?: "Interval"|"Easy"|"Tempo"|"Long_Run",
   "customNotes"?: string,
   "instructions": string[],
+  "gifUrl": null,
+  "youtubeEmbedUrl": null,
+  "mediaUrls": [],
+  "garminExerciseEnum"?: string|null,
   // Gym defaults (optional, infer when appropriate)
   "defaultSets"?: number,
   "defaultReps"?: number,
@@ -33,13 +40,17 @@ Return a JSON object: {
 IMPORTANT: targetMuscleGroup MUST be exactly one of: Chest, Back, Shoulders, Arms, Legs, Abs (case-sensitive, singular).
 IMPORTANT: runningType MUST be exactly one of: Interval, Easy, Tempo, Long_Run (case-sensitive).
 IMPORTANT: defaultIntensityType MUST be exactly one of: PACE, HEART_RATE, NONE (uppercase).
+IMPORTANT: Always generate BOTH "name" (English) and "vietnameseName" (Vietnamese) fields.
+IMPORTANT: Include "secondaryMuscleGroups" as an array of secondary muscles worked (e.g. ["Triceps", "Anterior Deltoid"]).
+IMPORTANT: Include "garminExerciseEnum" if the exercise maps to a Garmin exercise enum, or null if not mappable.
+IMPORTANT: Set "gifUrl", "youtubeEmbedUrl" to null and "mediaUrls" to [] (user fills later).
 Infer workout defaults when user provides or implies them (e.g., "3 sets of 10 reps" → defaultSets: 3, defaultReps: 10).
 If user doesn't specify defaults, omit those fields (don't guess values).
 Return ONLY raw JSON. No markdown. No triple-backtick wrapping. No explanation.`
 
 const getSystemPrompt = (locale?: string) => {
   if (!locale || locale === 'en') return SYSTEM
-  return `${SYSTEM}\nIMPORTANT: Respond in ${locale === 'vi' ? 'Vietnamese' : locale} language for name, customNotes, and instructions fields.`
+  return `${SYSTEM}\nIMPORTANT: Generate "vietnameseName" in Vietnamese. Generate "name" in English. Generate "customNotes" and "instructions" in ${locale === 'vi' ? 'Vietnamese' : locale}.`
 }
 
 @CommandHandler(CreateExerciseAiCommand)

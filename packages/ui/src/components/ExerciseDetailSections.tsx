@@ -104,6 +104,7 @@ export interface ExerciseDetailData {
   vietnameseName?: string
   sportType?: string
   targetMuscleGroup?: string
+  secondaryMuscleGroups?: string[]
   runningType?: string
   classification?: string
   customNotes?: string
@@ -111,6 +112,7 @@ export interface ExerciseDetailData {
   gifUrl?: string
   youtubeEmbedUrl?: string
   mediaUrls?: string[]
+  garminExerciseEnum?: string | null
   // Gym defaults
   defaultSets?: number
   defaultReps?: number
@@ -205,6 +207,16 @@ export function ExerciseDetailSections({
         )}
         {data.classification && (
           <MetaChip tone='neutral'>{data.classification}</MetaChip>
+        )}
+        {data.secondaryMuscleGroups && data.secondaryMuscleGroups.length > 0 && (
+          <MetaChip tone='neutral'>
+            {data.secondaryMuscleGroups.join(', ')}
+          </MetaChip>
+        )}
+        {data.garminExerciseEnum && (
+          <MetaChip tone='neutral'>
+            Garmin: {data.garminExerciseEnum}
+          </MetaChip>
         )}
       </div>
 

@@ -310,11 +310,17 @@ export enum StorageProvider {
 
 export interface DraftExercise {
   name: string;
+  vietnameseName?: string;
   sportType: 'GYM' | 'RUNNING';
   targetMuscleGroup?: string;
+  secondaryMuscleGroups?: string[];
   runningType?: string;
   customNotes?: string;
   instructions?: string[];
+  gifUrl?: string;
+  youtubeEmbedUrl?: string;
+  mediaUrls?: string[];
+  garminExerciseEnum?: string;
   // Gym workout defaults
   defaultSets?: number;
   defaultReps?: number;

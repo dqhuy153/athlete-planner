@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations, useLocale } from 'next-intl';
-import { X, Loader2, Trash2, ChevronDown, Eye } from 'lucide-react';
+import { X, Loader2, Trash2, Eye } from 'lucide-react';
 import { BottomSheet, ExerciseDetailSections } from '@athlete-planner/ui';
 import {
   api,
@@ -13,6 +13,11 @@ import {
   SportType,
   normalizeDraftExercise,
 } from '@/lib/api';
+import {
+  ExercisePreviewList,
+  type PreviewExerciseItem,
+  type ItemAction,
+} from './ExercisePreviewShared';
 
 type Step = 'idle' | 'generating' | 'review' | 'previewing' | 'preview' | 'importing' | 'success';
 
@@ -155,6 +160,41 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
     );
   };
 
+  // Convert previewItems to shared PreviewExerciseItem format
+  const sharedPreviewItems: PreviewExerciseItem[] = previewItems.map((item, i) => ({
+    index: i,
+    name: item.name,
+    status: (item.status || 'new') as PreviewExerciseItem['status'],
+    action: item.action as ItemAction,
+    data: {
+      name: item.data?.name || item.name,
+      vietnameseName: item.data?.vietnameseName,
+      sportType: item.data?.sportType,
+      targetMuscleGroup: item.data?.targetMuscleGroup,
+      secondaryMuscleGroups: item.data?.secondaryMuscleGroups,
+      runningType: item.data?.runningType,
+      customNotes: item.data?.customNotes,
+      instructions: item.data?.instructions,
+      gifUrl: item.data?.gifUrl,
+      youtubeEmbedUrl: item.data?.youtubeEmbedUrl,
+      mediaUrls: item.data?.mediaUrls,
+      defaultSets: item.data?.defaultSets,
+      defaultReps: item.data?.defaultReps,
+      defaultWeightKg: item.data?.defaultWeightKg,
+      defaultRpe: item.data?.defaultRpe,
+      restTimeSecs: item.data?.restTimeSecs,
+      restBetweenExercisesSecs: item.data?.restBetweenExercisesSecs,
+      defaultTargetDistanceKm: item.data?.defaultTargetDistanceKm,
+      defaultDurationMinutes: item.data?.defaultDurationMinutes,
+      defaultIntensityType: item.data?.defaultIntensityType,
+      defaultPaceMinSecPerKm: item.data?.defaultPaceMinSecPerKm,
+      defaultPaceMaxSecPerKm: item.data?.defaultPaceMaxSecPerKm,
+      defaultHrZone: item.data?.defaultHrZone,
+      defaultHrMin: item.data?.defaultHrMin,
+      defaultHrMax: item.data?.defaultHrMax,
+    },
+  }));
+
   const summary = {
     admin: previewItems.filter(i => i.action === 'clone').length,
     custom: previewItems.filter(i => i.action === 'override').length,
@@ -280,89 +320,24 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
           {/* Preview step — duplicate detection + action selection */}
           {step === 'preview' && (
             <>
-              {/* Summary */}
-              <div className="flex gap-2 text-xs flex-wrap">
-                {summary.admin > 0 && (
-                  <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400">
-                    {summary.admin} {t('adminExisting')}
-                  </span>
-                )}
-                {summary.custom > 0 && (
-                  <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400">
-                    {summary.custom} {t('customExisting')}
-                  </span>
-                )}
-                {summary.new > 0 && (
-                  <span className="px-2 py-0.5 rounded bg-green-500/10 text-green-400">
-                    {summary.new} {t('newExercises')}
-                  </span>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                {previewItems.map((item, i) => (
-                  <div
-                    key={i}
-                    className="rounded-xl border border-border bg-surface-2 p-3"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`text-xs font-mono px-2 py-0.5 rounded shrink-0 ${
-                          item.status === 'admin-existing'
-                            ? 'text-blue-400 bg-blue-500/10'
-                            : item.status === 'custom-existing'
-                              ? 'text-amber-400 bg-amber-500/10'
-                              : 'text-green-400 bg-green-500/10'
-                        }`}
-                      >
-                        {item.status === 'admin-existing'
-                          ? 'ADMIN'
-                          : item.status === 'custom-existing'
-                            ? 'CUSTOM'
-                            : 'NEW'}
-                      </span>
-                      <span className="flex-1 text-sm text-text-primary truncate">
-                        {item.name}
-                      </span>
-                      <div className="relative">
-                        <select
-                          value={item.action}
-                          onChange={e =>
-                            updatePreviewAction(
-                              i,
-                              e.target.value as DraftWithAction['action'],
-                            )
-                          }
-                          className="appearance-none bg-surface-3 border border-border rounded-lg px-2 py-1 pr-6 text-xs text-text-secondary focus:outline-none focus:ring-1 focus:ring-accent/30"
-                        >
-                          {item.status === 'admin-existing' && (
-                            <>
-                              <option value="clone">{t('actionClone')}</option>
-                              <option value="skip">{t('actionSkip')}</option>
-                            </>
-                          )}
-                          {item.status === 'custom-existing' && (
-                            <>
-                              <option value="override">{t('actionOverride')}</option>
-                              <option value="skip">{t('actionSkip')}</option>
-                            </>
-                          )}
-                          {item.status === 'new' && (
-                            <>
-                              <option value="create">{t('actionCreate')}</option>
-                              <option value="skip">{t('actionSkip')}</option>
-                            </>
-                          )}
-                        </select>
-                        <ChevronDown
-                          size={12}
-                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ExercisePreviewList
+                items={sharedPreviewItems}
+                onDetailClick={index => setDetailIndex(index)}
+                onActionChange={(index, action) => {
+                  setPreviewItems(prev =>
+                    prev.map((item, i) =>
+                      i === index ? { ...item, action } : item,
+                    ),
+                  );
+                }}
+                t={tImport}
+                tImport={tImport}
+                tField={tField}
+                tEnum={tEnum}
+                tUnit={tUnit}
+                tDyn={tDyn}
+                locale={locale}
+              />
 
               <div className="flex gap-2 pt-1">
                 <button
@@ -405,48 +380,77 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
         onClose={() => setDetailIndex(null)}
         maxHeight="88vh"
       >
-        {detailIndex !== null && drafts[detailIndex] && (
-          <div className="p-5 space-y-4">
-            <ExerciseDetailSections
-              data={{
-                name: drafts[detailIndex].name,
-                sportType: drafts[detailIndex].sportType,
-                targetMuscleGroup: drafts[detailIndex].targetMuscleGroup,
-                runningType: drafts[detailIndex].runningType,
-                customNotes: drafts[detailIndex].customNotes,
-                instructions: drafts[detailIndex].instructions,
-                defaultSets: drafts[detailIndex].defaultSets,
-                defaultReps: drafts[detailIndex].defaultReps,
-                defaultWeightKg: drafts[detailIndex].defaultWeightKg,
-                defaultRpe: drafts[detailIndex].defaultRpe,
-                restTimeSecs: drafts[detailIndex].restTimeSecs,
-                restBetweenExercisesSecs: drafts[detailIndex].restBetweenExercisesSecs,
-                defaultTargetDistanceKm: drafts[detailIndex].defaultTargetDistanceKm,
-                defaultDurationMinutes: drafts[detailIndex].defaultDurationMinutes,
-                defaultIntensityType: drafts[detailIndex].defaultIntensityType,
-                defaultPaceMinSecPerKm: drafts[detailIndex].defaultPaceMinSecPerKm,
-                defaultPaceMaxSecPerKm: drafts[detailIndex].defaultPaceMaxSecPerKm,
-                defaultHrZone: drafts[detailIndex].defaultHrZone,
-                defaultHrMin: drafts[detailIndex].defaultHrMin,
-                defaultHrMax: drafts[detailIndex].defaultHrMax,
-              }}
-              locale={locale}
-              t={tImport as never}
-              tField={tField as never}
-              tEnum={tEnum as never}
-              tUnit={tUnit as never}
-              tDyn={tDyn as never}
-            />
+        {detailIndex !== null && (
+          step === 'review' && drafts[detailIndex] ? (
+            <div className="p-5 space-y-4">
+              <ExerciseDetailSections
+                data={{
+                  name: drafts[detailIndex].name,
+                  vietnameseName: drafts[detailIndex].vietnameseName,
+                  sportType: drafts[detailIndex].sportType,
+                  targetMuscleGroup: drafts[detailIndex].targetMuscleGroup,
+                  secondaryMuscleGroups: drafts[detailIndex].secondaryMuscleGroups,
+                  runningType: drafts[detailIndex].runningType,
+                  customNotes: drafts[detailIndex].customNotes,
+                  instructions: drafts[detailIndex].instructions,
+                  gifUrl: drafts[detailIndex].gifUrl,
+                  youtubeEmbedUrl: drafts[detailIndex].youtubeEmbedUrl,
+                  mediaUrls: drafts[detailIndex].mediaUrls,
+                  garminExerciseEnum: drafts[detailIndex].garminExerciseEnum,
+                  defaultSets: drafts[detailIndex].defaultSets,
+                  defaultReps: drafts[detailIndex].defaultReps,
+                  defaultWeightKg: drafts[detailIndex].defaultWeightKg,
+                  defaultRpe: drafts[detailIndex].defaultRpe,
+                  restTimeSecs: drafts[detailIndex].restTimeSecs,
+                  restBetweenExercisesSecs: drafts[detailIndex].restBetweenExercisesSecs,
+                  defaultTargetDistanceKm: drafts[detailIndex].defaultTargetDistanceKm,
+                  defaultDurationMinutes: drafts[detailIndex].defaultDurationMinutes,
+                  defaultIntensityType: drafts[detailIndex].defaultIntensityType,
+                  defaultPaceMinSecPerKm: drafts[detailIndex].defaultPaceMinSecPerKm,
+                  defaultPaceMaxSecPerKm: drafts[detailIndex].defaultPaceMaxSecPerKm,
+                  defaultHrZone: drafts[detailIndex].defaultHrZone,
+                  defaultHrMin: drafts[detailIndex].defaultHrMin,
+                  defaultHrMax: drafts[detailIndex].defaultHrMax,
+                }}
+                locale={locale}
+                t={tImport as never}
+                tField={tField as never}
+                tEnum={tEnum as never}
+                tUnit={tUnit as never}
+                tDyn={tDyn as never}
+              />
 
-            <div className="pt-2 border-t border-border">
-              <button
-                onClick={() => setDetailIndex(null)}
-                className="w-full min-h-[44px] rounded-xl border border-border text-sm text-text-secondary hover:border-accent/40 transition-colors"
-              >
-                {t('close')}
-              </button>
+              <div className="pt-2 border-t border-border">
+                <button
+                  onClick={() => setDetailIndex(null)}
+                  className="w-full min-h-[44px] rounded-xl border border-border text-sm text-text-secondary hover:border-accent/40 transition-colors"
+                >
+                  {t('close')}
+                </button>
+              </div>
             </div>
-          </div>
+          ) : step === 'preview' && sharedPreviewItems[detailIndex] ? (
+            <div className="p-5 space-y-4">
+              <ExerciseDetailSections
+                data={sharedPreviewItems[detailIndex].data}
+                locale={locale}
+                t={tImport as never}
+                tField={tField as never}
+                tEnum={tEnum as never}
+                tUnit={tUnit as never}
+                tDyn={tDyn as never}
+              />
+
+              <div className="pt-2 border-t border-border">
+                <button
+                  onClick={() => setDetailIndex(null)}
+                  className="w-full min-h-[44px] rounded-xl border border-border text-sm text-text-secondary hover:border-accent/40 transition-colors"
+                >
+                  {t('close')}
+                </button>
+              </div>
+            </div>
+          ) : null
         )}
       </BottomSheet>
     </div>

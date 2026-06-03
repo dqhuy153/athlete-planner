@@ -1,0 +1,16 @@
+name: redesign-custom-exercise-view
+description: "Redesign custom exercise detail page with view/edit mode toggle and quick-add media popup"
+created: "2026-06-03T23:45:00Z"
+status: ready
+artifacts:
+  proposal:
+    status: done
+    path: proposal.md
+  design:
+    status: done
+    path: design.md
+    dependencies: []
+  tasks:
+    status: done
+    path: tasks.md
+    dependencies: [design]
