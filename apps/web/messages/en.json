@@ -640,7 +640,76 @@
     "sectionDefaults": "Default parameters",
     "sectionStructure": "Workout structure",
     "emptyInstructions": "No detail data available.",
-    "paceFormat": "{pace} min/km"
+    "paceFormat": "{pace} min/km",
+    "field": {
+      "sportType": "Sport type",
+      "targetMuscleGroup": "Muscle group",
+      "runningType": "Running type",
+      "gifUrl": "GIF",
+      "youtubeEmbedUrl": "YouTube video",
+      "mediaUrls": "Other media",
+      "defaultSets": "Sets",
+      "defaultReps": "Reps",
+      "defaultWeightKg": "Weight (kg)",
+      "defaultRpe": "RPE",
+      "restTimeSecs": "Rest between sets (sec)",
+      "restBetweenExercisesSecs": "Rest between exercises (sec)",
+      "defaultTargetDistanceKm": "Target distance (km)",
+      "defaultDurationMinutes": "Duration (min)",
+      "defaultPaceMinSecPerKm": "Min pace",
+      "defaultPaceMaxSecPerKm": "Max pace",
+      "defaultHrZone": "HR zone",
+      "defaultHrMin": "Min HR (bpm)",
+      "defaultHrMax": "Max HR (bpm)"
+    },
+    "enum": {
+      "sportType": { "GYM": "Gym", "RUNNING": "Running" },
+      "muscleGroup": {
+        "Chest": "Chest",
+        "Back": "Back",
+        "Shoulders": "Shoulders",
+        "Arms": "Arms",
+        "Legs": "Legs",
+        "Abs": "Abs"
+      },
+      "runningType": {
+        "Interval": "Interval",
+        "Easy": "Easy",
+        "Tempo": "Tempo",
+        "Long_Run": "Long Run"
+      },
+      "phaseType": {
+        "warm_up": "Warm up",
+        "interval": "Interval",
+        "recovery": "Recovery",
+        "steady_state": "Steady state",
+        "cool_down": "Cool down",
+        "custom": "Custom"
+      }
+    },
+    "phaseField": {
+      "phase": "Phase",
+      "type": "Type",
+      "duration": "Duration",
+      "distance": "Distance",
+      "hr_zone": "HR zone",
+      "pace_min": "Min pace",
+      "pace_max": "Max pace",
+      "rpe": "RPE",
+      "cadence": "Cadence",
+      "repeats": "Repeats",
+      "rest": "Rest",
+      "notes": "Notes"
+    },
+    "hrZone": "Zone {n}",
+    "unit": {
+      "min": "{n} min",
+      "km": "{n} km",
+      "m": "{n} m",
+      "spm": "{n} spm",
+      "bpm": "{n} bpm",
+      "min_per_km": "{p} min/km"
+    }
   },
   "aiCreate": {
     "title": "Create Exercise",

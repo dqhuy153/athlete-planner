@@ -643,7 +643,76 @@
     "sectionDefaults": "Thông số mặc định",
     "sectionStructure": "Cấu trúc buổi tập",
     "emptyInstructions": "Không có dữ liệu chi tiết.",
-    "paceFormat": "{pace} phút/km"
+    "paceFormat": "{pace} phút/km",
+    "field": {
+      "sportType": "Loại thể thao",
+      "targetMuscleGroup": "Nhóm cơ",
+      "runningType": "Loại chạy",
+      "gifUrl": "Ảnh động (GIF)",
+      "youtubeEmbedUrl": "Video YouTube",
+      "mediaUrls": "Media khác",
+      "defaultSets": "Số hiệp",
+      "defaultReps": "Số rep",
+      "defaultWeightKg": "Khối lượng (kg)",
+      "defaultRpe": "RPE",
+      "restTimeSecs": "Nghỉ giữa hiệp (giây)",
+      "restBetweenExercisesSecs": "Nghỉ giữa bài (giây)",
+      "defaultTargetDistanceKm": "Quãng đường (km)",
+      "defaultDurationMinutes": "Thời lượng (phút)",
+      "defaultPaceMinSecPerKm": "Pace tối thiểu",
+      "defaultPaceMaxSecPerKm": "Pace tối đa",
+      "defaultHrZone": "Vùng nhịp tim",
+      "defaultHrMin": "HR tối thiểu (bpm)",
+      "defaultHrMax": "HR tối đa (bpm)"
+    },
+    "enum": {
+      "sportType": { "GYM": "Tạ", "RUNNING": "Chạy bộ" },
+      "muscleGroup": {
+        "Chest": "Ngực",
+        "Back": "Lưng",
+        "Shoulders": "Vai",
+        "Arms": "Tay",
+        "Legs": "Chân",
+        "Abs": "Bụng"
+      },
+      "runningType": {
+        "Interval": "Interval",
+        "Easy": "Dễ",
+        "Tempo": "Tempo",
+        "Long_Run": "Chạy dài"
+      },
+      "phaseType": {
+        "warm_up": "Khởi động",
+        "interval": "Interval",
+        "recovery": "Phục hồi",
+        "steady_state": "Duy trì",
+        "cool_down": "Hạ nhiệt",
+        "custom": "Tùy chỉnh"
+      }
+    },
+    "phaseField": {
+      "phase": "Giai đoạn",
+      "type": "Loại",
+      "duration": "Thời lượng",
+      "distance": "Quãng đường",
+      "hr_zone": "Vùng HR",
+      "pace_min": "Pace tối thiểu",
+      "pace_max": "Pace tối đa",
+      "rpe": "RPE",
+      "cadence": "Cadence",
+      "repeats": "Số lần lặp",
+      "rest": "Nghỉ",
+      "notes": "Ghi chú"
+    },
+    "hrZone": "Vùng {n}",
+    "unit": {
+      "min": "{n} phút",
+      "km": "{n} km",
+      "m": "{n} m",
+      "spm": "{n} spm",
+      "bpm": "{n} bpm",
+      "min_per_km": "{p} phút/km"
+    }
   },
   "aiCreate": {
     "title": "Tạo bài tập bằng AI",
