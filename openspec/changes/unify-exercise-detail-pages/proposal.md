@@ -1,32 +1,43 @@
-# Proposal: Unify Exercise Detail Pages
+# Proposal: Unify Custom Exercise Detail Page with System Exercise Detail Page
 
-## Problem
+## Problem Statement
 
-The system exercise detail page (`/library/[id]`) and the custom exercise detail page (`/library/my/[id]`) look completely different:
+The custom exercise detail page (`/library/my/[id]`) and the system exercise detail page (`/library/[id]`) look completely different:
 
-- **System page**: Uses `VideoPlayer`, `InstructionsPanel`, pill badges, `ExerciseActionBar` — polished, consistent
-- **Custom page**: Flat form with raw inputs, no `VideoPlayer`, no `InstructionsPanel`, different layout structure
+**System page** uses:
+- `VideoPlayer` — YouTube/GIF with play button overlay
+- `InstructionsPanel` — structured gym instructions with beginner/advanced tabs
+- Running instructions as numbered list
+- Workout structure as numbered phases
+- Pill badges for muscle group / running type
+- `ExerciseActionBar` — sticky bottom bar (Start Workout, Add to Today, Add to Schedule)
 
-Users see two radically different experiences for the same type of content. The custom page feels like a settings form, not an exercise detail page.
+**Custom page** uses:
+- Raw form inputs in section cards (Identity, Details, Media, Instructions, Workout Defaults)
+- Custom YouTube preview (raw iframe)
+- `MediaUrlsManager` for media URLs
+- `PrivateInstructionsEditor` for step editing
+- No `VideoPlayer`, no `InstructionsPanel`, no `ExerciseActionBar`
+- Save button + Delete button at bottom
 
-## Goal
+This creates a jarring experience — users click from a system exercise to their custom copy and see a completely different UI. The custom page feels like a different app.
 
-Make the custom exercise detail page visually identical to the system page, with editing capabilities layered on top. Both pages should:
+## Goals
 
-- Use the same shared components (`VideoPlayer`, `InstructionsPanel`)
-- Have the same layout structure (video at top, title, metadata tags, instructions, workout structure)
-- Share the same typography and spacing
-- Only differ in interactivity (custom = editable, system = read-only)
+1. **Same visual layout** — custom exercise page uses the same shared components and layout as the system page
+2. **Same shared components** — `VideoPlayer`, `InstructionsPanel`, pill badges, `ExerciseActionBar`
+3. **Editability is the only difference** — custom exercises are editable (click-to-edit or inline edit), system exercises are read-only
+4. **Preserve save/delete** — custom page retains save and delete functionality
 
 ## Non-Goals
 
-- Changing the system exercise detail page
-- Modifying the shared components themselves
+- Changing the system exercise page layout
+- Adding new shared components (reuse existing ones)
 - Changing the backend API
 
 ## Success Criteria
 
-- Custom exercise page looks identical to system page at first glance
-- All fields are editable on the custom page
-- Same shared components used on both pages
-- No visual regressions on the system page
+- Both pages render identical layouts for the same exercise data
+- Custom exercise page uses `VideoPlayer`, `InstructionsPanel`, pill badges, `ExerciseActionBar`
+- Custom exercise page supports editing with save/delete
+- No visual differences between the two pages except edit controls

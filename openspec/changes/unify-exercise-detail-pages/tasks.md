@@ -1,74 +1,191 @@
-# Tasks: Unify Exercise Detail Pages
+# Tasks: Unify Custom Exercise Detail Page with System Exercise Detail Page
 
-## Task 1: Rewrite `PrivateExerciseDetailClient` — Unified Read-First Layout
+## Task 1: Create Shared `ExerciseDetailView` Component ✅
 
-**File:** `apps/web/app/[locale]/library/my/[id]/PrivateExerciseDetailClient.tsx`
+**File:** `apps/web/components/ExerciseDetailView.tsx` (new)
 
-Full rewrite. New structure matches system exercise detail page layout:
+### What:
+Create a shared component that renders exercise detail in a unified layout. Both system and custom pages will use this component.
 
+### Props:
+```typescript
+interface ExerciseDetailViewProps {
+  exercise: GymExerciseMaster | RunningExerciseMaster | PrivateExercise;
+  locale: string;
+  readonly?: boolean;          // default true
+  sourceGymName?: string | null;
+  editMedia?: boolean;
+
+  // Edit-mode callbacks (only used when readonly=false)
+  onSave?: () => Promise<void>;
+  onDelete?: () => Promise<void>;
+  onNameChange?: (name: string) => void;
+  onMuscleGroupChange?: (mg: MuscleGroup | '') => void;
+  onRunningTypeChange?: (rt: RunningType | '') => void;
+  onNotesChange?: (notes: string) => void;
+  onInstructionsChange?: (instructions: string[]) => void;
+  onMediaUrlsChange?: (urls: string[]) => void;
+  onYoutubeChange?: (url: string) => void;
+
+  // Edit-mode state
+  editState?: {
+    name: string;
+    muscleGroup: MuscleGroup | '';
+    runningType: RunningType | '';
+    notes: string;
+    instructions: string[];
+    mediaUrls: string[];
+    youtubeEmbedUrl: string;
+    saving?: boolean;
+    saveDone?: boolean;
+    isDirty?: boolean;
+  };
+}
 ```
-Back link
-VideoPlayer (youtubeEmbedUrl, gifUrl)
-Editable title (h1 ↔ input on click)
-Source attribution (if applicable)
-Metadata tags (pills ↔ select on click)
-Notes (read-only text ↔ textarea on click)
-InstructionsPanel (gym) or ordered list (running) ↔ PrivateInstructionsEditor on edit
-Workout structure phases (running, if applicable) ↔ edit mode
-Workout defaults summary ↔ NumericField/NumberRow on edit
-MediaUrlsManager
-Save Button
-Delete Zone
-```
+
+### Layout (always the same):
+1. Back link
+2. `VideoPlayer` (shared component)
+3. Title (`<h1>` / input based on readonly)
+4. Pill badges for muscle group / running type
+5. Instructions section (`InstructionsPanel` for gym, numbered list for running)
+6. Workout structure (running only)
+7. Bottom bar (`ExerciseActionBar` when readonly, Save+Delete when editable)
+
+### Edit mode (readonly=false):
+- Each editable section has a pencil icon (`Pencil` from lucide-react) in the top-right
+- Clicking pencil toggles that section between view and edit mode
+- Only one section edits at a time
+- Notes and Workout defaults sections only appear in editable mode
+- Media section uses `MediaUrlsManager` when editing
 
 ### Key implementation details:
-
-1. **VideoPlayer**: Use `<VideoPlayer youtubeEmbedUrl={...} gifUrl={...} title={...} />` — same as system page. Add a small edit button overlay to change URLs.
-
-2. **Title**: Default to `<h1 className="text-subheading font-bold text-text-primary text-balance">{name}</h1>`. On click, swap to `<input>` with same styling. Save on blur.
-
-3. **Metadata tags**: Display as pills:
-   - Gym: `rounded-md bg-accent-muted px-2.5 py-1 text-micro font-semibold text-accent tracking-wide uppercase`
-   - Running: `rounded-md bg-success/20 px-2.5 py-1 text-micro font-semibold text-success tracking-wide uppercase`
-   - On click, show `<select>` dropdown to change value.
-
-4. **Instructions (GYM)**: Convert flat `string[]` to `ExerciseInstruction[]` format:
-   ```typescript
-   const gymInstructions: ExerciseInstruction[] = instructions.length > 0
-     ? [{ level: ExperienceLevel.BEGINNER, steps: { vi: instructions, en: instructions }, form_cues: { vi: [], en: [] } }]
-     : [];
-   ```
-   Pass to `<InstructionsPanel instructions={gymInstructions} locale={locale} />`.
-   Add "Edit" button to switch to `PrivateInstructionsEditor`.
-
-5. **Instructions (RUNNING)**: Display as ordered list inside `card-surface p-4` (same as system page running instructions). Add "Edit" button to switch to `PrivateInstructionsEditor`.
-
-6. **Workout structure (running)**: If `workoutStructure` exists, display as phase list with `card-surface flex items-center gap-3 px-4 py-3` rows (same as system page).
-
-7. **Workout defaults**: Show as a compact summary. On click, expand to full NumericField grid (gym) or NumberRow config (running).
-
-8. **Notes**: Show as read-only text in a subtle card. On click, swap to textarea.
-
-9. **MediaUrlsManager**: Same component, same position below instructions.
-
-10. **Save button**: Keep unified save with dirty indicator.
-
-11. **Delete zone**: Same as current.
-
-### Edit state management:
-```typescript
-const [editingField, setEditingField] = useState<string | null>(null);
-```
-Only one section editable at a time. Click another section to switch. Click "Done" or blur to save and exit edit mode.
+- Import and use existing shared components: `VideoPlayer`, `InstructionsPanel`, `ExerciseActionBar`
+- Use `cn` from `@athlete-planner/ui` for conditional classes
+- Use `useTranslations` for i18n
+- Exercise type detection: `isGymExercise()`, `isRunningExercise()` helper functions
+- Muscle group translation: use `t('chest')`, `t('back')`, etc. from `library` namespace
+- Running type translation: use `t('intervalType')`, `t('easyType')`, etc.
+- Running workout structure: numbered phase cards with `font-data` for numbers
+- Section styling: `rounded-[20px] border border-border bg-surface-1 p-4` (matching existing)
 
 ---
 
-## Task 2: Verify TypeScript & Visual Consistency
+## Task 2: Refactor System Exercise Page to Use Shared Component ✅
 
-1. Run `pnpm --filter web exec tsc --noEmit`
-2. Verify custom page uses same components as system page:
-   - `VideoPlayer` ✓
-   - `InstructionsPanel` ✓ (for gym)
-   - Same pill badge styling ✓
-   - Same typography (`text-subheading`, `text-caption`, `text-micro`) ✓
-3. Verify no regressions on system page
+**File:** `apps/web/app/[locale]/library/[id]/page.tsx`
+
+### What:
+Replace the current inline JSX with `ExerciseDetailView` (readonly=true).
+
+### Changes:
+1. Import `ExerciseDetailView` from `@/components/ExerciseDetailView`
+2. Remove direct imports of `VideoPlayer`, `InstructionsPanel` (now inside shared component)
+3. Remove `isGym()`, `isRunning()`, `translateMuscleGroup()`, `translateRunningType()` helpers (now inside shared component)
+4. Keep `CustomizeSaveButton` and `AddCustomMediaButton` imports (rendered outside `ExerciseDetailView`)
+5. Replace the entire exercise detail JSX block with:
+   ```tsx
+   <ExerciseDetailView
+     exercise={exercise}
+     locale={locale}
+     readonly
+   />
+   ```
+6. Keep `CustomizeSaveButton` and `AddCustomMediaButton` rendered between the back link and `ExerciseDetailView` (or pass them as children/slots)
+
+### Note:
+The `CustomizeSaveButton` and `AddCustomMediaButton` are system-page-specific. They should be rendered by the system page, not inside `ExerciseDetailView`. Either:
+- Option A: Render them outside `ExerciseDetailView` in the page
+- Option B: Add a `actions` slot prop to `ExerciseDetailView`
+
+**Decision: Option A** — keep them outside the shared component, rendered in the page after the back link.
+
+---
+
+## Task 3: Refactor Custom Exercise Page to Use Shared Component ✅
+
+**File:** `apps/web/app/[locale]/library/my/[id]/PrivateExerciseDetailClient.tsx`
+
+### What:
+Replace the current form-based layout with `ExerciseDetailView` (readonly=false).
+
+### Changes:
+1. Import `ExerciseDetailView` from `@/components/ExerciseDetailView`
+2. Remove all inline JSX for sections (Identity, Details, Media, Instructions, Workout Defaults)
+3. Remove `NumericField`, `NumberRow` helper components (move inside `ExerciseDetailView`)
+4. Keep all state management (name, muscleGroup, etc.) — these become editState props
+5. Keep `handleSave`, `handleDelete`, `isDirty`, `beforeunload` logic
+6. Replace the JSX with:
+   ```tsx
+   <ExerciseDetailView
+     exercise={exercise}
+     locale={locale}
+     readonly={false}
+     editMedia={editMedia}
+     sourceGymName={sourceGymName}
+     onSave={handleSave}
+     onDelete={handleDelete}
+     onNameChange={setName}
+     onMuscleGroupChange={setMuscleGroup}
+     onRunningTypeChange={setRunningTypeState}
+     onNotesChange={setNotes}
+     onInstructionsChange={setInstructions}
+     onMediaUrlsChange={setMediaUrls}
+     onYoutubeChange={setYoutubeEmbedUrl}
+     editState={{
+       name, muscleGroup, runningType: runningTypeState,
+       notes, instructions, mediaUrls, youtubeEmbedUrl,
+       saving, saveDone, isDirty: isDirty(),
+     }}
+   />
+   ```
+
+### What gets removed from this file:
+- `NumericField` component (move to `ExerciseDetailView`)
+- `NumberRow` component (move to `ExerciseDetailView`)
+- All section JSX blocks (Identity, Details, Media, Instructions, Workout Defaults)
+- `MUSCLE_GROUPS`, `RUNNING_TYPES`, `INTENSITY_OPTIONS`, `HR_ZONES` constants (move to `ExerciseDetailView`)
+- `secsToMMSS` helper (move to `ExerciseDetailView`)
+
+### What stays in this file:
+- All `useState` hooks for form state
+- `useEffect` for `beforeunload`
+- `useEffect` for `editMedia` auto-focus
+- `useRef` for `mediaUrlsRef`
+- `isDirty` callback
+- `handleSave` function
+- `handleDelete` function
+
+---
+
+## Task 4: Update i18n Files ✅
+
+**Files:**
+- `apps/web/messages/vi.json`
+- `apps/web/messages/en.json`
+
+### New keys under `privateExercise`:
+```json
+{
+  "editSection": "Chỉnh sửa" / "Edit",
+  "doneEditing": "Xong" / "Done",
+  "notesPlaceholder": "Thêm ghi chú về bài tập..." / "Add notes about this exercise...",
+  "sourceFrom": "Sao chép từ {name}" / "Copied from {name}"
+}
+```
+
+---
+
+## Task 5: Verify & Test ✅
+
+1. Run TypeScript check: `pnpm --filter web exec tsc --noEmit`
+2. Run TypeScript check: `pnpm --filter api exec tsc --noEmit`
+3. Manual test:
+   - System page: verify identical layout (VideoPlayer, InstructionsPanel, pill badges, ActionBar)
+   - Custom page: verify same layout with editable controls
+   - Custom page: click pencil icons to toggle edit mode
+   - Custom page: save changes, verify persistence
+   - Custom page: delete exercise
+   - Custom page: test `?editMedia=true` auto-focus flow
+   - Both pages: verify mobile responsiveness
+   - Both pages: verify dark mode

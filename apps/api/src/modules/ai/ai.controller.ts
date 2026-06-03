@@ -20,7 +20,7 @@ class SuggestAlternativeDto {
 
 class CreateExerciseAiDto {
   @IsString() @IsNotEmpty() prompt: string;
-  @IsString() locale?: string;
+  @IsString() @IsNotEmpty() locale: string;
 }
 
 @UseGuards(JwtAuthGuard)

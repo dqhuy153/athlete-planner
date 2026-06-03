@@ -670,13 +670,14 @@ class ApiClient {
   createExercisesBulkAI(
     token: string,
     prompt: string,
+    locale: string,
   ): Promise<{ exercises: DraftExercise[] }> {
     return this.request<{ exercises: DraftExercise[] }>(
       '/ai/create-exercises',
       {
         method: 'POST',
         headers: this.authHeaders(token),
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, locale }),
         timeoutMs: ApiClient.AI_TIMEOUT_MS,
       },
     )

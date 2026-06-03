@@ -1,159 +1,158 @@
-# Design: Unify Exercise Detail Pages
+# Design: Unify Custom Exercise Detail Page with System Exercise Detail Page
 
-## Current State
+## Approach: Shared `ExerciseDetailView` Component
 
-### System page layout (`/library/[id]`)
+Create a single shared component that both pages render. The only difference is a `readonly` prop — when `false`, editable controls appear.
+
+### Target Layout (identical for both pages)
+
 ```
-Back link
-VideoPlayer (youtubeEmbedUrl, gifUrl)
-Title (h1) + subtitle (original name)
-CustomizeSaveButton
-Metadata tags (pills)
-InstructionsPanel or inline instructions
-Workout structure (running phases)
-ExerciseActionBar (sticky bottom)
+┌─────────────────────────────────────┐
+│ ← Back to Library                   │
+│                                     │
+│ ┌─ VideoPlayer ───────────────────┐ │
+│ │ YouTube / GIF with play overlay │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ Title (h1)                          │
+│ Subtitle (English name, dim)        │
+│                                     │
+│ ┌─ Pill Badges ───────────────────┐ │
+│ │ [Muscle Group] [Secondary...]   │ │
+│ │ [Running Type]                  │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ ┌─ Instructions ──────────────────┐ │
+│ │ InstructionsPanel (gym)         │ │
+│ │ OR numbered list (running)      │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ ┌─ Workout Structure ─────────────┐ │
+│ │ Running phases (if running)     │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ System: ExerciseActionBar           │
+│ Custom: Save + Delete               │
+└─────────────────────────────────────┘
 ```
-
-### Custom page layout (`/library/my/[id]`)
-```
-Back link
-[Section: Identity] — name input
-[Section: Details] — muscle group select, notes textarea
-[Section: Media] — YouTube input + iframe preview, MediaUrlsManager
-[Section: Instructions] — PrivateInstructionsEditor (textareas)
-[Section: Workout Defaults] — NumericField grid / NumberRow config
-Save Button
-Delete Section
-```
-
-## Design: Unified Custom Page
-
-### New layout (matches system page structure)
-```
-Back link
-VideoPlayer (youtubeEmbedUrl, gifUrl) — same component, but clicking opens edit
-Editable title (click-to-edit h1)
-Metadata tags — same pill design, click-to-edit dropdown
-InstructionsPanel — same component, click-to-edit steps
-Workout structure (running) — same phase list, click-to-edit
-MediaUrlsManager — below instructions, for additional links
-Save Button (floating or inline)
-Delete Section
-```
-
-### Approach: Click-to-Edit Pattern
-
-Instead of a flat form, use a **read-first, click-to-edit** pattern:
-
-1. **Default state**: Shows data using the same read-only components as the system page
-2. **Click on any section**: That section becomes editable inline
-3. **Blur/Save**: Section returns to read-only with updated data
-
-This gives users the same visual experience as the system page, with editing discoverable through interaction.
-
-### Section-by-Section Design
-
-#### 1. Video/GIF — Use `VideoPlayer` component
-- Show `VideoPlayer` exactly like system page
-- Add a small "Edit" icon button overlay (top-right corner) to change the YouTube URL or GIF URL
-- Click opens a small inline form to update URLs
-
-#### 2. Title — Click-to-Edit
-- Display as `<h1 className="text-subheading font-bold text-text-primary text-balance">` (same as system)
-- Click switches to an `<input>` with the same text styling
-- On blur, saves the name
-
-#### 3. Source Attribution
-- Keep `sourceGymName` display below title (same as current)
-- Only shown for exercises copied from master library
-
-#### 4. Metadata Tags — Click-to-Edit
-- Display as pill badges (same as system page):
-  - Gym: `rounded-md bg-accent-muted px-2.5 py-1 text-micro font-semibold text-accent tracking-wide uppercase`
-  - Running: `rounded-md bg-success/20 px-2.5 py-1 text-micro font-semibold text-success tracking-wide uppercase`
-- Click opens a `<select>` dropdown to change the value
-
-#### 5. Notes — Click-to-Edit
-- Not present on system page — show as a subtle card below metadata
-- Display as read-only text (or placeholder "Add notes...")
-- Click opens a textarea
-
-#### 6. Instructions — Use `InstructionsPanel`
-- For GYM exercises: Use `InstructionsPanel` with Beginner/Advanced tabs
-  - Instructions stored as flat `string[]` in PrivateExercise
-  - Convert to `ExerciseInstruction[]` format for the component: `[{ level: 'beginner', steps: instructions, form_cues: [] }]`
-  - When editing: show `PrivateInstructionsEditor` inline
-- For RUNNING exercises: Show as ordered list (same as system page)
-  - When editing: show `PrivateInstructionsEditor` inline
-- Click "Edit" button to switch between view/edit mode
-
-#### 7. Workout Structure (Running)
-- Display `workoutStructure` as phase list (same as system page)
-- Click to edit phases (add/remove/reorder)
-
-#### 8. Workout Defaults — Click-to-Edit
-- Show as a compact summary row (e.g., "3 sets × 10 reps @ 60kg RPE 7")
-- Click opens the full NumericField grid / NumberRow config
-
-#### 9. MediaUrlsManager
-- Show below instructions (additional reference links)
-- Same component, same styling
-
-#### 10. Save & Delete
-- Save button: sticky or inline, with dirty indicator
-- Delete: danger zone at bottom (same as current)
 
 ### Component Structure
 
 ```
-PrivateExerciseDetailClient (main)
+ExerciseDetailView (shared, 'use client')
 ├── Back link
-├── VideoPlayer (with edit overlay)
-├── EditableTitle (h1 ↔ input)
-├── SourceAttribution
-├── MetadataTags (pills ↔ select)
-├── NotesSection (text ↔ textarea)
-├── InstructionsSection (InstructionsPanel ↔ PrivateInstructionsEditor)
-├── WorkoutStructureSection (running phases, if applicable)
-├── WorkoutDefaultsSection (summary ↔ NumericField/NumberRow)
-├── MediaUrlsManager
-├── SaveButton
-└── DeleteZone
+├── VideoPlayer
+├── Title section (view: h1 + subtitle / edit: input)
+├── Pill badges (view: static / edit: select dropdowns)
+├── Instructions section (view: InstructionsPanel / edit: PrivateInstructionsEditor)
+├── Workout structure (view: phase cards / edit: editable phases)
+├── Media section (view: VideoPlayer + media list / edit: MediaUrlsManager)
+├── Action bar (readonly=true: ExerciseActionBar / readonly=false: Save + Delete)
+```
+
+### Props Interface
+
+```typescript
+interface ExerciseDetailViewProps {
+  exercise: GymExerciseMaster | RunningExerciseMaster | PrivateExercise;
+  locale: string;
+  readonly?: boolean;          // default true
+  sourceGymName?: string | null;
+  editMedia?: boolean;
+
+  // Edit-mode callbacks (only used when readonly=false)
+  onSave?: () => Promise<void>;
+  onDelete?: () => Promise<void>;
+  onNameChange?: (name: string) => void;
+  onMuscleGroupChange?: (mg: MuscleGroup | '') => void;
+  onRunningTypeChange?: (rt: RunningType | '') => void;
+  onNotesChange?: (notes: string) => void;
+  onInstructionsChange?: (instructions: string[]) => void;
+  onMediaUrlsChange?: (urls: string[]) => void;
+  onYoutubeChange?: (url: string) => void;
+
+  // Edit-mode state (only used when readonly=false)
+  editState?: {
+    name: string;
+    muscleGroup: MuscleGroup | '';
+    runningType: RunningType | '';
+    notes: string;
+    instructions: string[];
+    mediaUrls: string[];
+    youtubeEmbedUrl: string;
+    saving?: boolean;
+    saveDone?: boolean;
+    isDirty?: boolean;
+  };
+}
+```
+
+### Edit Mode UX
+
+When `readonly=false`:
+
+1. **Title**: Click to edit — swaps `<h1>` with `<input>` (large, bold, same font)
+2. **Muscle group / Running type**: Click badge → opens dropdown selector overlay
+3. **Instructions**: Click section header → toggles between `InstructionsPanel` (view) and `PrivateInstructionsEditor` (edit)
+4. **Media**: "Add Custom Media" button → opens `MediaUrlsManager` URL input
+5. **Notes**: Added as a collapsible section below title (not present on system page)
+6. **Workout defaults**: Added as a collapsible section (not present on system page)
+
+Key principle: **View mode is the default.** User clicks to enter edit mode for a section. Only one section edits at a time. Save persists all changes.
+
+### Section Edit Toggles
+
+Each editable section has a small edit icon (pencil from lucide-react) in the top-right corner. Clicking it toggles that section between view and edit mode.
+
+```
+Section Header                    [Edit icon]
+┌─────────────────────────────────────────────┐
+│ View mode: InstructionsPanel / pill badges  │
+│ Edit mode: PrivateInstructionsEditor / etc  │
+└─────────────────────────────────────────────┘
 ```
 
 ### State Management
 
-Single `formData` state holding all fields (same as current). Each section manages its own edit state locally:
+The `ExerciseDetailView` is a **controlled component** when `readonly=false`:
+- All edit state lives in the parent (`PrivateExerciseDetailClient`)
+- The component receives current values + change callbacks
+- Parent handles save/delete via API calls
 
-```typescript
-const [editing, setEditing] = useState<{
-  title: boolean;
-  metadata: boolean;
-  notes: boolean;
-  instructions: boolean;
-  workoutStructure: boolean;
-  workoutDefaults: boolean;
-}>({ ... });
-```
+This keeps the shared component pure — no internal state for edit mode, all controlled by props.
 
-### Save Strategy
+### What Changes vs. What Stays
 
-Same as current — call both API endpoints sequentially:
-1. `api.updatePrivateExercise(token, id, infoFields)`
-2. `api.updatePrivateExerciseConfig(token, id, configFields)`
+| Element | System Page | Custom Page (new) |
+|---|---|---|
+| Back link | `← Gym` / `← Running` | `← My Library` |
+| VideoPlayer | Same | Same |
+| Title | `<h1>` | `<h1>` (click to edit) |
+| Subtitle | English name | English name |
+| Pill badges | Static | Click to edit |
+| Instructions | InstructionsPanel | InstructionsPanel (click to edit) |
+| Running instructions | Numbered list | Numbered list (click to edit) |
+| Workout structure | Phase cards | Phase cards |
+| Media | Not shown | VideoPlayer + media list |
+| Bottom bar | ExerciseActionBar | Save + Delete buttons |
+| Notes | Not shown | Editable section (custom only) |
+| Workout defaults | Not shown | Editable section (custom only) |
 
 ### Files to Modify
 
 | File | Change |
 |---|---|
-| `apps/web/app/[locale]/library/my/[id]/PrivateExerciseDetailClient.tsx` | Full rewrite — unified layout with click-to-edit |
-| `apps/web/app/[locale]/library/my/[id]/page.tsx` | May need to pass additional data (workoutStructure, mediaUrls) |
+| `apps/web/components/ExerciseDetailView.tsx` | **New** — shared view/edit component |
+| `apps/web/app/[locale]/library/[id]/page.tsx` | Refactor to use `ExerciseDetailView` (readonly) |
+| `apps/web/app/[locale]/library/my/[id]/PrivateExerciseDetailClient.tsx` | Refactor to use `ExerciseDetailView` (editable) |
+| `apps/web/app/[locale]/library/my/[id]/page.tsx` | Minor — pass editMedia prop |
+| `apps/web/messages/vi.json` | Add i18n keys for edit mode |
+| `apps/web/messages/en.json` | Add i18n keys for edit mode |
 
-### Files NOT Modified
+### i18n Keys (new)
 
-- `VideoPlayer.tsx` — used as-is
-- `InstructionsPanel.tsx` — used as-is
-- `ExerciseActionBar.tsx` — not used on custom page (user edits, doesn't start workout)
-- `MediaUrlsManager.tsx` — used as-is
-- `PrivateInstructionsEditor.tsx` — used as-is (for edit mode)
-- System exercise detail page — no changes
+Under `privateExercise`:
+- `editSection` — "Edit"
+- `doneEditing` — "Done"
+- `notesPlaceholder` — "Add notes about this exercise..."
+- `sourceFrom` — "Copied from {name}"

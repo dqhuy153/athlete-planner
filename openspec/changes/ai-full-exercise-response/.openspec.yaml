@@ -1,0 +1,16 @@
+name: ai-full-exercise-response
+description: "AI returns full exercise data with Vietnamese names, secondary muscle groups, and Garmin enums; review UI reuses ImportJSONModal pattern"
+created: "2026-06-03T16:40:00Z"
+status: ready
+artifacts:
+  proposal:
+    status: done
+    path: proposal.md
+  design:
+    status: done
+    path: design.md
+    dependencies: []
+  tasks:
+    status: done
+    path: tasks.md
+    dependencies: [design]

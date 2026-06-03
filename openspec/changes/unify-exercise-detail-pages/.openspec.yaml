@@ -1,0 +1,16 @@
+name: unify-exercise-detail-pages
+description: "Unify custom exercise detail page with system exercise detail page — same shared components, same layout, only editability differs"
+created: "2026-06-03T18:00:00Z"
+status: ready
+artifacts:
+  proposal:
+    status: done
+    path: proposal.md
+  design:
+    status: done
+    path: design.md
+    dependencies: []
+  tasks:
+    status: done
+    path: tasks.md
+    dependencies: [design]

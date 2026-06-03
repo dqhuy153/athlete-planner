@@ -53,6 +53,7 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
       const result = await api.createExercisesBulkAI(
         session.accessToken as string,
         prompt,
+        locale,
       );
       if (!result.exercises || result.exercises.length === 0) {
         setError(t('noExercises'));
