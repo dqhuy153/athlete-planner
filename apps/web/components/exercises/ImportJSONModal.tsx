@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Upload, Trash2, X, Download, ChevronLeft, Copy, Check, Eye } from "lucide-react";
 import { api, FlatExerciseImportItem } from "@/lib/api";
 import { BottomSheet } from "@athlete-planner/ui";
@@ -37,6 +37,18 @@ const secondsToPace = (sec: number | null | undefined) => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
+const getLocalizedName = (
+  item: { name?: string; vietnameseName?: string } | null | undefined,
+  locale: string,
+): string => {
+  if (!item) return '';
+  const lang = locale.split('-')[0];
+  if (lang === 'vi') {
+    return item.vietnameseName?.trim() || item.name?.trim() || '';
+  }
+  return item.name?.trim() || item.vietnameseName?.trim() || '';
+};
+
 type ItemAction = 'skip' | 'clone' | 'override' | 'create';
 
 interface PreviewItemWithAction extends PrivateImportPreviewItem {
@@ -47,6 +59,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
   const { data: session } = useSession();
   const t = useTranslations('importJSON');
   const tc = useTranslations('common');
+  const locale = useLocale();
   const [step, setStep] = useState<'sport' | 'input' | 'preview'>('sport');
   const [selectedSport, setSelectedSport] = useState<SportType>(SportType.GYM);
   const [inputMethod, setInputMethod] = useState<'file' | 'text'>('file');
@@ -345,7 +358,7 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
                     <Eye size={16} aria-hidden />
                   </button>
                   <div className="flex-1 mx-2">
-                    <p className="text-sm font-medium text-text-primary">{p.name}</p>
+                    <p className="text-sm font-medium text-text-primary">{getLocalizedName(p.data, locale) || p.name}</p>
                     <p className={`text-xs ${getStatusColor(p.status)}`}>{t(p.status as 'admin-existing' | 'custom-existing' | 'new')}</p>
                   </div>
                   <select
@@ -390,7 +403,9 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
         {detailItem && (
           <div className="p-5 space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-text-primary">{detailItem.name}</h3>
+              <h3 className="text-lg font-semibold text-text-primary">
+                {getLocalizedName(detailItem.data, locale) || detailItem.name}
+              </h3>
               <p className={`text-xs mt-1 ${getStatusColor(detailItem.status)}`}>
                 {t(detailItem.status as 'admin-existing' | 'custom-existing' | 'new')}
               </p>

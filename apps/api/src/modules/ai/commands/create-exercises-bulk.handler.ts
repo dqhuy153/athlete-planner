@@ -9,7 +9,9 @@ import type { DraftExercise } from '@athlete-planner/contracts'
 const SYSTEM = `Create exercise definitions from the user's description.
 The user may describe one or more exercises (e.g. "a push day workout", "chest and triceps exercises").
 Return a JSON array of exercise objects.
-Each object: { "name": string, "sportType": "GYM"|"RUNNING", "targetMuscleGroup"?: string, "runningType"?: string, "customNotes"?: string, "instructions": string[] }
+Each object: { "name": string, "sportType": "GYM"|"RUNNING", "targetMuscleGroup"?: "Chest"|"Back"|"Shoulders"|"Arms"|"Legs"|"Abs", "runningType"?: "Interval"|"Easy"|"Tempo"|"Long_Run", "customNotes"?: string, "instructions": string[] }
+IMPORTANT: targetMuscleGroup MUST be exactly one of: Chest, Back, Shoulders, Arms, Legs, Abs (case-sensitive, singular).
+IMPORTANT: runningType MUST be exactly one of: Interval, Easy, Tempo, Long_Run (case-sensitive).
 Return ONLY raw JSON array. No markdown. No triple-backtick wrapping. No explanation.
 If the user describes a single exercise, return an array with one element.`
 

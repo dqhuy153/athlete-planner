@@ -6,7 +6,9 @@ import { CreateExerciseAiCommand } from './create-exercise-ai.command'
 import { parseAiJson } from '../parse-ai-json'
 
 const SYSTEM = `Create a single exercise definition from the user's description.
-Return a JSON object: { "name": string, "sportType": "GYM"|"RUNNING", "targetMuscleGroup"?: string, "runningType"?: string, "customNotes"?: string, "instructions": string[] }
+Return a JSON object: { "name": string, "sportType": "GYM"|"RUNNING", "targetMuscleGroup"?: "Chest"|"Back"|"Shoulders"|"Arms"|"Legs"|"Abs", "runningType"?: "Interval"|"Easy"|"Tempo"|"Long_Run", "customNotes"?: string, "instructions": string[] }
+IMPORTANT: targetMuscleGroup MUST be exactly one of: Chest, Back, Shoulders, Arms, Legs, Abs (case-sensitive, singular).
+IMPORTANT: runningType MUST be exactly one of: Interval, Easy, Tempo, Long_Run (case-sensitive).
 Return ONLY raw JSON. No markdown. No triple-backtick wrapping. No explanation.`
 
 @CommandHandler(CreateExerciseAiCommand)

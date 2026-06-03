@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { X, Loader2, Trash2, ChevronDown } from 'lucide-react';
+import { X, Loader2, Trash2, ChevronDown, Eye } from 'lucide-react';
+import { BottomSheet } from '@athlete-planner/ui';
 import {
   api,
   DraftExercise,
   PrivateImportPreviewItem,
   FlatExerciseImportItem,
   SportType,
+  normalizeDraftExercise,
 } from '@/lib/api';
 
 type Step = 'idle' | 'generating' | 'review' | 'previewing' | 'preview' | 'importing' | 'success';
@@ -35,6 +37,7 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
   const [drafts, setDrafts] = useState<DraftWithAction[]>([]);
   const [previewItems, setPreviewItems] = useState<PrivateImportPreviewItem[]>([]);
   const [error, setError] = useState('');
+  const [detailIndex, setDetailIndex] = useState<number | null>(null);
 
   const generate = async () => {
     if (!session?.accessToken || !prompt.trim()) return;
@@ -68,14 +71,17 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
     setStep('previewing');
     setError('');
     try {
-      const items: FlatExerciseImportItem[] = drafts.map(d => ({
-        name: d.name,
-        sportType: d.sportType as SportType,
-        targetMuscleGroup: d.targetMuscleGroup,
-        runningType: d.runningType,
-        customNotes: d.customNotes,
-        instructions: d.instructions,
-      }));
+      const items: FlatExerciseImportItem[] = drafts.map(d => {
+        const normalized = normalizeDraftExercise(d);
+        return {
+          name: normalized.name,
+          sportType: normalized.sportType as SportType,
+          targetMuscleGroup: normalized.targetMuscleGroup,
+          runningType: normalized.runningType,
+          customNotes: normalized.customNotes,
+          instructions: normalized.instructions,
+        };
+      });
       const result = await api.previewPrivateExercises(
         session.accessToken as string,
         items,
@@ -207,6 +213,13 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
                         onChange={e => updateDraftName(i, e.target.value)}
                         className="flex-1 bg-transparent text-sm font-medium text-text-primary focus:outline-none border-b border-transparent focus:border-border"
                       />
+                      <button
+                        onClick={() => setDetailIndex(i)}
+                        className="p-1.5 rounded-lg hover:bg-accent/10 text-text-tertiary hover:text-accent transition-colors"
+                        title={t('previewExercise')}
+                      >
+                        <Eye size={14} aria-hidden />
+                      </button>
                       <button
                         onClick={() => removeDraft(i)}
                         className="p-1.5 rounded-lg hover:bg-red-500/10 text-text-tertiary hover:text-red-400 transition-colors"
@@ -364,6 +377,86 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
           )}
         </div>
       </div>
+
+      {/* Exercise Detail BottomSheet */}
+      <BottomSheet
+        open={detailIndex !== null}
+        onClose={() => setDetailIndex(null)}
+        maxHeight="88vh"
+      >
+        {detailIndex !== null && drafts[detailIndex] && (
+          <div className="p-5 space-y-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-accent bg-accent/10 px-2 py-0.5 rounded">
+                  {drafts[detailIndex].sportType}
+                </span>
+                <h3 className="text-lg font-semibold text-text-primary">
+                  {drafts[detailIndex].name}
+                </h3>
+              </div>
+            </div>
+
+            {drafts[detailIndex].targetMuscleGroup && (
+              <div>
+                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1">
+                  {t('sectionIdentity')}
+                </h4>
+                <p className="text-sm text-text-primary">
+                  {drafts[detailIndex].targetMuscleGroup}
+                </p>
+              </div>
+            )}
+
+            {drafts[detailIndex].runningType && (
+              <div>
+                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1">
+                  {t('sectionIdentity')}
+                </h4>
+                <p className="text-sm text-text-primary">
+                  {drafts[detailIndex].runningType}
+                </p>
+              </div>
+            )}
+
+            {drafts[detailIndex].customNotes && (
+              <div>
+                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1">
+                  {t('sectionNotes')}
+                </h4>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  {drafts[detailIndex].customNotes}
+                </p>
+              </div>
+            )}
+
+            {drafts[detailIndex].instructions && drafts[detailIndex].instructions!.length > 0 && (
+              <div>
+                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-2">
+                  {t('sectionInstructions')}
+                </h4>
+                <ol className="space-y-1.5">
+                  {drafts[detailIndex].instructions!.map((step, i) => (
+                    <li key={i} className="flex gap-2 text-sm">
+                      <span className="font-mono text-accent shrink-0">{i + 1}.</span>
+                      <span className="text-text-secondary">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            <div className="pt-2 border-t border-border">
+              <button
+                onClick={() => setDetailIndex(null)}
+                className="w-full min-h-[44px] rounded-xl border border-border text-sm text-text-secondary hover:border-accent/40 transition-colors"
+              >
+                {t('close')}
+              </button>
+            </div>
+          </div>
+        )}
+      </BottomSheet>
     </div>
   );
 }

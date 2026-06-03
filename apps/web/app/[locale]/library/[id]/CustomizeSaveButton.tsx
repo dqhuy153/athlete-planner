@@ -8,7 +8,8 @@ import { Copy, Check, X } from 'lucide-react';
 import { cn } from '@athlete-planner/ui';
 import { Button } from '@athlete-planner/ui';
 import { api } from '@/lib/api';
-import { SportType } from '@athlete-planner/contracts';
+import { SportType, ExperienceLevel } from '@athlete-planner/contracts';
+import type { GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 
 interface CustomizeSaveButtonProps {
   exerciseId: string;
@@ -17,6 +18,30 @@ interface CustomizeSaveButtonProps {
   targetMuscleGroup?: string;
   runningType?: string;
   locale: string;
+}
+
+function isGymExercise(ex: GymExerciseMaster | RunningExerciseMaster): ex is GymExerciseMaster {
+  return 'targetMuscleGroup' in ex;
+}
+
+function isMasterExercise(ex: GymExerciseMaster | RunningExerciseMaster | { sourceGymMasterId?: string | null }): ex is GymExerciseMaster | RunningExerciseMaster {
+  return 'vietnameseName' in ex;
+}
+
+function flattenGymInstructions(instructions: GymExerciseMaster['instructions']): string[] {
+  if (!instructions?.length) return [];
+  const beginner = instructions.find((i) => i.level === ExperienceLevel.BEGINNER) ?? instructions[0];
+  const steps = beginner.steps?.vi ?? beginner.steps?.en ?? [];
+  const cues = beginner.form_cues?.vi ?? beginner.form_cues?.en ?? [];
+  return [...steps, ...(cues.length > 0 ? ['Kỹ thuật:', ...cues] : [])];
+}
+
+function flattenRunningInstructions(
+  instructions: RunningExerciseMaster['instructions'],
+  locale: string,
+): string[] {
+  if (!instructions) return [];
+  return instructions[locale as 'vi' | 'en'] ?? instructions.en ?? [];
 }
 
 export function CustomizeSaveButton({
@@ -54,25 +79,69 @@ export function CustomizeSaveButton({
     setSaving(true);
     setError(null);
     try {
-      const created = await api.createPrivateExercise(token, {
+      // Fetch full exercise detail to copy all data
+      const fullExercise = await api.getExerciseDetail(exerciseId);
+
+      // fullExercise is GymExerciseMaster | RunningExerciseMaster | PrivateExercise
+      // We know it's a master exercise since we're on the system exercise page
+      if (!isMasterExercise(fullExercise)) return;
+      const master = fullExercise;
+
+      const isGym = sportType === SportType.GYM;
+
+      const payload: Parameters<typeof api.createPrivateExercise>[1] = {
         sportType,
         name: exerciseName,
         targetMuscleGroup,
         runningType,
-        customNotes: `Copied from master library`,
-        sourceGymMasterId: sportType === SportType.GYM ? exerciseId : undefined,
-      });
+        customNotes: 'Copied from master library',
+        sourceGymMasterId: isGym ? exerciseId : undefined,
+      };
+
+      if (isGym && isGymExercise(master)) {
+        // Copy gym exercise data
+        payload.gifUrl = master.gifUrl ?? undefined;
+        payload.youtubeEmbedUrl = master.youtubeEmbedUrl ?? undefined;
+        payload.mediaUrls = master.mediaUrls?.length ? master.mediaUrls : undefined;
+        payload.instructions = flattenGymInstructions(master.instructions);
+        payload.defaultSets = master.defaultBeginnerSets ?? undefined;
+        payload.defaultReps = master.defaultBeginnerReps ?? undefined;
+        payload.defaultWeightKg = master.defaultBeginnerWeightKg ?? undefined;
+        payload.defaultRpe = master.defaultBeginnerRpe ?? undefined;
+        payload.restTimeSecs = master.defaultBeginnerRestTimeSecs ?? undefined;
+        payload.restBetweenExercisesSecs = master.defaultBeginnerRestBetweenExercisesSecs ?? undefined;
+      } else if (!isGym && !isGymExercise(master)) {
+        // Copy running exercise data
+        payload.gifUrl = master.gifUrl ?? undefined;
+        payload.youtubeEmbedUrl = master.youtubeEmbedUrl ?? undefined;
+        payload.mediaUrls = master.mediaUrls?.length ? master.mediaUrls : undefined;
+        payload.instructions = flattenRunningInstructions(master.instructions, locale);
+        payload.workoutStructure = master.workoutStructure?.length ? master.workoutStructure as object[] : undefined;
+
+        // Derive running defaults from workout structure
+        if (master.workoutStructure?.length) {
+          let totalDuration = 0;
+          let totalDistance = 0;
+          for (const phase of master.workoutStructure) {
+            if (phase.duration_minutes) totalDuration += phase.duration_minutes;
+            if (phase.distance_meters) totalDistance += phase.distance_meters;
+          }
+          if (totalDuration > 0) payload.defaultDurationMinutes = totalDuration;
+          if (totalDistance > 0) payload.defaultTargetDistanceKm = parseFloat((totalDistance / 1000).toFixed(1));
+        }
+      }
+
+      const created = await api.createPrivateExercise(token, payload);
       setSaved(true);
-       // Navigate to private exercise detail/config page
-       router.push(`/${locale}/library/my/${created.id}`);
-     } catch (e: unknown) {
-       const msg = e instanceof Error ? e.message : '';
-       if (msg.toLowerCase().includes('limit') || msg.includes('10')) {
-         setIsFull(true);
-       } else {
-         setError(msg || t('saveFailed'));
-       }
-     } finally {
+      router.push(`/${locale}/library/my/${created.id}`);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : '';
+      if (msg.toLowerCase().includes('limit') || msg.includes('10')) {
+        setIsFull(true);
+      } else {
+        setError(msg || t('saveFailed'));
+      }
+    } finally {
       setSaving(false);
     }
   }

@@ -258,15 +258,25 @@ class ApiClient {
       runningType?: string
       customNotes?: string
       gifUrl?: string
+      mediaUrls?: string[]
       sourceGymMasterId?: string
       youtubeEmbedUrl?: string
       instructions?: string[]
+      workoutStructure?: object[]
       defaultSets?: number
       defaultReps?: number
       defaultWeightKg?: number
       defaultRpe?: number
       restTimeSecs?: number
       restBetweenExercisesSecs?: number
+      defaultTargetDistanceKm?: number
+      defaultDurationMinutes?: number
+      defaultIntensityType?: string
+      defaultPaceMinSecPerKm?: number
+      defaultPaceMaxSecPerKm?: number
+      defaultHrZone?: number
+      defaultHrMin?: number
+      defaultHrMax?: number
     },
   ) {
     return this.request<PrivateExercise>('/exercises/private', {
@@ -697,6 +707,57 @@ class ApiClient {
         body: JSON.stringify({ exercises }),
       },
     )
+  }
+}
+
+const VALID_MUSCLE_GROUPS = ['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs'] as const
+const VALID_RUNNING_TYPES = ['Interval', 'Easy', 'Tempo', 'Long_Run'] as const
+
+const MUSCLE_GROUP_MAP: Record<string, typeof VALID_MUSCLE_GROUPS[number]> = {
+  chest: 'Chest', pectoral: 'Chest', pecs: 'Chest', breast: 'Chest',
+  back: 'Back', lats: 'Back', lat: 'Back', traps: 'Back', rear: 'Back',
+  shoulder: 'Shoulders', deltoid: 'Shoulders', delts: 'Shoulders',
+  arm: 'Arms', bicep: 'Arms', biceps: 'Arms', tricep: 'Arms', triceps: 'Arms', forearms: 'Arms', forearm: 'Arms',
+  leg: 'Legs', quad: 'Legs', quads: 'Legs', hamstring: 'Legs', hamstrings: 'Legs', calf: 'Legs', calves: 'Legs', glute: 'Legs', glutes: 'Legs',
+  abs: 'Abs', core: 'Abs', abdominal: 'Abs', abdominals: 'Abs', oblique: 'Abs', obliques: 'Abs',
+}
+
+const RUNNING_TYPE_MAP: Record<string, typeof VALID_RUNNING_TYPES[number]> = {
+  interval: 'Interval', intervals: 'Interval', hiit: 'Interval', sprint: 'Interval', sprints: 'Interval',
+  easy: 'Easy', recovery: 'Easy', easyrun: 'Easy', easy_run: 'Easy', jog: 'Easy', jogging: 'Easy',
+  tempo: 'Tempo', threshold: 'Tempo', tempo_run: 'Tempo',
+  long: 'Long_Run', longrun: 'Long_Run', long_run: 'Long_Run', endurance: 'Long_Run', lsd: 'Long_Run',
+}
+
+export function normalizeMuscleGroup(value?: string): typeof VALID_MUSCLE_GROUPS[number] | undefined {
+  if (!value) return undefined
+  const trimmed = value.trim()
+  if ((VALID_MUSCLE_GROUPS as readonly string[]).includes(trimmed)) return trimmed as typeof VALID_MUSCLE_GROUPS[number]
+  const lower = trimmed.toLowerCase()
+  if (MUSCLE_GROUP_MAP[lower]) return MUSCLE_GROUP_MAP[lower]
+  for (const [key, val] of Object.entries(MUSCLE_GROUP_MAP)) {
+    if (lower.includes(key)) return val
+  }
+  return undefined
+}
+
+export function normalizeRunningType(value?: string): typeof VALID_RUNNING_TYPES[number] | undefined {
+  if (!value) return undefined
+  const trimmed = value.trim()
+  if ((VALID_RUNNING_TYPES as readonly string[]).includes(trimmed)) return trimmed as typeof VALID_RUNNING_TYPES[number]
+  const lower = trimmed.toLowerCase().replace(/[\s-]/g, '')
+  if (RUNNING_TYPE_MAP[lower]) return RUNNING_TYPE_MAP[lower]
+  for (const [key, val] of Object.entries(RUNNING_TYPE_MAP)) {
+    if (lower.includes(key)) return val
+  }
+  return undefined
+}
+
+export function normalizeDraftExercise(exercise: DraftExercise): DraftExercise {
+  return {
+    ...exercise,
+    targetMuscleGroup: normalizeMuscleGroup(exercise.targetMuscleGroup),
+    runningType: normalizeRunningType(exercise.runningType),
   }
 }
 

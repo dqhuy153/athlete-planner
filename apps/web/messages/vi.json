@@ -529,7 +529,12 @@
     "skipStep": "Bỏ qua bước này",
     "configTitle2": "Cấu hình mặc định",
     "configHint": "Thiết lập các thông số mặc định cho bài tập (tùy chọn)",
-    "skipAndCreate": "Bỏ qua và tạo ngay"
+    "skipAndCreate": "Bỏ qua và tạo ngay",
+    "sectionIdentity": "Định danh",
+    "sectionDetails": "Chi tiết",
+    "sectionMedia": "Phương tiện",
+    "sectionInstructions": "Hướng dẫn",
+    "sectionWorkoutDefaults": "Thông số mặc định"
   },
   "starterTemplate": {
     "title": "Bắt đầu với mẫu lịch",
@@ -666,6 +671,11 @@
     "importSuccess": "Nhập bài tập thành công",
     "importError": "Nhập thất bại. Thử lại.",
     "noExercises": "AI không thể sinh bài tập. Thử prompt khác.",
-    "allSkipped": "Không có bài tập nào được nhập"
+    "allSkipped": "Không có bài tập nào được nhập",
+    "previewExercise": "Xem chi tiết bài tập",
+    "sectionIdentity": "Thông tin",
+    "sectionNotes": "Ghi chú",
+    "sectionInstructions": "Hướng dẫn",
+    "close": "Đóng"
   }
 }

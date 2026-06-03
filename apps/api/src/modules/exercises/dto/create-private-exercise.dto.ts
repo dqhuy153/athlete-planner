@@ -78,4 +78,45 @@ export class CreatePrivateExerciseDto {
   @IsOptional()
   @IsString()
   youtubeEmbedUrl?: string;
+
+  // Running workout defaults
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  defaultTargetDistanceKm?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  defaultDurationMinutes?: number;
+
+  @IsOptional()
+  @IsString()
+  defaultIntensityType?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  defaultPaceMinSecPerKm?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  defaultPaceMaxSecPerKm?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  defaultHrZone?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  defaultHrMin?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  defaultHrMax?: number;
 }

@@ -23,6 +23,7 @@ export class CreatePrivateExerciseHandler implements ICommandHandler<CreatePriva
         runningType: dto.runningType,
         customNotes: dto.customNotes,
         gifUrl: dto.gifUrl,
+        mediaUrls: dto.mediaUrls ?? [],
         instructions: (dto.instructions as unknown as Prisma.InputJsonValue) ?? undefined,
         workoutStructure: (dto.workoutStructure as unknown as Prisma.InputJsonValue) ?? undefined,
         youtubeEmbedUrl: dto.youtubeEmbedUrl,
@@ -33,6 +34,14 @@ export class CreatePrivateExerciseHandler implements ICommandHandler<CreatePriva
         defaultRpe: dto.defaultRpe,
         restTimeSecs: dto.restTimeSecs,
         restBetweenExercisesSecs: dto.restBetweenExercisesSecs,
+        defaultTargetDistanceKm: dto.defaultTargetDistanceKm,
+        defaultDurationMinutes: dto.defaultDurationMinutes,
+        defaultIntensityType: dto.defaultIntensityType,
+        defaultPaceMinSecPerKm: dto.defaultPaceMinSecPerKm,
+        defaultPaceMaxSecPerKm: dto.defaultPaceMaxSecPerKm,
+        defaultHrZone: dto.defaultHrZone,
+        defaultHrMin: dto.defaultHrMin,
+        defaultHrMax: dto.defaultHrMax,
       },
     });
   }

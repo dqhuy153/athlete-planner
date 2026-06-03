@@ -526,7 +526,12 @@
     "skipStep": "Skip this step",
     "configTitle2": "Default configuration",
     "configHint": "Set default parameters (optional)",
-    "skipAndCreate": "Skip and create"
+    "skipAndCreate": "Skip and create",
+    "sectionIdentity": "Identity",
+    "sectionDetails": "Details",
+    "sectionMedia": "Media",
+    "sectionInstructions": "Instructions",
+    "sectionWorkoutDefaults": "Workout Defaults"
   },
   "starterTemplate": {
     "title": "Start with a template",
@@ -663,6 +668,11 @@
     "importSuccess": "Exercises imported successfully",
     "importError": "Import failed. Try again.",
     "noExercises": "AI could not generate exercises. Try a different prompt.",
-    "allSkipped": "No exercises to import"
+    "allSkipped": "No exercises to import",
+    "previewExercise": "Preview exercise details",
+    "sectionIdentity": "Identity",
+    "sectionNotes": "Notes",
+    "sectionInstructions": "Instructions",
+    "close": "Close"
   }
 }
