@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Prisma, PrismaService } from '@athlete-planner/database';
 import { TierGuardService } from '../../tier-guard/tier-guard.service';
 import { ImportPrivateExercisesCommand } from './import-private-exercises.command';
@@ -34,7 +34,25 @@ export class ImportPrivateExercisesHandler
             targetMuscleGroup: ex.targetMuscleGroup as any,
             runningType: ex.runningType as any,
             customNotes: ex.customNotes,
+            gifUrl: ex.gifUrl,
+            youtubeEmbedUrl: ex.youtubeEmbedUrl,
+            mediaUrls: ex.mediaUrls ?? [],
             instructions: (ex.instructions as unknown as Prisma.InputJsonValue) ?? undefined,
+            workoutStructure: (ex.workoutStructure as unknown as Prisma.InputJsonValue) ?? undefined,
+            defaultSets: ex.defaultSets,
+            defaultReps: ex.defaultReps,
+            defaultWeightKg: ex.defaultWeightKg,
+            defaultRpe: ex.defaultRpe,
+            restTimeSecs: ex.restTimeSecs,
+            restBetweenExercisesSecs: ex.restBetweenExercisesSecs,
+            defaultTargetDistanceKm: ex.defaultTargetDistanceKm,
+            defaultDurationMinutes: ex.defaultDurationMinutes,
+            defaultIntensityType: ex.defaultIntensityType,
+            defaultPaceMinSecPerKm: ex.defaultPaceMinSecPerKm,
+            defaultPaceMaxSecPerKm: ex.defaultPaceMaxSecPerKm,
+            defaultHrZone: ex.defaultHrZone,
+            defaultHrMin: ex.defaultHrMin,
+            defaultHrMax: ex.defaultHrMax,
           },
         }),
       ),

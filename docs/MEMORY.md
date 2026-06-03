@@ -115,6 +115,12 @@ Both the AI Generate button and JSON Import use the same canonical format — th
 - `apps/admin-web/public/skills/gym-exercise-import.md` — prompt + schema for gym exercises
 - `apps/admin-web/public/skills/running-exercise-import.md` — prompt + schema for running workouts
 
+### Private (User-Facing) Import Skill Files
+- `apps/web/public/skills/gym-exercise-import.md` — full backend-aligned prompt for personal library gym imports
+- `apps/web/public/skills/running-exercise-import.md` — full backend-aligned prompt for personal library running imports, including `workoutStructure[]` phase schema
+- Served by Next.js from `public/` and consumed by `ImportJSONModal` via the **Download prompt** and **Copy prompt** buttons
+- 2026-06-03: expanded to mirror the admin format (bilingual `vietnameseName`, full media fields, `workoutStructure` phases, workout defaults, Garmin mapping) so users get first-try-correct AI output. Parity with the admin import format means a personal exercise can later be promoted to admin master without re-authoring. Ingestion of the new optional fields is a separate follow-up — the modal still only uses `name` + `sportType` for classification & create.
+
 ---
 
 ## Tier Guardrails

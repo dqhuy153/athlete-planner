@@ -96,7 +96,12 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
     setLoading(true);
     try {
       const result = await api.previewPrivateExercises(session.accessToken as string, valid);
-      setPreview(result.results.map(r => ({ ...r, action: 'skip' as ItemAction })));
+      setPreview(
+        result.results.map(r => {
+          const original = valid[r.index];
+          return { ...r, data: original, action: 'skip' as ItemAction };
+        }),
+      );
       setStep('preview');
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : t('previewFailed'));
@@ -110,7 +115,12 @@ export function ImportJSONModal({ onClose, onSuccess }: Props) {
     setLoading(true);
     try {
       const result = await api.previewPrivateExercises(session.accessToken as string, items);
-      setPreview(result.results.map(r => ({ ...r, action: 'skip' as ItemAction })));
+      setPreview(
+        result.results.map(r => {
+          const original = items[r.index];
+          return { ...r, data: original, action: 'skip' as ItemAction };
+        }),
+      );
       setStep('preview');
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : t('previewFailed'));

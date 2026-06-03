@@ -23,7 +23,7 @@ export class AIService {
 
   constructor(private readonly config: ConfigService) {}
 
-  private getModel(provider: AIProvider = 'openrouter') {
+  private getModel(provider: AIProvider = 'google') {
     if (provider === 'openrouter') {
       const apiKey = this.config.get<string>('OPENROUTER_API_KEY')?.trim()
       if (!apiKey) {
@@ -46,14 +46,16 @@ export class AIService {
     //   return anthropic('claude-sonnet-4-20250514')
     // }
 
-    const apiKey = this.config.get<string>('GOOGLE_GENERATIVE_AI_API_KEY')?.trim()
+    const apiKey = this.config
+      .get<string>('GOOGLE_GENERATIVE_AI_API_KEY')
+      ?.trim()
     if (!apiKey) {
       throw new ServiceUnavailableException(
         'Google AI API key is not configured. Set GOOGLE_GENERATIVE_AI_API_KEY in apps/api/.env',
       )
     }
     const google = createGoogleGenerativeAI({ apiKey })
-    return google('models/gemma-4-31b-it')
+    return google('gemma-4-31b-it')
   }
 
   async generateText(options: AIRequestOptions): Promise<{ text: string }> {
@@ -72,7 +74,9 @@ export class AIService {
     }
   }
 
-  async streamTextResponse(options: AIRequestOptions): Promise<StreamTextResult<ToolSet, Output.Output<string, string, never>>> {
+  async streamTextResponse(
+    options: AIRequestOptions,
+  ): Promise<StreamTextResult<ToolSet, Output.Output<string, string, never>>> {
     const model = this.getModel(options.model)
 
     try {
