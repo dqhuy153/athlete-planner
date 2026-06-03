@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, forwardRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -10,7 +10,7 @@ import type { PrivateExercise } from '@athlete-planner/contracts';
 import { SportType, MuscleGroup, RunningType, RunningIntensityType } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 import { Button, cn } from '@athlete-planner/ui';
-import { MediaUrlsManager } from '@/components/MediaUrlsManager';
+import { MediaUrlsManager, type MediaUrlsManagerHandle } from '@/components/MediaUrlsManager';
 import { PrivateInstructionsEditor } from '@/components/exercises/PrivateInstructionsEditor';
 import { parseYouTubeEmbedUrl } from '@/lib/youtube';
 
@@ -107,12 +107,14 @@ interface PrivateExerciseDetailClientProps {
   exercise: PrivateExercise;
   locale: string;
   sourceGymName?: string | null;
+  editMedia?: boolean;
 }
 
 export function PrivateExerciseDetailClient({
   exercise,
   locale,
   sourceGymName,
+  editMedia,
 }: PrivateExerciseDetailClientProps) {
   const t = useTranslations('privateExercise');
   const { data: session } = useSession();
@@ -158,6 +160,17 @@ export function PrivateExerciseDetailClient({
 
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const mediaUrlsRef = useRef<MediaUrlsManagerHandle>(null);
+
+  // Auto-focus media URL input when navigated from system page with editMedia=true
+  useEffect(() => {
+    if (editMedia) {
+      // Small delay to ensure the component is mounted
+      const timer = setTimeout(() => mediaUrlsRef.current?.focus(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [editMedia]);
 
   // ── Unsaved changes tracking ─────────────────────────────────────────────
   const isDirty = useCallback(() => {
@@ -403,7 +416,7 @@ export function PrivateExerciseDetailClient({
           </div>
 
           {/* Media URLs */}
-          <MediaUrlsManager urls={mediaUrls} onChange={setMediaUrls} />
+          <MediaUrlsManager ref={mediaUrlsRef} urls={mediaUrls} onChange={setMediaUrls} />
         </div>
       </section>
 

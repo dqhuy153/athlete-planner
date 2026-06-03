@@ -20,6 +20,7 @@ class SuggestAlternativeDto {
 
 class CreateExerciseAiDto {
   @IsString() @IsNotEmpty() prompt: string;
+  @IsString() locale?: string;
 }
 
 @UseGuards(JwtAuthGuard)
@@ -44,14 +45,14 @@ export class AiController {
   @Post('create-exercise')
   createExercise(@Body() body: CreateExerciseAiDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(
-      new CreateExerciseAiCommand(body.prompt, req.user.sub),
+      new CreateExerciseAiCommand(body.prompt, req.user.sub, body.locale),
     );
   }
 
   @Post('create-exercises')
   createExercises(@Body() body: CreateExerciseAiDto, @Req() req: AuthenticatedRequest) {
     return this.commandBus.execute(
-      new CreateExercisesBulkCommand(body.prompt, req.user.sub),
+      new CreateExercisesBulkCommand(body.prompt, req.user.sub, body.locale),
     );
   }
 }

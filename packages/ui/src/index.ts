@@ -36,6 +36,8 @@ export { MarkdownRenderer } from './components/markdown-renderer';
 export type { MarkdownRendererProps } from './components/markdown-renderer';
 export { CardImage, CardLightbox } from './components/card-image';
 export type { CardImageProps } from './components/card-image';
+export { ExerciseDetailSections } from './components/ExerciseDetailSections';
+export type { ExerciseDetailData } from './components/ExerciseDetailSections';
 
 // Shared icons
 export { SunIcon, MoonIcon, TypeIcon, TypeOffIcon } from './components/icons';

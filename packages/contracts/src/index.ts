@@ -315,6 +315,23 @@ export interface DraftExercise {
   runningType?: string;
   customNotes?: string;
   instructions?: string[];
+  // Gym workout defaults
+  defaultSets?: number;
+  defaultReps?: number;
+  defaultWeightKg?: number;
+  defaultRpe?: number;
+  restTimeSecs?: number;
+  restBetweenExercisesSecs?: number;
+  // Running workout defaults
+  defaultTargetDistanceKm?: number;
+  defaultDurationMinutes?: number;
+  defaultIntensityType?: 'PACE' | 'HEART_RATE' | 'NONE';
+  defaultPaceMinSecPerKm?: number;
+  defaultPaceMaxSecPerKm?: number;
+  defaultHrZone?: number;
+  defaultHrMin?: number;
+  defaultHrMax?: number;
+  // Legacy payloads (kept for backward compat)
   gymPayload?: {
     rest_time_seconds: number;
     sets: Array<{ weight_kg: number; reps: number; rpe?: number }>;

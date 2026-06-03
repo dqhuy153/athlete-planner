@@ -8,6 +8,7 @@ import { ExerciseActionBar } from '@/components/ExerciseActionBar';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { CustomizeSaveButton } from './CustomizeSaveButton';
+import { AddCustomMediaButton } from './AddCustomMediaButton';
 
 export const revalidate = 300;
 
@@ -105,15 +106,23 @@ export default async function ExerciseDetailPage({ params, searchParams }: PageP
 
        {/* Customize & Save Copy — only for master exercises (gym or running) */}
        {(isGym(exercise) || isRunning(exercise)) && (
-         <div className="mt-3">
+         <div className="mt-3 space-y-2">
            <CustomizeSaveButton
-            exerciseId={exercise.id}
-            exerciseName={exercise.vietnameseName || exercise.name || 'Exercise'}
-            sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
-            targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
-            runningType={isRunning(exercise) ? exercise.runningType : undefined}
-            locale={locale}
-          />
+             exerciseId={exercise.id}
+             exerciseName={exercise.vietnameseName || exercise.name || 'Exercise'}
+             sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
+             targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
+             runningType={isRunning(exercise) ? exercise.runningType : undefined}
+             locale={locale}
+           />
+           <AddCustomMediaButton
+             exerciseId={exercise.id}
+             exerciseName={exercise.vietnameseName || exercise.name || 'Exercise'}
+             sportType={isGym(exercise) ? SportType.GYM : SportType.RUNNING}
+             targetMuscleGroup={isGym(exercise) ? exercise.targetMuscleGroup : undefined}
+             runningType={isRunning(exercise) ? exercise.runningType : undefined}
+             locale={locale}
+           />
          </div>
        )}
 

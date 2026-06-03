@@ -3,15 +3,17 @@
 import { useEffect, useState } from 'react';
 import { notFound } from 'next/navigation';
 import { useSession, signIn } from 'next-auth/react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { PrivateExerciseDetailClient } from './PrivateExerciseDetailClient';
 import type { PrivateExercise, GymExerciseMaster, RunningExerciseMaster } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 
 export default function PrivateExerciseDetailPage() {
   const params = useParams<{ locale: string; id: string }>();
+  const searchParams = useSearchParams();
   const locale = params.locale;
   const id = params.id;
+  const editMedia = searchParams.get('editMedia') === 'true';
   const { data: session, status } = useSession();
   const token = session?.accessToken;
 
@@ -64,6 +66,7 @@ export default function PrivateExerciseDetailPage() {
         exercise={exercise}
         locale={locale}
         sourceGymName={sourceGymName}
+        editMedia={editMedia}
       />
     </div>
   );

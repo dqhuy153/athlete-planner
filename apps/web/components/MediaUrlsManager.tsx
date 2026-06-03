@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Plus, X, ExternalLink, Youtube } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -16,15 +16,25 @@ function classifyUrl(url: string): UrlType {
   return 'other';
 }
 
+export interface MediaUrlsManagerHandle {
+  focus: () => void;
+}
+
 interface MediaUrlsManagerProps {
   urls: string[];
   onChange: (urls: string[]) => void;
 }
 
-export function MediaUrlsManager({ urls, onChange }: MediaUrlsManagerProps) {
-  const t = useTranslations('mediaUrls');
-  const [inputValue, setInputValue] = useState('');
-  const [inputError, setInputError] = useState<string | null>(null);
+export const MediaUrlsManager = forwardRef<MediaUrlsManagerHandle, MediaUrlsManagerProps>(
+  function MediaUrlsManager({ urls, onChange }, ref) {
+    const t = useTranslations('mediaUrls');
+    const [inputValue, setInputValue] = useState('');
+    const [inputError, setInputError] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useImperativeHandle(ref, () => ({
+      focus: () => inputRef.current?.focus(),
+    }));
 
   function handleAdd() {
     const trimmed = inputValue.trim();
@@ -85,6 +95,7 @@ export function MediaUrlsManager({ urls, onChange }: MediaUrlsManagerProps) {
 
       <div className="flex gap-2">
         <input
+          ref={inputRef}
           type="url"
           value={inputValue}
           onChange={(e) => {
@@ -114,4 +125,4 @@ export function MediaUrlsManager({ urls, onChange }: MediaUrlsManagerProps) {
       {inputError && <p className="text-xs text-error">{inputError}</p>}
     </div>
   );
-}
+});

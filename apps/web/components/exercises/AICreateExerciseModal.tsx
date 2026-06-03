@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { X, Loader2, Trash2, ChevronDown, Eye } from 'lucide-react';
-import { BottomSheet } from '@athlete-planner/ui';
+import { BottomSheet, ExerciseDetailSections } from '@athlete-planner/ui';
 import {
   api,
   DraftExercise,
@@ -32,6 +32,12 @@ interface Props {
 export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
   const { data: session } = useSession();
   const t = useTranslations('aiCreate');
+  const tImport = useTranslations('importJSON');
+  const tField = useTranslations('importJSON.field');
+  const tEnum = useTranslations('importJSON.enum');
+  const tUnit = useTranslations('units');
+  const tDyn = useTranslations('importJSON.dynamic');
+  const locale = useLocale();
   const [step, setStep] = useState<Step>('idle');
   const [prompt, setPrompt] = useState('');
   const [drafts, setDrafts] = useState<DraftWithAction[]>([]);
@@ -80,6 +86,20 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
           runningType: normalized.runningType,
           customNotes: normalized.customNotes,
           instructions: normalized.instructions,
+          defaultSets: normalized.defaultSets,
+          defaultReps: normalized.defaultReps,
+          defaultWeightKg: normalized.defaultWeightKg,
+          defaultRpe: normalized.defaultRpe,
+          restTimeSecs: normalized.restTimeSecs,
+          restBetweenExercisesSecs: normalized.restBetweenExercisesSecs,
+          defaultTargetDistanceKm: normalized.defaultTargetDistanceKm,
+          defaultDurationMinutes: normalized.defaultDurationMinutes,
+          defaultIntensityType: normalized.defaultIntensityType,
+          defaultPaceMinSecPerKm: normalized.defaultPaceMinSecPerKm,
+          defaultPaceMaxSecPerKm: normalized.defaultPaceMaxSecPerKm,
+          defaultHrZone: normalized.defaultHrZone,
+          defaultHrMin: normalized.defaultHrMin,
+          defaultHrMax: normalized.defaultHrMax,
         };
       });
       const result = await api.previewPrivateExercises(
@@ -386,65 +406,36 @@ export function AICreateExerciseModal({ onClose, onSuccess }: Props) {
       >
         {detailIndex !== null && drafts[detailIndex] && (
           <div className="p-5 space-y-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-accent bg-accent/10 px-2 py-0.5 rounded">
-                  {drafts[detailIndex].sportType}
-                </span>
-                <h3 className="text-lg font-semibold text-text-primary">
-                  {drafts[detailIndex].name}
-                </h3>
-              </div>
-            </div>
-
-            {drafts[detailIndex].targetMuscleGroup && (
-              <div>
-                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1">
-                  {t('sectionIdentity')}
-                </h4>
-                <p className="text-sm text-text-primary">
-                  {drafts[detailIndex].targetMuscleGroup}
-                </p>
-              </div>
-            )}
-
-            {drafts[detailIndex].runningType && (
-              <div>
-                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1">
-                  {t('sectionIdentity')}
-                </h4>
-                <p className="text-sm text-text-primary">
-                  {drafts[detailIndex].runningType}
-                </p>
-              </div>
-            )}
-
-            {drafts[detailIndex].customNotes && (
-              <div>
-                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1">
-                  {t('sectionNotes')}
-                </h4>
-                <p className="text-sm text-text-secondary leading-relaxed">
-                  {drafts[detailIndex].customNotes}
-                </p>
-              </div>
-            )}
-
-            {drafts[detailIndex].instructions && drafts[detailIndex].instructions!.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-2">
-                  {t('sectionInstructions')}
-                </h4>
-                <ol className="space-y-1.5">
-                  {drafts[detailIndex].instructions!.map((step, i) => (
-                    <li key={i} className="flex gap-2 text-sm">
-                      <span className="font-mono text-accent shrink-0">{i + 1}.</span>
-                      <span className="text-text-secondary">{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
+            <ExerciseDetailSections
+              data={{
+                name: drafts[detailIndex].name,
+                sportType: drafts[detailIndex].sportType,
+                targetMuscleGroup: drafts[detailIndex].targetMuscleGroup,
+                runningType: drafts[detailIndex].runningType,
+                customNotes: drafts[detailIndex].customNotes,
+                instructions: drafts[detailIndex].instructions,
+                defaultSets: drafts[detailIndex].defaultSets,
+                defaultReps: drafts[detailIndex].defaultReps,
+                defaultWeightKg: drafts[detailIndex].defaultWeightKg,
+                defaultRpe: drafts[detailIndex].defaultRpe,
+                restTimeSecs: drafts[detailIndex].restTimeSecs,
+                restBetweenExercisesSecs: drafts[detailIndex].restBetweenExercisesSecs,
+                defaultTargetDistanceKm: drafts[detailIndex].defaultTargetDistanceKm,
+                defaultDurationMinutes: drafts[detailIndex].defaultDurationMinutes,
+                defaultIntensityType: drafts[detailIndex].defaultIntensityType,
+                defaultPaceMinSecPerKm: drafts[detailIndex].defaultPaceMinSecPerKm,
+                defaultPaceMaxSecPerKm: drafts[detailIndex].defaultPaceMaxSecPerKm,
+                defaultHrZone: drafts[detailIndex].defaultHrZone,
+                defaultHrMin: drafts[detailIndex].defaultHrMin,
+                defaultHrMax: drafts[detailIndex].defaultHrMax,
+              }}
+              locale={locale}
+              t={tImport as never}
+              tField={tField as never}
+              tEnum={tEnum as never}
+              tUnit={tUnit as never}
+              tDyn={tDyn as never}
+            />
 
             <div className="pt-2 border-t border-border">
               <button
