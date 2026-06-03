@@ -46,7 +46,7 @@ function NumericField({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-medium text-text-secondary">{label}</label>
+      <label className="text-xs font-semibold text-text-secondary">{label}</label>
       <input
         type="number"
         min={min}
@@ -58,7 +58,7 @@ function NumericField({
           const v = e.target.value;
           onChange(v === '' ? null : parseFloat(v));
         }}
-        className="rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text-primary text-right hover:border-accent/40 focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-text-tertiary transition-colors"
+        className="rounded-lg border border-input-border bg-input-bg px-3 py-2 font-mono text-sm text-text-primary text-right hover:border-input-border-hover focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-text-tertiary transition-colors"
       />
     </div>
   );
@@ -296,14 +296,14 @@ export function PrivateExerciseDetailClient({
 
       {/* ── Section: Identity ──────────────────────────────────────────────── */}
       <section className="mb-4 rounded-[20px] border border-border bg-surface-1 p-4">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
           {t('sectionIdentity')}
         </h2>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-lg font-bold text-text-primary placeholder:text-text-tertiary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+          className="w-full rounded-xl border border-input-border bg-input-bg px-4 py-3 text-lg font-bold text-text-primary placeholder:text-text-tertiary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
         />
         {sourceGymName && (
           <p className="mt-2 text-xs text-text-tertiary">
@@ -314,20 +314,20 @@ export function PrivateExerciseDetailClient({
 
       {/* ── Section: Details ───────────────────────────────────────────────── */}
       <section className="mb-4 rounded-[20px] border border-border bg-surface-1 p-4">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
           {t('sectionDetails')}
         </h2>
         <div className="space-y-3">
           {/* Muscle group (GYM) */}
           {exercise.sportType === SportType.GYM && (
             <div>
-              <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+              <label className="mb-1 block text-xs font-semibold text-text-secondary">
                 {t('muscleGroupLabel')}
               </label>
               <select
                 value={muscleGroup}
                 onChange={(e) => setMuscleGroup(e.target.value as MuscleGroup | '')}
-                className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full rounded-xl border border-input-border bg-input-bg px-4 py-2.5 text-sm text-text-primary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="">—</option>
                 {MUSCLE_GROUPS.map((mg) => (
@@ -340,13 +340,13 @@ export function PrivateExerciseDetailClient({
           {/* Running type (RUNNING) */}
           {exercise.sportType === SportType.RUNNING && (
             <div>
-              <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+              <label className="mb-1 block text-xs font-semibold text-text-secondary">
                 {t('runningTypeLabel')}
               </label>
               <select
                 value={runningTypeState}
                 onChange={(e) => setRunningTypeState(e.target.value as RunningType | '')}
-                className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full rounded-xl border border-input-border bg-input-bg px-4 py-2.5 text-sm text-text-primary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="">—</option>
                 {RUNNING_TYPES.map((rt) => (
@@ -358,7 +358,7 @@ export function PrivateExerciseDetailClient({
 
           {/* Notes */}
           <div>
-            <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+            <label className="mb-1 block text-xs font-semibold text-text-secondary">
               {t('notes')}
             </label>
             <textarea
@@ -366,7 +366,7 @@ export function PrivateExerciseDetailClient({
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
               placeholder={t('notesPlaceholder')}
-              className="w-full resize-none rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full resize-none rounded-xl border border-input-border bg-input-bg px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
         </div>
@@ -374,13 +374,13 @@ export function PrivateExerciseDetailClient({
 
       {/* ── Section: Media ─────────────────────────────────────────────────── */}
       <section className="mb-4 rounded-[20px] border border-border bg-surface-1 p-4">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
           {t('sectionMedia')}
         </h2>
         <div className="space-y-3">
           {/* YouTube */}
           <div>
-            <label className="mb-1 block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+            <label className="mb-1 block text-xs font-semibold text-text-secondary">
               {t('youtubeLabel')}
             </label>
             <input
@@ -388,7 +388,7 @@ export function PrivateExerciseDetailClient({
               value={youtubeEmbedUrl}
               onChange={(e) => setYoutubeEmbedUrl(e.target.value)}
               placeholder="https://youtube.com/watch?v=..."
-              className="w-full rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full rounded-xl border border-input-border bg-input-bg px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
             />
             {youtubeEmbedUrl && parseYouTubeEmbedUrl(youtubeEmbedUrl) && (
               <div className="mt-2 aspect-video w-full rounded-xl overflow-hidden bg-black">
@@ -409,7 +409,7 @@ export function PrivateExerciseDetailClient({
 
       {/* ── Section: Instructions ──────────────────────────────────────────── */}
       <section className="mb-4 rounded-[20px] border border-border bg-surface-1 p-4">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
           {t('sectionInstructions')}
         </h2>
         <PrivateInstructionsEditor
@@ -420,7 +420,7 @@ export function PrivateExerciseDetailClient({
 
       {/* ── Section: Workout Defaults ──────────────────────────────────────── */}
       <section className="mb-4 rounded-[20px] border border-border bg-surface-1 p-4">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
           {t('sectionWorkoutDefaults')}
         </h2>
 

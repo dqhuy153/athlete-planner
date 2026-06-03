@@ -50,7 +50,7 @@ export function MediaUrlsManager({ urls, onChange }: MediaUrlsManagerProps) {
 
   return (
     <div className="space-y-3">
-      <label className="block text-xs font-medium text-text-tertiary uppercase tracking-wider">
+      <label className="block text-xs font-semibold text-text-secondary">
         {t('sectionTitle')}
       </label>
 
@@ -61,7 +61,7 @@ export function MediaUrlsManager({ urls, onChange }: MediaUrlsManagerProps) {
             return (
               <li
                 key={url}
-                className="flex items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2"
+                className="flex items-center gap-2 rounded-xl border border-input-border bg-input-bg px-3 py-2"
               >
                 {type === 'youtube' ? (
                   <Youtube size={14} className="shrink-0 text-red-500" aria-hidden />
@@ -98,7 +98,7 @@ export function MediaUrlsManager({ urls, onChange }: MediaUrlsManagerProps) {
             }
           }}
           placeholder={t('urlPlaceholder')}
-          className="flex-1 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
+          className="flex-1 rounded-xl border border-input-border bg-input-bg px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <button
           type="button"

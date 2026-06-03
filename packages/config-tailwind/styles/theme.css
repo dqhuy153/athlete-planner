@@ -31,6 +31,11 @@
   --border: #2a2a2a;
   --border-muted: #1f1f1f;
 
+  /* Input surfaces — clearly distinct from section cards */
+  --input-bg: #333333;
+  --input-border: #444444;
+  --input-border-hover: rgba(0, 212, 170, 0.4);
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -60,6 +65,11 @@
 
   --border: #e5e5e5;
   --border-muted: #f0f0f0;
+
+  /* Input surfaces — white for clear distinction */
+  --input-bg: #ffffff;
+  --input-border: #d4d4d4;
+  --input-border-hover: rgba(0, 184, 148, 0.5);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);

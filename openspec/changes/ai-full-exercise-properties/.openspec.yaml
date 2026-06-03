@@ -1,0 +1,16 @@
+name: ai-full-exercise-properties
+description: "Upgrade AI exercise generation to full properties with locale support and shared components"
+created: "2026-06-03T15:30:00Z"
+status: ready
+artifacts:
+  proposal:
+    status: done
+    path: proposal.md
+  design:
+    status: done
+    path: design.md
+    dependencies: []
+  tasks:
+    status: done
+    path: tasks.md
+    dependencies: [design]

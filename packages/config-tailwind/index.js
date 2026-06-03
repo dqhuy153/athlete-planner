@@ -38,6 +38,13 @@ module.exports = {
         border: 'var(--border)',
         'border-muted': 'var(--border-muted)',
 
+        // Input surfaces
+        input: {
+          bg: 'var(--input-bg)',
+          border: 'var(--input-border)',
+          'border-hover': 'var(--input-border-hover)',
+        },
+
         // ── Material Design 3 aliases ────────────────────────────────────────
         // These map admin-web page token names to our CSS variables.
         // 'primary' maps to accent — allows bg-primary, text-primary (color),

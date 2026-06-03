@@ -34,7 +34,7 @@ export function PrivateInstructionsEditor({ steps, onChange }: Props) {
             value={step}
             onChange={(e) => updateStep(index, e.target.value)}
             placeholder="Mô tả bước này..."
-            className="flex-1 resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary hover:border-accent/40 transition-colors focus:outline-none focus:ring-2 focus:ring-accent/30"
+            className="flex-1 resize-none rounded-lg border border-input-border bg-input-bg px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary hover:border-input-border-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <button
             type="button"

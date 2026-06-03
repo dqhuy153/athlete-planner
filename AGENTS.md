@@ -219,6 +219,14 @@ The following rules are ALWAYS enforced by opencode's superpowers system:
 - New reusable component → add to `packages/ui/`
 - Single-use component → keep in app-specific `components/`
 
+**Rule 2b - Shared Component Policy (STRICT):**
+- **NEVER clone/duplicate** components that exist in shared locations. Always extract to shared.
+- **Input, Select, DatePicker, Textarea, Button** — use `@athlete-planner/ui` or shadcn/ui, never raw HTML or hand-rolled components
+- **Display components** (e.g., exercise detail sections, data tables, status badges) — extract to `packages/ui/` if used in 2+ places
+- **Before writing any form/control component**, check if shadcn/ui or `@athlete-planner/ui` already provides it
+- **Pattern**: If you find yourself copy-pasting JSX between files, extract it to a shared component immediately
+- **Prefer shadcn/ui over raw components** — use `@athlete-planner/ui` first, then shadcn/ui patterns, only create raw as last resort
+
 **Rule 3 - Documentation Updates:**
 - After implementation → update `docs/MEMORY.md`
 - After UI text changes → update `apps/web/messages/vi.json` and `apps/web/messages/en.json`
