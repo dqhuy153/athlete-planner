@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
-import { Plus, FileJson, Sparkles, Lock } from 'lucide-react';
+import { Plus, FileJson, Sparkles, Lock, CheckSquare, Square } from 'lucide-react';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { UserTier } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 import { ImportJSONModal } from '@/components/exercises/ImportJSONModal';
 import { AICreateExerciseModal } from '@/components/exercises/AICreateExerciseModal';
+import { ConfirmModal } from '@athlete-planner/ui';
 import { Button, cn } from '@athlete-planner/ui';
 import { ExerciseCard } from '@/components/ExerciseCard';
 import { TierLimitBanner } from '@/components/TierLimitBanner';
@@ -28,6 +29,11 @@ export default function MyExercisesPage({ params }: PageProps) {
   const [loading, setLoading] = useState(true);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showAICreateModal, setShowAICreateModal] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmUsage, setConfirmUsage] = useState<{ past: number; today: number; future: number; total: number } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     params.then(({ locale: l }) => setLocale(l));
@@ -51,6 +57,44 @@ export default function MyExercisesPage({ params }: PageProps) {
     api.getPrivateExercises(session.accessToken as string)
       .then(setExercises)
       .catch(() => {});
+  };
+
+  const toggleSelected = useCallback((id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const handleDeleteSelected = async () => {
+    if (!session?.accessToken) return;
+    setDeleting(true);
+    try {
+      const result = await api.bulkDeletePrivateExercises(session.accessToken as string, Array.from(selectedIds));
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      setShowConfirm(false);
+      setConfirmUsage(null);
+      refetch();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const checkUsageAndConfirm = async () => {
+    if (!session?.accessToken) return;
+    try {
+      const result = await api.getPrivateExerciseUsage(session.accessToken as string, Array.from(selectedIds));
+      setConfirmUsage(result);
+      setShowConfirm(true);
+    } catch {
+      setConfirmUsage({ past: 0, today: 0, future: 0, total: 0 });
+      setShowConfirm(true);
+    }
   };
 
   return (
@@ -138,6 +182,18 @@ export default function MyExercisesPage({ params }: PageProps) {
                 </Link>
               </Button>
             )}
+
+            {/* Select button */}
+            <button
+              onClick={() => {
+                setSelectMode(true);
+                setSelectedIds(new Set());
+              }}
+              className='flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-border text-xs text-text-secondary hover:border-accent/40 hover:text-accent transition-colors whitespace-nowrap'
+            >
+              {selectMode ? <CheckSquare size={13} aria-hidden /> : <Square size={13} aria-hidden />}
+              {selectMode ? t('bulkDelete.done') : t('bulkDelete.select')}
+            </button>
           </div>
         </div>
 
@@ -190,12 +246,55 @@ export default function MyExercisesPage({ params }: PageProps) {
                   locale={locale}
                   isPrivate
                   isInactive={!ex.isActive}
+                  selectable={selectMode}
+                  selected={selectedIds.has(ex.id)}
+                  onToggleSelect={toggleSelected}
                 />
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      {/* Bulk action bar */}
+      {selectMode && selectedIds.size > 0 && (
+        <div
+          className='sticky bottom-0 left-0 right-0 z-30 bg-surface-1 border-t border-border px-4 py-3 flex items-center gap-3'
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)' }}
+        >
+          <span className='text-caption text-text-secondary flex-1'>
+            {t('bulkDelete.selectedCount', { count: selectedIds.size })}
+          </span>
+          <Button variant='outline' size='sm' onClick={() => { setSelectMode(false); setSelectedIds(new Set()); }}>
+            {t('bulkDelete.cancelSelection')}
+          </Button>
+          <Button variant='destructive' size='sm' onClick={checkUsageAndConfirm}>
+            {t('bulkDelete.bulkDeleteAction', { count: selectedIds.size })}
+          </Button>
+        </div>
+      )}
+
+      <ConfirmModal
+        open={showConfirm}
+        title={t('bulkDelete.bulkDeleteConfirmTitle', { count: selectedIds.size })}
+        message={
+          confirmUsage && confirmUsage.total > 0
+            ? t('bulkDelete.bulkDeleteCascadeMessage', {
+                count: confirmUsage.total,
+                past: confirmUsage.past,
+                today: confirmUsage.today,
+                future: confirmUsage.future,
+              })
+            : t('bulkDelete.bulkDeleteConfirmMessage', { count: selectedIds.size })
+        }
+        confirmLabel={t('bulkDelete.bulkDeleteConfirmAction', { count: selectedIds.size })}
+        cancelLabel={tc('cancel')}
+        destructive
+        loading={deleting}
+        onConfirm={handleDeleteSelected}
+        onCancel={() => { setShowConfirm(false); setConfirmUsage(null); }}
+      />
+
       {showImportModal && (
         <ImportJSONModal
           onClose={() => setShowImportModal(false)}

@@ -25,7 +25,10 @@ import { ImportRunningExercisesCommand } from './commands/import-running-exercis
 import { ConfigPrivateExerciseCommand } from './commands/config-private-exercise.command';
 import { ConfigPrivateExerciseDto } from './dto/config-private-exercise.dto';
 import { DeletePrivateExerciseCommand } from './commands/delete-private-exercise.command';
+import { DeletePrivateExercisesCommand } from './commands/delete-private-exercises.command';
 import { PreviewPrivateImportQuery } from './queries/preview-private-import.query';
+import { GetPrivateExerciseUsageQuery } from './queries/get-private-exercise-usage.query';
+import { BulkDeletePrivateExercisesDto } from './dto/bulk-delete-private-exercises.dto';
 import { BulkCreatePrivateExercisesDto, FlatExerciseImportItemDto } from './dto/bulk-create-private-exercises.dto';
 import { BulkCreatePrivateExercisesCommand } from './commands/bulk-create-private-exercises.command';
 import { ImportPrivateExercisesCommand } from './commands/import-private-exercises.command';
@@ -238,5 +241,24 @@ export class ExercisesController {
     @Req() req: AuthenticatedRequest,
   ) {
     return this.commandBus.execute(new ImportPrivateExercisesCommand(body.exercises, req.user.sub));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('private/bulk-delete')
+  async bulkDeletePrivateExercises(
+    @Body() body: BulkDeletePrivateExercisesDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.commandBus.execute(new DeletePrivateExercisesCommand(body.ids, req.user.sub));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('private/usage')
+  async getPrivateExerciseUsage(
+    @Query('ids') ids: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const idList = ids.split(',').filter(Boolean);
+    return this.queryBus.execute(new GetPrivateExerciseUsageQuery(idList, req.user.sub));
   }
 }

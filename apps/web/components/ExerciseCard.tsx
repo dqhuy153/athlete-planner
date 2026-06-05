@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Dumbbell } from 'lucide-react';
+import { Dumbbell, Square, CheckSquare } from 'lucide-react';
 import { cn } from '@athlete-planner/ui';
 
 interface ExerciseCardProps {
@@ -14,6 +14,9 @@ interface ExerciseCardProps {
   isInactive?: boolean;
   privateBadgeLabel?: string;
   fromSection?: 'gym' | 'running';
+  selectable?: boolean;
+  selected?: boolean;
+  onToggleSelect?: (id: string) => void;
 }
 
 export function ExerciseCard({
@@ -27,22 +30,27 @@ export function ExerciseCard({
   isInactive,
   privateBadgeLabel = 'Mine',
   fromSection,
+  selectable,
+  selected,
+  onToggleSelect,
 }: ExerciseCardProps) {
-  return (
-    <Link
-      href={
-        isPrivate
-          ? `/${locale}/library/my/${id}`
-          : `/${locale}/library/${id}?from=${fromSection ?? 'gym'}`
-      }
-      className={cn(
-        'group relative flex flex-col overflow-hidden rounded-xl',
-        'border border-border bg-surface-1 transition-all duration-150',
-        'hover:border-accent/40 hover:bg-surface-2',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
-        isInactive ? 'opacity-50' : '',
-      )}
-    >
+  const handleClick = (e: React.MouseEvent) => {
+    if (selectable) {
+      e.preventDefault();
+      onToggleSelect?.(id);
+    }
+  };
+
+  const baseClasses = cn(
+    'group relative flex flex-col overflow-hidden rounded-xl',
+    'border border-border bg-surface-1 transition-all duration-150',
+    'hover:border-accent/40 hover:bg-surface-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+    isInactive ? 'opacity-50' : '',
+  );
+
+  const content = (
+    <>
       <div className="relative aspect-square w-full overflow-hidden bg-surface-2">
         {gifUrl ? (
           <Image
@@ -63,6 +71,25 @@ export function ExerciseCard({
             {privateBadgeLabel}
           </div>
         )}
+        {selectable && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleSelect?.(id);
+            }}
+            className={cn(
+              'absolute left-2 top-2 rounded-md p-1 transition-colors',
+              selected
+                ? 'bg-accent text-black'
+                : 'bg-surface-1/80 text-text-secondary hover:bg-surface-2',
+            )}
+            aria-label={selected ? 'Deselect' : 'Select'}
+            aria-pressed={selected}
+          >
+            {selected ? <CheckSquare size={14} /> : <Square size={14} />}
+          </button>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-1 p-2.5">
@@ -74,6 +101,38 @@ export function ExerciseCard({
           {badge}
         </span>
       </div>
+    </>
+  );
+
+  if (selectable) {
+    return (
+      <div
+        className={cn(baseClasses, selected ? 'ring-2 ring-accent' : '')}
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onToggleSelect?.(id);
+          }
+        }}
+      >
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={
+        isPrivate
+          ? `/${locale}/library/my/${id}`
+          : `/${locale}/library/${id}?from=${fromSection ?? 'gym'}`
+      }
+      className={baseClasses}
+    >
+      {content}
     </Link>
   );
 }

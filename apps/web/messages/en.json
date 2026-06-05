@@ -238,6 +238,18 @@
       "aiCreateExercise": "AI",
       "proRequired": "PRO required"
     },
+    "bulkDelete": {
+      "select": "Select",
+      "done": "Done",
+      "cancelSelection": "Cancel",
+      "selectedCount": "{count} selected",
+      "bulkDeleteAction": "Delete {count}",
+      "bulkDeleteConfirmTitle": "Delete {count} exercises?",
+      "bulkDeleteConfirmMessage": "Are you sure you want to delete {count} exercises from your library?",
+      "bulkDeleteCascadeMessage": "Warning: {count} schedule items will lose their exercise name ({past} past, {today} today, {future} future). Workout data (sets, weight, RPE) is preserved.",
+      "bulkDeleteConfirmAction": "Delete {count}",
+      "bulkDeleteError": "Could not delete exercises. Please try again."
+    },
     "searching": "Searching..."
   },
   "blog": {
@@ -534,7 +546,13 @@
     "sectionDetails": "Details",
     "sectionMedia": "Media",
     "sectionInstructions": "Instructions",
-    "sectionWorkoutDefaults": "Workout Defaults"
+    "sectionWorkoutDefaults": "Workout Defaults",
+    "editExercise": "Edit",
+    "cancelEdit": "Cancel",
+    "addMediaTitle": "Add Media",
+    "addMediaPlaceholder": "Paste a video URL...",
+    "addMediaDetected": "Detected: {type}",
+    "addMediaSuccess": "Media added"
   },
   "starterTemplate": {
     "title": "Start with a template",

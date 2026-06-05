@@ -709,6 +709,31 @@ class ApiClient {
       },
     )
   }
+
+  bulkDeletePrivateExercises(
+    token: string,
+    ids: string[],
+  ): Promise<{ deleted: number }> {
+    return this.request<{ deleted: number }>(
+      '/exercises/private/bulk-delete',
+      {
+        method: 'POST',
+        headers: this.authHeaders(token),
+        body: JSON.stringify({ ids }),
+      },
+    )
+  }
+
+  getPrivateExerciseUsage(
+    token: string,
+    ids: string[],
+  ): Promise<{ past: number; today: number; future: number; total: number }> {
+    const qs = ids.map(id => `ids=${encodeURIComponent(id)}`).join('&')
+    return this.request<{ past: number; today: number; future: number; total: number }>(
+      `/exercises/private/usage?${qs}`,
+      { method: 'GET', headers: this.authHeaders(token) },
+    )
+  }
 }
 
 const VALID_MUSCLE_GROUPS = ['Chest', 'Back', 'Shoulders', 'Arms', 'Legs', 'Abs'] as const

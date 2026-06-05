@@ -1,6 +1,6 @@
 # Tasks: Redesign Custom Exercise Detail Page
 
-## Task 1: Create `QuickAddMediaPopup` Component
+## Task 1: Create `QuickAddMediaPopup` Component ✅
 
 **File:** `apps/web/components/QuickAddMediaPopup.tsx` (new)
 
@@ -35,7 +35,7 @@ interface QuickAddMediaPopupProps {
 
 ---
 
-## Task 2: Create `ExerciseEditView` Component
+## Task 2: Create `ExerciseEditView` Component ✅
 
 **File:** `apps/web/components/ExerciseEditView.tsx` (new)
 
@@ -79,7 +79,7 @@ interface ExerciseEditViewProps {
 
 ---
 
-## Task 3: Refactor `PrivateExerciseDetailClient` — View/Edit Mode Toggle
+## Task 3: Refactor `PrivateExerciseDetailClient` — View/Edit Mode Toggle ✅
 
 **File:** `apps/web/app/[locale]/library/my/[id]/PrivateExerciseDetailClient.tsx`
 
@@ -145,7 +145,7 @@ Refactor to support two modes: view (library-like) and edit (form).
 
 ---
 
-## Task 4: Update i18n Files
+## Task 4: Update i18n Files ✅
 
 **Files:**
 - `apps/web/messages/vi.json`
@@ -165,7 +165,7 @@ Refactor to support two modes: view (library-like) and edit (form).
 
 ---
 
-## Task 5: Verify & Test
+## Task 5: Verify & Test ✅
 
 1. Run TypeScript check: `pnpm --filter web exec tsc --noEmit`
 2. Manual test:

@@ -4,10 +4,14 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Pencil, Plus } from 'lucide-react';
 import type { PrivateExercise } from '@athlete-planner/contracts';
 import { SportType, MuscleGroup, RunningType, RunningIntensityType } from '@athlete-planner/contracts';
 import { api } from '@/lib/api';
 import { ExerciseDetailView } from '@/components/ExerciseDetailView';
+import { ExerciseEditView } from '@/components/ExerciseEditView';
+import { ExerciseActionBar } from '@/components/ExerciseActionBar';
+import { QuickAddMediaPopup } from '@/components/QuickAddMediaPopup';
 
 interface PrivateExerciseDetailClientProps {
   exercise: PrivateExercise;
@@ -17,7 +21,7 @@ interface PrivateExerciseDetailClientProps {
 }
 
 export function PrivateExerciseDetailClient({
-  exercise,
+  exercise: initialExercise,
   locale,
   sourceGymName,
   editMedia,
@@ -26,6 +30,13 @@ export function PrivateExerciseDetailClient({
   const { data: session } = useSession();
   const router = useRouter();
   const token = session?.accessToken;
+
+  // ── Local exercise state (for quick-add media updates) ────────────────────
+  const [exercise, setExercise] = useState(initialExercise);
+
+  // ── Mode state ────────────────────────────────────────────────────────────
+  const [isEditing, setIsEditing] = useState(false);
+  const [showQuickAddMedia, setShowQuickAddMedia] = useState(false);
 
   // ── Unified form state ───────────────────────────────────────────────────
   const [name, setName] = useState(exercise.name);
@@ -117,13 +128,19 @@ export function PrivateExerciseDetailClient({
     };
   }, []);
 
+  // Auto-open edit mode when editMedia=true
+  useEffect(() => {
+    if (editMedia) {
+      setIsEditing(true);
+    }
+  }, [editMedia]);
+
   // ── Save handler ─────────────────────────────────────────────────────────
   async function handleSave() {
     if (!token) return;
     setSaving(true);
     setSaveDone(false);
     try {
-      // Save info fields
       await api.updatePrivateExercise(token, exercise.id, {
         name: name.trim(),
         customNotes: notes,
@@ -138,7 +155,6 @@ export function PrivateExerciseDetailClient({
           : {}),
       });
 
-      // Save config fields
       if (exercise.sportType === SportType.GYM) {
         await api.updatePrivateExerciseConfig(token, exercise.id, {
           type: 'GYM',
@@ -168,10 +184,11 @@ export function PrivateExerciseDetailClient({
       }
 
       setSaveDone(true);
+      setIsEditing(false);
       if (saveDoneTimerRef.current) clearTimeout(saveDoneTimerRef.current);
       saveDoneTimerRef.current = setTimeout(() => setSaveDone(false), 3000);
     } catch {
-      // error handled by parent if needed
+      // error handled
     } finally {
       setSaving(false);
     }
@@ -197,72 +214,112 @@ export function PrivateExerciseDetailClient({
     setConfirmDelete(false);
   }
 
+  // ── Quick-add media handler ──────────────────────────────────────────────
+  function handleMediaAdded(updatedUrls: string[]) {
+    setExercise({ ...exercise, mediaUrls: updatedUrls });
+  }
+
   return (
-    <ExerciseDetailView
-      exercise={exercise}
-      locale={locale}
-      readonly={false}
-      editMedia={editMedia}
-      sourceGymName={sourceGymName}
-      onSave={handleSave}
-      onDelete={handleDelete}
-      onConfirmDelete={handleConfirmDelete}
-      onCancelDelete={handleCancelDelete}
-      onNameChange={setName}
-      onMuscleGroupChange={setMuscleGroup}
-      onRunningTypeChange={setRunningTypeState}
-      onNotesChange={setNotes}
-      onInstructionsChange={setInstructions}
-      onMediaUrlsChange={setMediaUrls}
-      onYoutubeChange={setYoutubeEmbedUrl}
-      editState={{
-        name,
-        muscleGroup,
-        runningType: runningTypeState,
-        notes,
-        instructions,
-        mediaUrls,
-        youtubeEmbedUrl,
-        saving,
-        saveDone,
-        isDirty: isDirty(),
-        deleting,
-        confirmDelete,
-      }}
-      // Running config
-      onIntensityTypeChange={setIntensityType}
-      onTargetDistanceChange={setTargetDistanceKm}
-      onDurationChange={setDurationMinutes}
-      onPaceMinChange={setPaceMinSecPerKm}
-      onPaceMaxChange={setPaceMaxSecPerKm}
-      onHrZoneChange={setHrZone}
-      onHrMinChange={setHrMin}
-      onHrMaxChange={setHrMax}
-      runningEditState={{
-        intensityType,
-        targetDistanceKm,
-        durationMinutes,
-        paceMinSecPerKm,
-        paceMaxSecPerKm,
-        hrZone,
-        hrMin,
-        hrMax,
-      }}
-      // GYM config
-      onDefaultSetsChange={setDefaultSets}
-      onDefaultRepsChange={setDefaultReps}
-      onDefaultWeightChange={setDefaultWeightKg}
-      onDefaultRpeChange={setDefaultRpe}
-      onRestTimeChange={setRestTimeSecs}
-      onRestBetweenChange={setRestBetweenExercisesSecs}
-      gymEditState={{
-        defaultSets,
-        defaultReps,
-        defaultWeightKg,
-        defaultRpe,
-        restTimeSecs,
-        restBetweenExercisesSecs,
-      }}
-    />
+    <>
+      {isEditing ? (
+        <ExerciseEditView
+          exercise={exercise}
+          locale={locale}
+          sourceGymName={sourceGymName}
+          onSave={handleSave}
+          onCancel={() => setIsEditing(false)}
+          onDelete={handleDelete}
+          name={name}
+          muscleGroup={muscleGroup}
+          runningType={runningTypeState}
+          notes={notes}
+          instructions={instructions}
+          mediaUrls={mediaUrls}
+          youtubeEmbedUrl={youtubeEmbedUrl}
+          onNameChange={setName}
+          onMuscleGroupChange={setMuscleGroup}
+          onRunningTypeChange={setRunningTypeState}
+          onNotesChange={setNotes}
+          onInstructionsChange={setInstructions}
+          onMediaUrlsChange={setMediaUrls}
+          onYoutubeChange={setYoutubeEmbedUrl}
+          gymConfig={{
+            defaultSets, defaultReps, defaultWeightKg, defaultRpe,
+            restTimeSecs, restBetweenExercisesSecs,
+          }}
+          onGymConfigChange={{
+            defaultSets: setDefaultSets,
+            defaultReps: setDefaultReps,
+            defaultWeightKg: setDefaultWeightKg,
+            defaultRpe: setDefaultRpe,
+            restTimeSecs: setRestTimeSecs,
+            restBetweenExercisesSecs: setRestBetweenExercisesSecs,
+          }}
+          runningConfig={{
+            intensityType, targetDistanceKm, durationMinutes,
+            paceMinSecPerKm, paceMaxSecPerKm, hrZone, hrMin, hrMax,
+          }}
+          onRunningConfigChange={{
+            intensityType: setIntensityType,
+            targetDistanceKm: setTargetDistanceKm,
+            durationMinutes: setDurationMinutes,
+            paceMinSecPerKm: setPaceMinSecPerKm,
+            paceMaxSecPerKm: setPaceMaxSecPerKm,
+            hrZone: setHrZone,
+            hrMin: setHrMin,
+            hrMax: setHrMax,
+          }}
+          saving={saving}
+          saveDone={saveDone}
+          deleting={deleting}
+          confirmDelete={confirmDelete}
+          onConfirmDelete={handleConfirmDelete}
+          onCancelDelete={handleCancelDelete}
+        />
+      ) : (
+        <div className="relative">
+          {/* Edit button — top right */}
+          <div className="mb-4 flex justify-end">
+            <button
+              type="button"
+              onClick={() => setIsEditing(true)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface-2 px-3 py-2 text-xs font-medium text-text-secondary hover:border-accent/40 hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Pencil size={14} aria-hidden />
+              {t('editExercise')}
+            </button>
+          </div>
+
+          {/* View mode — same as system page */}
+          <ExerciseDetailView
+            exercise={exercise}
+            locale={locale}
+            readonly
+          />
+
+          {/* Exercise actions — Start Workout, Add to Today, Add to Schedule */}
+          <ExerciseActionBar exercise={exercise} locale={locale} />
+
+          {/* Floating add media button */}
+          <button
+            type="button"
+            onClick={() => setShowQuickAddMedia(true)}
+            className="fixed bottom-24 right-5 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-accent text-black shadow-lg hover:bg-accent/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:bottom-8 md:right-8"
+            aria-label={t('addMediaTitle')}
+          >
+            <Plus size={20} />
+          </button>
+
+          {/* Quick-add media popup */}
+          <QuickAddMediaPopup
+            open={showQuickAddMedia}
+            onClose={() => setShowQuickAddMedia(false)}
+            exerciseId={exercise.id}
+            existingUrls={exercise.mediaUrls ?? []}
+            onMediaAdded={handleMediaAdded}
+          />
+        </div>
+      )}
+    </>
   );
 }

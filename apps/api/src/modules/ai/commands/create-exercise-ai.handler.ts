@@ -45,7 +45,7 @@ IMPORTANT: Include "secondaryMuscleGroups" as an array of secondary muscles work
 IMPORTANT: Include "garminExerciseEnum" if the exercise maps to a Garmin exercise enum, or null if not mappable.
 IMPORTANT: Set "gifUrl", "youtubeEmbedUrl" to null and "mediaUrls" to [] (user fills later).
 Infer workout defaults when user provides or implies them (e.g., "3 sets of 10 reps" → defaultSets: 3, defaultReps: 10).
-If user doesn't specify defaults, omit those fields (don't guess values).
+If user doesn't specify defaults, provide reasonable default values (e.g., 3-4 sets, 8-12 reps, 2-3 min rest).
 Return ONLY raw JSON. No markdown. No triple-backtick wrapping. No explanation.`
 
 const getSystemPrompt = (locale?: string) => {

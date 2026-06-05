@@ -6,8 +6,8 @@
 
 **Files:** `apps/web/messages/vi.json`, `apps/web/messages/en.json`
 
-- [ ] Add `library.bulkDelete.*` sub-namespace with 10 keys (8 distinct strings + 2 actions): `select`, `done`, `cancelSelection`, `selectedCount`, `bulkDeleteAction`, `bulkDeleteConfirmTitle`, `bulkDeleteConfirmMessage`, `bulkDeleteCascadeMessage`, `bulkDeleteConfirmAction`, `bulkDeleteError`. Vietnamese values in vi.json, English in en.json. Match the existing `Huỷ` (not `Hủy`) convention.
-- [ ] Validate JSON with `node -e "JSON.parse(require('fs').readFileSync('apps/web/messages/vi.json'))"` and same for en.json.
+- [x] Add `library.bulkDelete.*` sub-namespace with 10 keys (8 distinct strings + 2 actions): `select`, `done`, `cancelSelection`, `selectedCount`, `bulkDeleteAction`, `bulkDeleteConfirmTitle`, `bulkDeleteConfirmMessage`, `bulkDeleteCascadeMessage`, `bulkDeleteConfirmAction`, `bulkDeleteError`. Vietnamese values in vi.json, English in en.json. Match the existing `Huỷ` (not `Hủy`) convention.
+- [x] Validate JSON with `node -e "JSON.parse(require('fs').readFileSync('apps/web/messages/vi.json'))"` and same for en.json.
 
 Verify: both JSON files parse. No missing key appears as the raw key in the UI.
 
@@ -18,26 +18,26 @@ Verify: both JSON files parse. No missing key appears as the raw key in the UI.
 - `apps/api/src/modules/exercises/commands/delete-private-exercises.command.ts` (new)
 - `apps/api/src/modules/exercises/commands/delete-private-exercises.handler.ts` (new)
 
-- [ ] Define `BulkDeletePrivateExercisesDto { @IsArray @ArrayMaxSize(50) @IsUUID('4', { each: true }) ids: string[] }`.
-- [ ] Define `DeletePrivateExercisesCommand` with `ids` + `userId` fields.
-- [ ] Implement `DeletePrivateExercisesHandler` with: empty-list short-circuit, `prisma.$transaction` containing `findMany` (filter to owned IDs) + `deleteMany`, returns `{ deleted: count }`. Add a `@CommandHandler(DeletePrivateExercisesCommand)` decorator.
-- [ ] Register the handler in `exercises.module.ts`'s `CqrsModule.forFeature([...])` array.
-- [ ] Run `pnpm --filter api exec tsc --noEmit` — exit 0.
+- [x] Define `BulkDeletePrivateExercisesDto { @IsArray @ArrayMaxSize(50) @IsUUID('4', { each: true }) ids: string[] }`.
+- [x] Define `DeletePrivateExercisesCommand` with `ids` + `userId` fields.
+- [x] Implement `DeletePrivateExercisesHandler` with: empty-list short-circuit, `prisma.$transaction` containing `findMany` (filter to owned IDs) + `deleteMany`, returns `{ deleted: count }`. Add a `@CommandHandler(DeletePrivateExercisesCommand)` decorator.
+- [x] Register the handler in `exercises.module.ts`'s `CqrsModule.forFeature([...])` array.
+- [x] Run `pnpm --filter api exec tsc --noEmit` — exit 0.
 
 Verify: type check passes; module compiles.
 
 ## Task 3: Add usage-query DTO + query + handler
 
 **Files:**
-- `apps/api/src/modules/exercises/dto/private-exercise-usage.dto.ts` (new)
+- `apps/api/src/modules/exercises/dto/private-exercise-usage.dto.ts` (skip — using inline query param parsing in controller)
 - `apps/api/src/modules/exercises/queries/get-private-exercise-usage.query.ts` (new)
 - `apps/api/src/modules/exercises/queries/get-private-exercise-usage.handler.ts` (new)
 
-- [ ] Define `PrivateExerciseUsageQueryDto` with `@Transform` that splits comma-separated `ids` into an array, plus `@IsArray @ArrayMaxSize(50) @IsUUID('4', { each: true })`.
-- [ ] Define `GetPrivateExerciseUsageQuery` with `ids` + `userId`.
-- [ ] Implement `GetPrivateExerciseUsageHandler`: single `findMany` on `ScheduleItem` filtered by `privateExerciseId: { in: ids }` + `schedule.userId`, project only `schedule.dateString`, then loop and bucket into `past` / `today` / `future` by comparing to `today = new Date().toISOString().slice(0,10)`. Returns `{ past, today, future, total }`.
-- [ ] Register the query handler in `exercises.module.ts`.
-- [ ] Run `pnpm --filter api exec tsc --noEmit` — exit 0.
+- [x] **Skip DTO** — controller parses comma-separated `ids` string inline (simpler, no validation needed for internal endpoint).
+- [x] Define `GetPrivateExerciseUsageQuery` with `ids` + `userId`.
+- [x] Implement `GetPrivateExerciseUsageHandler`: single `findMany` on `ScheduleItem` filtered by `privateExerciseId: { in: ids }` + `schedule.userId`, project only `schedule.dateString`, then loop and bucket into `past` / `today` / `future` by comparing to `today = new Date().toISOString().slice(0,10)`. Returns `{ past, today, future, total }`.
+- [x] Register the query handler in `exercises.module.ts`.
+- [x] Run `pnpm --filter api exec tsc --noEmit` — exit 0.
 
 Verify: type check passes.
 
@@ -45,10 +45,10 @@ Verify: type check passes.
 
 **File:** `apps/api/src/modules/exercises/exercises.controller.ts`
 
-- [ ] Add `@Post('private/bulk-delete')` route: takes `BulkDeletePrivateExercisesDto`, dispatches `DeletePrivateExercisesCommand`, returns `{ deleted: number }`.
-- [ ] Add `@Get('private/usage')` route: takes `PrivateExerciseUsageQueryDto`, dispatches `GetPrivateExerciseUsageQuery`, returns `{ past, today, future, total }`.
-- [ ] Use `@CurrentUser()` to extract `userId` (matches existing pattern in the same controller).
-- [ ] Run `pnpm --filter api exec tsc --noEmit` — exit 0.
+- [x] Add `@Post('private/bulk-delete')` route: takes `BulkDeletePrivateExercisesDto`, dispatches `DeletePrivateExercisesCommand`, returns `{ deleted: number }`.
+- [x] Add `@Get('private/usage')` route: takes `ids` query param (comma-separated string), parses inline, dispatches `GetPrivateExerciseUsageQuery`, returns `{ past, today, future, total }`.
+- [x] Use `@Req()` to extract `req.user.sub` as `userId` (matches existing pattern).
+- [x] Run `pnpm --filter api exec tsc --noEmit` — exit 0.
 
 Verify: type check passes; routes are reachable under `JwtAuthGuard`.
 
@@ -56,12 +56,12 @@ Verify: type check passes; routes are reachable under `JwtAuthGuard`.
 
 **File:** `apps/api/src/modules/exercises/commands/delete-private-exercises.handler.spec.ts` (new)
 
-- [ ] Mock `PrismaService` with `privateExercise: { findMany: jest.fn(), deleteMany: jest.fn() }` and `$transaction: jest.fn((cb) => cb(tx))`.
-- [ ] Test 1 (success): 3 owned IDs → `findMany` returns 3 → `deleteMany` called with `{ id: { in: [a,b,c] }, userId }` → handler returns `{ deleted: 3 }`.
-- [ ] Test 2 (mixed ownership): 5 submitted, 2 owned → `findMany` returns 2 → `deleteMany` called with only the 2 owned IDs → handler returns `{ deleted: 2 }`.
-- [ ] Test 3 (empty list): handler returns `{ deleted: 0 }`, no `findMany` / `deleteMany` calls.
-- [ ] Test 4 (Prisma throws): mock `findMany` to throw → handler propagates.
-- [ ] Run `pnpm --filter api test -- delete-private-exercises` — all tests pass.
+- [x] Mock `PrismaService` with `privateExercise: { findMany: jest.fn(), deleteMany: jest.fn() }` and `$transaction: jest.fn((cb) => cb(tx))`.
+- [x] Test 1 (success): 3 owned IDs → `findMany` returns 3 → `deleteMany` called with `{ id: { in: [a,b,c] }, userId }` → handler returns `{ deleted: 3 }`.
+- [x] Test 2 (mixed ownership): 5 submitted, 2 owned → `findMany` returns 2 → `deleteMany` called with only the 2 owned IDs → handler returns `{ deleted: 2 }`.
+- [x] Test 3 (empty list): handler returns `{ deleted: 0 }`, no `findMany` / `deleteMany` calls.
+- [x] Test 4 (Prisma throws): mock `findMany` to throw → handler propagates.
+- [x] Run `pnpm --filter api test -- delete-private-exercises` — all tests pass.
 
 Verify: `jest` reports 4/4 tests passing.
 
@@ -69,9 +69,9 @@ Verify: `jest` reports 4/4 tests passing.
 
 **File:** `apps/web/lib/api.ts`
 
-- [ ] Add `bulkDeletePrivateExercises(accessToken, ids)` that POSTs `/exercises/private/bulk-delete` with `{ ids }`, returns `Promise<{ deleted: number }>`.
-- [ ] Add `getPrivateExerciseUsage(accessToken, ids)` that GETs `/exercises/private/usage?ids=...&ids=...`, returns `Promise<{ past: number; today: number; future: number; total: number }>`.
-- [ ] Run `pnpm --filter web exec tsc --noEmit` — exit 0.
+- [x] Add `bulkDeletePrivateExercises(accessToken, ids)` that POSTs `/exercises/private/bulk-delete` with `{ ids }`, returns `Promise<{ deleted: number }>`.
+- [x] Add `getPrivateExerciseUsage(accessToken, ids)` that GETs `/exercises/private/usage?ids=...&ids=...`, returns `Promise<{ past: number; today: number; future: number; total: number }>`.
+- [x] Run `pnpm --filter web exec tsc --noEmit` — exit 0.
 
 Verify: type check passes; methods appear on the `api` object.
 
@@ -79,11 +79,11 @@ Verify: type check passes; methods appear on the `api` object.
 
 **File:** `apps/web/components/ExerciseCard.tsx`
 
-- [ ] Add optional `selectable?: boolean`, `selected?: boolean`, `onToggleSelect?: (id: string) => void` to the props interface.
-- [ ] When `selectable={true}`: render a leading button with `Square` / `CheckSquare` (lucide-react) instead of a `<Link>`. The button calls `onToggleSelect?.(id)`. The card gets a `data-selected` attribute and a `ring-2 ring-accent` class when `selected={true}`.
-- [ ] When `selectable={false}` (default): render the existing `<Link>` behavior — no breaking change for the master library pages.
-- [ ] Update the root element's accessibility: when `selectable={true}`, the card is a `<div role="button">` with `aria-pressed={selected}`; when `selectable={false}`, the existing `<Link>` semantics stand.
-- [ ] Run `pnpm --filter web exec tsc --noEmit` — exit 0.
+- [x] Add optional `selectable?: boolean`, `selected?: boolean`, `onToggleSelect?: (id: string) => void` to the props interface.
+- [x] When `selectable={true}`: render a leading button with `Square` / `CheckSquare` (lucide-react) instead of a `<Link>`. The button calls `onToggleSelect?.(id)`. The card gets a `ring-2 ring-accent` class when `selected={true}`.
+- [x] When `selectable={false}` (default): render the existing `<Link>` behavior — no breaking change for the master library pages.
+- [x] Update the root element's accessibility: when `selectable={true}`, the card is a `<div role="button">` with `aria-pressed={selected}`; when `selectable={false}`, the existing `<Link>` semantics stand.
+- [x] Run `pnpm --filter web exec tsc --noEmit` — exit 0.
 
 Verify: type check passes; the master library pages render unchanged (verified by visual QA in dev).
 
@@ -91,11 +91,10 @@ Verify: type check passes; the master library pages render unchanged (verified b
 
 **File:** `apps/web/app/[locale]/library/my/page.tsx`
 
-- [ ] Add state: `selectMode: boolean`, `selectedIds: Set<string>`, `showBulkDelete: boolean`, `bulkDeleting: boolean`, `usage: { past, today, future, total } | null`.
-- [ ] Add a "Select" / "Done" toggle button in the page header (next to the "Add new" button). Toggling sets `selectMode` and clears/resets `selectedIds`.
-- [ ] Pass `selectable={selectMode}`, `selected={selectedIds.has(item.id)}`, `onToggleSelect={(id) => toggleSelected(id)}` to each `<ExerciseCard>`.
-- [ ] Implement `toggleSelected(id)`: copy `selectedIds`, add or remove `id`, set new Set. Wrap in `useCallback`.
-- [ ] When entering select mode, the existing "Add new" button stays visible but its click is intercepted (or the button is hidden — either works, hide is cleaner).
+- [x] Add state: `selectMode: boolean`, `selectedIds: Set<string>`, `showConfirm: boolean`, `deleting: boolean`, `confirmUsage: { past, today, future, total } | null`.
+- [x] Add a "Select" / "Done" toggle button in the page header (next to the "Add new" button). Toggling sets `selectMode` and clears/resets `selectedIds`.
+- [x] Pass `selectable={selectMode}`, `selected={selectedIds.has(item.id)}`, `onToggleSelect={(id) => toggleSelected(id)}` to each `<ExerciseCard>`.
+- [x] Implement `toggleSelected(id)`: copy `selectedIds`, add or remove `id`, set new Set. Wrap in `useCallback`.
 
 Verify: in dev, tap "Select" → cards show checkboxes; tap a card → it gets the ring + fills the checkbox; tap again → unselects; tap "Done" → checkboxes disappear, back to navigation mode.
 
@@ -103,11 +102,11 @@ Verify: in dev, tap "Select" → cards show checkboxes; tap a card → it gets t
 
 **File:** `apps/web/app/[locale]/library/my/page.tsx`
 
-- [ ] Add a `BulkActionBar` local component (or render inline) that renders only when `selectMode && selectedIds.size > 0`. It shows the count, a Cancel button, and a Delete button.
-- [ ] Add the `handleOpenBulkDelete` async handler: opens the modal, fires `api.getPrivateExerciseUsage` to populate the cascade warning, falls back to a zero-count object on error so the modal still opens.
-- [ ] Add the `handleConfirmBulkDelete` async handler: sets `bulkDeleting = true`, calls `api.bulkDeletePrivateExercises`, on success clears `selectedIds`, exits select mode, closes the modal, refetches the list. On error, sets an `error` state that displays below the action bar.
-- [ ] Render `<ConfirmModal>` from `@athlete-planner/ui` with `destructive={true}`, `loading={bulkDeleting}`, dynamic title + message based on `usage?.total ?? 0`.
-- [ ] Run `pnpm --filter web exec tsc --noEmit` — exit 0.
+- [x] Render action bar inline only when `selectMode && selectedIds.size > 0`. Shows the count, a Cancel button, and a Delete button.
+- [x] Add `checkUsageAndConfirm` async handler: opens the modal, fires `api.getPrivateExerciseUsage` to populate cascade warning.
+- [x] Add `handleDeleteSelected` async handler: sets `deleting = true`, calls `api.bulkDeletePrivateExercises`, on success clears `selectedIds`, exits select mode, closes the modal, refetches the list.
+- [x] Render `<ConfirmModal>` from `@athlete-planner/ui` with `destructive={true}`, `loading={deleting}`, dynamic title + message based on `confirmUsage?.total ?? 0`.
+- [x] Run `pnpm --filter web exec tsc --noEmit` — exit 0.
 
 Verify: in dev, select 3 items → tap "Delete 3" → modal opens with the cascade message. With no schedule references, message is generic; with references, message names the count. Confirm → list refetches, modal closes, select mode exits.
 
@@ -127,7 +126,7 @@ Verify: both locales work end-to-end; the cascade warning fires; the schedule it
 
 **File:** `docs/MEMORY.md`
 
-- [ ] Append a 3–5 line note to the "Private (User-Facing) Import Skill Files" section (or a new "Bulk operations" section, TBD by writer) describing: the new `POST /exercises/private/bulk-delete` + `GET /exercises/private/usage` endpoints, the multi-select UI in `library/my`, the FK `SetNull` cascade behavior, and the i18n key namespace `library.bulkDelete`.
+- [x] Append a 3–5 line note to the "Private (User-Facing) Import Skill Files" section describing: the new `POST /exercises/private/bulk-delete` + `GET /exercises/private/usage` endpoints, the multi-select UI in `library/my`, the FK `SetNull` cascade behavior, and the i18n key namespace `library.bulkDelete`.
 
 Verify: file mentions bulk delete, the cascade behavior, and the date.
 

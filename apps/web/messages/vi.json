@@ -241,6 +241,18 @@
       "aiCreateExercise": "AI",
       "proRequired": "Cần PRO"
     },
+    "bulkDelete": {
+      "select": "Chọn",
+      "done": "Xong",
+      "cancelSelection": "Huỷ",
+      "selectedCount": "Đã chọn {count}",
+      "bulkDeleteAction": "Xoá {count}",
+      "bulkDeleteConfirmTitle": "Xoá {count} bài tập?",
+      "bulkDeleteConfirmMessage": "Bạn có chắc muốn xoá {count} bài tập khỏi thư viện?",
+      "bulkDeleteCascadeMessage": "Cảnh báo: {count} mục lịch tập sẽ mất tên bài tập ({past} đã qua, {today} hôm nay, {future} sắp tới). Dữ liệu buổi tập (hiệp, khối lượng, RPE) vẫn được giữ nguyên.",
+      "bulkDeleteConfirmAction": "Xoá {count}",
+      "bulkDeleteError": "Không thể xoá bài tập. Vui lòng thử lại."
+    },
     "searching": "Đang tìm..."
   },
   "blog": {
@@ -537,7 +549,13 @@
     "sectionDetails": "Chi tiết",
     "sectionMedia": "Phương tiện",
     "sectionInstructions": "Hướng dẫn",
-    "sectionWorkoutDefaults": "Thông số mặc định"
+    "sectionWorkoutDefaults": "Thông số mặc định",
+    "editExercise": "Chỉnh sửa",
+    "cancelEdit": "Hủy",
+    "addMediaTitle": "Thêm media",
+    "addMediaPlaceholder": "Dán URL video...",
+    "addMediaDetected": "Phát hiện: {type}",
+    "addMediaSuccess": "Đã thêm media"
   },
   "starterTemplate": {
     "title": "Bắt đầu với mẫu lịch",

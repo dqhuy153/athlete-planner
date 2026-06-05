@@ -19,6 +19,7 @@ import { DeleteExerciseHandler } from './commands/delete-exercise.handler';
 import { DeletePrivateExerciseHandler } from './commands/delete-private-exercise.handler';
 import { BulkCreatePrivateExercisesHandler } from './commands/bulk-create-private-exercises.handler';
 import { ImportPrivateExercisesHandler } from './commands/import-private-exercises.handler';
+import { DeletePrivateExercisesHandler } from './commands/delete-private-exercises.handler';
 
 // Queries
 import { GetExerciseLibraryHandler } from './queries/get-exercise-library.handler';
@@ -26,6 +27,7 @@ import { GetPrivateExercisesHandler } from './queries/get-private-exercises.hand
 import { GetExerciseDetailHandler } from './queries/get-exercise-detail.handler';
 import { GetExerciseUsageHandler } from './queries/get-exercise-usage.handler';
 import { PreviewPrivateImportHandler } from './queries/preview-private-import.handler';
+import { GetPrivateExerciseUsageHandler } from './queries/get-private-exercise-usage.handler';
 
 const CommandHandlers = [
   CreateGymMasterHandler,
@@ -40,6 +42,7 @@ const CommandHandlers = [
   DeletePrivateExerciseHandler,
   BulkCreatePrivateExercisesHandler,
   ImportPrivateExercisesHandler,
+  DeletePrivateExercisesHandler,
 ];
 
 const QueryHandlers = [
@@ -48,6 +51,7 @@ const QueryHandlers = [
   GetExerciseDetailHandler,
   GetExerciseUsageHandler,
   PreviewPrivateImportHandler,
+  GetPrivateExerciseUsageHandler,
 ];
 
 @Module({
